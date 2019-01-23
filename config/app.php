@@ -228,7 +228,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
-        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
+        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
+
+        'GraphQL' => \Nuwave\Lighthouse\Support\Facades\GraphQLFacade::class,
 
     ],
 
