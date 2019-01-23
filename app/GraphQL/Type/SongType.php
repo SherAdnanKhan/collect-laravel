@@ -8,40 +8,40 @@ use Folklore\GraphQL\Support\Type as GraphQLType;
 
 class SongType extends GraphQLType
 {
-  protected $attributes = [
-    'name' => 'Song',
-    'description' => 'A song'
-  ];
-
-  public function fields()
-  {
-    return [
-      'id' => [
-        'type' => Type::nonNull(Type::int()),
-        'description' => 'The id of a song'
-      ],
-      'name' => [
-        'type' => Type::nonNull(Type::string()),
-        'description' => 'The name of a song'
-      ],
-      'created_at' => [
-        'type' => Type::string(),
-        'description' => 'Date a was created'
-      ],
-      'updated_at' => [
-        'type' => Type::string(),
-        'description' => 'Date a was updated'
-      ],
+    protected $attributes = [
+        'name' => 'Song',
+        'description' => 'A song'
     ];
-  }
 
-  protected function resolveCreatedAtField($root, $args)
-  {
-    return (string) $root->created_at;
-  }
+    public function fields()
+    {
+        return [
+            'id' => [
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'The id of a song'
+            ],
+            'name' => [
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The name of a song'
+            ],
+            'created_at' => [
+                'type' => Type::string(),
+                'description' => 'Date a was created'
+            ],
+            'updated_at' => [
+                'type' => Type::string(),
+                'description' => 'Date a was updated'
+            ],
+        ];
+    }
 
-  protected function resolveUpdatedAtField($root, $args)
-  {
-    return (string) $root->updated_at;
-  }
+    protected function resolveCreatedAtField($root, $args)
+    {
+        return (string) $root->created_at;
+    }
+
+    protected function resolveUpdatedAtField($root, $args)
+    {
+        return (string) $root->updated_at;
+    }
 }
