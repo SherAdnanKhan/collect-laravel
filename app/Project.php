@@ -8,11 +8,11 @@ class Project extends Model
 {
     public function songs()
     {
-      return $this->hasMany(Song::class);
+        return $this->hasMany(Song::class);
     }
 
     public function files()
     {
-      return $this->hasMany(File::class);
+        return $this->hasMany(File::class);
     }
 }
