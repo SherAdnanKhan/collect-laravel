@@ -19,11 +19,11 @@ Copy `.env.example` to `.env` and then run `php artisan key:generate`. Configure
 [Read here for documentation](https://laradock.io/documentation)
 
 #### Mac
-In the root run: `cp ./laradock/env-example-mac ./laradock/.env`
+In the root run: `cp ./veva-laradock/env-example-mac ./veva-laradock/.env`
 
 #### Windows (Not bash)
 _If using bash, use same command as mac but use 'env-example-windows' file_
-In the root run: `copy laradock/env-example-windows laradock/.env`
+In the root run: `copy veva-laradock/env-example-windows veva-laradock/.env`
 
 Then to run Laradock: `make up`. This will boot up the workspace environment as well as Redis, MySQL and the Nginx and PHP-FPM services.
 
