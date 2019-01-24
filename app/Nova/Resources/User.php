@@ -2,6 +2,7 @@
 
 namespace App\Nova\Resources;
 
+use App\Nova\Metrics\NewUsers;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
@@ -70,7 +71,9 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [];
+        return [
+            new NewUsers,
+        ];
     }
 
     /**
