@@ -7,6 +7,8 @@ type User {
 	created_at: String!
 	updated_at: String
 	profile: UserProfile @hasOne
+	two_factor_tokens: UserTwoFactorToken @hasMany
 }
 
 #import profile.graphql
+#import tokens.graphql
