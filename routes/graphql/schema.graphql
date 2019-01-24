@@ -1,5 +1,6 @@
 type Query {
 	users: [User] @all
+	user(id: Int! @eq): User @find
 }
 
 #import users/*.graphql
