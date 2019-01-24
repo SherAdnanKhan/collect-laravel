@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Nova;
+namespace App\Nova\Resources;
 
-use Laravel\Nova\Fields\ID;
+use App\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Text;
 
-class Administrator extends Resource
+class User extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Administrator';
+    public static $model = 'App\\Models\\User';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
