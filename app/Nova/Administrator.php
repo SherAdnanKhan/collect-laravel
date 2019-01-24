@@ -15,7 +15,7 @@ class Administrator extends Resource
      *
      * @var string
      */
-    public static $model = App\Models\Administrator::class;
+    public static $model = 'App\\Models\\Administrator';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
