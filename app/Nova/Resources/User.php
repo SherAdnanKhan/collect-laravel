@@ -24,7 +24,7 @@ class User extends Resource
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'first_name';
 
     /**
      * The columns that should be searched.
@@ -32,7 +32,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'first_name', 'email',
     ];
 
     /**
@@ -46,9 +46,22 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Name')
+            Heading::make('Basic'),
+
+            Text::make('First Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Text::make('Last Name')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Select::make('Status')->options([
+                'active'   => 'Active',
+                'inactive' => 'Inactive',
+            ])->displayUsingLabels(),
+
+            Heading::make('Authentication'),
 
             Text::make('Email')
                 ->sortable()
