@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Nova;
+namespace App\Nova\Resources;
 
-use Laravel\Nova\Fields\ID;
+use App\Nova\Metrics\NewUsers;
+use App\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\Heading;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 
 class User extends Resource
 {
@@ -15,14 +19,14 @@ class User extends Resource
      *
      * @var string
      */
-    public static $model = 'App\\User';
+    public static $model = 'App\\Models\\User';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'first_name';
 
     /**
      * The columns that should be searched.
@@ -30,7 +34,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'first_name', 'email',
     ];
 
     /**
@@ -44,11 +48,22 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Gravatar::make(),
+            Heading::make('Basic'),
 
-            Text::make('Name')
+            Text::make('First Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Text::make('Last Name')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Select::make('Status')->options([
+                'active'   => 'Active',
+                'inactive' => 'Inactive',
+            ])->displayUsingLabels(),
+
+            Heading::make('Authentication'),
 
             Text::make('Email')
                 ->sortable()
@@ -71,7 +86,9 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [];
+        return [
+            new NewUsers,
+        ];
     }
 
     /**
