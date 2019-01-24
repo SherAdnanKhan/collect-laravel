@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\UserProfile;
+use App\Models\UserTwoFactorToken;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -38,5 +39,15 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(UserProfile::class);
+    }
+
+    /**
+     * The two factor tokens for the user.
+     *
+     * @return HasMany
+     */
+    public function twoFactorTokens()
+    {
+        return $this->hasMany(UserTwoFactorToken::class);
     }
 }
