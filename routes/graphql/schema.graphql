@@ -1,5 +1,5 @@
 type Query {
-	users: [User] @paginate
+	users: [User] @all
 }
 
 #import users/*.graphql
