@@ -23,7 +23,7 @@ class Administrator extends Resource
      *
      * @var string
      */
-    public static $title = 'first_name';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -31,7 +31,7 @@ class Administrator extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'last_name', 'email',
+        'id', 'name', 'email',
     ];
 
     /**
@@ -54,11 +54,7 @@ class Administrator extends Resource
                 'super-admin' => 'Super Admin',
             ])->displayUsingLabels(),
 
-            Text::make('First Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Last Name')
+            Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
