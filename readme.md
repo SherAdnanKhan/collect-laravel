@@ -34,6 +34,7 @@ The `php-fpm` and `workspace` containers have xDebug installed. It is reccomende
 #### Some useful links:
 https://www.sitepoint.com/debugging-xdebug-sublime-text-3/
 https://www.codewall.co.uk/debug-php-in-vscode-with-xdebug/
+https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en
 
 ### GraphQL
 
