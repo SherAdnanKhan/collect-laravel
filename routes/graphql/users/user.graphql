@@ -6,4 +6,7 @@ type User {
 	status: String!
 	created_at: String!
 	updated_at: String
+	profile: UserProfile @hasOne
 }
+
+#import profile.graphql
