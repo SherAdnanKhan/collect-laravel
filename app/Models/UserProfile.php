@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class UserProfile extends Model
@@ -12,6 +13,12 @@ class UserProfile extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id',
+        'studio_type',
+        'label',
+        'job_role',
+        'genre',
+        'workload',
     ];
 
     /**
@@ -21,4 +28,16 @@ class UserProfile extends Model
      */
     protected $hidden = [
     ];
+
+    public $timestamps = false;
+
+    /**
+     * Get the owning user of this model.
+     *
+     * @return Collection
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

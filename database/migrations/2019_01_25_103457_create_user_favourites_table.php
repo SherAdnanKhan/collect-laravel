@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserProfilesTable extends Migration
+class CreateUserFavouritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateUserProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_profiles', function (Blueprint $table) {
+        Schema::create('user_favourites', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
-            $table->string('studio_type')->nullable();
-            $table->string('label')->nullable();
-            $table->string('job_role')->nullable();
-            $table->string('genre')->nullable();
-            $table->unsignedInteger('workload')->default(0);
+            $table->unsignedInteger('resource_id');
+            $table->string('resource_type');
+            $table->timestamps();
         });
     }
 
@@ -33,6 +31,6 @@ class CreateUserProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_profiles');
+        Schema::dropIfExists('user_favourites');
     }
 }

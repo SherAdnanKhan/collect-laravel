@@ -4,31 +4,39 @@ namespace App\Nova\Resources;
 
 use App\Nova\Metrics\NewUsers;
 use App\Nova\Resource;
-use App\Nova\Resources\UserProfile;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
-class User extends Resource
+class UserProfile extends Resource
 {
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\User';
+    public static $model = 'App\\Models\\UserProfile';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'first_name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -36,7 +44,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'email',
+        'id', 'studio_type', 'job_role', 'label', 'genre'
     ];
 
     /**
@@ -48,37 +56,26 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Heading::make('Basic'),
-
-            Text::make('First Name')
+            Text::make('Studio Type')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Last Name')
+            Text::make('Job Role')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Select::make('Status')->options([
-                'active'   => 'Active',
-                'inactive' => 'Inactive',
-            ])->displayUsingLabels(),
+            Text::make('Label')
+                ->sortable(),
 
-            Heading::make('Authentication'),
+            Text::make('Genre')
+                ->sortable(),
 
-            Text::make('Email')
+            Number::make('Workload')
+                ->help('Projects / Week')
                 ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:6')
-                ->updateRules('nullable', 'string', 'min:6'),
-
-            HasOne::make('User Profile', 'profile'),
+                ->min(0)
+                ->max(20)
+                ->step(1),
         ];
     }
 
@@ -90,9 +87,7 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [
-            new NewUsers,
-        ];
+        return [];
     }
 
     /**

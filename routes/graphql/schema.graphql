@@ -3,4 +3,4 @@ type Query {
 	user(id: Int! @eq): User @find
 }
 
-#import users/*.graphql
+#import user.graphql

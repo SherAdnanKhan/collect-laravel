@@ -1,0 +1,38 @@
+type User {
+	id: ID!
+	first_name: String!
+	last_name: String!
+	email: String!
+	status: String!
+	created_at: String!
+	updated_at: String
+	profile: UserProfile @hasOne
+	tokens: [UserTwoFactorToken] @hasMany
+	favourites: [UserFavourite] @hasMany
+}
+
+type UserProfile {
+	id: ID!
+	user: User! @belongsTo
+	studio_type: String!
+	label: String!
+	job_role: String!
+	genre: String!
+	workload: Int!
+}
+
+type UserTwoFactorToken {
+	id: ID!
+	user: User! @belongsTo
+	token: String!
+	expires_at: String!
+}
+
+type UserFavourite {
+	id: ID!
+	user: User! @belongsTo
+	resource_id: Int!
+	resource_type: String!
+	created_at: String!
+	updated_at: String
+}
