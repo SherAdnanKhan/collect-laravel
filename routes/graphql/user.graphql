@@ -6,9 +6,14 @@ type User {
 	status: String!
 	created_at: String!
 	updated_at: String
+	stripe_id: String
+	card_brand: String
+	card_last_four: String
+	trial_ends_at: String
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany
 	favourites: [UserFavourite] @hasMany
+	subscriptions: [Subscription] @hasMany
 }
 
 type UserProfile {
@@ -33,6 +38,19 @@ type UserFavourite {
 	user: User! @belongsTo
 	resource_id: Int!
 	resource_type: String!
+	created_at: String!
+	updated_at: String
+}
+
+type Subscription {
+	id: ID!
+	user: User! @belongsTo
+	name: String!
+	stripe_id: String!
+	stripe_plan: String!
+	quantity: Int!
+	trial_ends_at: String
+	ends_at: String
 	created_at: String!
 	updated_at: String
 }
