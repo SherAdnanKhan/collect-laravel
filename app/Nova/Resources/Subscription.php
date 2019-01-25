@@ -2,36 +2,42 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\Metrics\NewUsers;
 use App\Nova\Resource;
-use App\Nova\Resources\UserProfile;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
-class User extends Resource
+class Subscription extends Resource
 {
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\User';
+    public static $model = 'Laravel\\Cashier\\Subscription';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'first_name';
-
-    public static $with = ['profile', 'subscriptions'];
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -39,7 +45,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'email',
+        'id', 'name', 'stripe_id', 'stripe_plan'
     ];
 
     /**
@@ -51,41 +57,26 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Heading::make('Basic'),
-
-            Text::make('First Name')
+            Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Last Name')
+            Text::make('Stripe Id')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Select::make('Status')->options([
-                'active'   => 'Active',
-                'inactive' => 'Inactive',
-            ])->displayUsingLabels(),
-
-            Heading::make('Authentication'),
-
-            Text::make('Email')
+            Text::make('Stripe Plan')
                 ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+                ->rules('required', 'max:255'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:6')
-                ->updateRules('nullable', 'string', 'min:6'),
+            Number::make('Quantity')
+                ->sortable()
+                ->min(1)
+                ->max(999),
 
-            HasOne::make('User Profile', 'profile'),
+            DateTime::make('Trial Ends At'),
 
-            HasMany::make('Subscriptions', 'subscriptions'),
-
-            HasMany::make('Projects', 'projects'),
+            DateTime::make('Ends At'),
         ];
     }
 
@@ -97,9 +88,7 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [
-            new NewUsers,
-        ];
+        return [];
     }
 
     /**
