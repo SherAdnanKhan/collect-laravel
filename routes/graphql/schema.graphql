@@ -2,7 +2,7 @@ type Query {
 	users: [User] @all
 	user(id: Int! @eq): User @find
 	projects: [Project] @all
-	project(id: Int! @eq) Project @find
+	project(id: Int! @eq): Project @find
 }
 
 #import user.graphql
