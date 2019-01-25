@@ -3,8 +3,10 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+// use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
@@ -15,23 +17,21 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Project extends Resource
+class Collaborator extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Project';
+    public static $model = 'App\\Models\\Collaborators';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
-
-    public static $with = ['user', 'collaborators'];
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -39,7 +39,7 @@ class Project extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id'
     ];
 
     /**
@@ -54,15 +54,12 @@ class Project extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('User'),
+            BelongsTo::make('Project'),
 
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Textarea::make('Description')
-                ->rules('required'),
-
-            HasMany::make('Collaborators', 'collaborators'),
+            Select::make('Level')->options([
+                'all'       => 'All',
+                'read-only' => 'Read-Only',
+            ])->displayUsingLabels()->rules('required'),
         ];
     }
 

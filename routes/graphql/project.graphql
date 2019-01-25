@@ -5,4 +5,12 @@ type Project {
 	description: String!
 	created_at: String!
 	updated_at: String
+	collaborators: [Collaborator] @hasMany
+}
+
+type Collaborator {
+	id: ID!
+	user: User! @belongsTo
+	project: Project! @belongsTo
+	level: String!
 }
