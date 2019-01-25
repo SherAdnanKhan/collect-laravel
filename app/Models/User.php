@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\UserFavourite;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -34,7 +35,7 @@ class User extends Authenticatable
     /**
      * The profile associated to the user.
      *
-     * @return HasOne
+     * @return Collection
      */
     public function profile()
     {
@@ -44,10 +45,20 @@ class User extends Authenticatable
     /**
      * The two factor tokens for the user.
      *
-     * @return HasMany
+     * @return Collection
      */
-    public function twoFactorTokens()
+    public function tokens()
     {
         return $this->hasMany(UserTwoFactorToken::class);
+    }
+
+    /**
+     * The users favourite items in the system.
+     *
+     * @return Collection
+     */
+    public function favourites()
+    {
+        return $this->hasMany(UserFavourite::class);
     }
 }

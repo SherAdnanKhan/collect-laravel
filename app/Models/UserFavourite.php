@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class UserTwoFactorToken extends Model
+class UserFavourite extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,6 +13,7 @@ class UserTwoFactorToken extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id', 'resource_type', 'resource_id',
     ];
 
     /**
@@ -31,5 +32,13 @@ class UserTwoFactorToken extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all of the owning resource models.
+     */
+    public function favoured()
+    {
+        return $this->morphTo();
     }
 }
