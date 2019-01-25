@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Project;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
@@ -62,5 +63,15 @@ class User extends Authenticatable
     public function favourites()
     {
         return $this->hasMany(UserFavourite::class);
+    }
+
+    /**
+     * All of the users projects.
+     *
+     * @return Collection
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 }

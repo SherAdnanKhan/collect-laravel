@@ -1,0 +1,8 @@
+type Project {
+	id: ID!
+	user: User! @belongsTo
+	name: String!
+	description: String!
+	created_at: String!
+	updated_at: String
+}
