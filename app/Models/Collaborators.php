@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Collaborators;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Project extends Model
+class Collaborators extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -14,7 +15,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'description',
+        'user_id', 'project_id', 'level',
     ];
 
     /**
@@ -26,7 +27,7 @@ class Project extends Model
     ];
 
     /**
-     * The user owner for this project.
+     * The user who this collaborator represents
      *
      * @return User
      */
@@ -36,22 +37,12 @@ class Project extends Model
     }
 
     /**
-     * Get the collaborator users for this project.
+     * The project this collaborator belongs to.
      *
-     * @return Collection
+     * @return User
      */
-    public function collaborators()
+    public function project()
     {
-        return $this->hasMany(Collaborators::class);
+        return $this->belongsTo(Project::class);
     }
-
-    // public function songs()
-    // {
-    //     return $this->hasMany(Song::class);
-    // }
-
-    // public function files()
-    // {
-    //     return $this->hasMany(File::class);
-    // }
 }

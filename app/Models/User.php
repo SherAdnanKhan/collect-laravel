@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
@@ -73,5 +74,15 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->hasMany(Project::class);
+    }
+
+    /**
+     * Get the times this user has been a collaborator
+     *
+     * @return Collection
+     */
+    public function collaborators()
+    {
+        return $this->hasMany(Collaborators::class);
     }
 }
