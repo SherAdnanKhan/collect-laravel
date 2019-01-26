@@ -85,4 +85,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Collaborators::class);
     }
+
+    /**
+     * Get the people on this users accounts.
+     *
+     * @return Collection
+     */
+    public function persons()
+    {
+        return $this->hasMany(Person::class);
+    }
 }
