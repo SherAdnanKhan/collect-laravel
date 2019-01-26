@@ -16,6 +16,7 @@ type User {
 	subscriptions: [Subscription] @hasMany
 	projects: [Project] @hasMany
 	persons: [Person] @hasMany
+	files: [File] @hasMany
 }
 
 type UserProfile {

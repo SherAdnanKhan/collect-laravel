@@ -45,13 +45,13 @@ class Project extends Model
         return $this->hasMany(Collaborators::class);
     }
 
-    // public function songs()
-    // {
-    //     return $this->hasMany(Song::class);
-    // }
-
-    // public function files()
-    // {
-    //     return $this->hasMany(File::class);
-    // }
+    /**
+     * Get the files belonging to this project.
+     *
+     * @return Collection
+     */
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
 }
