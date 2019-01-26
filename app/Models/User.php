@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Collaborators;
+use App\Models\File;
 use App\Models\Project;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
@@ -94,5 +95,15 @@ class User extends Authenticatable
     public function persons()
     {
         return $this->hasMany(Person::class);
+    }
+
+    /**
+     * Get the files belonging to this user.
+     *
+     * @return Collection
+     */
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
 }

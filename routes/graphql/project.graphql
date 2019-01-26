@@ -6,6 +6,7 @@ type Project {
 	created_at: String!
 	updated_at: String
 	collaborators: [Collaborator] @hasMany
+	files: [File] @hasMany
 }
 
 type Collaborator {
@@ -13,4 +14,18 @@ type Collaborator {
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	level: String!
+}
+
+type File {
+	id: ID!
+	user: User! @belongsTo
+	project: Project! @belongsTo
+	type: String!
+	name: String!
+	path: String!
+	bitrate: Int
+	bitdepth: Int
+	status: String!
+	created_at: String!
+	updated_at: String
 }
