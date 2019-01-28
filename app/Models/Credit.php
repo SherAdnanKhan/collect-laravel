@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\SongRecording;
 use Illuminate\Database\Eloquent\Model;
 
 class Credit extends Model
@@ -22,4 +23,14 @@ class Credit extends Model
      */
     protected $hidden = [
     ];
+
+    /**
+     * Get the song/recording instance this credit is for.
+     *
+     * @return SongRecording
+     */
+    public function songRecording()
+    {
+        return $this->belongsTo(SongRecording::class, 'song_recording_id');
+    }
 }
