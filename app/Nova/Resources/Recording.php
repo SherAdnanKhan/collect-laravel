@@ -15,14 +15,14 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Project extends Resource
+class Recording extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Project';
+    public static $model = 'App\\Models\\Recording';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -31,7 +31,7 @@ class Project extends Resource
      */
     public static $title = 'name';
 
-    public static $with = ['user', 'collaborators', 'recordings'];
+    public static $with = ['project'];
 
     /**
      * The columns that should be searched.
@@ -39,7 +39,7 @@ class Project extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id', 'name', 'type', 'description',
     ];
 
     /**
@@ -53,17 +53,18 @@ class Project extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
+            BelongsTo::make('Project'),
 
-            Text::make('Name')
+            Text::make('name')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Text::make('Type')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
             Textarea::make('Description')
-                ->rules('required'),
-
-            HasMany::make('Collaborators', 'collaborators'),
-            HasMany::make('Recordings', 'recordings'),
+                ->rules('max:255'),
         ];
     }
 
