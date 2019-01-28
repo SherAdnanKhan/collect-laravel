@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Collaborators;
 use App\Models\File;
 use App\Models\Project;
+use App\Models\Song;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
@@ -105,5 +106,15 @@ class User extends Authenticatable
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    /**
+     * Get the files belonging to this user.
+     *
+     * @return Collection
+     */
+    public function songs()
+    {
+        return $this->hasMany(Song::class);
     }
 }
