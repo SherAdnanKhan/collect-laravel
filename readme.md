@@ -4,7 +4,7 @@ This project uses Laravel 5.7, running Laradock to handle the docker environment
 
 ## Getting Setup
 
-Make sure you pull all submodules for this project, here is a command to run to do that: `git submodule update --recursive --remote`
+Make sure you pull all submodules for this project, here is a command to run to do that: `git submodule update --init --recursive`
 
 ### Laradock
 	
