@@ -54,4 +54,14 @@ class Project extends Model
     {
         return $this->hasMany(File::class);
     }
+
+    /**
+     * Get this projects recordings.
+     *
+     * @return Collection
+     */
+    public function recordings()
+    {
+        return $this->hasMany(Recording::class);
+    }
 }
