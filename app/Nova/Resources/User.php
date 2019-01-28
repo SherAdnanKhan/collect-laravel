@@ -86,6 +86,8 @@ class User extends Resource
             HasMany::make('Subscriptions', 'subscriptions'),
 
             HasMany::make('Projects', 'projects'),
+
+            HasMany::make('Songs', 'songs'),
         ];
     }
 
