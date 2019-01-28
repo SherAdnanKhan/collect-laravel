@@ -17,6 +17,7 @@ type User {
 	projects: [Project] @hasMany
 	persons: [Person] @hasMany
 	files: [File] @hasMany
+	songs: [Song] @hasMany
 }
 
 type UserProfile {
@@ -63,6 +64,19 @@ type Person {
 	user: User @belongsTo
 	name: String!
 	email: String
+	created_at: String!
+	updated_at: String
+}
+
+type Song {
+	id: ID!
+	user: User! @belongsTo
+	iswc: String
+	type: String!
+	title: String!
+	subtitle: String
+	genre: String
+	artist: String
 	created_at: String!
 	updated_at: String
 }
