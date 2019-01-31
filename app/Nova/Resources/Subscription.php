@@ -63,16 +63,19 @@ class Subscription extends Resource
 
             Text::make('Stripe Id')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255')
+                ->hideFromIndex(),
 
             Text::make('Stripe Plan')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255')
+                ->hideFromIndex(),
 
             Number::make('Quantity')
                 ->sortable()
                 ->min(1)
-                ->max(999),
+                ->max(999)
+                ->hideFromIndex(),
 
             DateTime::make('Trial Ends At'),
 
