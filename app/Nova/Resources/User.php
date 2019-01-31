@@ -30,7 +30,7 @@ class User extends Resource
      *
      * @var string
      */
-    public static $title = 'first_name';
+    public static $title = 'name';
 
     public static $with = ['profile', 'subscriptions'];
 
@@ -40,7 +40,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'email',
+        'id', 'name', 'email',
     ];
 
     /**

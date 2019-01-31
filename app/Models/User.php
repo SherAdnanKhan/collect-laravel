@@ -39,6 +39,16 @@ class User extends Authenticatable
     ];
 
     /**
+     * Allow access to a 'name' attribute for display purposes.
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
+    }
+
+    /**
      * The profile associated to the user.
      *
      * @return Collection

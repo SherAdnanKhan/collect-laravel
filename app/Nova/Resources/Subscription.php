@@ -57,6 +57,8 @@ class Subscription extends Resource
     public function fields(Request $request)
     {
         return [
+            BelongsTo::make('User'),
+
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
