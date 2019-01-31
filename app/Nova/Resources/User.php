@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\PasswordConfirmation;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
@@ -78,8 +79,10 @@ class User extends Resource
 
             Password::make('Password')
                 ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:6')
-                ->updateRules('nullable', 'string', 'min:6'),
+                ->creationRules('required', 'string', 'min:6', 'confirmed')
+                ->updateRules('nullable', 'string', 'min:6', 'confirmed'),
+
+            PasswordConfirmation::make('Password Confirmation'),
 
             HasOne::make('User Profile', 'profile'),
 
