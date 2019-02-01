@@ -2,7 +2,9 @@
 
 namespace App\Nova\Resources;
 
+use App\Nova\FieldGroups\PersonSessionFields;
 use App\Nova\Resource;
+use App\Nova\Resources\Person;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -68,6 +70,15 @@ class Session extends Resource
                 ->rules('max:255'),
 
             BelongsToMany::make('Recordings'),
+
+            BelongsToMany::make('Persons', 'people', Person::class)->fields(function() {
+                return [
+                    // TODO: Work out how to set properties on a pivot with a relation.
+                    BelongsTo::make('Person Role', 'role', PersonRole::class),
+
+                    // BelongsTo::make('Instrument'),
+                ];
+            }),
         ];
     }
 
