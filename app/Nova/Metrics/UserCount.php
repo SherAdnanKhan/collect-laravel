@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Laravel\Nova\Metrics\Value;
 
-class NewUsers extends Value
+class UserCount extends Value
 {
     /**
      * Calculate the value of the metric.
@@ -53,6 +53,6 @@ class NewUsers extends Value
      */
     public function uriKey()
     {
-        return 'new-users';
+        return 'user-count';
     }
 }

@@ -5,6 +5,7 @@ namespace App\Nova\Resources;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
@@ -65,6 +66,8 @@ class Recording extends Resource
 
             Textarea::make('Description')
                 ->rules('max:255'),
+
+            BelongsToMany::make('Sessions'),
         ];
     }
 

@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use App\Models\Collaborators;
+use App\Models\PersonSession;
+use App\Models\Session;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Persons extends Model
+class Person extends Model
 {
+    protected $table = 'persons';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,5 +37,15 @@ class Persons extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all sessions this person is associated to.
+     *
+     * @return BelongsToMany
+     */
+    public function sessions()
+    {
+        return $this->belongsToMany(Session::class)->using(PersonSession::class);
     }
 }

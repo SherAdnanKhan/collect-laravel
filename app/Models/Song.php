@@ -33,4 +33,12 @@ class Song extends Model
     {
         return $this->hasManyThrough(Recording::class, SongRecording::class);
     }
+
+    /**
+     * Get the songs favourite row
+     */
+    public function favourites()
+    {
+        return $this->morphMany(UserFavourite::class, 'favourable');
+    }
 }

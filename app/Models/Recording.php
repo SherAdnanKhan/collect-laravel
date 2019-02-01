@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Collaborators;
 use App\Models\Project;
+use App\Models\Session;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,5 +35,15 @@ class Recording extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the sessions associated to this session.
+     *
+     * @return BelongsToMany
+     */
+    public function sessions()
+    {
+        return $this->belongsToMany(Session::class, 'sessions_to_recordings');
     }
 }
