@@ -31,7 +31,7 @@ class Project extends Resource
      */
     public static $title = 'name';
 
-    public static $with = ['user', 'collaborators', 'recordings'];
+    public static $with = ['user', 'collaborators', 'recordings', 'sessions'];
 
     /**
      * The columns that should be searched.
@@ -64,6 +64,7 @@ class Project extends Resource
 
             HasMany::make('Collaborators', 'collaborators'),
             HasMany::make('Recordings', 'recordings'),
+            HasMany::make('Sessions', 'sessions'),
         ];
     }
 

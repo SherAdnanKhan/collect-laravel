@@ -2,41 +2,37 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\Metrics\UserCount;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 
-class UserProfile extends Resource
+class Session extends Resource
 {
-    /**
-     * Indicates if the resource should be displayed in the sidebar.
-     *
-     * @var bool
-     */
-    public static $displayInNavigation = false;
-
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\UserProfile';
+    public static $model = 'App\\Models\\Session';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
+
+    public static $with = ['project'];
 
     /**
      * The columns that should be searched.
@@ -44,7 +40,7 @@ class UserProfile extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'studio_type', 'job_role', 'label', 'genre'
+        'id', 'name', 'studio', 'description',
     ];
 
     /**
@@ -56,29 +52,22 @@ class UserProfile extends Resource
     public function fields(Request $request)
     {
         return [
+            ID::make()->sortable(),
 
-            BelongsTo::make('User'),
+            BelongsTo::make('Project'),
 
-            Text::make('Studio Type')
+            Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Job Role')
+            Text::make('Studio')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Label')
-                ->sortable(),
+            Textarea::make('Description')
+                ->rules('max:255'),
 
-            Text::make('Genre')
-                ->sortable(),
-
-            Number::make('Workload')
-                ->help('Projects / Week')
-                ->sortable()
-                ->min(0)
-                ->max(20)
-                ->step(1),
+            BelongsToMany::make('Recordings'),
         ];
     }
 

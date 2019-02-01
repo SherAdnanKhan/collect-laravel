@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Collaborators;
+use App\Models\Session;
 use App\Models\User;
+use App\Models\UserFavourite;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
@@ -56,12 +58,30 @@ class Project extends Model
     }
 
     /**
-     * Get this projects recordings.
+     * Get this recordings recordings.
      *
      * @return Collection
      */
     public function recordings()
     {
         return $this->hasMany(Recording::class);
+    }
+
+    /**
+     * Get this sessions recordings.
+     *
+     * @return Collection
+     */
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    /**
+     * Get the projects favourite row.
+     */
+    public function favourite()
+    {
+        return $this->morphMany(UserFavourite::class, 'favourable');
     }
 }

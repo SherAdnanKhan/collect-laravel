@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Nova\Metrics\NewUsers;
+use App\Nova\Metrics\ProjectCount;
+use App\Nova\Metrics\UserCount;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -57,7 +58,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function cards()
     {
         return [
-            new NewUsers,
+            new UserCount,
+            new ProjectCount,
         ];
     }
 

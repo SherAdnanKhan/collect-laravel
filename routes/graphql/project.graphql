@@ -7,6 +7,8 @@ type Project {
 	updated_at: String
 	collaborators: [Collaborator] @hasMany
 	files: [File] @hasMany
+	sessions: [Session] @hasMany
+	recordings: [Recording] @hasMany
 }
 
 type Collaborator {
@@ -28,4 +30,24 @@ type File {
 	status: String!
 	created_at: String!
 	updated_at: String
+}
+
+type Recording {
+	id: ID!
+	project: Project! @belongsTo
+	name: String
+	type: String
+	description: String
+	sessions: [Session] @belongsToMany
+}
+
+type Session {
+	id: ID!
+	project: Project! @belongsTo
+	studio: String
+	name: String
+	description: String
+	created_at: String!
+	updated_at: String
+	recordings: [Recording] @belongsToMany
 }

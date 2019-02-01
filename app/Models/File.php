@@ -35,4 +35,12 @@ class File extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the files favourite row.
+     */
+    public function favourite()
+    {
+        return $this->morphMany(UserFavourite::class, 'favourable');
+    }
 }

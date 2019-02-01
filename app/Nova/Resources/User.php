@@ -2,8 +2,8 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\Metrics\NewUsers;
 use App\Nova\Resource;
+use App\Nova\Resources\Person;
 use App\Nova\Resources\UserProfile;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
@@ -40,7 +40,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'first_name', 'last_name', 'email',
     ];
 
     /**
@@ -91,6 +91,8 @@ class User extends Resource
             HasMany::make('Projects', 'projects'),
 
             HasMany::make('Songs', 'songs'),
+
+            HasMany::make('People', 'persons', Person::class),
         ];
     }
 
@@ -102,9 +104,7 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [
-            new NewUsers,
-        ];
+        return [];
     }
 
     /**
