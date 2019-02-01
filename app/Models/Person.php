@@ -46,6 +46,6 @@ class Person extends Model
      */
     public function sessions()
     {
-        return $this->belongsToMany(Session::class)->using(PersonSession::class);
+        return $this->belongsToMany(Session::class, 'persons_to_sessions')->using(PersonSession::class);
     }
 }

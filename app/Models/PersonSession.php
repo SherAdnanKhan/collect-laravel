@@ -9,7 +9,7 @@ use App\Models\PersonRole;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
-use Illuminate\Database\Eloquent\Pivot;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class PersonSession extends Pivot
 {
