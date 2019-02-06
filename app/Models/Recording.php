@@ -20,14 +20,6 @@ class Recording extends Model
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
-    /**
      * Get the project that this recording is asociated to.
      *
      * @return Project
