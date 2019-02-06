@@ -6,6 +6,7 @@ use App\Models\Credit;
 use App\Models\Instrument;
 use App\Models\Person;
 use App\Models\PersonRole;
+use App\Models\PersonSession;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
@@ -41,7 +42,7 @@ class PersonSession extends Pivot
      */
     public function role()
     {
-        return $this->belongsTo(PersonRole::class);
+        return $this->belongsToMany(PersonRole::class);
     }
 
     /**

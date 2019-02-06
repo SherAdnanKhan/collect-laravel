@@ -2,6 +2,7 @@
 
 namespace App\Nova\Resources;
 
+use App\Models\PersonSession;
 use App\Nova\FieldGroups\PersonSessionFields;
 use App\Nova\Resource;
 use App\Nova\Resources\Person;
@@ -71,14 +72,7 @@ class Session extends Resource
 
             BelongsToMany::make('Recordings'),
 
-            BelongsToMany::make('Persons', 'people', Person::class)->fields(function() {
-                return [
-                    // TODO: Work out how to set properties on a pivot with a relation.
-                    BelongsTo::make('Person Role', 'role', PersonRole::class),
-
-                    // BelongsTo::make('Instrument'),
-                ];
-            }),
+            BelongsToMany::make('Persons', 'people', Person::class)->fields(new PersonSessionFields),
         ];
     }
 

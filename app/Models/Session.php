@@ -41,6 +41,7 @@ class Session extends Model
      */
     public function people()
     {
-        return $this->belongsToMany(Person::class, 'persons_to_sessions')->using(PersonSession::class);
+        return $this->belongsToMany(Person::class, 'persons_to_sessions')
+            ->using(PersonSession::class)->withPivot('person_role_id', 'instrument_id');
     }
 }
