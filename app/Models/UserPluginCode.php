@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Session;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class UserFavourite extends Model
+class UserPluginCode extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,13 +14,15 @@ class UserFavourite extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'resource_type', 'resource_id',
+        'user_id', 'session_id', 'type', 'code', 'expires_at'
     ];
+
+    protected $timestamps = false;
 
     /**
      * Get the owning user of this model.
      *
-     * @return Collection
+     * @return BelongsTo
      */
     public function user()
     {
@@ -27,10 +30,12 @@ class UserFavourite extends Model
     }
 
     /**
-     * Get all of the owning resource models.
+     * Get the owning Session of this model.
+     *
+     * @return BelongsTo
      */
-    public function favoured()
+    public function session()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Session::class);
     }
 }

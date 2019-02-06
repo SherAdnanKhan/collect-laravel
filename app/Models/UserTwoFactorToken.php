@@ -13,15 +13,10 @@ class UserTwoFactorToken extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id', 'token', 'expires_at'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
+    protected $timestamps = false;
 
     /**
      * Get the owning user of this model.
