@@ -3,8 +3,8 @@ type Project {
 	user: User! @belongsTo
 	name: String!
 	description: String!
-	created_at: String!
-	updated_at: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 	collaborators: [Collaborator] @hasMany
 	files: [File] @hasMany
 	sessions: [Session] @hasMany
@@ -28,8 +28,8 @@ type File {
 	bitrate: Int
 	bitdepth: Int
 	status: String!
-	created_at: String!
-	updated_at: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type Recording {
@@ -47,7 +47,7 @@ type Session {
 	studio: String
 	name: String
 	description: String
-	created_at: String!
-	updated_at: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording] @belongsToMany
 }
