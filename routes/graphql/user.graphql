@@ -67,6 +67,26 @@ type Person {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	sessions: [Session] @belongsToMany
+	role: PersonRole @belongsTo
+	pivot: PersonSession
+}
+
+type PersonRole {
+	id: ID!
+	name: String!
+}
+
+type Instrument {
+	id: ID!
+	category: String
+	name: String
+}
+
+type PersonSession {
+	person: Person @belongsTo
+	session: Session @belongsTo
+	role: PersonRole @belongsTo
+	instrument: Instrument @belongsTo
 }
 
 type Song {
