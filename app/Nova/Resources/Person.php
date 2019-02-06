@@ -2,9 +2,11 @@
 
 namespace App\Nova\Resources;
 
+use App\Nova\FieldGroups\PersonSessionFields;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
@@ -60,6 +62,8 @@ class Person extends Resource
             Text::make('Email')
                 ->sortable()
                 ->rules('max:255', 'email'),
+
+            BelongsToMany::make('Sessions')->fields(new PersonSessionFields),
         ];
     }
 
