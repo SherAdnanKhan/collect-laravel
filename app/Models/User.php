@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Models\Collaborators;
 use App\Models\File;
 use App\Models\Project;
+use App\Models\Session;
 use App\Models\Song;
 use App\Models\UserFavourite;
+use App\Models\UserPluginCode;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,7 +53,7 @@ class User extends Authenticatable
     /**
      * The profile associated to the user.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function profile()
     {
@@ -61,7 +63,7 @@ class User extends Authenticatable
     /**
      * The two factor tokens for the user.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function tokens()
     {
@@ -71,7 +73,7 @@ class User extends Authenticatable
     /**
      * The users favourite items in the system.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function favourites()
     {
@@ -81,7 +83,7 @@ class User extends Authenticatable
     /**
      * All of the users projects.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function projects()
     {
@@ -91,7 +93,7 @@ class User extends Authenticatable
     /**
      * Get the times this user has been a collaborator
      *
-     * @return Collection
+     * @return HasMany
      */
     public function collaborators()
     {
@@ -101,7 +103,7 @@ class User extends Authenticatable
     /**
      * Get the people on this users accounts.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function persons()
     {
@@ -111,7 +113,7 @@ class User extends Authenticatable
     /**
      * Get the files belonging to this user.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function files()
     {
@@ -121,10 +123,20 @@ class User extends Authenticatable
     /**
      * Get the files belonging to this user.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function songs()
     {
         return $this->hasMany(Song::class);
+    }
+
+    /**
+     * Get the plugin codes for a user, for a specific session.
+     *
+     * @return HasMany
+     */
+    public function pluginCodes(Session $session)
+    {
+        return $this->hasMany(UserPluginCode::class)->where('session_id', $session->id);
     }
 }
