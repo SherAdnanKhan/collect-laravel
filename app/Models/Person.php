@@ -22,14 +22,6 @@ class Person extends Model
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
-    /**
      * The user owner for this project.
      *
      * @return User
@@ -46,6 +38,7 @@ class Person extends Model
      */
     public function sessions()
     {
-        return $this->belongsToMany(Session::class, 'persons_to_sessions')->using(PersonSession::class);
+        return $this->belongsToMany(Session::class, 'persons_to_sessions')
+            ->using(PersonSession::class);
     }
 }
