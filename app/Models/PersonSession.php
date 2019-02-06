@@ -42,7 +42,7 @@ class PersonSession extends Pivot
      */
     public function role()
     {
-        return $this->belongsTo(PersonRole::class);
+        return $this->belongsTo(PersonRole::class, 'person_role_id');
     }
 
     /**
