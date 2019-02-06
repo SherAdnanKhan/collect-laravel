@@ -56,7 +56,7 @@ class Recording extends Resource
 
             BelongsTo::make('Project'),
 
-            Text::make('name')
+            Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 

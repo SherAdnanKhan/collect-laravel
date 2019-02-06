@@ -21,14 +21,6 @@ class UserProfile extends Model
         'workload',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
     public $timestamps = false;
 
     /**
