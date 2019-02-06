@@ -50,4 +50,5 @@ type Session {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording] @belongsToMany
+	people: [Person] @belongsToMany
 }

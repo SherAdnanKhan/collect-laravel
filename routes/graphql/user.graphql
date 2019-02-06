@@ -66,6 +66,7 @@ type Person {
 	email: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+	sessions: [Session] @belongsToMany
 }
 
 type Song {
