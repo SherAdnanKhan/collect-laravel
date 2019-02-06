@@ -1,15 +1,15 @@
 type User {
 	id: ID!
-	first_name: String!
-	last_name: String!
+	firstName: String! @rename(attribute: "first_name")
+	lastName: String! @rename(attribute: "last_name")
 	email: String!
 	status: String!
-	created_at: String!
-	updated_at: String
-	stripe_id: String
-	card_brand: String
-	card_last_four: String
-	trial_ends_at: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	stripeId: String @rename(attribute: "stripe_id")
+	cardBrand: String @rename(attribute: "card_brand")
+	cardLastFour: String @rename(attribute: "card_last_four")
+	trialEndsAt: String @rename(attribute: "trial_ends_at")
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany
 	favourites: [UserFavourite] @hasMany
@@ -23,9 +23,9 @@ type User {
 type UserProfile {
 	id: ID!
 	user: User! @belongsTo
-	studio_type: String!
+	studioType: String! @rename(attribute: "studio_type")
 	label: String!
-	job_role: String!
+	jobRole: String! @rename(attribute: "job_role")
 	genre: String!
 	workload: Int!
 }
@@ -34,29 +34,29 @@ type UserTwoFactorToken {
 	id: ID!
 	user: User! @belongsTo
 	token: String!
-	expires_at: String!
+	expiresAt: String! @rename(attribute: "expires_at")
 }
 
 type UserFavourite {
 	id: ID!
 	user: User! @belongsTo
-	resource_id: Int!
-	resource_type: String!
-	created_at: String!
-	updated_at: String
+	resourceId: Int! @rename(attribute: "resource_id")
+	resourceType: String! @rename(attribute: "resource_type")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type Subscription {
 	id: ID!
 	user: User! @belongsTo
 	name: String!
-	stripe_id: String!
-	stripe_plan: String!
+	stripeId: String! @rename(attribute: "stripe_id")
+	stripePlan: String! @rename(attribute: "stripe_plan")
 	quantity: Int!
-	trial_ends_at: String
-	ends_at: String
-	created_at: String!
-	updated_at: String
+	trialEndsAt: String @rename(attribute: "trial_ends_at")
+	endsAt: String @rename(attribute: "ends_at")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type Person {
@@ -64,8 +64,8 @@ type Person {
 	user: User @belongsTo
 	name: String!
 	email: String
-	created_at: String!
-	updated_at: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type Song {
@@ -77,6 +77,6 @@ type Song {
 	subtitle: String
 	genre: String
 	artist: String
-	created_at: String!
-	updated_at: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
