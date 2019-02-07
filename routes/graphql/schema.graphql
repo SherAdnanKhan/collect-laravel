@@ -5,5 +5,19 @@ type Query {
 	project(id: Int! @eq): Project @find
 }
 
+type Mutation {
+	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
+}
+
+input CreateUserFavouriteInput {
+	user: CreateUserFavouriteRelation!
+	resourceId: Int! @rename(attribute: "resource_id")
+	resourceType: String! @rename(attribute: "resource_type")
+}
+
+input CreateUserFavouriteRelation {
+	id: ID!
+}
+
 #import user.graphql
 #import project.graphql
