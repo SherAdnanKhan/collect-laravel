@@ -5,18 +5,22 @@ type Query {
 	project(id: Int! @eq): Project @find
 }
 
-type Mutation @group(namespace: "App\\Http\\GraphQL\\Mutations"){
-	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "UserFavouriteMutator@create")
+# type Mutation @group(namespace: "App\\Http\\GraphQL\\Mutations"){
+# 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "UserFavouriteMutator@create")
+# }
+
+type Mutation {
+	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 }
 
 input CreateUserFavouriteInput {
 	user: CreateUserFavouriteRelation!
-	resourceId: Int! @rename(attribute: "resource_id")
-	resourceType: String! @rename(attribute: "resource_type")
+	resourceId: Int! @renameInput(attribute: "resource_id")
+	resourceType: String! @renameInput(attribute: "resource_type")
 }
 
 input CreateUserFavouriteRelation {
-	id: ID!
+	connect: ID!
 }
 
 #import user.graphql

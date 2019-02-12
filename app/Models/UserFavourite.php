@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserFavourite extends Model
 {
@@ -19,9 +20,9 @@ class UserFavourite extends Model
     /**
      * Get the owning user of this model.
      *
-     * @return Collection
+     * @return BelongsTo
      */
-    public function user()
+    public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }
