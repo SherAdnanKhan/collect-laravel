@@ -11,6 +11,8 @@ use App\Models\UserFavourite;
 use App\Models\UserPluginCode;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -45,7 +47,7 @@ class User extends Authenticatable
      *
      * @return string
      */
-    public function getNameAttribute()
+    public function getNameAttribute(): string
     {
         return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
     }
@@ -53,9 +55,9 @@ class User extends Authenticatable
     /**
      * The profile associated to the user.
      *
-     * @return HasMany
+     * @return HasOne
      */
-    public function profile()
+    public function profile(): HasOne
     {
         return $this->hasOne(UserProfile::class);
     }
@@ -65,7 +67,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(UserTwoFactorToken::class);
     }
@@ -75,7 +77,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function favourites()
+    public function favourites(): HasMany
     {
         return $this->hasMany(UserFavourite::class);
     }
@@ -85,7 +87,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function projects()
+    public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
     }
@@ -95,7 +97,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function collaborators()
+    public function collaborators(): HasMany
     {
         return $this->hasMany(Collaborators::class);
     }
@@ -105,7 +107,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function persons()
+    public function persons(): HasMany
     {
         return $this->hasMany(Person::class);
     }
@@ -115,7 +117,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function files()
+    public function files(): HasMany
     {
         return $this->hasMany(File::class);
     }
@@ -125,7 +127,7 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function songs()
+    public function songs(): HasMany
     {
         return $this->hasMany(Song::class);
     }
@@ -133,9 +135,10 @@ class User extends Authenticatable
     /**
      * Get the plugin codes for a user, for a specific session.
      *
+     * @param  Session $session
      * @return HasMany
      */
-    public function pluginCodes(Session $session)
+    public function pluginCodes(Session $session): HasMany
     {
         return $this->hasMany(UserPluginCode::class)->where('session_id', $session->id);
     }

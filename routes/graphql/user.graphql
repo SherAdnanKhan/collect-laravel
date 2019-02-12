@@ -1,4 +1,4 @@
-type User {
+ type User @model(class: "App\\Models\\User") {
 	id: ID!
 	firstName: String! @rename(attribute: "first_name")
 	lastName: String! @rename(attribute: "last_name")
@@ -13,7 +13,7 @@ type User {
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany
 	favourites: [UserFavourite] @hasMany
-	subscriptions: [Subscription] @hasMany
+	subscriptions: [UserSubscription] @hasMany
 	projects: [Project] @hasMany
 	persons: [Person] @hasMany
 	files: [File] @hasMany
@@ -37,7 +37,7 @@ type UserTwoFactorToken {
 	expiresAt: String! @rename(attribute: "expires_at")
 }
 
-type UserFavourite {
+type UserFavourite @model(class: "App\\Models\\UserFavourite") {
 	id: ID!
 	user: User! @belongsTo
 	resourceId: Int! @rename(attribute: "resource_id")
@@ -46,7 +46,7 @@ type UserFavourite {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type Subscription {
+type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
 	id: ID!
 	user: User! @belongsTo
 	name: String!
