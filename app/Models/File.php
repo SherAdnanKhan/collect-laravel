@@ -39,8 +39,8 @@ class File extends Model
     /**
      * Get the files favourite row.
      */
-    public function favourite()
+    public function favourites()
     {
-        return $this->morphMany(UserFavourite::class, 'favourable');
+        return $this->morphMany(UserFavourite::class, 'favoured');
     }
 }

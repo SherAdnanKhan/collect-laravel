@@ -1,4 +1,4 @@
-type Project {
+type Project implements Favoured {
 	id: ID!
 	user: User! @belongsTo
 	name: String!
@@ -18,7 +18,7 @@ type Collaborator {
 	level: String!
 }
 
-type File {
+type File implements Favoured {
 	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
@@ -32,7 +32,7 @@ type File {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type Recording {
+type Recording implements Favoured {
 	id: ID!
 	project: Project! @belongsTo
 	name: String
@@ -41,7 +41,7 @@ type Recording {
 	sessions: [Session] @belongsToMany
 }
 
-type Session {
+type Session implements Favoured {
 	id: ID!
 	project: Project! @belongsTo
 	studio: String
