@@ -15,12 +15,22 @@ type Mutation {
 
 input CreateUserFavouriteInput {
 	user: CreateUserFavouriteRelation!
-	resourceId: Int! @renameInput(attribute: "resource_id")
-	resourceType: String! @renameInput(attribute: "resource_type")
+	resource_id: Int!
+	resource_type: String!
 }
+
+# input CreateUserFavouriteInput {
+#     user: CreateUserFavouriteRelation!
+#     resourceId: Int! @renameInput(attribute: "resource_id")
+#     resourceType: String! @renameInput(attribute: "resource_type")
+# }
 
 input CreateUserFavouriteRelation {
 	connect: ID!
+}
+
+interface Favoured {
+    id: ID!
 }
 
 #import user.graphql

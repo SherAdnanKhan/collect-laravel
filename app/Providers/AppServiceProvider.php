@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\File;
+use App\Models\Person;
+use App\Models\Project;
+use App\Models\Recording;
+use App\Models\Session;
+use App\Models\Song;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Relation::morphMap([
+            'file'      => File::class,
+            'project'   => Project::class,
+            'person'    => Person::class,
+            'session'   => Session::class,
+            'recording' => Recording::class,
+            'song'      => Song::class,
+        ]);
     }
 
     /**

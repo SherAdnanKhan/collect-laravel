@@ -42,6 +42,7 @@ type UserFavourite @model(class: "App\\Models\\UserFavourite") {
 	user: User! @belongsTo
 	resourceId: Int! @rename(attribute: "resource_id")
 	resourceType: String! @rename(attribute: "resource_type")
+	favoured: Favoured
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
@@ -59,7 +60,7 @@ type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type Person {
+type Person implements Favoured {
 	id: ID!
 	user: User @belongsTo
 	name: String!
@@ -88,7 +89,7 @@ type PersonSession {
 	instrument: Instrument @belongsTo
 }
 
-type Song {
+type Song implements Favoured {
 	id: ID!
 	user: User! @belongsTo
 	iswc: String

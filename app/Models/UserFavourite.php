@@ -32,6 +32,6 @@ class UserFavourite extends Model
      */
     public function favoured()
     {
-        return $this->morphTo();
+        return $this->morphTo(null, 'resource_type', 'resource_id');
     }
 }
