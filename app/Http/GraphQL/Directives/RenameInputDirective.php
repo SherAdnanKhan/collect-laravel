@@ -29,19 +29,18 @@ class RenameInputDirective extends BaseDirective implements FieldResolver
      */
     public function resolveField(FieldValue $fieldValue): FieldValue
     {
-        $attribute = $this->directiveArgValue('attribute');
+        // $attribute = $this->directiveArgValue('attribute');
 
-        if (! $attribute) {
-            throw new DirectiveException(
-                "The [{$this->name()}] directive requires an `attribute` argument."
-            );
-        }
+        // if (!$attribute) {
+        //     throw new DirectiveException(
+        //         "The [{$this->name()}] directive requires an `attribute` argument."
+        //     );
+        // }
 
-        return $fieldValue->setResolver(
-            function ($rootValue, array $args) use ($attribute) {
-                var_dump($rootValue);
-                die();
-            }
-        );
+        // return $fieldValue->setResolver(
+        //     function ($rootValue, array $args) use ($attribute) {
+        //         return data_get($attribute, $rootValue);
+        //     }
+        // );
     }
 }

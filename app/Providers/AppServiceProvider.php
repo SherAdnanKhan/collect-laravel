@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\GraphQL\Directives\RenameInputDirective;
 use App\Models\File;
 use App\Models\Person;
 use App\Models\Project;
