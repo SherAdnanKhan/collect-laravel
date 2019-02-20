@@ -2,21 +2,21 @@ type Query {
     # User Queries
     getMe: User @auth
 	getUsers: [User] @paginate
-	getUserById(id: Int! @eq): User @find
+	getUser(id: Int! @eq): User @find
 
 	# User Favourite Queries
-	getUserFavouritesByUserId(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate
+	getUserFavourites(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate
 
 	# User Token Queries
-	getUserTwoFactorTokensByUserId(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
+	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
 
 	# subscription Queries
-	getSubscriptionsByUserId(userId: Int! @eq(key: "user_id")): [Subscription] @all
+	getSubscriptions(userId: Int! @eq(key: "user_id")): [Subscription] @all
 
 	# Project Queries
 	getProjects: [Project] @paginate
 	getProject(id: Int! @eq): Project @find
-	getProjectsByUserId(userId: Int! @eq(key: "user_id")): [Project] @paginate
+	getProjects(userId: Int! @eq(key: "user_id")): [Project] @paginate
 
 }
 
