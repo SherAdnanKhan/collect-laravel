@@ -1,5 +1,5 @@
  type User @model(class: "App\\Models\\User") {
-	id: ID!
+	id: ID! @globalId
 	firstName: String! @rename(attribute: "first_name")
 	lastName: String! @rename(attribute: "last_name")
 	email: String!
@@ -22,7 +22,7 @@
 }
 
 type UserProfile {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	studioType: String! @rename(attribute: "studio_type")
 	label: String!
@@ -32,14 +32,14 @@ type UserProfile {
 }
 
 type UserTwoFactorToken {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	token: String!
 	expiresAt: String! @rename(attribute: "expires_at")
 }
 
 type UserFavourite @model(class: "App\\Models\\UserFavourite") {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	resourceId: Int! @rename(attribute: "resource_id")
 	resourceType: String! @rename(attribute: "resource_type")
@@ -49,7 +49,7 @@ type UserFavourite @model(class: "App\\Models\\UserFavourite") {
 }
 
 type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	name: String!
 	stripeId: String! @rename(attribute: "stripe_id")
@@ -62,7 +62,7 @@ type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
 }
 
 type Person implements Favoured {
-	id: ID!
+	id: ID! @globalId
 	user: User @belongsTo
 	name: String!
 	email: String
@@ -73,12 +73,12 @@ type Person implements Favoured {
 }
 
 type PersonRole {
-	id: ID!
+	id: ID! @globalId
 	name: String!
 }
 
 type Instrument {
-	id: ID!
+	id: ID! @globalId
 	category: String
 	name: String
 }
@@ -91,7 +91,7 @@ type PersonSession {
 }
 
 type Song implements Favoured {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	iswc: String
 	type: String!

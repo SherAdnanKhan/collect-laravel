@@ -1,13 +1,32 @@
 type Query {
-    me: User @auth
-	users: [User] @paginate
-	user(id: Int! @eq): User @find
-	projects: [Project] @paginate
-	project(id: Int! @eq): Project @find
+    # User Queries
+    getMe: User @auth
+	getUsers: [User] @paginate
+	getUserById(id: Int! @eq): User @find
+
+	# User Favourite Queries
+	getUserFavouritesByUserId(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate
+
+	# User Token Queries
+	getUserTwoFactorTokensByUserId(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
+
+	# subscription Queries
+	getSubscriptionsByUserId(userId: Int! @eq(key: "user_id")): [Subscription] @all
+
+	# Project Queries
+	getProjects: [Project] @paginate
+	getProject(id: Int! @eq): Project @find
+	getProjectsByUserId(userId: Int! @eq(key: "user_id")): [Project] @paginate
+
 }
 
 type Mutation {
+	# User Mutations
+
+	# User Favourite Mutations
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
+
+	# Project Mutations
 }
 
 input CreateUserFavouriteInput {
@@ -21,7 +40,7 @@ input CreateUserFavouriteRelation {
 }
 
 interface Favoured {
-    id: ID! @globalid
+    id: ID! @globalId
 }
 
 #import user.graphql

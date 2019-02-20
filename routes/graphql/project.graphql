@@ -1,5 +1,5 @@
 type Project implements Favoured {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	name: String!
 	description: String!
@@ -13,14 +13,14 @@ type Project implements Favoured {
 }
 
 type Collaborator {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	level: String!
 }
 
 type File implements Favoured {
-	id: ID!
+	id: ID! @globalId
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	type: String!
@@ -34,7 +34,7 @@ type File implements Favoured {
 }
 
 type Recording implements Favoured {
-	id: ID!
+	id: ID! @globalId
 	project: Project! @belongsTo
 	name: String
 	type: String
@@ -43,7 +43,7 @@ type Recording implements Favoured {
 }
 
 type Session implements Favoured {
-	id: ID!
+	id: ID! @globalId
 	project: Project! @belongsTo
 	studio: String
 	name: String
@@ -55,7 +55,7 @@ type Session implements Favoured {
 }
 
 type Comment {
-	id: ID!
+	id: ID! @globalId
 	project: Project! @belongsTo
 	user: User! @belongsTo
 	resourceId: Int @rename(attribute: "resource_id")
