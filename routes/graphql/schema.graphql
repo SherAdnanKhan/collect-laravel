@@ -1,4 +1,5 @@
 type Query {
+    me: User @auth
 	users: [User] @all
 	user(id: Int! @eq): User @find
 	projects: [Project] @all
@@ -19,18 +20,12 @@ input CreateUserFavouriteInput {
 	resource_type: String!
 }
 
-# input CreateUserFavouriteInput {
-#     user: CreateUserFavouriteRelation!
-#     resourceId: Int! @renameInput(attribute: "resource_id")
-#     resourceType: String! @renameInput(attribute: "resource_type")
-# }
-
 input CreateUserFavouriteRelation {
 	connect: ID!
 }
 
 interface Favoured {
-    id: ID!
+    id: ID! @globalid
 }
 
 #import user.graphql
