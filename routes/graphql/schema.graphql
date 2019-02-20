@@ -10,13 +10,28 @@ type Query {
 	# User Token Queries
 	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
 
-	# subscription Queries
-	getSubscriptions(userId: Int! @eq(key: "user_id")): [Subscription] @all
+	# User Subscription Queries
+	getSubscription(id: Int! @eq): UserSubscription @find(model: "Laravel\\Cashier\\Subscription")
+	getSubscriptions(userId: Int! @eq(key: "user_id")): [UserSubscription] @paginate(model: "Laravel\\Cashier\\Subscription", defaultCount: 1)
+
+	# Person (People) Queries
+	getPerson(id: Int! @eq): Person @find
+	getPeople(userId: Int @eq(key: "user_id")): [Person] @paginate
 
 	# Project Queries
 	getProject(id: Int! @eq): Project @find
 	getProjects(userId: Int @eq(key: "user_id")): [Project] @paginate
 
+	# Song Queries
+	getSong(id: Int! @eq): Song @find
+	getSongs(userId: Int @eq(key: "user_id")): [Song] @paginate
+
+	# File Queries
+	getFile(id: Int! @eq): File @find
+	getFiles(
+		userId: Int @eq(key: "user_id")
+		projectId: Int @eq(key: "project_id")
+	): [File] @paginate
 }
 
 type Mutation {
