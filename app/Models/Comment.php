@@ -44,7 +44,7 @@ class Comment extends Model
      *
      * @return MorphTo
      */
-    public function commentedOn() : MorphTo
+    public function commentable() : MorphTo
     {
         return $this->morphTo(null, 'resource_type', 'resource_id');
     }
