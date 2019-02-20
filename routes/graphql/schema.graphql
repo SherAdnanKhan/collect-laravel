@@ -6,10 +6,6 @@ type Query {
 	project(id: Int! @eq): Project @find
 }
 
-# type Mutation @group(namespace: "App\\Http\\GraphQL\\Mutations"){
-# 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "UserFavouriteMutator@create")
-# }
-
 type Mutation {
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 }
