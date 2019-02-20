@@ -5,11 +5,11 @@ type Project implements Favoured {
 	description: String!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
-	collaborators: [Collaborator] @hasMany
-	files: [File] @hasMany
-	sessions: [Session] @hasMany
-	recordings: [Recording] @hasMany
-	comments: [Comment] @hasMany
+	collaborators: [Collaborator] @hasMany(type: "paginator")
+	files: [File] @hasMany(type: "paginator")
+	sessions: [Session] @hasMany(type: "paginator")
+	recordings: [Recording] @hasMany(type: "paginator")
+	comments: [Comment] @hasMany(type: "paginator")
 }
 
 type Collaborator {
@@ -50,8 +50,8 @@ type Session implements Favoured {
 	description: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
-	recordings: [Recording] @belongsToMany
-	people: [Person] @belongsToMany
+	recordings: [Recording] @belongsToMany(type: "paginator")
+	people: [Person] @belongsToMany(type: "paginator")
 }
 
 type Comment {

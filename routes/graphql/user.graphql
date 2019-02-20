@@ -11,14 +11,14 @@
 	cardLastFour: String @rename(attribute: "card_last_four")
 	trialEndsAt: String @rename(attribute: "trial_ends_at")
 	profile: UserProfile @hasOne
-	tokens: [UserTwoFactorToken] @hasMany
-	favourites: [UserFavourite] @hasMany
-	subscriptions: [UserSubscription] @hasMany
-	projects: [Project] @hasMany
-	persons: [Person] @hasMany
-	files: [File] @hasMany
-	songs: [Song] @hasMany
-	comments: [Comment] @hasMany
+	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
+	favourites: [UserFavourite] @hasMany(type: "paginator")
+	subscriptions: [UserSubscription] @hasMany(type: "paginator")
+	projects: [Project] @hasMany(type: "paginator")
+	persons: [Person] @hasMany(type: "paginator")
+	files: [File] @hasMany(type: "paginator")
+	songs: [Song] @hasMany(type: "paginator")
+	comments: [Comment] @hasMany(type: "paginator")
 }
 
 type UserProfile {
@@ -68,7 +68,7 @@ type Person implements Favoured {
 	email: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
-	sessions: [Session] @belongsToMany
+	sessions: [Session] @belongsToMany(type: "paginator")
 	meta: PersonSession @rename(attribute: "pivot")
 }
 
