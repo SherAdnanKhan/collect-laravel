@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Collaborators;
+use App\Models\Comment;
 use App\Models\Session;
 use App\Models\User;
 use App\Models\UserFavourite;
@@ -80,8 +81,18 @@ class Project extends Model
     /**
      * Get the projects favourite row.
      */
-    public function favourite()
+    public function favourites()
     {
-        return $this->morphMany(UserFavourite::class, 'favourable');
+        return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * Get all of the projects' comments.
+     *
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }
