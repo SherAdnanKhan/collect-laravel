@@ -14,9 +14,8 @@ type Query {
 	getSubscriptions(userId: Int! @eq(key: "user_id")): [Subscription] @all
 
 	# Project Queries
-	getProjects: [Project] @paginate
 	getProject(id: Int! @eq): Project @find
-	getProjects(userId: Int! @eq(key: "user_id")): [Project] @paginate
+	getProjects(userId: Int @eq(key: "user_id")): [Project] @paginate
 
 }
 
