@@ -44,4 +44,9 @@ class Session extends Model
         return $this->belongsToMany(Person::class, 'persons_to_sessions')
             ->using(PersonSession::class)->withPivot('person_role_id', 'instrument_id');
     }
+
+    public function favourites()
+    {
+        return $this->morphMany(UserFavourite::class, 'favoured');
+    }
 }

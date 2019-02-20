@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Collaborators;
+use App\Models\Comment;
 use App\Models\File;
 use App\Models\Project;
 use App\Models\Session;
@@ -130,6 +131,16 @@ class User extends Authenticatable
     public function songs(): HasMany
     {
         return $this->hasMany(Song::class);
+    }
+
+    /**
+     * Get all of the users comments.
+     *
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 
     /**

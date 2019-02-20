@@ -38,4 +38,9 @@ class Recording extends Model
     {
         return $this->belongsToMany(Session::class, 'sessions_to_recordings');
     }
+
+    public function favourites()
+    {
+        return $this->morphMany(UserFavourite::class, 'favoured');
+    }
 }

@@ -39,6 +39,6 @@ class Song extends Model
      */
     public function favourites()
     {
-        return $this->morphMany(UserFavourite::class, 'favourable');
+        return $this->morphMany(UserFavourite::class, 'favoured');
     }
 }

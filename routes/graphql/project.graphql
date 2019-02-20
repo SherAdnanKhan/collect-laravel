@@ -9,6 +9,7 @@ type Project implements Favoured {
 	files: [File] @hasMany
 	sessions: [Session] @hasMany
 	recordings: [Recording] @hasMany
+	comments: [Comment] @hasMany
 }
 
 type Collaborator {
@@ -51,4 +52,16 @@ type Session implements Favoured {
 	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording] @belongsToMany
 	people: [Person] @belongsToMany
+}
+
+type Comment {
+	id: ID!
+	project: Project! @belongsTo
+	user: User! @belongsTo
+	resourceId: Int @rename(attribute: "resource_id")
+	resourceType: String @rename(attribute: "resource_type")
+	commentedOn: Favoured
+	message: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }

@@ -41,4 +41,9 @@ class Person extends Model
         return $this->belongsToMany(Session::class, 'persons_to_sessions')
             ->using(PersonSession::class);
     }
+
+    public function favourites()
+    {
+        return $this->morphMany(UserFavourite::class, 'favoured');
+    }
 }

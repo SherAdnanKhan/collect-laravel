@@ -18,6 +18,7 @@
 	persons: [Person] @hasMany
 	files: [File] @hasMany
 	songs: [Song] @hasMany
+	comments: [Comment] @hasMany
 }
 
 type UserProfile {
