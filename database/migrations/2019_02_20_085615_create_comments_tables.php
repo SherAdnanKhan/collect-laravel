@@ -23,7 +23,7 @@ class CreateCommentsTables extends Migration
                 ->onDelete('cascade');
             $table->unsignedInteger('resource_id')->nullable();
             $table->string('resource_type')->nullable();
-            $table->text('message')->default('');
+            $table->text('message');
             $table->timestamps();
         });
     }
