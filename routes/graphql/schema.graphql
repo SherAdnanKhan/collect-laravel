@@ -1,8 +1,8 @@
 type Query {
     me: User @auth
-	users: [User] @all
+	users: [User] @paginate
 	user(id: Int! @eq): User @find
-	projects: [Project] @all
+	projects: [Project] @paginate
 	project(id: Int! @eq): Project @find
 }
 
