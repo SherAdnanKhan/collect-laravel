@@ -32,6 +32,36 @@ type Query {
 		userId: Int @eq(key: "user_id")
 		projectId: Int @eq(key: "project_id")
 	): [File] @paginate
+
+	# Recording Queries
+	getRecording(id: Int! @eq): Recording @find
+	getRecordings(projectId: Int! @eq(key: "project_id")): [Recording] @paginate
+
+	# Session Queries
+	getSession(id: Int! @eq): Session @find
+	getSessions(projectId: Int! @eq(key: "project_id")): [Session] @paginate
+
+	# Comment Queries
+	getComment(id: Int! @eq): Comment @find
+	getComments(
+		userId: Int @eq(key: "user_id")
+		projectId: Int @eq(key: "project_id")
+		resourceType: String @eq(key: "resource_type")
+		resourceId: Int @eq(key: "resource_id")
+	): [Comment] @paginate
+
+	# Collaborator Queries
+	getCollaborator(id: Int! @eq): Collaborator @find
+	getCollaborators(
+		userId: Int @eq(key: "user_id")
+		projectId: Int @eq(key: "project_id")
+	): [Collaborator] @paginate
+
+	# Person Roles Queries
+	getPersonRoles: [PersonRole] @all
+
+	# Instrument Queries
+	getInstruments: [Instrument] @all
 }
 
 type Mutation {

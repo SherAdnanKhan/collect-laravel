@@ -24,7 +24,7 @@ class Collaborator extends Resource
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Collaborators';
+    public static $model = 'App\\Models\\Collaborator';
 
     public static $displayInNavigation = false;
 

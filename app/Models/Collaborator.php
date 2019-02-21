@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Collaborators extends Model
+class Collaborator extends Model
 {
     /**
      * The attributes that are mass assignable.
