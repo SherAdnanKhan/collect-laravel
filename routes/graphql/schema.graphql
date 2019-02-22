@@ -66,11 +66,17 @@ type Query {
 
 type Mutation {
 	# User Mutations
+	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
 
 	# User Favourite Mutations
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 
 	# Project Mutations
+}
+
+input UpdateUserInput {
+	first_name: String
+	last_name: String
 }
 
 input CreateUserFavouriteInput {
