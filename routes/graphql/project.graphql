@@ -41,7 +41,7 @@ type Folder implements Favoured {
 	project: Project! @belongsTo
 	parent: Folder @belongsTo
 	files: [File] @hasMany
-	folders: [Folders] @hasMany
+	folders: [Folder] @hasMany
 	name: String!
 	depth: Int!
 	createdAt: String! @rename(attribute: "created_at")
