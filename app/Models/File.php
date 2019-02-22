@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Folder;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+/**
+ * Represent a file that has been uploaded by a user into the system.
+ */
 class File extends Model
 {
     /**
@@ -14,32 +20,47 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'project_id', 'name', 'type',
+        'user_id', 'project_id', 'folder_id', 'name', 'type',
         'path', 'bitrate', 'bitdepth', 'status',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The project the file belongs to.
      *
-     * @var array
+     *
+     * @return BelongsTo
      */
-    protected $hidden = [
-    ];
-
-    public function project()
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function user()
+    /**
+     * The folder this file is in.
+     *
+     * @return BelongsTo
+     */
+    public function folder(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class);
+    }
+
+    /**
+     * Get the owning user of this file.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
      * Get the files favourite row.
+     *
+     * @return MorphMany
      */
-    public function favourites()
+    public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
     }

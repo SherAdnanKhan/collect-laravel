@@ -6,7 +6,8 @@ type Project implements Favoured {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	collaborators: [Collaborator] @hasMany(type: "paginator")
-	files: [File] @hasMany(type: "paginator")
+	files: [File] @hasMany
+	folders: [Folder] @hasMany
 	sessions: [Session] @hasMany(type: "paginator")
 	recordings: [Recording] @hasMany(type: "paginator")
 	comments: [Comment] @hasMany(type: "paginator")
@@ -23,12 +24,26 @@ type File implements Favoured {
 	id: ID! @globalId
 	user: User! @belongsTo
 	project: Project! @belongsTo
+	folder: Folder @belongsTo
 	type: String!
 	name: String!
 	path: String!
 	bitrate: Int
 	bitdepth: Int
 	status: String!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Folder implements Favoured {
+	id: ID! @globalId
+	user: User! @belongsTo
+	project: Project! @belongsTo
+	parent: Folder @belongsTo
+	files: [File] @hasMany
+	folders: [Folders] @hasMany
+	name: String!
+	depth: Int!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }

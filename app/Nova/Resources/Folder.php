@@ -3,6 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+use App\Nova\Resources\Folder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Gravatar;
@@ -10,19 +11,20 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Project extends Resource
+class Folder extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Project';
+    public static $model = 'App\\Models\\Folder';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -30,8 +32,6 @@ class Project extends Resource
      * @var string
      */
     public static $title = 'name';
-
-    public static $with = ['user', 'collaborators', 'recordings', 'sessions'];
 
     /**
      * The columns that should be searched.
@@ -54,17 +54,15 @@ class Project extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('User'),
+            BelongsTo::make('Project'),
+
+            BelongsTo::make('Parent Folder', 'parent', Folder::class)->nullable(),
 
             Text::make('Name')
                 ->sortable()
-                ->rules('required', 'max:255'),
-
-            Textarea::make('Description')
                 ->rules('required'),
 
-            HasMany::make('Collaborators', 'collaborators'),
-            HasMany::make('Recordings', 'recordings'),
-            HasMany::make('Sessions', 'sessions'),
+            Number::make('Depth')->min(1)->max(100),
 
             HasMany::make('Folders'),
             HasMany::make('Files'),

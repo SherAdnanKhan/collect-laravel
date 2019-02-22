@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Collaborators;
+use App\Models\Collaborator;
 use App\Models\Comment;
+use App\Models\Folder;
 use App\Models\Session;
 use App\Models\User;
 use App\Models\UserFavourite;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
 {
@@ -21,19 +25,11 @@ class Project extends Model
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
-    /**
      * The user owner for this project.
      *
      * @return User
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -43,17 +39,27 @@ class Project extends Model
      *
      * @return Collection
      */
-    public function collaborators()
+    public function collaborators(): HasMany
     {
-        return $this->hasMany(Collaborators::class);
+        return $this->hasMany(Collaborator::class);
+    }
+
+    /**
+     * Get all folders in this project.
+     *
+     * @return HasMany
+     */
+    public function folders(): HasMany
+    {
+        return $this->hasMany(Folder::class);
     }
 
     /**
      * Get the files belonging to this project.
      *
-     * @return Collection
+     * @return HasMany
      */
-    public function files()
+    public function files(): HasMany
     {
         return $this->hasMany(File::class);
     }
@@ -61,9 +67,9 @@ class Project extends Model
     /**
      * Get this recordings recordings.
      *
-     * @return Collection
+     * @return HasMany
      */
-    public function recordings()
+    public function recordings(): HasMany
     {
         return $this->hasMany(Recording::class);
     }
@@ -71,17 +77,19 @@ class Project extends Model
     /**
      * Get this sessions recordings.
      *
-     * @return Collection
+     * @return HasMany
      */
-    public function sessions()
+    public function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
     }
 
     /**
      * Get the projects favourite row.
+     *
+     * @return MorphMany
      */
-    public function favourites()
+    public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
     }
