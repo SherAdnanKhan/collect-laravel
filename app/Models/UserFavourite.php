@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class UserFavourite extends Model
 {
@@ -22,7 +23,7 @@ class UserFavourite extends Model
      *
      * @return BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -30,7 +31,7 @@ class UserFavourite extends Model
     /**
      * Get all of the owning resource models.
      */
-    public function favoured()
+    public function favoured(): MorphTo
     {
         return $this->morphTo(null, 'resource_type', 'resource_id');
     }

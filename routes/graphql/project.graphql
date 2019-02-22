@@ -80,3 +80,14 @@ type Comment {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
+
+type EventLog {
+	id: ID! @globalId
+	user: User! @belongsTo
+	project: Project! @belongsTo
+	resourceId: Int @rename(attribute: "resource_id")
+	resourceType: String @rename(attribute: "resource_type")
+	message: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
