@@ -30,8 +30,17 @@ type Query {
 	getFile(id: Int! @eq): File @find
 	getFiles(
 		userId: Int @eq(key: "user_id")
+		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
-	): [File] @paginate
+	): [File] @all
+
+	# File Queries
+	getFolder(id: Int! @eq): Folder @find
+	getFolders(
+		userId: Int @eq(key: "user_id")
+		folderId: Int @eq(key: "folder_id")
+		projectId: Int @eq(key: "project_id")
+	): [Folder] @all
 
 	# Recording Queries
 	getRecording(id: Int! @eq): Recording @find
