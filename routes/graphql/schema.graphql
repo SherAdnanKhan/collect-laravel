@@ -1,11 +1,14 @@
 type Query {
     # User Queries
     getMe: User @auth
+}
+
+extend type Query @group(middleware: ["auth:api"]) {
 	getUsers: [User] @paginate
 	getUser(id: Int! @eq): User @find
 
 	# User Favourite Queries
-	getUserFavourites(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate
+	getUserFavourites(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate  @middleware(checks: ["auth:api"])
 
 	# User Token Queries
 	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
@@ -75,7 +78,9 @@ type Query {
 
 type Mutation {
 	doLogin(input: LoginInput): AuthPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+}
 
+extend type Mutation @group(middleware: ["auth:api"]) {
 	# User Mutations
 	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
 
