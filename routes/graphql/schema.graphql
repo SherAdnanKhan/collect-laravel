@@ -74,6 +74,8 @@ type Query {
 }
 
 type Mutation {
+	doLogin(input: LoginInput): AuthPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+
 	# User Mutations
 	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
 
@@ -81,6 +83,17 @@ type Mutation {
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 
 	# Project Mutations
+}
+
+input LoginInput {
+  email: String! @rules(apply: ["email"])
+  password: String! @rules(apply: ["required", "min:6"])
+}
+
+type AuthPayload {
+  accessToken: String! @rename(attribute: "access_token")
+  expiresIn: Int! @rename(attribute: "expires_in")
+  tokenType: String! @rename(attribute: "token_type")
 }
 
 input UpdateUserInput {
