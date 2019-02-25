@@ -7,11 +7,15 @@ type Project implements Favoured {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	collaborators: [Collaborator] @hasMany
+	collaboratorCount: Int!
 	collaboratorInvites: [CollaboratorInvite] @hasMany
 	files: [File] @hasMany
+	fileCount: Int!
 	folders: [Folder] @hasMany
 	sessions: [Session] @hasMany(type: "paginator")
+	sessionCount: Int!
 	recordings: [Recording] @hasMany(type: "paginator")
+	recordingCount: Int!
 	comments: [Comment] @hasMany(type: "paginator")
 }
 
