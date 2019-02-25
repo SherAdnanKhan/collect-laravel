@@ -77,7 +77,8 @@ extend type Query @group(middleware: ["auth:api"]) {
 }
 
 type Mutation {
-	doLogin(input: LoginInput): AuthPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+	doLogin(input: LoginInput): LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+	doLogout: LogoutPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Logout@resolve")
 }
 
 extend type Mutation @group(middleware: ["auth:api"]) {
@@ -95,7 +96,11 @@ input LoginInput {
   password: String! @rules(apply: ["required", "min:6"])
 }
 
-type AuthPayload {
+type LogoutPayload {
+  loggedOut: Boolean @rename(attribute: "logged_out")
+}
+
+type LoginPayload {
   accessToken: String! @rename(attribute: "access_token")
   expiresIn: Int! @rename(attribute: "expires_in")
   tokenType: String! @rename(attribute: "token_type")
