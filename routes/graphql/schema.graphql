@@ -22,8 +22,8 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getPeople(userId: Int @eq(key: "user_id")): [Person] @paginate
 
 	# Project Queries
-	getProject(id: Int! @eq): Project @find
-	getProjects(userId: Int @eq(key: "user_id")): [Project] @paginate
+	getProject(id: ID! @eq): Project @find
+	getProjects(userId: Int @eq(key: "user_id")): [Project] @all
 
 	# Song Queries
 	getSong(id: Int! @eq): Song @find
