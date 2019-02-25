@@ -1,5 +1,6 @@
  type User @model(class: "App\\Models\\User") {
-	id: ID! @globalId
+ 	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	firstName: String! @rename(attribute: "first_name")
 	lastName: String! @rename(attribute: "last_name")
 	email: String!
