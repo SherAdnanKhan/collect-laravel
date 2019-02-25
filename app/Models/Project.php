@@ -68,7 +68,9 @@ class Project extends Model
         $user = auth()->user();
 
         return $query->whereHas('collaborators', function($q) use ($user) {
-            return $q->where('user_id', $user->id)->where('level', 1);
+            return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
+                return $q->where('level', 'read');
+            });
         })->orWhere('user_id', $user->id);
     }
 
