@@ -66,6 +66,8 @@ type Recording implements Favoured {
 	name: String
 	type: String
 	description: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 	sessions: [Session] @belongsToMany
 }
 
