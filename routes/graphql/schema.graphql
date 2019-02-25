@@ -5,7 +5,7 @@ type Query {
 
 extend type Query @group(middleware: ["auth:api"]) {
 	getUsers: [User] @paginate
-	getUser(id: Int! @eq): User @find
+	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
 
 	# User Favourite Queries
 	getUserFavourites(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate  @middleware(checks: ["auth:api"])
@@ -35,7 +35,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
-	): [File] @all
+	): [File] @paginate(model: "App\\Models\\File")
 
 	# File Queries
 	getFolder(id: Int! @eq): Folder @find
@@ -51,7 +51,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Session Queries
 	getSession(id: Int! @eq): Session @find
-	getSessions(projectId: Int! @eq(key: "project_id")): [Session] @paginate
+	getSessions(projectId: Int! @eq(key: "project_id")): [Session] @paginate(model: "App\\Models\\Session")
 
 	# Comment Queries
 	getComment(id: Int! @eq): Comment @find

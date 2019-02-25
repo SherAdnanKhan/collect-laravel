@@ -12,7 +12,7 @@
 	trialEndsAt: String @rename(attribute: "trial_ends_at")
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
-	favourites: [UserFavourite] @hasMany(type: "paginator")
+	favourites: [UserFavourite]
 	subscriptions: [UserSubscription] @hasMany(type: "paginator")
 	projects: [Project] @hasMany(type: "paginator")
 	persons: [Person] @hasMany(type: "paginator")
