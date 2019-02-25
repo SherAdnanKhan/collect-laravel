@@ -4,6 +4,7 @@ namespace App\Http\GraphQL\Execution;
 
 use GraphQL\Error\Error;
 use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
+use Nuwave\Lighthouse\Execution\ErrorHandler;
 
 class ExtensionErrorHandler implements ErrorHandler
 {
