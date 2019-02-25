@@ -46,6 +46,16 @@ class Project extends Model
     }
 
     /**
+     * Get the files belonging to this project.
+     *
+     * @return Integer
+     */
+    public function getCollaboratorCountAttribute()
+    {
+        return $this->hasMany(Collaborator::class)->count();
+    }
+
+    /**
      * Get all folders in this project.
      *
      * @return HasMany
@@ -66,6 +76,16 @@ class Project extends Model
     }
 
     /**
+     * Get the files belonging to this project.
+     *
+     * @return Integer
+     */
+    public function getFileCountAttribute()
+    {
+        return $this->hasMany(File::class)->count();
+    }
+
+    /**
      * Get this recordings recordings.
      *
      * @return HasMany
@@ -76,6 +96,16 @@ class Project extends Model
     }
 
     /**
+     * Get the files belonging to this project.
+     *
+     * @return Integer
+     */
+    public function getRecordingCountAttribute()
+    {
+        return $this->hasMany(Recording::class)->count();
+    }
+
+    /**
      * Get this sessions recordings.
      *
      * @return HasMany
@@ -83,6 +113,16 @@ class Project extends Model
     public function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
+    }
+
+    /**
+     * Get the files belonging to this project.
+     *
+     * @return Integer
+     */
+    public function getSessionCountAttribute()
+    {
+        return $this->hasMany(Session::class)->count();
     }
 
     /**
