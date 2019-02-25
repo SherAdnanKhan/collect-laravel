@@ -1,5 +1,6 @@
 type Project implements Favoured {
-	id: ID! @globalId
+	id: ID!
+	_id: ID! @globalId @rename(attribute: "id")
 	user: User! @belongsTo
 	name: String!
 	description: String!
