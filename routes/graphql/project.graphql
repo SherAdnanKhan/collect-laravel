@@ -20,7 +20,8 @@ type Project implements Favoured {
 }
 
 type Collaborator {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	level: String!

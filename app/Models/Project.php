@@ -9,6 +9,7 @@ use App\Models\Folder;
 use App\Models\Session;
 use App\Models\User;
 use App\Models\UserFavourite;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,9 +51,25 @@ class Project extends Model
      *
      * @return Integer
      */
-    public function getCollaboratorCountAttribute()
+    public function getCollaboratorCountAttribute(): int
     {
         return $this->hasMany(Collaborator::class)->count();
+    }
+
+    /**
+     * A scope to filter projects who're accessible by the
+     * current authed user.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        return $query->whereHas('collaborators', function($q) use ($user) {
+            return $q->where('user_id', $user->id)->where('level', 1);
+        })->orWhere('user_id', $user->id);
     }
 
     /**
