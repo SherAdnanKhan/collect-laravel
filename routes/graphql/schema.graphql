@@ -35,7 +35,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
-	): [File] @paginate(model: "App\\Models\\File")
+	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable"])
 
 	# File Queries
 	getFolder(id: Int! @eq): Folder @find
