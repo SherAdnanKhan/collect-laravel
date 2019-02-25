@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Collaborator;
+use App\Models\CollaboratorInvite;
 use App\Models\Comment;
 use App\Models\Folder;
 use App\Models\Session;
@@ -102,5 +103,15 @@ class Project extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get the projects invites for new collaborators.
+     *
+     * @return HasMany
+     */
+    public function collaboratorInvites(): HasMany
+    {
+        return $this->hasMany(CollaboratorInvite::class);
     }
 }
