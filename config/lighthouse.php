@@ -142,7 +142,7 @@ return [
     */
 
     'error_handlers' => [
-        \Nuwave\Lighthouse\Execution\ExtensionErrorHandler::class,
+        \App\Http\GraphQL\Execution\ExtensionErrorHandler::class,
     ],
 
     /*
