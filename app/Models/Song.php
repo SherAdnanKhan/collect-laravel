@@ -41,4 +41,17 @@ class Song extends Model
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
     }
+
+    /**
+     * A scope to filter songs who're owned by the current authed
+     * user.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserOwns(Builder $query): Builder
+    {
+        $user = auth()->user();
+        return $query->where('user_id', $user->id);
+    }
 }
