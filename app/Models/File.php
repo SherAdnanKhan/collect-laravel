@@ -64,4 +64,25 @@ class File extends Model
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
     }
+
+    /**
+     * A scope to filter files with which the current user has
+     * access to view, either by ownership or read access on
+     * the project that this file is in.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        return $query->whereHas('project', function($q) use ($user) {
+            return $q->whereHas('collaborators', function($q) use ($user) {
+                return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
+                    return $q->where('level', 'read');
+                });
+            })->orWhere('user_id', $user->id);
+        })->orWhere('user_id', $user->id);
+    }
 }
