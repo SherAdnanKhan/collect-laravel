@@ -3,7 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
-use App\Nova\Resources\CollaboratorPermission;
+// use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -17,14 +17,14 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Collaborator extends Resource
+class CollaboratorPermission extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Collaborator';
+    public static $model = 'App\\Models\\CollaboratorPermission';
 
     public static $displayInNavigation = false;
 
@@ -33,7 +33,7 @@ class Collaborator extends Resource
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'level';
 
     /**
      * The columns that should be searched.
@@ -41,7 +41,7 @@ class Collaborator extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'level',
     ];
 
     /**
@@ -55,10 +55,14 @@ class Collaborator extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
-            BelongsTo::make('Project'),
+            BelongsTo::make('Collaborator'),
 
-            HasMany::make('Permissions', 'permissions', CollaboratorPermission::class),
+            Select::make('Level')->options([
+                'read'   => 'Read',
+                'create' => 'Create',
+                'update' => 'Update',
+                'delete' => 'Delete',
+            ])->displayUsingLabels()->rules('required'),
         ];
     }
 

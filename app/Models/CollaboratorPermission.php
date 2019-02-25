@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Collaborator;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class CollaboratorInvite extends Model
+class CollaboratorPermission extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -15,16 +17,16 @@ class CollaboratorInvite extends Model
      * @var array
      */
     protected $fillable = [
-        'project_id', 'email', 'token',
+        'collaborator_id', 'level'
     ];
 
     /**
-     * The project this collaborator belongs to.
+     * Get the collaborator.
      *
      * @return BelongsTo
      */
-    public function project(): BelongsTo
+    public function collaborator(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Collaborator::class);
     }
 }
