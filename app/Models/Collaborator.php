@@ -19,14 +19,6 @@ class Collaborator extends Model
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
-    /**
      * The user who this collaborator represents
      *
      * @return User
