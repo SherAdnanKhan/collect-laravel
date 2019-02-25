@@ -6,7 +6,8 @@ type Project implements Favoured {
 	description: String!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
-	collaborators: [Collaborator] @hasMany(type: "paginator")
+	collaborators: [Collaborator] @hasMany
+	collaboratorInvites: [CollaboratorInvite] @hasMany
 	files: [File] @hasMany
 	folders: [Folder] @hasMany
 	sessions: [Session] @hasMany(type: "paginator")
@@ -19,6 +20,16 @@ type Collaborator {
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	level: String!
+}
+
+type CollaboratorInvite {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	project: Project! @belongsTo
+	email: String!
+	token: String!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type File implements Favoured {
