@@ -18,7 +18,11 @@ class Logout
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        auth()->logout();
+        try {
+            auth()->logout();
+        } catch (\Exception $e) {
+            throw new AuthenticationException('Failed to logout');
+        }
 
         return [
             'logged_out' => true,
