@@ -6,6 +6,7 @@ use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Recording extends Model
@@ -42,5 +43,28 @@ class Recording extends Model
     public function favourites()
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * A scope to filter recordings with which the current user has
+     * access to view, either by ownership or read access
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        // Check to see if the current user owns or
+        // has read access as a collaborator on the project
+        // with which this recording is in.
+        return $query->whereHas('project', function($q) use ($user) {
+            return $q->whereHas('collaborators', function($q) use ($user) {
+                return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
+                    return $q->where('level', 'read');
+                });
+            })->orWhere('user_id', $user->id);
+        })->orWhere('user_id', $user->id);
     }
 }

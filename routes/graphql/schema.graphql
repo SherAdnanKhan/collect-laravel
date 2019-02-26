@@ -27,7 +27,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Song Queries
 	getSong(id: Int! @eq): Song @find
-	getSongs(userId: Int @eq(key: "user_id")): [Song] @all(scopes: ["userOwns"])
+	getSongs(userId: Int @eq(key: "user_id")): [Song] @all(scopes: ["userViewable"])
 
 	# File Queries
 	getFile(id: Int! @eq): File @find
