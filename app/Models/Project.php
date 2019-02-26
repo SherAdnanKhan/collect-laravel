@@ -31,6 +31,24 @@ class Project extends Model
     ];
 
     /**
+     * A scope to filter projects who're accessible by the
+     * current authed user.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        // Add to the query a check to see if the user
+        // has read permission on the project, or owns it.
+        return (new CollaboratorPermission($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
+    }
+
+    /**
      * The user owner for this project.
      *
      * @return User
@@ -58,24 +76,6 @@ class Project extends Model
     public function getCollaboratorCountAttribute(): int
     {
         return $this->hasMany(Collaborator::class)->count();
-    }
-
-    /**
-     * A scope to filter projects who're accessible by the
-     * current authed user.
-     *
-     * @param  Builder $query
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $query): Builder
-    {
-        $user = auth()->user();
-
-        // Add to the query a check to see if the user
-        // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['read']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 
     /**
