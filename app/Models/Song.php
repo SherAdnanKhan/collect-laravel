@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Recording;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -58,16 +59,9 @@ class Song extends Model
         // owner on a project that this song has been used on or if
         // this song is owned by this user.
         return $query->whereHas('recordings', function($q) use ($user) {
-            // We grab the project for the recording
-            return $q->whereHas('project', function($q) use ($user) {
-                // Grab the collaborators for the project
-                return $q->whereHas('collaborators', function($q) use ($user) {
-                    // Check the users permissions
-                    return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
-                        return $q->where('level', 'read');
-                    });
-                })->orWhere('user_id', $user->id);
-            });
-        })->orWhere('user_id', $user->id);
+            // We grab the project for the recording and check permission or
+            // ownership access on that.
+            return (new ProjectAccess($q, $user, ['read']))->getQuery();
+        })->orWhere('user_id', $user->getAuthIdentifier());
     }
 }
