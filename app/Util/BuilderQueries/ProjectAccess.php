@@ -43,7 +43,8 @@ class ProjectAccess
         $permissions = $this->permissions;
 
         return $this->query->whereHas('project', function($q) use ($user, $permissions) {
-            return (new CollaboratorPermission($q, $user, $permissions))->getQuery();
+            return (new CollaboratorPermission($q, $user, $permissions))
+                ->getQuery()->orWhere('user_id', $user->getAuthIdentifier());
         });
     }
 }
