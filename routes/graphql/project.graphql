@@ -38,7 +38,8 @@ type CollaboratorInvite {
 }
 
 type File implements Favoured {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	folder: Folder @belongsTo
@@ -53,7 +54,8 @@ type File implements Favoured {
 }
 
 type Folder implements Favoured {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	parent: Folder @belongsTo
@@ -66,7 +68,8 @@ type Folder implements Favoured {
 }
 
 type Recording implements Favoured {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	project: Project! @belongsTo
 	name: String
 	type: String
@@ -77,7 +80,8 @@ type Recording implements Favoured {
 }
 
 type Session implements Favoured {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	project: Project! @belongsTo
 	studio: String
 	name: String
@@ -89,7 +93,8 @@ type Session implements Favoured {
 }
 
 type Comment {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	project: Project! @belongsTo
 	user: User! @belongsTo
 	resourceId: Int @rename(attribute: "resource_id")
@@ -101,7 +106,8 @@ type Comment {
 }
 
 type EventLog {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	resourceId: Int @rename(attribute: "resource_id")
