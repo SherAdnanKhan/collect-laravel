@@ -9,9 +9,9 @@ type Project implements Favoured {
 	collaborators: [Collaborator] @hasMany
 	collaboratorCount: Int!
 	collaboratorInvites: [CollaboratorInvite] @hasMany
-	files: [File] @hasMany
+	files(folderId: ID): [File] @hasMany
 	fileCount: Int!
-	folders: [Folder] @hasMany
+	folders(folderId: ID): [Folder] @hasMany
 	sessions: [Session] @hasMany(type: "paginator")
 	sessionCount: Int!
 	recordings: [Recording] @hasMany(type: "paginator")
@@ -66,8 +66,14 @@ type Folder implements Favoured {
 	folders: [Folder] @hasMany
 	name: String!
 	depth: Int!
+	path: [FolderPath]
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type FolderPath {
+	id: ID!
+	name: String!
 }
 
 type Recording implements Favoured {

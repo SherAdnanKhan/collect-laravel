@@ -14,8 +14,29 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Folder extends Model
 {
     protected $fillable = [
-        'user_id', 'project', 'folder_id', 'name', 'depth'
+        'user_id', 'project_id', 'folder_id', 'name', 'depth'
     ];
+
+    public function getPathAttribute(): array
+    {
+        $path = [];
+
+        $parent = self::find($this->attributes['folder_id']);
+        while (true) {
+            if (!$parent) {
+                break;
+            }
+
+            $path[] = [
+                'id' => $parent->id,
+                'name' => $parent->name
+            ];
+
+            $parent = self::find($parent->folder_id);
+        }
+
+        return array_reverse($path);
+    }
 
     /**
      * Get the user that owns this folder.

@@ -16,6 +16,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 class File extends Model
 {
+    const STATUS_PENDING = 'pending';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_COMPLETE = 'complete';
+
     /**
      * The attributes that are mass assignable.
      *
