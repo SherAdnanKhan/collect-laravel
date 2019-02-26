@@ -22,16 +22,11 @@ class Folder extends Model
         $path = [];
 
         $parent = self::find($this->attributes['folder_id']);
-        while (true) {
-            if (!$parent) {
-                break;
-            }
-
+        while ($parent) {
             $path[] = [
                 'id' => $parent->id,
                 'name' => $parent->name
             ];
-
             $parent = self::find($parent->folder_id);
         }
 
