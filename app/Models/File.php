@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Folder;
 use App\Models\Project;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -91,12 +92,11 @@ class File extends Model
     {
         $user = auth()->user();
 
-        return $query->whereHas('project', function($q) use ($user) {
-            return $q->whereHas('collaborators', function($q) use ($user) {
-                return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
-                    return $q->where('level', 'read');
-                });
-            })->orWhere('user_id', $user->id);
-        })->orWhere('user_id', $user->id);
+        // Check to see if the current user owns or
+        // has read access as a collaborator on the project
+        // with which this file is on.
+        return (new ProjectAccess($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Recording;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Song extends Model
@@ -43,15 +45,23 @@ class Song extends Model
     }
 
     /**
-     * A scope to filter songs who're owned by the current authed
-     * user.
+     * A scope to filter songs which are accesible by
+     * the currently authed user.
      *
      * @param  Builder $query
      * @return Builder
      */
-    public function scopeUserOwns(Builder $query): Builder
+    public function scopeUserViewable(Builder $query): Builder
     {
         $user = auth()->user();
-        return $query->where('user_id', $user->id);
+
+        // We check to see if the user is a collaborator or
+        // owner on a project that this song has been used on or if
+        // this song is owned by this user.
+        return $query->whereHas('recordings', function($q) use ($user) {
+            // We grab the project for the recording and check permission or
+            // ownership access on that.
+            return (new ProjectAccess($q, $user, ['read']))->getQuery();
+        })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('iswc');
     }
 }

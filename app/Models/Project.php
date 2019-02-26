@@ -9,6 +9,7 @@ use App\Models\Folder;
 use App\Models\Session;
 use App\Models\User;
 use App\Models\UserFavourite;
+use App\Util\BuilderQueries\CollaboratorPermission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -67,11 +68,11 @@ class Project extends Model
     {
         $user = auth()->user();
 
-        return $query->whereHas('collaborators', function($q) use ($user) {
-            return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
-                return $q->where('level', 'read');
-            });
-        })->orWhere('user_id', $user->id);
+        // Add to the query a check to see if the user
+        // has read permission on the project, or owns it.
+        return (new CollaboratorPermission($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 
     /**
