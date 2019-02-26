@@ -22,8 +22,21 @@ class File extends Model
      */
     protected $fillable = [
         'user_id', 'project_id', 'folder_id', 'name', 'type',
-        'path', 'bitrate', 'bitdepth', 'status',
+        'path', 'transcoded_path',
+        'bitrate', 'bitdepth', 'size',
+        'status',
     ];
+
+    /**
+     * Get whether this file is previable
+     *
+     *
+     * @return BelongsTo
+     */
+    public function getIsPreviewableAttribute()
+    {
+        return !empty($this->attributes['transcoded_path']);
+    }
 
     /**
      * The project the file belongs to.
