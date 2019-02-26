@@ -47,7 +47,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Recording Queries
 	getRecording(id: Int! @eq): Recording @find
-	getRecordings(projectId: Int @eq(key: "project_id")): [Recording] @all(scopes: ["userViewable"])
+	getRecordings(projectId: Int @eq(key: "project_id")): [Recording] @paginate(scopes: ["userViewable"])
 
 	# Session Queries
 	getSession(id: Int! @eq): Session @find
