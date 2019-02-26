@@ -7,6 +7,8 @@ use App\Models\CollaboratorInvite;
 use App\Models\Comment;
 use App\Models\Folder;
 use App\Models\Session;
+use App\Models\Song;
+use App\Models\SongRecording;
 use App\Models\User;
 use App\Models\UserFavourite;
 use App\Util\BuilderQueries\CollaboratorPermission;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
@@ -116,11 +119,22 @@ class Project extends Model
     }
 
     /**
+     * Get songs which have been a part of a recording
+     * under this project.
+     *
+     * @return HasMany
+     */
+    public function songs(): HasMany
+    {
+        return $this->hasMany(Song::class)->using(SongRecording::class);
+    }
+
+    /**
      * Get the files belonging to this project.
      *
      * @return Integer
      */
-    public function getRecordingCountAttribute()
+    public function getRecordingCountAttribute(): int
     {
         return $this->hasMany(Recording::class)->count();
     }
