@@ -174,4 +174,14 @@ class Project extends Model
     {
         return $this->hasMany(CollaboratorInvite::class);
     }
+
+    /**
+     * Get the path to this projects root files
+     *
+     * @return string
+     */
+    public function getUploadFolderPath()
+    {
+        return md5($this->attributes['id']);
+    }
 }
