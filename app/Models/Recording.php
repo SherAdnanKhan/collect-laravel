@@ -6,6 +6,7 @@ use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -59,12 +60,6 @@ class Recording extends Model
         // Check to see if the current user owns or
         // has read access as a collaborator on the project
         // with which this recording is in.
-        return $query->whereHas('project', function($q) use ($user) {
-            return $q->whereHas('collaborators', function($q) use ($user) {
-                return $q->where('user_id', $user->id)->whereHas('permissions', function($q) {
-                    return $q->where('level', 'read');
-                });
-            })->orWhere('user_id', $user->id);
-        })->orWhere('user_id', $user->id);
+        return (new ProjectAccess($q, $user, ['read']))->getQuery();
     }
 }
