@@ -3,11 +3,16 @@
 namespace App\Models;
 
 use App\Models\Credit;
+use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Song;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class SongRecording extends Model
+class SongRecording extends Pivot
 {
     protected $table = 'songs_to_recordings';
 
@@ -17,15 +22,15 @@ class SongRecording extends Model
      * @var array
      */
     protected $fillable = [
-        'song_id', 'recording_id',
+        'song_id', 'recording_id', 'project_id',
     ];
 
     /**
      * Get the song associated to this.
      *
-     * @return Song
+     * @return BelongsTo
      */
-    public function song()
+    public function song(): BelongsTo
     {
         return $this->belongsTo(Song::class);
     }
@@ -33,19 +38,29 @@ class SongRecording extends Model
     /**
      * Get the recording associated to this.
      *
-     * @return recording
+     * @return BelongsTo
      */
-    public function recording()
+    public function recording(): BelongsTo
     {
         return $this->belongsTo(Recording::class);
     }
 
     /**
+     * Get the projects that this pivot table is for.
+     *
+     * @return BelongsTo
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    /**
      * Get all the credits for this song/recording instance.
      *
-     * @return Collection
+     * @return HasMany
      */
-    public function credits()
+    public function credits(): HasMany
     {
         return $this->hasMany(Credit::class);
     }
