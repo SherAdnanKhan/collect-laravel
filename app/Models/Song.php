@@ -62,6 +62,6 @@ class Song extends Model
             // We grab the project for the recording and check permission or
             // ownership access on that.
             return (new ProjectAccess($q, $user, ['read']))->getQuery();
-        })->orWhere('user_id', $user->getAuthIdentifier());
+        })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('iswc');
     }
 }
