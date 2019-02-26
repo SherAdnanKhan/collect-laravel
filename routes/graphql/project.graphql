@@ -45,9 +45,12 @@ type File implements Favoured {
 	type: String!
 	name: String!
 	path: String!
+	transcoded_path: String
 	bitrate: Int
 	bitdepth: Int
+	size: Int
 	status: String!
+	isPreviewable: Boolean
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
