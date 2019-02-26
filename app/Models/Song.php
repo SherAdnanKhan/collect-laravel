@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SongRecording;
 use App\Models\User;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Song extends Model
 {
@@ -19,9 +23,9 @@ class Song extends Model
     /**
      * The user who owns this song.
      *
-     * @return User
+     * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -29,17 +33,30 @@ class Song extends Model
     /**
      * Get all occurences of a recording of this song.
      *
-     * @return Collection
+     * @return BelongsToMany
      */
-    public function recordings()
+    public function recordings(): BelongsToMany
     {
-        return $this->hasManyThrough(Recording::class, SongRecording::class);
+        return $this->belongsToMany(Recording::class)->using(SongRecording::class);
+    }
+
+    /**
+     * Get all of the projects that this song
+     * is used in.
+     *
+     * @return BelongsToMany
+     */
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class)->using(SongRecording::class);
     }
 
     /**
      * Get the songs favourite row
+     *
+     * @return MorphMany
      */
-    public function favourites()
+    public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
     }

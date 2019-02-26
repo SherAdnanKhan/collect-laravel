@@ -7,6 +7,8 @@ use App\Models\CollaboratorInvite;
 use App\Models\Comment;
 use App\Models\Folder;
 use App\Models\Session;
+use App\Models\Song;
+use App\Models\SongRecording;
 use App\Models\User;
 use App\Models\UserFavourite;
 use App\Util\BuilderQueries\CollaboratorPermission;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
@@ -26,6 +29,24 @@ class Project extends Model
     protected $fillable = [
         'user_id', 'name', 'description',
     ];
+
+    /**
+     * A scope to filter projects who're accessible by the
+     * current authed user.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        // Add to the query a check to see if the user
+        // has read permission on the project, or owns it.
+        return (new CollaboratorPermission($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
+    }
 
     /**
      * The user owner for this project.
@@ -55,24 +76,6 @@ class Project extends Model
     public function getCollaboratorCountAttribute(): int
     {
         return $this->hasMany(Collaborator::class)->count();
-    }
-
-    /**
-     * A scope to filter projects who're accessible by the
-     * current authed user.
-     *
-     * @param  Builder $query
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $query): Builder
-    {
-        $user = auth()->user();
-
-        // Add to the query a check to see if the user
-        // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['read']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 
     /**
@@ -116,11 +119,22 @@ class Project extends Model
     }
 
     /**
+     * Get songs which have been a part of a recording
+     * under this project.
+     *
+     * @return HasMany
+     */
+    public function songs(): HasMany
+    {
+        return $this->hasMany(Song::class)->using(SongRecording::class);
+    }
+
+    /**
      * Get the files belonging to this project.
      *
      * @return Integer
      */
-    public function getRecordingCountAttribute()
+    public function getRecordingCountAttribute(): int
     {
         return $this->hasMany(Recording::class)->count();
     }
