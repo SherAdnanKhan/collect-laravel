@@ -36,6 +36,13 @@ class File extends Model
     ];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * Get whether this file is previable
      *
      *
