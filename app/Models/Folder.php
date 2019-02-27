@@ -9,16 +9,25 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Folders contain files and folders.
  */
 class Folder extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'user_id', 'project_id', 'folder_id', 'name', 'depth'
     ];
 
+    /**
+     * Get an array of paths with which make up
+     * the path to this folder.
+     *
+     * @return array
+     */
     public function getPathAttribute(): array
     {
         $path = [];
