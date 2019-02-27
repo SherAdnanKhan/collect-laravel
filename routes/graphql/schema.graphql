@@ -88,7 +88,18 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	# User Favourite Mutations
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 
-	# Project Mutations
+	# File & Folder Mutations
+	deleteFiles(input: DeleteFilesInput!): DeleteFilesPayload @field(resolver: "App
+	\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
+}
+
+input DeleteFilesInput {
+	id: ID!
+	type: String!
+}
+
+type DeleteFilesPayload {
+	success: Boolean
 }
 
 input LoginInput {
