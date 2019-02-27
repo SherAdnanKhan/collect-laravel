@@ -23,6 +23,13 @@ class Folder extends Model
     ];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * Get an array of paths with which make up
      * the path to this folder.
      *
