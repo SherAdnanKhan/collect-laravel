@@ -9,7 +9,7 @@ type Project implements Favoured {
 	collaborators: [Collaborator] @hasMany
 	collaboratorCount: Int!
 	collaboratorInvites: [CollaboratorInvite] @hasMany
-	files(folderId: ID): [File] @hasMany
+	files(folder_id: ID @eq): [File] @hasMany
 	fileCount: Int!
 	folders(folderId: ID): [Folder] @hasMany
 	sessions: [Session] @hasMany(type: "paginator")
@@ -43,6 +43,7 @@ type File implements Favoured {
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	folder: Folder @belongsTo
+	folderId: ID @rename(attribute: "folder_id")
 	type: String!
 	name: String!
 	path: String!
