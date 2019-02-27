@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Modelss\Folder;
+use App\Models\Folder;
 
 class FolderObserver
 {

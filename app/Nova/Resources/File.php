@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -37,7 +38,7 @@ class File extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id', 'name', 'type', 'path'
     ];
 
     /**
@@ -59,6 +60,33 @@ class File extends Resource
             Text::make('Name')
                 ->sortable()
                 ->rules('required'),
+
+            Text::make('Type')
+                ->sortable()
+                ->rules('required'),
+
+            Text::make('Path')
+                ->sortable()
+                ->rules('required'),
+
+            Text::make('Transcoded Path')
+                ->sortable()
+                ->rules('required'),
+
+            Number::make('Bitrate')
+                ->sortable(),
+
+            Number::make('Bitdepth')
+                ->sortable(),
+
+            Number::make('Size')
+                ->sortable(),
+
+            Select::make('Status')->options([
+                'pending'    => 'Pending',
+                'processing' => 'Processing',
+                'complete'   => 'Complete',
+            ])->displayUsingLabels()->rules('required'),
         ];
     }
 
