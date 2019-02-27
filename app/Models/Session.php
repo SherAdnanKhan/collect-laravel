@@ -6,7 +6,12 @@ use App\Models\Person;
 use App\Models\PersonSession;
 use App\Models\Project;
 use App\Models\Recording;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Session extends Model
 {
@@ -19,7 +24,7 @@ class Session extends Model
      *
      * @return BelongsTo
      */
-    public function project()
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
@@ -29,7 +34,7 @@ class Session extends Model
      *
      * @return BelongsToMany
      */
-    public function recordings()
+    public function recordings(): BelongsToMany
     {
         return $this->belongsToMany(Recording::class, 'sessions_to_recordings');
     }
@@ -39,14 +44,30 @@ class Session extends Model
      *
      * @return BelongsToMany
      */
-    public function people()
+    public function people(): BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'persons_to_sessions')
             ->using(PersonSession::class)->withPivot('person_role_id', 'instrument_id');
     }
 
-    public function favourites()
+    /**
+     * Where this session has been favourited/
+     *
+     * @return MorphMany
+     */
+    public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * A scope to filter the sessions by user access to a project.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        return (new ProjectAccess($query, auth()->user(), ['read']))->getQuery();
     }
 }

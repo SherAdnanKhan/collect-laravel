@@ -16,6 +16,7 @@ class ProjectAccess
     private $query;
     private $permissions;
     private $user;
+    private $relation;
 
     /**
      * Create a new query extension to scope for
@@ -25,11 +26,12 @@ class ProjectAccess
      * @param User      $user
      * @param array     $permissions
      */
-    public function __construct(Builder $query, User $user, $permissions = ['read'])
+    public function __construct(Builder $query, User $user, $permissions = ['read'], $relation = 'project')
     {
         $this->query = $query;
         $this->permissions = $permissions;
         $this->user = $user;
+        $this->relation = $relation;
     }
 
     /**
@@ -42,7 +44,7 @@ class ProjectAccess
         $user = $this->user;
         $permissions = $this->permissions;
 
-        return $this->query->whereHas('project', function($q) use ($user, $permissions) {
+        return $this->query->whereHas($this->relation, function($q) use ($user, $permissions) {
             return (new CollaboratorPermission($q, $user, $permissions))
                 ->getQuery()->orWhere('user_id', $user->getAuthIdentifier());
         });

@@ -10,6 +10,7 @@ use App\Models\PersonSession;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class PersonSession extends Pivot
@@ -30,7 +31,7 @@ class PersonSession extends Pivot
      *
      * @return BelongsTo
      */
-    public function instrument()
+    public function instrument(): BelongsTo
     {
         return $this->belongsTo(Instrument::class);
     }
@@ -40,7 +41,7 @@ class PersonSession extends Pivot
      *
      * @return BelongsTo
      */
-    public function role()
+    public function role(): BelongsTo
     {
         return $this->belongsTo(PersonRole::class, 'person_role_id');
     }
@@ -50,7 +51,7 @@ class PersonSession extends Pivot
      *
      * @return BelongsTo
      */
-    public function person()
+    public function person(): BelongsTo
     {
         return $this->belongsTo(Person::class);
     }
@@ -60,7 +61,7 @@ class PersonSession extends Pivot
      *
      * @return BelongsTo
      */
-    public function session()
+    public function session(): BelongsTo
     {
         return $this->belongsTo(Session::class);
     }
