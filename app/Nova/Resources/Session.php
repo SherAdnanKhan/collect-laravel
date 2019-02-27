@@ -2,8 +2,7 @@
 
 namespace App\Nova\Resources;
 
-use App\Models\ProjectPersonSession;
-use App\Nova\FieldGroups\PersonSessionFields;
+use App\Nova\FieldGroups\ProjectPersonSessionFields;
 use App\Nova\Resource;
 use App\Nova\Resources\Person;
 use App\Nova\Resources\ProjectPerson;

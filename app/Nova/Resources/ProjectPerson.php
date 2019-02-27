@@ -2,8 +2,7 @@
 
 namespace App\Nova\Resources;
 
-use App\Models\ProjectPersonSession;
-use App\Nova\FieldGroups\PersonSessionFields;
+use App\Nova\FieldGroups\ProjectPersonSessionFields;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -20,6 +19,14 @@ use Laravel\Nova\Fields\Textarea;
 
 class ProjectPerson extends Resource
 {
+
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
@@ -64,7 +71,7 @@ class ProjectPerson extends Resource
                 ->sortable()
                 ->rules('max:255', 'email'),
 
-            BelongsToMany::make('Sessions', 'sessions', ProjectPersonSession::class)
+            BelongsToMany::make('Sessions', 'sessions')
                 ->fields(new ProjectPersonSessionFields),
         ];
     }
