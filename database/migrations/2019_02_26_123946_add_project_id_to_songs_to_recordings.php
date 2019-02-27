@@ -28,6 +28,7 @@ class AddProjectIdToSongsToRecordings extends Migration
     public function down()
     {
         Schema::table('songs_to_recordings', function (Blueprint $table) {
+            $table->dropForeignKey(['project_id']);
             $table->dropColumn('project_id');
         });
     }
