@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -22,7 +24,7 @@ class Comment extends Model
      *
      * @return BelongsTo
      */
-    public function project() : BelongsTo
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
@@ -32,7 +34,7 @@ class Comment extends Model
      *
      * @return BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -44,8 +46,27 @@ class Comment extends Model
      *
      * @return MorphTo
      */
-    public function commentable() : MorphTo
+    public function commentable(): MorphTo
     {
         return $this->morphTo(null, 'resource_type', 'resource_id');
+    }
+
+    /**
+     * A scope to filter comments to only those viewable
+     * by the user if they have access to the project.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        // Check to see if the current user owns or
+        // has read access as a collaborator on the project
+        // with which this is on.
+        return (new ProjectAccess($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 }

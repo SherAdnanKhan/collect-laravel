@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\File;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -81,5 +83,24 @@ class Folder extends Model
     public function folders(): HasMany
     {
         return $this->hasMany(Folder::class);
+    }
+
+    /**
+     * A scope to filter folders with which the current user has
+     * access to view, either by ownership or read access on
+     * the project that this file is in.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        // Check to see if the current user has read access as a
+        // collaborator on the project with which this is on.
+        return (new ProjectAccess($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 }

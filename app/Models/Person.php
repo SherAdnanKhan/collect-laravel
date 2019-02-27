@@ -7,6 +7,9 @@ use App\Models\PersonSession;
 use App\Models\Session;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Person extends Model
 {
@@ -26,7 +29,7 @@ class Person extends Model
      *
      * @return User
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -36,14 +39,34 @@ class Person extends Model
      *
      * @return BelongsToMany
      */
-    public function sessions()
+    public function sessions(): BelongsToMany
     {
         return $this->belongsToMany(Session::class, 'persons_to_sessions')
             ->using(PersonSession::class);
     }
 
-    public function favourites()
+    /**
+     * Get the times this person has been favourited.
+     *
+     * @return MorphMany
+     */
+    public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * A scope to filter visible people by user ownership.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        return $query->whereHas('user', function($query) {
+            return (new ProjectAccess($query, $user, ['read'], 'projects'))->getQuery();
+        })->orWhere('user_id', $user->getAuthIdentifier());
     }
 }

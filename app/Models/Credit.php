@@ -17,14 +17,6 @@ class Credit extends Model
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
-    /**
      * Get the song/recording instance this credit is for.
      *
      * @return SongRecording
