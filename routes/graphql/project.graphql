@@ -125,3 +125,26 @@ type EventLog {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
+
+type ProjectPerson {
+	id: ID! @globalId
+	project: Project @belongsTo
+	name: String!
+	email: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	sessions: [Session] @belongsToMany(type: "paginator")
+	meta: ProjectPersonSession @rename(attribute: "pivot")
+}
+
+type ProjectPersonSession {
+	person: ProjectPerson @belongsTo
+	session: Session @belongsTo
+	role: ProjectPersonRole @belongsTo
+	instrument: Instrument @belongsTo
+}
+
+type ProjectPersonRole {
+	id: ID! @globalId
+	name: String!
+}
