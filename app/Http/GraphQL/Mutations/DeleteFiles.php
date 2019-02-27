@@ -33,7 +33,7 @@ class DeleteFiles
         if (isset($args['input'])) {
             $input = $args['input'];
 
-            $id = (int) $input['type'];
+            $id = (int) $input['id'];
             $type = $input['type'];
 
             if (!in_array($type, ['folder', 'file'])) {
