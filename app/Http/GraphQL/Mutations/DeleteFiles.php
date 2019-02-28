@@ -29,29 +29,25 @@ class DeleteFiles
     ): array
     {
         $success = false;
+        foreach ($args['files'] as $file) {
+            if ($file['type'] === 'folder') {
+                $folder = Folder::where('id', $file['id'])->userViewable()->first();
+                if (!$folder) {
+                    continue;
+                }
 
-        if (isset($args['input'])) {
-            $input = $args['input'];
-
-            $id = (int) $input['id'];
-            $type = $input['type'];
-
-            if (!in_array($type, ['folder', 'file'])) {
-                throw new \Exception('Type is not valid.');
+                $folder->delete();
+                $success = true;
+                continue;
             }
 
-            switch ($type) {
-                case 'file':
-                    File::destroy($id);
-                    $success = true;
-                    break;
-                case 'folder':
-                    Folder::destroy($id);
-                    $success = true;
-                    break;
-                default:
-                    break;
+            $file = File::where('id', $file['id'])->userViewable()->first();
+            if (!$file) {
+                continue;
             }
+
+            $file->delete();
+            $success = true;
         }
 
         return [
