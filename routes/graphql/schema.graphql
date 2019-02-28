@@ -89,6 +89,7 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 
 	# Project Mutations
+	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
 }
 
 input LoginInput {
@@ -106,6 +107,11 @@ type LoginPayload {
   tokenType: String! @rename(attribute: "token_type")
 }
 
+type DownloadFilesPayload {
+	success: Boolean!
+	url: String
+}
+
 input UpdateUserInput {
 	first_name: String
 	last_name: String
@@ -119,6 +125,11 @@ input CreateUserFavouriteInput {
 
 input CreateUserFavouriteRelation {
 	connect: ID!
+}
+
+input DownloadFilesInput {
+	id: ID!
+	type: String!
 }
 
 interface Favoured {
