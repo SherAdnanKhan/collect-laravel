@@ -16,6 +16,7 @@ use App\Util\BuilderQueries\CollaboratorPermission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -105,11 +106,11 @@ class Project extends Model
      * Get songs which have been a part of a recording
      * under this project.
      *
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function songs(): HasMany
+    public function songs(): BelongsToMany
     {
-        return $this->hasMany(Song::class)->using(SongRecording::class);
+        return $this->belongsToMany(Song::class, 'songs_to_recordings')->using(SongRecording::class);
     }
 
     /**

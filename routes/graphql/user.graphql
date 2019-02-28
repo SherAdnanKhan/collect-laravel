@@ -78,7 +78,8 @@ type Instrument {
 }
 
 type Song implements Favoured {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	user: User! @belongsTo
 	iswc: String
 	type: String!
