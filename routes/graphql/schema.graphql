@@ -140,14 +140,6 @@ input CreateUserFavouriteInput {
 	resource_type: String!
 }
 
-input CreateUserFavouriteRelation {
-	connect: ID!
-}
-
-input DeleteUserFavouriteRelation {
-	disconnect: ID!
-}
-
 input DownloadFilesInput {
 	id: ID!
 	type: String!
