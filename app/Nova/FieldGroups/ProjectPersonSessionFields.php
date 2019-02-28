@@ -3,14 +3,14 @@
 namespace App\Nova\FieldGroups;
 
 use App\Models\Instrument;
-use App\Models\Person;
-use App\Models\PersonRole;
+use App\Models\ProjectPerson;
+use App\Models\ProjectPersonRole;
 use App\Models\Session;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Select;
 
-class PersonSessionFields
+class ProjectPersonSessionFields
 {
     /**
      * Get the pivot fields for the relationship.
@@ -21,14 +21,14 @@ class PersonSessionFields
      */
     public function __invoke($request, $resource)
     {
-        $roles = PersonRole::all()->pluck('name', 'id');
+        $roles = ProjectPersonRole::all()->pluck('name', 'id');
         $instruments = Instrument::all()->pluck('name', 'id');
 
         $fields = [];
 
-        if ($resource instanceof Person) {
-            $people = Person::all()->pluck('name', 'id');
-            $fields[] = Select::make('Person', 'person_id')->options($people)->hideFromIndex();
+        if ($resource instanceof ProjectPerson) {
+            $people = ProjectPerson::all()->pluck('name', 'id');
+            $fields[] = Select::make('Person', 'project_person_id')->options($people)->hideFromIndex();
         }
 
         if ($resource instanceof Session) {
@@ -37,7 +37,7 @@ class PersonSessionFields
         }
 
         return array_merge($fields, [
-            Select::make('Role', 'person_role_id')->options($roles)->displayUsing(function($value) use ($roles) {
+            Select::make('Role', 'project_person_role_id')->options($roles)->displayUsing(function($value) use ($roles) {
                 return $roles->get($value, '-');
             }),
             Select::make('Instrument', 'instrument_id')->options($instruments)->displayUsing(function($value) use ($instruments) {

@@ -62,8 +62,6 @@ class Person extends Resource
             Text::make('Email')
                 ->sortable()
                 ->rules('max:255', 'email'),
-
-            BelongsToMany::make('Sessions')->fields(new PersonSessionFields),
         ];
     }
 

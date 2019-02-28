@@ -69,26 +69,12 @@ type Person implements Favoured {
 	email: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
-	sessions: [Session] @belongsToMany(type: "paginator")
-	meta: PersonSession @rename(attribute: "pivot")
-}
-
-type PersonRole {
-	id: ID! @globalId
-	name: String!
 }
 
 type Instrument {
 	id: ID! @globalId
 	category: String
 	name: String
-}
-
-type PersonSession {
-	person: Person @belongsTo
-	session: Session @belongsTo
-	role: PersonRole @belongsTo
-	instrument: Instrument @belongsTo
 }
 
 type Song implements Favoured {

@@ -2,9 +2,11 @@
 
 namespace App\Nova\Resources;
 
+use App\Nova\FieldGroups\ProjectPersonSessionFields;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
@@ -15,14 +17,22 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class PersonRole extends Resource
+class ProjectPerson extends Resource
 {
+
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\PersonRole';
+    public static $model = 'App\\Models\\ProjectPerson';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -37,19 +47,8 @@ class PersonRole extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name',
+        'id', 'project_id', 'name', 'email',
     ];
-
-    /**
-     * Define the label used to display this in
-     * the side navigation.
-     *
-     * @return string
-     */
-    public static function label()
-    {
-        return 'People Roles';
-    }
 
     /**
      * Get the fields displayed by the resource.
@@ -62,9 +61,18 @@ class PersonRole extends Resource
         return [
             ID::make()->sortable(),
 
+            BelongsTo::make('Project'),
+
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Text::make('Email')
+                ->sortable()
+                ->rules('max:255', 'email'),
+
+            BelongsToMany::make('Sessions', 'sessions')
+                ->fields(new ProjectPersonSessionFields),
         ];
     }
 
