@@ -41,6 +41,7 @@ type File implements Favoured {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
+	projectId: Int! @rename(attribute: "project_id")
 	project: Project! @belongsTo
 	folder: Folder @belongsTo
 	folderId: ID @rename(attribute: "folder_id")
