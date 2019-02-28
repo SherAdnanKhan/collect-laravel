@@ -17,6 +17,7 @@ type Project implements Favoured {
 	recordings: [Recording] @hasMany(type: "paginator")
 	recordingCount: Int!
 	comments: [Comment] @hasMany(type: "paginator")
+	songs: [Song] @hasMany
 }
 
 type Collaborator {

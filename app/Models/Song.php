@@ -37,7 +37,7 @@ class Song extends Model
      */
     public function recordings(): BelongsToMany
     {
-        return $this->belongsToMany(Recording::class)->using(SongRecording::class);
+        return $this->belongsToMany(Recording::class, 'songs_to_recordings')->using(SongRecording::class);
     }
 
     /**
