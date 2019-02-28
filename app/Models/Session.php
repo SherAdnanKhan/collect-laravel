@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Person;
 use App\Models\PersonSession;
 use App\Models\Project;
+use App\Models\ProjectPerson;
+use App\Models\ProjectPersonSession;
 use App\Models\Recording;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,8 +48,8 @@ class Session extends Model
      */
     public function people(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, 'persons_to_sessions')
-            ->using(PersonSession::class)->withPivot('person_role_id', 'instrument_id');
+        return $this->belongsToMany(ProjectPerson::class, 'project_persons_to_sessions')
+            ->using(ProjectPersonSession::class)->withPivot('project_person_role_id', 'instrument_id');
     }
 
     /**

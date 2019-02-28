@@ -13,9 +13,9 @@ use App\Models\Song;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PersonSession extends Pivot
+class ProjectPersonSession extends Pivot
 {
-    protected $table = 'persons_to_sessions';
+    protected $table = 'project_persons_to_sessions';
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +23,7 @@ class PersonSession extends Pivot
      * @var array
      */
     protected $fillable = [
-        'person_id', 'session_id', 'instrument_id', 'person_role_id',
+        'project_person_id', 'session_id', 'instrument_id', 'project_person_role_id',
     ];
 
     /**

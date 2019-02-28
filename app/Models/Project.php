@@ -6,6 +6,7 @@ use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
 use App\Models\Comment;
 use App\Models\Folder;
+use App\Models\ProjectPerson;
 use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
@@ -29,24 +30,6 @@ class Project extends Model
     protected $fillable = [
         'user_id', 'name', 'description',
     ];
-
-    /**
-     * A scope to filter projects who're accessible by the
-     * current authed user.
-     *
-     * @param  Builder $query
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $query): Builder
-    {
-        $user = auth()->user();
-
-        // Add to the query a check to see if the user
-        // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['read']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
-    }
 
     /**
      * The user owner for this project.
@@ -190,6 +173,16 @@ class Project extends Model
     }
 
     /**
+     * Get all people on the project
+     *
+     * @return HasMany
+     */
+    public function people(): HasMany
+    {
+        return $this->hasMany(ProjectPerson::class);
+    }
+
+    /**
      * Get the path to this projects root files
      *
      * @return string
@@ -197,5 +190,23 @@ class Project extends Model
     public function getUploadFolderPath()
     {
         return md5($this->attributes['id']);
+    }
+
+    /**
+     * A scope to filter projects who're accessible by the
+     * current authed user.
+     *
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query): Builder
+    {
+        $user = auth()->user();
+
+        // Add to the query a check to see if the user
+        // has read permission on the project, or owns it.
+        return (new CollaboratorPermission($query, $user, ['read']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 }

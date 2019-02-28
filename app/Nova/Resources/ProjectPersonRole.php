@@ -10,20 +10,19 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class File extends Resource
+class ProjectPersonRole extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\File';
+    public static $model = 'App\\Models\\ProjectPersonRole';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -38,8 +37,19 @@ class File extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'type', 'path'
+        'id', 'name',
     ];
+
+    /**
+     * Define the label used to display this in
+     * the side navigation.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'People Roles';
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -52,41 +62,9 @@ class File extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
-            BelongsTo::make('Project'),
-
-            BelongsTo::make('Folder')->nullable(),
-
             Text::make('Name')
                 ->sortable()
-                ->rules('required'),
-
-            Text::make('Type')
-                ->sortable()
-                ->rules('required'),
-
-            Text::make('Path')
-                ->sortable()
-                ->rules('required'),
-
-            Text::make('Transcoded Path')
-                ->sortable()
-                ->rules('required'),
-
-            Number::make('Bitrate')
-                ->sortable(),
-
-            Number::make('Bitdepth')
-                ->sortable(),
-
-            Number::make('Size')
-                ->sortable(),
-
-            Select::make('Status')->options([
-                'pending'    => 'Pending',
-                'processing' => 'Processing',
-                'complete'   => 'Complete',
-            ])->displayUsingLabels()->rules('required'),
+                ->rules('required', 'max:255'),
         ];
     }
 

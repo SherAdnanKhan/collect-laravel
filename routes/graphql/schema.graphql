@@ -35,7 +35,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
-	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable"])
+	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable"], defaultCount: 1000)
 
 	# File Queries
 	getFolder(id: Int! @eq): Folder @find
@@ -70,7 +70,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Collaborator] @paginate
 
 	# Person Roles Queries
-	getPersonRoles: [PersonRole] @all
+	getProjectPersonRoles: [ProjectPersonRole] @all
 
 	# Instrument Queries
 	getInstruments: [Instrument] @all
@@ -89,7 +89,19 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
 
 	# Project Mutations
+
+	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
+	deleteFiles(input: DeleteFilesInput!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
+}
+
+input DeleteFilesInput {
+	id: ID!
+	type: String!
+}
+
+type DeleteFilesPayload {
+	success: Boolean
 }
 
 input LoginInput {

@@ -9,9 +9,9 @@ type Project implements Favoured {
 	collaborators: [Collaborator] @hasMany
 	collaboratorCount: Int!
 	collaboratorInvites: [CollaboratorInvite] @hasMany
-	files(folderId: ID): [File] @hasMany
+	files(folder_id: ID @eq): [File] @hasMany
 	fileCount: Int!
-	folders(folderId: ID): [Folder] @hasMany
+	folders(folder_id: ID @eq): [Folder] @hasMany
 	sessions: [Session] @hasMany(type: "paginator")
 	sessionCount: Int!
 	recordings: [Recording] @hasMany(type: "paginator")
@@ -43,6 +43,7 @@ type File implements Favoured {
 	user: User! @belongsTo
 	project: Project! @belongsTo
 	folder: Folder @belongsTo
+	folderId: ID @rename(attribute: "folder_id")
 	type: String!
 	name: String!
 	path: String!
@@ -62,6 +63,7 @@ type Folder implements Favoured {
 	user: User! @belongsTo
 	projectId: Int! @rename(attribute: "project_id")
 	project: Project! @belongsTo
+	parentId: ID @rename(attribute: "folder_id")
 	parent: Folder @belongsTo
 	files: [File] @hasMany
 	folders: [Folder] @hasMany
@@ -125,4 +127,27 @@ type EventLog {
 	message: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type ProjectPerson {
+	id: ID! @globalId
+	project: Project @belongsTo
+	name: String!
+	email: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	sessions: [Session] @belongsToMany(type: "paginator")
+	meta: ProjectPersonSession @rename(attribute: "pivot")
+}
+
+type ProjectPersonSession {
+	person: ProjectPerson @belongsTo
+	session: Session @belongsTo
+	role: ProjectPersonRole @belongsTo
+	instrument: Instrument @belongsTo
+}
+
+type ProjectPersonRole {
+	id: ID! @globalId
+	name: String!
 }
