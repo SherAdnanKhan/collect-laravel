@@ -43,7 +43,8 @@ class Delete
         $id = (int) $input['resource_id'];
         $type = $input['resource_type'];
 
-        $favourite = UserFavourite::where('resource_id', $id)->where('resource_type', $type)->first();
+        $user = auth()->user();
+        $favourite = $user->favourites()->where('resource_id', $id)->where('resource_type', $type)->first();
 
         if (!$favourite) {
             throw new \Exception('Unable to find favourite for specified resource');
