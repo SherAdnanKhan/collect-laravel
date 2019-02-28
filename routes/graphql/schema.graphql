@@ -86,7 +86,8 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
 
 	# User Favourite Mutations
-	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @create(flatten: true)
+	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Create@resolve")
+	deleteUserFavourite(input: DeleteUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Delete@resolve")
 
 	# Project Mutations
 
@@ -129,14 +130,22 @@ input UpdateUserInput {
 	last_name: String
 }
 
+input DeleteUserFavouriteInput {
+	resource_id: Int!
+	resource_type: String!
+}
+
 input CreateUserFavouriteInput {
-	user: CreateUserFavouriteRelation!
 	resource_id: Int!
 	resource_type: String!
 }
 
 input CreateUserFavouriteRelation {
 	connect: ID!
+}
+
+input DeleteUserFavouriteRelation {
+	disconnect: ID!
 }
 
 input DownloadFilesInput {
