@@ -97,6 +97,13 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
 	deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
+	createFolder(input: CreateFolderInput!): Folder @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
+}
+
+input CreateFolderInput {
+	projectId: ID!
+	folderId: ID
+	name: String!
 }
 
 input DeleteFilesInput {
