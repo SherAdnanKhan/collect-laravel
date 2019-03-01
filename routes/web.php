@@ -110,7 +110,7 @@ Route::post('/create-multipart-upload', function (Request $request) {
     $existing_file = (clone $existing_file_query_base)->where('name', 'like', $filename . '.' . $extension)->first();
     $count = 1;
     while ($existing_file) {
-        $filename  = $original_filename . '('.$count.')';
+        $filename  = $original_filename . ' ('.$count.')';
         $existing_file = (clone $existing_file_query_base)->where('name', 'like', $filename . '.' . $extension)->first();
         $count++;
     }
