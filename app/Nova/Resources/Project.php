@@ -77,7 +77,6 @@ class Project extends Resource
 
             HasMany::make('Recordings', 'recordings'),
             HasMany::make('Sessions', 'sessions'),
-            HasMany::make('People', 'people', ProjectPerson::class),
             HasMany::make('Folders'),
             HasMany::make('Files'),
 

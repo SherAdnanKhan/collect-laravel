@@ -179,16 +179,6 @@ class Project extends Model implements UserAccessible
     }
 
     /**
-     * Get all people on the project
-     *
-     * @return HasMany
-     */
-    public function people(): HasMany
-    {
-        return $this->hasMany(ProjectPerson::class);
-    }
-
-    /**
      * Get the path to this projects root files
      *
      * @return string
