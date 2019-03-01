@@ -4,6 +4,10 @@ type Project implements Favoured {
 	user: User! @belongsTo
 	name: String!
 	description: String!
+	image: String
+	label: String
+	number: String!
+	artist: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	collaborators: [Collaborator] @hasMany
