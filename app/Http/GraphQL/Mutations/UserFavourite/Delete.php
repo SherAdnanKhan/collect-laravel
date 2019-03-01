@@ -29,6 +29,7 @@ class Delete
 
         $types = [
             'file'      => File::class,
+            'folder'    => Folder::class,
             'project'   => Project::class,
             'session'   => Session::class,
             'song'      => Song::class,
