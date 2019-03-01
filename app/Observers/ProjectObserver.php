@@ -16,7 +16,10 @@ class ProjectObserver
     {
         // Set the default value of the number to be
         // the ID of the row.
-        $project->number = $project->id;
-        $project->save();
+
+        if (is_null($project->number)) {
+            $project->number = $project->id;
+            $project->save();
+        }
     }
 }
