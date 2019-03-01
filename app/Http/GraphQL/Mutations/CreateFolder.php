@@ -34,7 +34,8 @@ class CreateFolder
             throw new AuthorizationException;
         }
 
-        if ($args['input']['folderId']) {
+        $parent_folder = false;
+        if (isset($args['input']['folderId'])) {
             $parent_folder = Folder::where('project_id', $project->id)->where('id', $args['input']['folderId'])->userViewable()->first();
             if (!$parent_folder) {
                 throw new AuthorizationException;
@@ -42,7 +43,7 @@ class CreateFolder
         }
 
         $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)].)/', '', $args['input']['name']);
-        $duplicate_folder_query = Folder::where('project_id', $project->id)->where('folder_id', $parent_folder->id)->userViewable()->where('name', 'like', $name);
+        $duplicate_folder_query = Folder::where('project_id', $project->id)->userViewable()->where('name', 'like', $name);
         if ($parent_folder) {
             $duplicate_folder_query->where('folder_id', $parent_folder->id);
         } else {
