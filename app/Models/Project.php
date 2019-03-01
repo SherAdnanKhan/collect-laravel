@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
 use App\Models\Comment;
@@ -12,6 +13,7 @@ use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
 use App\Models\UserFavourite;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\CollaboratorPermission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -21,8 +23,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Project extends Model
+class Project extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -199,9 +203,10 @@ class Project extends Model
      * current authed user.
      *
      * @param  Builder $query
+     * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         $user = auth()->user();
 

@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Credit extends Model
 {
+    // TODO:
+    // Associate credits polymorphically to each resource
+    // song, recording, project, session and relate
+    // to a person.
+
     /**
      * The attributes that are mass assignable.
      *

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,8 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Recording extends Model
+class Recording extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -73,9 +77,10 @@ class Recording extends Model
      * access to view, either by ownership or read access
      *
      * @param  Builder $query
+     * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         $user = auth()->user();
 
