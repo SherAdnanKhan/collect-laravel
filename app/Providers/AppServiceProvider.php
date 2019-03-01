@@ -11,6 +11,7 @@ use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
 use App\Observers\FolderObserver;
+use App\Observers\ProjectObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         Folder::observe(FolderObserver::class);
+        Project::observe(ProjectObserver::class);
     }
 
     /**
