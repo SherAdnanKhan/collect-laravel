@@ -3,7 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Project;
 
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Create
@@ -20,6 +20,12 @@ class Create
     {
         $input = $args['input'];
 
-        return auth()->user()->projects()->create($input);
+        try {
+            $project = auth()->user()->projects()->create($input);
+        } catch (\Exception $e) {
+            throw new GenericException($e->getMessage());
+        }
+
+        return $project;
     }
 }
