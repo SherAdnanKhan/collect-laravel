@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\File;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -14,8 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Folders contain files and folders.
  */
-class Folder extends Model
+class Folder extends Model implements UserAccessible
 {
+    use UserAccesses;
     use SoftDeletes;
 
     protected $fillable = [
@@ -107,9 +110,10 @@ class Folder extends Model
      * the project that this file is in.
      *
      * @param  Builder $query
+     * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         $user = auth()->user();
 

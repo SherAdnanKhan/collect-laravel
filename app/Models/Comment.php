@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,8 +15,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Represent a comment in a project on a resource.
  */
-class Comment extends Model
+class Comment extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     protected $fillable = [
         'project_id', 'user_id', 'resource_type', 'resource_id', 'message',
     ];
@@ -56,9 +60,10 @@ class Comment extends Model
      * by the user if they have access to the project.
      *
      * @param  Builder $query
+     * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         $user = auth()->user();
 

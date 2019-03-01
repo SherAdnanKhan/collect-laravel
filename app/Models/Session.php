@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Person;
 use App\Models\PersonSession;
 use App\Models\Project;
 use App\Models\ProjectPerson;
 use App\Models\ProjectPersonSession;
 use App\Models\Recording;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -15,8 +17,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Session extends Model
+class Session extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     protected $fillable = [
         'project_id', 'studio', 'name', 'description',
     ];
@@ -66,9 +70,10 @@ class Session extends Model
      * A scope to filter the sessions by user access to a project.
      *
      * @param  Builder $query
+     * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         return (new ProjectAccess($query, auth()->user(), ['read']))->getQuery();
     }

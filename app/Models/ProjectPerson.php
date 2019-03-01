@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\PersonSession;
 use App\Models\ProjectPersonRole;
 use App\Models\Session;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class ProjectPerson extends Model
+class ProjectPerson extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     protected $table = 'project_persons';
 
     /**
@@ -63,7 +67,7 @@ class ProjectPerson extends Model
      * @param  Builder $query
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         return (new ProjectAccess($query, auth()->user(), ['read']))->getQuery();
     }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\UserAccesses;
+use App\Contracts\UserAccessible;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SongRecording;
@@ -13,8 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Song extends Model
+class Song extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     protected $fillable = [
         'user_id', 'iswc', 'title', 'type', 'subtitle',
         'genre', 'artist'
@@ -66,9 +70,10 @@ class Song extends Model
      * the currently authed user.
      *
      * @param  Builder $query
+     * @param  Model  $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         $user = auth()->user();
 

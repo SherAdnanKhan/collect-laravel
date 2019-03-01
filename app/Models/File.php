@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Folder;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -15,8 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Represent a file that has been uploaded by a user into the system.
  */
-class File extends Model
+class File extends Model implements UserAccessible
 {
+    use UserAccesses;
     use SoftDeletes;
 
     const STATUS_PENDING = 'pending';
@@ -100,9 +103,10 @@ class File extends Model
      * the project that this file is in.
      *
      * @param  Builder $query
+     * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query): Builder
+    public function scopeUserViewable(Builder $query, $data): Builder
     {
         $user = auth()->user();
 
