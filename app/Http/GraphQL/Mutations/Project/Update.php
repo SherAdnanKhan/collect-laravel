@@ -4,7 +4,8 @@ namespace App\Http\GraphQL\Mutations\Project;
 
 use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
+use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Update
@@ -25,13 +26,13 @@ class Update
         $project = Project::where('id', $id)->userViewable()->first();
 
         if (!$project) {
-            throw new \Exception('Unable to find project to update');
+            throw new AuthorizationException('Unable to find project to update');
         }
 
         $saved = $project->fill($input)->save();
 
         if (!$saved) {
-            throw new \Exception('Error saving project');
+            throw new GenericException('Error saving project');
         }
 
         return $project;

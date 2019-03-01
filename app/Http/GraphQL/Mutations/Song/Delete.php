@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Project;
+namespace App\Http\GraphQL\Mutations\Song;
 
-use App\Models\Project;
+use App\Models\Song;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -22,12 +22,12 @@ class Delete
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $project = Project::where('id', $id)->userViewable()->first();
+        $song = Song::where('id', $id)->userViewable()->first();
 
-        if (!$project) {
-            throw new AuthorizationException('Unable to find project to update');
+        if (!$song) {
+            throw new AuthorizationException('Unable to find Song to update');
         }
 
-        return $project->delete();
+        return $song->delete();
     }
 }

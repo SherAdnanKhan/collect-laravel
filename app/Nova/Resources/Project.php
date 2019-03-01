@@ -40,7 +40,7 @@ class Project extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id', 'name', 'number', 'artist', 'label'
     ];
 
     /**
@@ -60,8 +60,20 @@ class Project extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+            Text::make('Number')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('Artist')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('Label')
+                ->sortable()
+                ->rules('max:255'),
+
             Textarea::make('Description')
-                ->rules('required'),
+                ->rules('max:255'),
 
             HasMany::make('Recordings', 'recordings'),
             HasMany::make('Sessions', 'sessions'),
