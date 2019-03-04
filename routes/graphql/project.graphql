@@ -1,4 +1,4 @@
-type Project implements Favoured {
+type Project implements Favoured & Creditable {
 	id: ID!
 	_id: ID! @globalId @rename(attribute: "id")
 	user: User! @belongsTo

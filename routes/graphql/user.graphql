@@ -13,7 +13,7 @@
 	trialEndsAt: String @rename(attribute: "trial_ends_at")
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
-	favourites: [UserFavourite]
+	favourites: [UserFavourite] @hasMany
 	subscriptions: [UserSubscription] @hasMany(type: "paginator")
 	projects: [Project] @hasMany(type: "paginator")
 	persons: [Person] @hasMany(type: "paginator")
@@ -67,6 +67,7 @@ type Person implements Favoured {
 	user: User @belongsTo
 	name: String!
 	email: String
+	credits: [Credit] @hasMany
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
@@ -77,7 +78,7 @@ type Instrument {
 	name: String
 }
 
-type Song implements Favoured {
+type Song implements Favoured & Creditable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
@@ -87,6 +88,18 @@ type Song implements Favoured {
 	subtitle: String
 	genre: String
 	artist: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Credit {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	person: Person! @belongsTo
+	role: String!
+	contributionId: Int! @rename(attribute: "contribution_id")
+	contributionType: String! @rename(attribute: "contribution_type")
+	contribution: Creditable!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
