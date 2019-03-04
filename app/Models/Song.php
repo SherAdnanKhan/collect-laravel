@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\UserAccesses;
 use App\Contracts\UserAccessible;
+use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -63,6 +64,16 @@ class Song extends Model implements UserAccessible
     public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * Grab the credits/contributions directly on this resource.
+     *
+     * @return MorphMany
+     */
+    public function credits(): MorphMany
+    {
+        return $this->morphMany(Credit::class, 'contribution');
     }
 
     /**
