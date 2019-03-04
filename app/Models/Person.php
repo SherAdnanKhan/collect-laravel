@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
+use App\Models\Credit;
 use App\Models\PersonSession;
 use App\Models\Session;
 use App\Models\User;
@@ -11,6 +12,7 @@ use App\Traits\UserAccesses;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Person extends Model implements UserAccessible
@@ -46,5 +48,15 @@ class Person extends Model implements UserAccessible
     public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * Get all of a persons credits.
+     *
+     * @return HasMany
+     */
+    public function credits(): HasMany
+    {
+        return $this->hasMany(Credit::class);
     }
 }

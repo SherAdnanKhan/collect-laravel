@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
+use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\Song;
@@ -70,6 +71,16 @@ class Recording extends Model implements UserAccessible
     public function songs(): HasMany
     {
         return $this->hasMany(Song::class)->using(SongRecording::class);
+    }
+
+    /**
+     * Grab the credits/contributions directly on this resource.
+     *
+     * @return MorphMany
+     */
+    public function credits(): MorphMany
+    {
+        return $this->morphMany(Credit::class, 'contribution');
     }
 
     /**

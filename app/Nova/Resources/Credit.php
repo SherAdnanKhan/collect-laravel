@@ -21,23 +21,23 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Comment extends Resource
+class Credit extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Comment';
+    public static $model = 'App\\Models\\Credit';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'message';
+    public static $title = 'person.name';
 
-    public static $with = ['user', 'project'];
+    public static $with = ['person', 'contribution'];
 
     /**
      * The columns that should be searched.
@@ -45,7 +45,7 @@ class Comment extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'message',
+        'id', 'person.name', 'role',
     ];
 
     /**
@@ -59,20 +59,17 @@ class Comment extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Project'),
-            BelongsTo::make('User'),
+            BelongsTo::make('Person'),
 
-            Textarea::make('Message')
+            Text::make('Role')
                 ->rules('required'),
 
-            MorphTo::make('Commented On', 'commentable')->types([
+            MorphTo::make('Contribution')->types([
                 Project::class,
                 Session::class,
                 Recording::class,
                 Song::class,
             ])->nullable(),
-
-            DateTime::make('Created At'),
         ];
     }
 

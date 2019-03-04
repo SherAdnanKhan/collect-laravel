@@ -2,32 +2,40 @@
 
 namespace App\Models;
 
+use App\Models\Person;
 use App\Models\SongRecording;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Credit extends Model
 {
-    // TODO:
-    // Associate credits polymorphically to each resource
-    // song, recording, project, session and relate
-    // to a person.
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'song_recording_id', 'role', 'name', 'email',
+        'person_id', 'contribution_id', 'contribution_type', 'role',
     ];
 
     /**
-     * Get the song/recording instance this credit is for.
+     * Get the contributed resource.
      *
-     * @return SongRecording
+     * @return MorphTo
      */
-    public function songRecording()
+    public function contribution(): MorphTo
     {
-        return $this->belongsTo(SongRecording::class, 'song_recording_id');
+        return $this->morphTo(null, 'contribution_type', 'contribution_id');
+    }
+
+    /**
+     * Get the person who is being credited.
+     *
+     * @return BelongsTo
+     */
+    public function person(): BelongsTo
+    {
+        return $this->belongsTo(Person::class);
     }
 }

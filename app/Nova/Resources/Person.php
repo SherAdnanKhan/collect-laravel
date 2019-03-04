@@ -62,6 +62,8 @@ class Person extends Resource
             Text::make('Email')
                 ->sortable()
                 ->rules('max:255', 'email'),
+
+            HasMany::make('Credits'),
         ];
     }
 

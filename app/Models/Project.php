@@ -6,8 +6,8 @@ use App\Contracts\UserAccessible;
 use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
 use App\Models\Comment;
+use App\Models\Credit;
 use App\Models\Folder;
-use App\Models\ProjectPerson;
 use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
@@ -176,6 +176,16 @@ class Project extends Model implements UserAccessible
     public function collaboratorInvites(): HasMany
     {
         return $this->hasMany(CollaboratorInvite::class);
+    }
+
+    /**
+     * Grab the credits/contributions directly on this resource.
+     *
+     * @return MorphMany
+     */
+    public function credits(): MorphMany
+    {
+        return $this->morphMany(Credit::class, 'contribution');
     }
 
     /**

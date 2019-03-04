@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\UserAccessible;
+use App\Models\Credit;
 use App\Models\Person;
 use App\Models\PersonSession;
 use App\Models\Project;
@@ -64,6 +65,16 @@ class Session extends Model implements UserAccessible
     public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * Grab the credits/contributions directly on this resource.
+     *
+     * @return MorphMany
+     */
+    public function credits(): MorphMany
+    {
+        return $this->morphMany(Credit::class, 'contribution');
     }
 
     /**
