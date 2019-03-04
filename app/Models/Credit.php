@@ -16,7 +16,7 @@ class Credit extends Model
      * @var array
      */
     protected $fillable = [
-        'person_id', 'contribution_id', 'contribution_type', 'role',
+        'person_id', 'contribution_id', 'contribution_type', 'role', 'performing',
     ];
 
     /**
