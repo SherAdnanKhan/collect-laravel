@@ -85,7 +85,7 @@ type FolderPath {
 	name: String!
 }
 
-type Recording implements Favoured {
+type Recording implements Favoured & Creditable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
@@ -97,7 +97,7 @@ type Recording implements Favoured {
 	sessions: [Session] @belongsToMany
 }
 
-type Session implements Favoured {
+type Session implements Favoured & Creditable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
