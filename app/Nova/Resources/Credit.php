@@ -9,6 +9,7 @@ use App\Nova\Resources\Session;
 use App\Nova\Resources\Song;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
@@ -63,6 +64,8 @@ class Credit extends Resource
 
             Text::make('Role')
                 ->rules('required'),
+
+            Boolean::make('Performing'),
 
             MorphTo::make('Contribution')->types([
                 Project::class,

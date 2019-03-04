@@ -97,6 +97,7 @@ type Credit {
 	id: ID!
 	person: Person! @belongsTo
 	role: String!
+	performing: Boolean
 	contributionId: Int! @rename(attribute: "contribution_id")
 	contributionType: String! @rename(attribute: "contribution_type")
 	contribution: Creditable!
