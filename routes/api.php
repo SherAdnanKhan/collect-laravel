@@ -13,28 +13,26 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::prefix('api')->group(function () {
-    // We'll use the 'api' guard for multi-part uploads as they'll auth
-    // using the JWT we have to authenticate the user through the GraphQL
-    // portion of the service.
-    Route::prefix('multipart-uploads')->middleware('auth:api')->group(function () {
-        Route::post('/create', 'MultipartUploads@create');
-        Route::post('/prepare', 'MultipartUploads@prepare');
-        Route::post('/list', 'MultipartUploads@list');
-        Route::post('/abort', 'MultipartUploads@abort');
-        Route::post('/complete', 'MultipartUploads@complete');
-    });
+// We'll use the 'api' guard for multi-part uploads as they'll auth
+// using the JWT we have to authenticate the user through the GraphQL
+// portion of the service.
+Route::prefix('multipart-uploads')->middleware('auth:api')->group(function () {
+    Route::post('/create', 'MultipartUploadsController@create');
+    Route::post('/prepare', 'MultipartUploadsController@prepare');
+    Route::post('/list', 'MultipartUploadsController@list');
+    Route::post('/abort', 'MultipartUploadsController@abort');
+    Route::post('/complete', 'MultipartUploadsController@complete');
+});
 
-    // Any routes defined in this group adhere to basic token authentication
-    // for the api routing, using the 'token' guard.
-    Route::middleware('auth:token')->group(function() {
+// Any routes defined in this group adhere to basic token authentication
+// for the api routing, using the 'token' guard.
+Route::middleware('auth:token')->group(function() {
 
-        // The stripe webhook endpoints, it automatically
-        // verifies the stripe signature to ensure the
-        // requests are coming from the correct Stripe.
-        Route::post(
-            'stripe/webhook',
-            '\App\Http\Controllers\Webhooks\StripeController@handleWebhook'
-        );
-    });
+    // The stripe webhook endpoints, it automatically
+    // verifies the stripe signature to ensure the
+    // requests are coming from the correct Stripe.
+    Route::post(
+        'stripe/webhook',
+        '\App\Http\Controllers\Webhooks\StripeController@handleWebhook'
+    );
 });
