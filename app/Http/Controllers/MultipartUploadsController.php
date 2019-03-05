@@ -7,7 +7,7 @@ use App\Models\Folder;
 use App\Models\Project;
 use \Illuminate\Http\Request;
 
-class MultipartUploads extends Controller
+class MultipartUploadsController extends Controller
 {
     public function create(Request $request)
     {
