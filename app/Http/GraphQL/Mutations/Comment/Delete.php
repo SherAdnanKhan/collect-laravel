@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Project;
+namespace App\Http\GraphQL\Mutations\Comment;
 
-use App\Models\Project;
+use App\Models\Comment;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -19,15 +19,15 @@ class Delete
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $input = $args['input'];
-        $id = (int) $input['id'];
+        $comment = auth()->user()
+            ->comments()
+            ->where('id', (int) array_get('input.id', $args))
+            ->first();
 
-        $project = Project::where('id', $id)->userViewable()->first();
-
-        if (!$project) {
-            throw new AuthorizationException('Unable to find project to delete');
+        if (!$comment) {
+            throw new AuthorizationException('Unable to find comment to delete');
         }
 
-        return $project->delete();
+        return $comment->delete();
     }
 }

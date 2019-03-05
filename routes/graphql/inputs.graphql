@@ -1,0 +1,69 @@
+input CreateFolderInput {
+    projectId: ID!
+    folderId: ID
+    name: String!
+}
+
+input DeleteFilesInput {
+    id: ID!
+    type: String!
+}
+
+input LoginInput {
+  email: String! @rules(apply: ["email"])
+  password: String! @rules(apply: ["required", "min:6"])
+}
+
+input UpdateUserInput {
+    first_name: String
+    last_name: String
+}
+
+input DeleteUserFavouriteInput {
+    resource_id: Int!
+    resource_type: String!
+}
+
+input CreateUserFavouriteInput {
+    resource_id: Int!
+    resource_type: String!
+}
+
+input DeleteProjectInput {
+    id: ID!
+}
+
+input UpdateProjectInput {
+    id: ID!
+    name: String @rules(apply: ["min:4", "max:255", "unique:projects,name"])
+    image: String
+    label: String @rules(apply: ["min:2", "max:255"])
+    artist: String @rules(apply: ["min:2", "max:255"])
+    number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
+    description: String
+}
+
+input CreateProjectInput {
+    name: String! @rules(apply: ["required", "min:4", "max:255", "unique:projects,name"])
+    image: String! @rules(apply: ["required"])
+    label: String! @rules(apply: ["required", "min:2", "max:255"])
+    artist: String @rules(apply: ["min:2", "max:255"])
+    number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
+    description: String
+}
+
+input DownloadFilesInput {
+    id: ID!
+    type: String!
+}
+
+input CreateCommentInput {
+    project_id: ID! @rules(apply: ["required"])
+    resource_id: ID! @rules(apply: ["required"])
+    resource_type: String! @rules(apply: ["required"])
+    message: String! @rules(apply: ["required", "min:2"])
+}
+
+input DeleteCommentInput {
+    id: ID!
+}
