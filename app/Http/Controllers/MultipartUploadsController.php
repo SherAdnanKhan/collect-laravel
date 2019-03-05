@@ -44,15 +44,6 @@ class MultipartUploadsController extends Controller
         // with folder name and filename collisions
         usleep(rand(0, 1000000));
 
-        $sharedConfig = [
-            'region'  => config('filesystems.disks.s3.region'),
-            'version' => 'latest',
-            'credentials' => [
-                'key'    => config('filesystems.disks.s3.key'),
-                'secret' => config('filesystems.disks.s3.secret'),
-            ]
-        ];
-
         $currentFolder = $folder;
         $depth = ($folder ? $folder->depth : 0);
 
