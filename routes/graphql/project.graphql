@@ -29,6 +29,14 @@ type Collaborator {
 	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
+	permissions: [CollaboratorPermission] @hasMany
+}
+
+type CollaboratorPermission {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	collaborator: Collaborator @belongsTo
+	type: String!
 	level: String!
 }
 
