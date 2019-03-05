@@ -192,5 +192,9 @@ interface Creditable {
 	id: ID! @globalId
 }
 
+interface Commentable {
+	id: ID! @globalId
+}
+
 #import user.graphql
 #import project.graphql

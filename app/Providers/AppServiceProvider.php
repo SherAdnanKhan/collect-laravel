@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'file'      => File::class,
+            'folder'    => Folder::class,
             'project'   => Project::class,
             'person'    => Person::class,
             'session'   => Session::class,
