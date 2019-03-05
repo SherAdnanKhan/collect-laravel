@@ -1,0 +1,11 @@
+interface Favoured {
+    id: ID! @globalId
+}
+
+interface Creditable {
+    id: ID! @globalId
+}
+
+interface Commentable {
+    id: ID! @globalId
+}

@@ -1,0 +1,18 @@
+type DeleteFilesPayload {
+    success: Boolean
+}
+
+type LogoutPayload {
+  loggedOut: Boolean @rename(attribute: "logged_out")
+}
+
+type LoginPayload {
+  accessToken: String! @rename(attribute: "access_token")
+  expiresIn: Int! @rename(attribute: "expires_in")
+  tokenType: String! @rename(attribute: "token_type")
+}
+
+type DownloadFilesPayload {
+    success: Boolean!
+    url: String
+}

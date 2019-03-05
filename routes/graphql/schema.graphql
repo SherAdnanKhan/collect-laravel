@@ -100,101 +100,18 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	updateProject(input: UpdateProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Update@resolve")
 	deleteProject(input: DeleteProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Delete@resolve")
 
+	# Comment Mutations
+	createComment(input: CreateCommentInput!): Comment @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Create@resolve")
+	deleteComment(input: DeleteCommentInput!): Comment @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Delete@resolve")
+
 	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
 	deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
 	createFolder(input: CreateFolderInput!): Folder @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
 }
 
-input CreateFolderInput {
-	projectId: ID!
-	folderId: ID
-	name: String!
-}
-
-input DeleteFilesInput {
-	id: ID!
-	type: String!
-}
-
-type DeleteFilesPayload {
-	success: Boolean
-}
-
-input LoginInput {
-  email: String! @rules(apply: ["email"])
-  password: String! @rules(apply: ["required", "min:6"])
-}
-
-type LogoutPayload {
-  loggedOut: Boolean @rename(attribute: "logged_out")
-}
-
-type LoginPayload {
-  accessToken: String! @rename(attribute: "access_token")
-  expiresIn: Int! @rename(attribute: "expires_in")
-  tokenType: String! @rename(attribute: "token_type")
-}
-
-type DownloadFilesPayload {
-	success: Boolean!
-	url: String
-}
-
-input UpdateUserInput {
-	first_name: String
-	last_name: String
-}
-
-input DeleteUserFavouriteInput {
-	resource_id: Int!
-	resource_type: String!
-}
-
-input CreateUserFavouriteInput {
-	resource_id: Int!
-	resource_type: String!
-}
-
-input DeleteProjectInput {
-	id: ID!
-}
-
-input UpdateProjectInput {
-	id: ID!
-	name: String @rules(apply: ["min:4", "max:255", "unique:projects,name"])
-	image: String
-	label: String @rules(apply: ["min:2", "max:255"])
-	artist: String @rules(apply: ["min:2", "max:255"])
-	number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
-	description: String
-}
-
-input CreateProjectInput {
-	name: String! @rules(apply: ["required", "min:4", "max:255", "unique:projects,name"])
-	image: String! @rules(apply: ["required"])
-	label: String! @rules(apply: ["required", "min:2", "max:255"])
-	artist: String @rules(apply: ["min:2", "max:255"])
-	number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
-	description: String
-}
-
-input DownloadFilesInput {
-	id: ID!
-	type: String!
-}
-
-interface Favoured {
-    id: ID! @globalId
-}
-
-interface Creditable {
-	id: ID! @globalId
-}
-
-interface Commentable {
-	id: ID! @globalId
-}
-
+#import inputs.graphql
+#import payloads.graphql
+#import interfaces.graphql
 #import user.graphql
 #import project.graphql
