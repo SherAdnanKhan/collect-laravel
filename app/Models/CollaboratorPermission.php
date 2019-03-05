@@ -17,7 +17,7 @@ class CollaboratorPermission extends Model
      * @var array
      */
     protected $fillable = [
-        'collaborator_id', 'level'
+        'collaborator_id', 'type', 'level'
     ];
 
     /**

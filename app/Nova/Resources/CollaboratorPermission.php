@@ -41,7 +41,7 @@ class CollaboratorPermission extends Resource
      * @var array
      */
     public static $search = [
-        'level',
+        'type', 'level',
     ];
 
     /**
@@ -57,11 +57,20 @@ class CollaboratorPermission extends Resource
 
             BelongsTo::make('Collaborator'),
 
+            Select::make('On Resource', 'type')->options([
+                'project'      => 'Projects',
+                'file'         => 'Files & Folders',
+                'session'      => 'Sessions',
+                'recording'    => 'Recordings',
+                'collaborator' => 'Collaborators',
+            ])->displayUsingLabels()->rules('required'),
+
             Select::make('Level')->options([
-                'read'   => 'Read',
-                'create' => 'Create',
-                'update' => 'Update',
-                'delete' => 'Delete',
+                'read'     => 'Read',
+                'create'   => 'Create',
+                'update'   => 'Update',
+                'delete'   => 'Delete',
+                'download' => 'Download',
             ])->displayUsingLabels()->rules('required'),
         ];
     }
