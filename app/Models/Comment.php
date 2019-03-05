@@ -63,7 +63,7 @@ class Comment extends Model implements UserAccessible
      * @param  Model   $model
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query, $data): Builder
+    public function scopeUserViewable(Builder $query, $data = []): Builder
     {
         $user = auth()->user();
 
