@@ -37,8 +37,9 @@ extend type Query @group(middleware: ["auth:api"]) {
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
 	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable"], defaultCount: 1000)
+	getFilePreview(id: Int!): GetFilePreviewPayload @field(resolver: "App\\Http\\GraphQL\\Queries\\File\\GetPreview@resolve")
 
-	# File Queries
+	# Folder Queries
 	getFolder(id: Int! @eq): Folder @find
 	getFolders(
 		userId: Int @eq(key: "user_id")
