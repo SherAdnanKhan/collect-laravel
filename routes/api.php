@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::prefix('api')->group(function () {
+    Route::prefix('multipart-uploads')->middleware('auth:api')->group(function () {
+        Route::post('/create', 'MultipartUploads@create');
+        Route::post('/prepare', 'MultipartUploads@prepare');
+        Route::post('/list', 'MultipartUploads@list');
+        Route::post('/abort', 'MultipartUploads@abort');
+        Route::post('/complete', 'MultipartUploads@complete');
+    });
+});
