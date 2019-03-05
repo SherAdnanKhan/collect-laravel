@@ -88,8 +88,19 @@ type Song implements Favoured & Creditable {
 	subtitle: String
 	genre: String
 	artist: String
+	songRecording: SongRecording @rename(attribute: "pivot")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type SongRecording {
+	id: ID!
+	recordingId: ID @rename(attribute: "recording_id")
+	songId: ID @rename(attribute: "song_id")
+	projectId: ID @rename(attribute: "project_id")
+	recording: Recording! @belongsTo
+	song: Song! @belongsTo
+	project: Project! @belongsTo
 }
 
 type Credit {

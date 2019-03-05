@@ -115,7 +115,8 @@ class Project extends Model implements UserAccessible
      */
     public function songs(): BelongsToMany
     {
-        return $this->belongsToMany(Song::class, 'songs_to_recordings')->using(SongRecording::class);
+        return $this->belongsToMany(Song::class, 'songs_to_recordings')
+            ->using(SongRecording::class)->withPivot('recording_id');
     }
 
     /**

@@ -11,11 +11,6 @@ trait UserAccesses
         return $query;
     }
 
-    public function scopeUserCreatable(Builder $query, $data): Builder
-    {
-        return $query;
-    }
-
     public function scopeUserUpdatable(Builder $query, $data): Builder
     {
         return $query;

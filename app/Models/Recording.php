@@ -70,7 +70,7 @@ class Recording extends Model implements UserAccessible
      */
     public function songs(): HasMany
     {
-        return $this->hasMany(Song::class)->using(SongRecording::class);
+        return $this->hasMany(Song::class)->using(SongRecording::class)->withPivot('project_id');
     }
 
     /**
