@@ -25,10 +25,16 @@ Route::prefix('api')->group(function () {
         Route::post('/complete', 'MultipartUploads@complete');
     });
 
-
     // Any routes defined in this group adhere to basic token authentication
     // for the api routing, using the 'token' guard.
     Route::middleware('auth:token')->group(function() {
 
+        // The stripe webhook endpoints, it automatically
+        // verifies the stripe signature to ensure the
+        // requests are coming from the correct Stripe.
+        Route::post(
+            'stripe/webhook',
+            '\App\Http\Controllers\Webhooks\StripeController@handleWebhook'
+        );
     });
 });
