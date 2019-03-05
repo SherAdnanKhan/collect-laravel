@@ -1,4 +1,4 @@
-type Project implements Favoured & Creditable {
+type Project implements Favoured & Creditable & Commentable {
 	id: ID!
 	_id: ID! @globalId @rename(attribute: "id")
 	user: User! @belongsTo
@@ -20,7 +20,7 @@ type Project implements Favoured & Creditable {
 	sessionCount: Int!
 	recordings: [Recording] @hasMany(type: "paginator")
 	recordingCount: Int!
-	comments: [Comment] @hasMany(type: "paginator")
+	comments: [Comment] @hasMany
 	songs: [Song] @hasMany
 }
 
@@ -50,7 +50,7 @@ type CollaboratorInvite {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type File implements Favoured {
+type File implements Favoured & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
@@ -71,7 +71,7 @@ type File implements Favoured {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type Folder implements Favoured {
+type Folder implements Favoured & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
@@ -93,7 +93,7 @@ type FolderPath {
 	name: String!
 }
 
-type Recording implements Favoured & Creditable {
+type Recording implements Favoured & Creditable & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
@@ -105,12 +105,12 @@ type Recording implements Favoured & Creditable {
 	sessions: [Session] @belongsToMany
 }
 
-type Session implements Favoured & Creditable {
+type Session implements Favoured & Creditable & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
-	studio: String
-	name: String
+	studio: String!
+	name: String!
 	description: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
@@ -124,7 +124,7 @@ type Comment {
 	user: User! @belongsTo
 	resourceId: Int @rename(attribute: "resource_id")
 	resourceType: String @rename(attribute: "resource_type")
-	commentedOn: Favoured
+	resource: Commentable @rename(attribute: "commentable")
 	message: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
