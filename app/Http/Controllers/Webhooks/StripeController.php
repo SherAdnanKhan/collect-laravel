@@ -2,12 +2,13 @@
 
 namespace App\Controllers\Webhooks;
 
-use App\Http\Controllers\Controller;
+use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 /**
  * Handle stripe webhook requests.
  */
-class StripeController extends Controller
+class StripeController extends CashierController
 {
-
+    // Override methods from the cashier controller when we want to do
+    // something different.
 }
