@@ -2,15 +2,20 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\Metrics\NewUsers;
 use App\Nova\Resource;
+use App\Nova\Resources\Person;
+use App\Nova\Resources\UserProfile;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\PasswordConfirmation;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Themsaid\CashierTool\CashierResourceTool;
 
 class User extends Resource
 {
@@ -26,7 +31,9 @@ class User extends Resource
      *
      * @var string
      */
-    public static $title = 'first_name';
+    public static $title = 'name';
+
+    public static $with = ['profile', 'subscriptions'];
 
     /**
      * The columns that should be searched.
@@ -34,7 +41,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'email',
+        'id', 'first_name', 'last_name', 'email',
     ];
 
     /**
@@ -73,8 +80,20 @@ class User extends Resource
 
             Password::make('Password')
                 ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:6')
-                ->updateRules('nullable', 'string', 'min:6'),
+                ->creationRules('required', 'string', 'min:6', 'confirmed')
+                ->updateRules('nullable', 'string', 'min:6', 'confirmed'),
+
+            PasswordConfirmation::make('Password Confirmation'),
+
+            CashierResourceTool::make()->onlyOnDetail(),
+
+            HasOne::make('User Profile', 'profile'),
+
+            HasMany::make('Projects', 'projects'),
+
+            HasMany::make('Songs', 'songs'),
+
+            HasMany::make('People', 'persons', Person::class),
         ];
     }
 
@@ -86,9 +105,7 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [
-            new NewUsers,
-        ];
+        return [];
     }
 
     /**

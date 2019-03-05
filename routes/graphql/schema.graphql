@@ -1,6 +1,196 @@
 type Query {
-	users: [User] @all
-	user(id: Int! @eq): User @find
+    # User Queries
+    getMe: User @auth
 }
 
-#import users/*.graphql
+extend type Query @group(middleware: ["auth:api"]) {
+	getUsers: [User] @paginate
+	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
+
+	# User Favourite Queries
+	getUserFavourites(userId: Int! @eq(key: "user_id")): [UserFavourite] @paginate  @middleware(checks: ["auth:api"])
+
+	# User Token Queries
+	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
+
+	# User Subscription Queries
+	getSubscription(id: Int! @eq): UserSubscription @find(model: "Laravel\\Cashier\\Subscription")
+	getSubscriptions(userId: Int! @eq(key: "user_id")): [UserSubscription] @paginate(model: "Laravel\\Cashier\\Subscription", defaultCount: 1)
+
+	# Person (People) Queries
+	getPerson(id: Int! @eq): Person @find
+	getPeople(userId: Int @eq(key: "user_id")): [Person] @all(scopes: ["userViewable"])
+
+	# Project Queries
+	getProject(id: ID! @eq): Project @find
+	getProjects(userId: Int @eq(key: "user_id")): [Project] @all(scopes: ["userViewable"])
+
+	# Song Queries
+	getSong(id: Int! @eq): Song @find
+	getSongs(userId: Int @eq(key: "user_id")): [Song] @all(scopes: ["userViewable"])
+	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
+
+	# File Queries
+	getFile(id: Int! @eq): File @find
+	getFiles(
+		userId: Int @eq(key: "user_id")
+		folderId: Int @eq(key: "folder_id")
+		projectId: Int @eq(key: "project_id")
+	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable"], defaultCount: 1000)
+
+	# File Queries
+	getFolder(id: Int! @eq): Folder @find
+	getFolders(
+		userId: Int @eq(key: "user_id")
+		folderId: Int @eq(key: "folder_id")
+		projectId: Int @eq(key: "project_id")
+	): [Folder] @all
+
+	# Recording Queries
+	getRecording(id: Int! @eq): Recording @find
+	getRecordings(projectId: Int @eq(key: "project_id")): [Recording] @paginate(scopes: ["userViewable"])
+
+	# Session Queries
+	getSession(id: Int! @eq): Session @find
+	getSessions(projectId: Int! @eq(key: "project_id")): [Session] @paginate(model: "App\\Models\\Session")
+
+	# Comment Queries
+	getComment(id: Int! @eq): Comment @find
+	getComments(
+		userId: Int @eq(key: "user_id")
+		projectId: Int @eq(key: "project_id")
+		resourceType: String @eq(key: "resource_type")
+		resourceId: Int @eq(key: "resource_id")
+	): [Comment] @paginate
+
+	# Collaborator Queries
+	getCollaborator(id: Int! @eq): Collaborator @find
+	getCollaborators(
+		userId: Int @eq(key: "user_id")
+		projectId: Int @eq(key: "project_id")
+	): [Collaborator] @paginate
+
+	# Credit Queries
+	getCredit(id: Int! @eq): Credit @find
+	getCredits(
+		personId: Int @eq(key: "person_id")
+		contributionType: String @eq(key: "contribution_type")
+		contributionId: Int @eq(key: "contribution_id")
+	): [Credit] @all
+
+	# Instrument Queries
+	getInstruments: [Instrument] @all
+}
+
+type Mutation {
+	doLogin(input: LoginInput): LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+	doLogout: LogoutPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Logout@resolve")
+}
+
+extend type Mutation @group(middleware: ["auth:api"]) {
+	# User Mutations
+	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
+
+	# User Favourite Mutations
+	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Create@resolve")
+	deleteUserFavourite(input: DeleteUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Delete@resolve")
+
+	# Project Mutations
+	createProject(input: CreateProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Create@resolve")
+	updateProject(input: UpdateProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Update@resolve")
+	deleteProject(input: DeleteProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Delete@resolve")
+
+	# File & Folder Mutations
+	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
+	deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
+	createFolder(input: CreateFolderInput!): Folder @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
+}
+
+input CreateFolderInput {
+	projectId: ID!
+	folderId: ID
+	name: String!
+}
+
+input DeleteFilesInput {
+	id: ID!
+	type: String!
+}
+
+type DeleteFilesPayload {
+	success: Boolean
+}
+
+input LoginInput {
+  email: String! @rules(apply: ["email"])
+  password: String! @rules(apply: ["required", "min:6"])
+}
+
+type LogoutPayload {
+  loggedOut: Boolean @rename(attribute: "logged_out")
+}
+
+type LoginPayload {
+  accessToken: String! @rename(attribute: "access_token")
+  expiresIn: Int! @rename(attribute: "expires_in")
+  tokenType: String! @rename(attribute: "token_type")
+}
+
+type DownloadFilesPayload {
+	success: Boolean!
+	url: String
+}
+
+input UpdateUserInput {
+	first_name: String
+	last_name: String
+}
+
+input DeleteUserFavouriteInput {
+	resource_id: Int!
+	resource_type: String!
+}
+
+input CreateUserFavouriteInput {
+	resource_id: Int!
+	resource_type: String!
+}
+
+input DeleteProjectInput {
+	id: ID!
+}
+
+input UpdateProjectInput {
+	id: ID!
+	name: String @rules(apply: ["min:4", "max:255", "unique:projects,name"])
+	image: String
+	label: String @rules(apply: ["min:2", "max:255"])
+	artist: String @rules(apply: ["min:2", "max:255"])
+	number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
+	description: String
+}
+
+input CreateProjectInput {
+	name: String! @rules(apply: ["required", "min:4", "max:255", "unique:projects,name"])
+	image: String! @rules(apply: ["required"])
+	label: String! @rules(apply: ["required", "min:2", "max:255"])
+	artist: String @rules(apply: ["min:2", "max:255"])
+	number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
+	description: String
+}
+
+input DownloadFilesInput {
+	id: ID!
+	type: String!
+}
+
+interface Favoured {
+    id: ID! @globalId
+}
+
+interface Creditable {
+	id: ID! @globalId
+}
+
+#import user.graphql
+#import project.graphql

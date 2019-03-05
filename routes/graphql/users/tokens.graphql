@@ -1,6 +1,0 @@
-type UserTwoFactorTokens {
-	id: ID!
-	user: User! @belongsTo
-	token: String!
-	expires_at: String!
-}

@@ -18,11 +18,11 @@ class CreateUserProfilesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
-            $table->string('studio_type');
-            $table->string('label');
-            $table->string('job_role');
-            $table->string('genre');
-            $table->unsignedInteger('workload');
+            $table->string('studio_type')->nullable();
+            $table->string('label')->nullable();
+            $table->string('job_role')->nullable();
+            $table->string('genre')->nullable();
+            $table->unsignedInteger('workload')->default(0);
         });
     }
 
