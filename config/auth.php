@@ -50,6 +50,11 @@ return [
             'driver'   => 'jwt',
             'provider' => 'users',
         ],
+
+        'token' => [
+            'driver'   => 'token',
+            'provider' => 'applications',
+        ],
     ],
 
     /*
@@ -80,10 +85,10 @@ return [
             'model' => \App\Models\Administrator::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'applications' => [
+            'driver' => 'eloquent',
+            'table'  => \App\Models\Application::class,
+        ],
     ],
 
     /*
