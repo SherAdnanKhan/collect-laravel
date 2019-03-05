@@ -15,6 +15,7 @@ use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\PasswordConfirmation;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Themsaid\CashierTool\CashierResourceTool;
 
 class User extends Resource
 {
@@ -84,9 +85,9 @@ class User extends Resource
 
             PasswordConfirmation::make('Password Confirmation'),
 
-            HasOne::make('User Profile', 'profile'),
+            CashierResourceTool::make()->onlyOnDetail(),
 
-            HasMany::make('Subscriptions', 'subscriptions'),
+            HasOne::make('User Profile', 'profile'),
 
             HasMany::make('Projects', 'projects'),
 
