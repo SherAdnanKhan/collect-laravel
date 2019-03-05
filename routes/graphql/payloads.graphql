@@ -1,5 +1,5 @@
 type DeleteFilesPayload {
-    success: Boolean
+  success: Boolean
 }
 
 type LogoutPayload {
@@ -13,6 +13,11 @@ type LoginPayload {
 }
 
 type DownloadFilesPayload {
-    success: Boolean!
-    url: String
+  success: Boolean!
+  url: String
+}
+
+type GetFilePreviewPayload {
+  name: String!
+  url: String!
 }
