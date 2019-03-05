@@ -18,6 +18,11 @@ class MultipartUploadsController extends Controller
         }
 
         $project_owner = $project->user;
+        if ($project_owner->hasStorageSpaceAvailable() === false) {
+            return response()->json([
+                'upgradeRequired' => true
+            ]);
+        }
 
         // Get the current folder
         $folder = null;
