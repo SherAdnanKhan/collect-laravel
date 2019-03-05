@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class UserTwoFactorToken extends Model
@@ -12,13 +13,18 @@ class UserTwoFactorToken extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id', 'token', 'expires_at'
     ];
 
+    public $timestamps = false;
+
     /**
-     * The attributes that should be hidden for arrays.
+     * Get the owning user of this model.
      *
-     * @var array
+     * @return Collection
      */
-    protected $hidden = [
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

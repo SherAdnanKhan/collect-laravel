@@ -1,9 +1,0 @@
-type UserProfile {
-	id: ID!
-	user: User! @belongsTo
-	studio_type: String!
-	label: String!
-	job_role: String!
-	genre: String!
-	workload: Int!
-}

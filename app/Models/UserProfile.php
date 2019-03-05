@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserProfile extends Model
 {
@@ -12,13 +14,23 @@ class UserProfile extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id',
+        'studio_type',
+        'label',
+        'job_role',
+        'genre',
+        'workload',
     ];
 
+    public $timestamps = false;
+
     /**
-     * The attributes that should be hidden for arrays.
+     * Get the owning user of this model.
      *
-     * @var array
+     * @return Collection
      */
-    protected $hidden = [
-    ];
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

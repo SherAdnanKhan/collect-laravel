@@ -6,15 +6,20 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "aws/aws-sdk-php": "^3.87",
+        "doctrine/dbal": "^2.9",
         "fideloper/proxy": "~4.0",
+        "laravel/cashier": "^9.0",
         "laravel/framework": "5.7.*",
         "laravel/nova": "^1",
         "laravel/tinker": "~1.0",
         "nesbot/carbon": "1.*",
-        "nuwave/lighthouse": "^2.6",
+        "nuwave/lighthouse": "v3.0-alpha.1",
         "predis/predis": "^1.1",
+        "pusher/pusher-php-server": "^3.3",
         "symfony/console": "4.*",
-        "tymon/jwt-auth": "^0.5.12"
+        "themsaid/nova-cashier-manager": "^0.2.1",
+        "tymon/jwt-auth": "1.0.0-rc.3"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

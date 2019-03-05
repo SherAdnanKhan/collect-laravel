@@ -1,0 +1,143 @@
+type Project implements Favoured & Creditable {
+	id: ID!
+	_id: ID! @globalId @rename(attribute: "id")
+	user: User! @belongsTo
+	name: String!
+	description: String!
+	image: String
+	label: String
+	number: String!
+	artist: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	collaborators: [Collaborator] @hasMany
+	collaboratorCount: Int!
+	collaboratorInvites: [CollaboratorInvite] @hasMany
+	files(folder_id: ID @eq): [File] @hasMany
+	fileCount: Int!
+	folders(folder_id: ID @eq): [Folder] @hasMany
+	sessions: [Session] @hasMany(type: "paginator")
+	sessionCount: Int!
+	recordings: [Recording] @hasMany(type: "paginator")
+	recordingCount: Int!
+	comments: [Comment] @hasMany(type: "paginator")
+	songs: [Song] @hasMany
+}
+
+type Collaborator {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	user: User! @belongsTo
+	project: Project! @belongsTo
+	permissions: [CollaboratorPermission] @hasMany
+}
+
+type CollaboratorPermission {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	collaborator: Collaborator @belongsTo
+	type: String!
+	level: String!
+}
+
+type CollaboratorInvite {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	project: Project! @belongsTo
+	email: String!
+	token: String!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type File implements Favoured {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	user: User! @belongsTo
+	projectId: Int! @rename(attribute: "project_id")
+	project: Project! @belongsTo
+	folder: Folder @belongsTo
+	folderId: ID @rename(attribute: "folder_id")
+	type: String!
+	name: String!
+	path: String!
+	transcoded_path: String
+	bitrate: Int
+	bitdepth: Int
+	size: Int
+	status: String!
+	isPreviewable: Boolean
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Folder implements Favoured {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	user: User! @belongsTo
+	projectId: Int! @rename(attribute: "project_id")
+	project: Project! @belongsTo
+	parentId: ID @rename(attribute: "folder_id")
+	parent: Folder @belongsTo
+	files: [File] @hasMany
+	folders: [Folder] @hasMany
+	name: String!
+	depth: Int!
+	path: [FolderPath]
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type FolderPath {
+	id: ID!
+	name: String!
+}
+
+type Recording implements Favoured & Creditable {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	project: Project! @belongsTo
+	name: String
+	type: String
+	description: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	sessions: [Session] @belongsToMany
+}
+
+type Session implements Favoured & Creditable {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	project: Project! @belongsTo
+	studio: String
+	name: String
+	description: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	recordings: [Recording] @belongsToMany(type: "paginator")
+}
+
+type Comment {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	project: Project! @belongsTo
+	user: User! @belongsTo
+	resourceId: Int @rename(attribute: "resource_id")
+	resourceType: String @rename(attribute: "resource_type")
+	commentedOn: Favoured
+	message: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type EventLog {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	user: User! @belongsTo
+	project: Project! @belongsTo
+	resourceId: Int @rename(attribute: "resource_id")
+	resourceType: String @rename(attribute: "resource_type")
+	message: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}

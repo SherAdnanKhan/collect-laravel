@@ -1,0 +1,117 @@
+ type User @model(class: "App\\Models\\User") {
+ 	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	firstName: String! @rename(attribute: "first_name")
+	lastName: String! @rename(attribute: "last_name")
+	email: String!
+	status: String!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+	stripeId: String @rename(attribute: "stripe_id")
+	cardBrand: String @rename(attribute: "card_brand")
+	cardLastFour: String @rename(attribute: "card_last_four")
+	trialEndsAt: String @rename(attribute: "trial_ends_at")
+	profile: UserProfile @hasOne
+	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
+	favourites: [UserFavourite] @hasMany
+	subscriptions: [UserSubscription] @hasMany(type: "paginator")
+	projects: [Project] @hasMany(type: "paginator")
+	persons: [Person] @hasMany(type: "paginator")
+	files: [File] @hasMany(type: "paginator")
+	songs: [Song] @hasMany(type: "paginator")
+	comments: [Comment] @hasMany(type: "paginator")
+}
+
+type UserProfile {
+	id: ID! @globalId
+	user: User! @belongsTo
+	studioType: String! @rename(attribute: "studio_type")
+	label: String!
+	jobRole: String! @rename(attribute: "job_role")
+	genre: String!
+	workload: Int!
+}
+
+type UserTwoFactorToken {
+	id: ID! @globalId
+	user: User! @belongsTo
+	token: String!
+	expiresAt: String! @rename(attribute: "expires_at")
+}
+
+type UserFavourite @model(class: "App\\Models\\UserFavourite") {
+	id: ID! @globalId
+	user: User! @belongsTo
+	resourceId: Int! @rename(attribute: "resource_id")
+	resourceType: String! @rename(attribute: "resource_type")
+	favoured: Favoured
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
+	id: ID! @globalId
+	user: User! @belongsTo
+	name: String!
+	stripeId: String! @rename(attribute: "stripe_id")
+	stripePlan: String! @rename(attribute: "stripe_plan")
+	quantity: Int!
+	trialEndsAt: String @rename(attribute: "trial_ends_at")
+	endsAt: String @rename(attribute: "ends_at")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Person implements Favoured {
+	id: ID! @globalId
+	user: User @belongsTo
+	name: String!
+	email: String
+	credits: [Credit] @hasMany
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Instrument {
+	id: ID! @globalId
+	category: String
+	name: String
+}
+
+type Song implements Favoured & Creditable {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	user: User! @belongsTo
+	iswc: String
+	type: String!
+	title: String!
+	subtitle: String
+	genre: String
+	artist: String
+	songRecording: SongRecording @rename(attribute: "pivot")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type SongRecording {
+	id: ID!
+	recordingId: ID @rename(attribute: "recording_id")
+	songId: ID @rename(attribute: "song_id")
+	projectId: ID @rename(attribute: "project_id")
+	recording: Recording! @belongsTo
+	song: Song! @belongsTo
+	project: Project! @belongsTo
+}
+
+type Credit {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	person: Person! @belongsTo
+	role: String!
+	performing: Boolean
+	contributionId: Int! @rename(attribute: "contribution_id")
+	contributionType: String! @rename(attribute: "contribution_type")
+	contribution: Creditable!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
