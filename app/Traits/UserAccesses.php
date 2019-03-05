@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait UserAccesses
 {
-    public function scopeUserViewable(Builder $query, $data): Builder
+    public function scopeUserViewable(Builder $query, $data = []): Builder
     {
         return $query;
     }
