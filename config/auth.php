@@ -87,7 +87,7 @@ return [
 
         'applications' => [
             'driver' => 'eloquent',
-            'table'  => \App\Models\Application::class,
+            'model'  => \App\Models\Application::class,
         ],
     ],
 
