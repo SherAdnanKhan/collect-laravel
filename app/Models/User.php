@@ -175,10 +175,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UserPluginCode::class)->where('session_id', $session->id);
     }
 
+    /**
+     * Return whether the user has storage space available
+     *
+     * @return boolean
+     */
     public function hasStorageSpaceAvailable()
     {
         // TODO: Calculate space available based on subscription
         // and return true/false depending
-        return false;
+        return true;
     }
 }
