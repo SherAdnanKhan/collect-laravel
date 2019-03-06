@@ -28,6 +28,8 @@ class Delete
             throw new AuthorizationException('Unable to find project to delete');
         }
 
-        return $project->delete();
+        $project->delete();
+
+        return $project;
     }
 }

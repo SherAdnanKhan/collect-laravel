@@ -23,7 +23,7 @@ class Update
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $song = Song::where('id', $id)->userViewable()->first();
+        $song = Song::where('id', $id)->userUpdatable()->first();
 
         if (!$song) {
             throw new AuthorizationException('Unable to find Song to update');
