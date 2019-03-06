@@ -71,6 +71,7 @@ input DeleteCommentInput {
 input CreateRecordingInput {
     project_id: ID! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
+    type: String! @rules(apply: ["required"])
 }
 
 input DeleteRecordingInput {
