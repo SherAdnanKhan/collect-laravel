@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Credit;
+use App\Models\Person;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\Song;
@@ -30,17 +31,39 @@ class Recording extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'project_id', 'name', 'type', 'description',
+        'project_id', 'person_id', 'song_id', 'name', 'type', 'description',
+        'isrc', 'subtitle', 'version', 'recorded_on', 'mixed_on', 'duration',
+        'language', 'key_signature', 'time_signature', 'tempo'
     ];
 
     /**
-     * Get the project that this recording is asociated to.
+     * Get the project that this recording is associated to.
      *
      * @return BelongsTo
      */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the person that this recording is associated to.
+     *
+     * @return BelongsTo
+     */
+    public function person(): BelongsTo
+    {
+        return $this->belongsTo(Person::class);
+    }
+
+    /**
+     * Get the song that this recording is associated to.
+     *
+     * @return BelongsTo
+     */
+    public function song(): BelongsTo
+    {
+        return $this->belongsTo(Song::class);
     }
 
     /**
