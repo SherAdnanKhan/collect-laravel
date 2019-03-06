@@ -94,7 +94,7 @@ class Song extends Model implements UserAccessible
         return $query->whereHas('recordings', function($q) use ($user) {
             // We grab the project for the recording and check permission or
             // ownership access on that.
-            return (new ProjectAccess($q, $user, ['read']))->getQuery()
+            return (new ProjectAccess($q, $user, ['recording'], ['read']))->getQuery()
                 ->select(['recordings.id', 'recordings.project_id']);
         })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('iswc');
     }

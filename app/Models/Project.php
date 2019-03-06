@@ -213,7 +213,7 @@ class Project extends Model implements UserAccessible
 
         // Add to the query a check to see if the user
         // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['read']))
+        return (new CollaboratorPermission($query, $user, ['project'], ['read']))
             ->getQuery()
             ->orWhere('user_id', $user->getAuthIdentifier());
     }

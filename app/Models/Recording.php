@@ -98,6 +98,6 @@ class Recording extends Model implements UserAccessible
         // Check to see if the current user owns or
         // has read access as a collaborator on the project
         // with which this recording is in.
-        return (new ProjectAccess($query, $user, ['read']))->getQuery();
+        return (new ProjectAccess($query, $user, ['recording'], ['read']))->getQuery();
     }
 }

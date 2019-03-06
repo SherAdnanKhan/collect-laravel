@@ -119,7 +119,7 @@ class Folder extends Model implements UserAccessible
 
         // Check to see if the current user has read access as a
         // collaborator on the project with which this is on.
-        return (new ProjectAccess($query, $user, ['read']))
+        return (new ProjectAccess($query, $user, ['file'], ['read']))
             ->getQuery()
             ->orWhere('user_id', $user->getAuthIdentifier());
     }

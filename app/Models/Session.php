@@ -73,6 +73,6 @@ class Session extends Model implements UserAccessible
      */
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
-        return (new ProjectAccess($query, auth()->user(), ['read']))->getQuery();
+        return (new ProjectAccess($query, auth()->user(), ['session'], ['read']))->getQuery();
     }
 }
