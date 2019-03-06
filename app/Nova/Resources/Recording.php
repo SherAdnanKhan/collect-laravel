@@ -6,11 +6,13 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -55,14 +57,57 @@ class Recording extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Project'),
+            BelongsTo::make('Person'),
+            BelongsTo::make('Song'),
 
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+            Text::make('Sub Title')
+                ->sortable()
+                ->rules('max:255'),
+
             Text::make('Type')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Text::make('ISRC')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('Version')
+                ->sortable()
+                ->rules('max:255'),
+
+            Date::make('Recorded On')
+                ->sortable(),
+
+            Date::make('Mixed On')
+                ->sortable(),
+
+            Number::make('Duration')
+                ->help('In Seconds')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('Version')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('Language Code', 'language')
+                ->help('eg. en_US, en_GB, es_MX...')
+                ->sortable()
+                ->rules('max:20'),
+
+            Text::make('Key Signature')
+                ->rules('max:255'),
+
+            Text::make('Time Signature')
+                ->rules('max:255'),
+
+            Number::make('Tempo')
+                ->rules('max:255'),
 
             Textarea::make('Description')
                 ->rules('max:255'),

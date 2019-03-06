@@ -69,9 +69,9 @@ class File extends Resource
                 ->sortable()
                 ->rules('required'),
 
-            Text::make('Transcoded Path')
-                ->sortable()
-                ->rules('required'),
+            // Text::make('Transcoded Path')
+            //     ->sortable()
+            //     ->rules('required'),
 
             Number::make('Bitrate')
                 ->sortable(),
@@ -79,13 +79,22 @@ class File extends Resource
             Number::make('Bitdepth')
                 ->sortable(),
 
+            Number::make('Sample Rate', 'samplerate')
+                ->sortable(),
+
+            Number::make('Duration')
+                ->sortable(),
+
+            Number::make('Number of Channels', 'numchans')
+                ->sortable(),
+
             Number::make('Size')
                 ->sortable(),
 
             Select::make('Status')->options([
-                'pending'    => 'Pending',
-                'processing' => 'Processing',
-                'complete'   => 'Complete',
+                \App\Models\File::STATUS_PENDING    => 'Pending',
+                \App\Models\File::STATUS_PROCESSING => 'Processing',
+                \App\Models\File::STATUS_COMPLETE   => 'Complete',
             ])->displayUsingLabels()->rules('required'),
         ];
     }

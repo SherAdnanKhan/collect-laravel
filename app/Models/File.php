@@ -32,10 +32,8 @@ class File extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'user_id', 'project_id', 'folder_id', 'name', 'type',
-        'path', 'transcoded_path',
-        'bitrate', 'bitdepth', 'size',
-        'status',
+        'user_id', 'project_id', 'folder_id', 'name', 'type', 'path', 'transcoded_path',
+        'bitrate', 'bitdepth', 'size', 'samplerate', 'duration', 'numchans', 'status',
     ];
 
     /**
