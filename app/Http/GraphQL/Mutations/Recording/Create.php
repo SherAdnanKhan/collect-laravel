@@ -30,10 +30,10 @@ class Create
             throw new AuthorizationException('Unable to find project to associate recording to');
         }
 
-        if (!$user->can('create', [Recording::class, $project]) {
+        if (!$user->can('create', [Recording::class, $project])) {
             throw new AuthorizationException('User does not have permission to create a recording on this project');
         }
 
-        return $project->recordings()->create($args['input']);
+        return $project->recordings()->create(array_get($args, 'input'));
     }
 }
