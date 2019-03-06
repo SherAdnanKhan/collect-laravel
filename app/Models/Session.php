@@ -7,8 +7,6 @@ use App\Models\Credit;
 use App\Models\Person;
 use App\Models\PersonSession;
 use App\Models\Project;
-use App\Models\ProjectPerson;
-use App\Models\ProjectPersonSession;
 use App\Models\Recording;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
@@ -44,17 +42,6 @@ class Session extends Model implements UserAccessible
     public function recordings(): BelongsToMany
     {
         return $this->belongsToMany(Recording::class, 'sessions_to_recordings');
-    }
-
-    /**
-     * Get the people in the session.
-     *
-     * @return BelongsToMany
-     */
-    public function people(): BelongsToMany
-    {
-        return $this->belongsToMany(ProjectPerson::class, 'project_persons_to_sessions')
-            ->using(ProjectPersonSession::class)->withPivot('project_person_role_id', 'instrument_id');
     }
 
     /**
