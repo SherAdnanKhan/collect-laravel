@@ -2,10 +2,8 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\FieldGroups\ProjectPersonSessionFields;
 use App\Nova\Resource;
 use App\Nova\Resources\Person;
-use App\Nova\Resources\ProjectPerson;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -71,9 +69,6 @@ class Session extends Resource
                 ->rules('max:255'),
 
             BelongsToMany::make('Recordings'),
-
-            BelongsToMany::make('Persons', 'people', ProjectPerson::class)
-                ->fields(new ProjectPersonSessionFields),
         ];
     }
 
