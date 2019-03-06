@@ -54,24 +54,4 @@ class Comment extends Model implements UserAccessible
     {
         return $this->morphTo(null, 'resource_type', 'resource_id');
     }
-
-    /**
-     * A scope to filter comments to only those viewable
-     * by the user if they have access to the project.
-     *
-     * @param  Builder $query
-     * @param  Model   $model
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $query, $data = []): Builder
-    {
-        $user = auth()->user();
-
-        // Check to see if the current user owns or
-        // has read access as a collaborator on the project
-        // with which this is on.
-        return (new ProjectAccess($query, $user))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
-    }
 }

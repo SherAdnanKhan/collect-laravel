@@ -24,6 +24,6 @@ class RecordingPolicy
                 return (new CollaboratorPermission($q, $user, ['recording'], ['create']))
                     ->getQuery()
                     ->orWhere('projects.user_id', $user->getAuthIdentifier());
-            })->count() > 0;
+            })->exists();
     }
 }
