@@ -70,7 +70,7 @@ class Comment extends Model implements UserAccessible
         // Check to see if the current user owns or
         // has read access as a collaborator on the project
         // with which this is on.
-        return (new ProjectAccess($query, $user, ['read']))
+        return (new ProjectAccess($query, $user))
             ->getQuery()
             ->orWhere('user_id', $user->getAuthIdentifier());
     }

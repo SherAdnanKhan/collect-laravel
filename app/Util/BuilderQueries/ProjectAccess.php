@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User;
 class ProjectAccess
 {
     private $query;
+    private $types;
     private $permissions;
     private $user;
     private $relation;
@@ -24,11 +25,14 @@ class ProjectAccess
      *
      * @param Builder   $query
      * @param User      $user
+     * @param array     $types
      * @param array     $permissions
+     * @param string    $relation
      */
-    public function __construct(Builder $query, User $user, $permissions = ['read'], $relation = 'project')
+    public function __construct(Builder $query, User $user, $types = ['project'], $permissions = ['read'], $relation = 'project')
     {
         $this->query = $query;
+        $this->types = $types;
         $this->permissions = $permissions;
         $this->user = $user;
         $this->relation = $relation;
@@ -42,11 +46,14 @@ class ProjectAccess
     public function getQuery(): Builder
     {
         $user = $this->user;
+        $types = $this->types;
         $permissions = $this->permissions;
 
-        return $this->query->whereHas($this->relation, function($q) use ($user, $permissions) {
-            return (new CollaboratorPermission($q, $user, $permissions))
-                ->getQuery()->select('user_id')->orWhere('user_id', $user->getAuthIdentifier());
+        return $this->query->whereHas($this->relation, function($q) use ($user, $types, $permissions) {
+            return (new CollaboratorPermission($q, $user, $types, $permissions))
+                ->getQuery()
+                ->select('user_id')
+                ->orWhere('user_id', $user->getAuthIdentifier());
         });
     }
 }

@@ -14,20 +14,24 @@ class CollaboratorPermission
     private $query;
     private $permissions;
     private $user;
+    private $types;
 
     /**
      * Create a new query extension to scope for
-     * project access by passing in the query and the permissions allowed.
+     * project access by passing in the query, the
+     * type of resource and the permissions allowed.
      *
      * @param Builder  $query
      * @param User     $user
+     * @param array    $type
      * @param array    $permissions
      */
-    public function __construct(Builder $query, User $user, $permissions = ['read'])
+    public function __construct(Builder $query, User $user, $types = ['project'], $permissions = ['read'])
     {
         $this->query = $query;
         $this->permissions = $permissions;
         $this->user = $user;
+        $this->types = $types;
     }
 
     /**
@@ -38,12 +42,17 @@ class CollaboratorPermission
     public function getQuery(): Builder
     {
         $user = $this->user;
+        $types = $this->types;
         $permissions = $this->permissions;
 
-        return $this->query->whereHas('collaborators', function($q) use ($user, $permissions) {
-            return $q->select('user_id')->where('user_id', $user->getAuthIdentifier())->whereHas('permissions', function($q) use ($permissions) {
-                return $q->select('level')->whereIn('level', $permissions);
-            });
+        return $this->query->whereHas('collaborators', function($q) use ($user, $types, $permissions) {
+            return $q->select('user_id')
+                ->where('user_id', $user->getAuthIdentifier())
+                ->whereHas('permissions', function($q) use ($types, $permissions) {
+                    return $q->select(['level', 'type'])
+                        ->whereIn('level', $permissions)
+                        ->whereIn('type', $types);
+                });
         });
     }
 }
