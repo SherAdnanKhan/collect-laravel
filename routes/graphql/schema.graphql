@@ -105,6 +105,10 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createComment(input: CreateCommentInput!): Comment @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Create@resolve")
 	deleteComment(input: DeleteCommentInput!): Comment @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Delete@resolve")
 
+	# Recording Mutations
+	createRecording(input: CreateRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Create@resolve")
+	deleteRecording(input: DeleteRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Delete@resolve")
+
 	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
 	deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")

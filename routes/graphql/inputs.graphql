@@ -67,3 +67,12 @@ input CreateCommentInput {
 input DeleteCommentInput {
     id: ID!
 }
+
+input CreateRecordingInput {
+    project_id: ID! @rules(apply: ["required"])
+    name: String! @rules(apply: ["required"])
+}
+
+input DeleteRecordingInput {
+    id: ID!
+}

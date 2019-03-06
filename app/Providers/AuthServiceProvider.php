@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Project;
+use App\Models\Recording;
 use App\Policies\ProjectPolicy;
+use App\Policies\RecordingPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Project::class => ProjectPolicy::class,
+        Project::class   => ProjectPolicy::class,
+        Recording::class => RecordingPolicy::class,
     ];
 
     /**
