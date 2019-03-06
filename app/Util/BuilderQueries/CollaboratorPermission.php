@@ -41,8 +41,8 @@ class CollaboratorPermission
         $permissions = $this->permissions;
 
         return $this->query->whereHas('collaborators', function($q) use ($user, $permissions) {
-            return $q->where('user_id', $user->getAuthIdentifier())->whereHas('permissions', function($q) use ($permissions) {
-                return $q->whereIn('level', $permissions);
+            return $q->select('user_id')->where('user_id', $user->getAuthIdentifier())->whereHas('permissions', function($q) use ($permissions) {
+                return $q->select('level')->whereIn('level', $permissions);
             });
         });
     }
