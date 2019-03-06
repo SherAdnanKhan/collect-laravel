@@ -105,22 +105,13 @@ class Folder extends Model implements UserAccessible
     }
 
     /**
-     * A scope to filter folders with which the current user has
-     * access to view, either by ownership or read access on
-     * the project that this file is in.
+     * We'll override the type we're using to determine
+     * user permissions. We will treat folders as files.
      *
-     * @param  Builder $query
-     * @param  Model   $model
-     * @return Builder
+     * @return string
      */
-    public function scopeUserViewable(Builder $query, $data = []): Builder
+    public function getTypeName(): string
     {
-        $user = auth()->user();
-
-        // Check to see if the current user has read access as a
-        // collaborator on the project with which this is on.
-        return (new ProjectAccess($query, $user, ['file'], ['read']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
+        return 'file';
     }
 }
