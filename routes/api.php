@@ -17,11 +17,11 @@ use Illuminate\Http\Request;
 // using the JWT we have to authenticate the user through the GraphQL
 // portion of the service.
 Route::prefix('multipart-uploads')->middleware('auth:api')->group(function () {
-    Route::post('/create', 'MultipartUploadsController@create');
-    Route::post('/prepare', 'MultipartUploadsController@prepare');
-    Route::post('/list', 'MultipartUploadsController@list');
-    Route::post('/abort', 'MultipartUploadsController@abort');
-    Route::post('/complete', 'MultipartUploadsController@complete');
+    Route::post('/create', '\App\Http\Controllers\MultipartUploadsController@create');
+    Route::post('/prepare', '\App\Http\Controllers\MultipartUploadsController@prepare');
+    Route::post('/list', '\App\Http\Controllers\MultipartUploadsController@list');
+    Route::post('/abort', '\App\Http\Controllers\MultipartUploadsController@abort');
+    Route::post('/complete', '\App\Http\Controllers\MultipartUploadsController@complete');
 });
 
 // Any routes defined in this group adhere to basic token authentication
@@ -34,5 +34,10 @@ Route::middleware('auth:token')->group(function() {
     Route::post(
         'stripe/webhook',
         '\App\Http\Controllers\Webhooks\StripeController@handleWebhook'
+    );
+
+    Route::post(
+        'lamdba/update-file-info',
+        '\App\Http\Controllers\Webhooks\LambdaController@updateFileInfo'
     );
 });
