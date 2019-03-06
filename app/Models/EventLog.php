@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\User;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -53,5 +55,20 @@ class EventLog extends Model
     public function resource(): MorphTo
     {
         return $this->morphTo(null, 'resource_type', 'resource_id');
+    }
+
+    /**
+     * Determine when a user can see the event log items.
+     *
+     * @param  Builder $builder
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $builder, $data = []): Builder
+    {
+        $user = auth()->user();
+
+        return (new ProjectAccess($q, $user, ['read']))->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 }
