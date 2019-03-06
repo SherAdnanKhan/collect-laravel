@@ -2,22 +2,66 @@
 
 namespace App\Traits;
 
+use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * A trait which provides default implementations for the
+ * UserAccessible contract.
+ */
 trait UserAccesses
 {
+    /**
+     * Should return the type which is used to determine which collaborator
+     * resource type we should check for permissions against. By default this is
+     * the lowercase name of the class.
+     *
+     * @return string
+     */
+    public function getTypeName(): string
+    {
+        return strtolower((new \ReflectionClass($this))->getShortName());
+    }
+
+    /**
+     * Provide a default user viewable scope which will by default
+     * filter out models where the user doesn't have read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
-        return $query;
+        return (new ProjectAccess($query, auth()->user(), [$this->getTypeName()], ['read']))->getQuery();
     }
 
-    public function scopeUserUpdatable(Builder $query, $data): Builder
+    /**
+     * Provide a default user updatab;e scope which will by default
+     * filter out models where the user doesn't update read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
-        return $query;
+        return (new ProjectAccess($query, auth()->user(), [$this->getTypeName()], ['update']))->getQuery();
     }
 
-    public function scopeUserDeletable(Builder $query, $data): Builder
+    /**
+     * Provide a default user deletable scope which will by default
+     * filter out models where the user doesn't have delete permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
-        return $query;
+        return (new ProjectAccess($query, auth()->user(), [$this->getTypeName()], ['delete']))->getQuery();
     }
 }

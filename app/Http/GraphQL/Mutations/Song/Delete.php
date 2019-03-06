@@ -22,12 +22,14 @@ class Delete
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $song = Song::where('id', $id)->userViewable()->first();
+        $song = Song::where('id', $id)->userDeletable()->first();
 
         if (!$song) {
-            throw new AuthorizationException('Unable to find Song to update');
+            throw new AuthorizationException('Unable to find Song to delete');
         }
 
-        return $song->delete();
+        $song->delete();
+
+        return $song;
     }
 }

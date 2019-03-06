@@ -2,7 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Recording;
 
-use App\Models\Song;
+use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -22,12 +22,14 @@ class Delete
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $song = Song::where('id', $id)->userViewable()->first();
+        $recording = Recording::where('id', $id)->userDeletable()->first();
 
-        if (!$song) {
-            throw new AuthorizationException('Unable to find Song to update');
+        if (!$recording) {
+            throw new AuthorizationException('Unable to find recording to delete');
         }
 
-        return $song->delete();
+        $recording->delete();
+
+        return $recording;
     }
 }

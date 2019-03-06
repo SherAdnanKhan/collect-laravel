@@ -107,6 +107,7 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 
 	# Recording Mutations
 	createRecording(input: CreateRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Create@resolve")
+	updateRecording(input: UpdateRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Update@resolve")
 	deleteRecording(input: DeleteRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Delete@resolve")
 
 	# File & Folder Mutations
