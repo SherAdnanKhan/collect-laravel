@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Create
@@ -21,7 +22,18 @@ class Create
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $user = auth()->user();
+        $projectId = (int) array_get($args, 'input.project_id');
 
-        dd($user->can('create', [Recording::class, Project::find(1)]));
+        $project = Project::find($projectId);
+
+        if (!$project) {
+            throw new AuthorizationException('Unable to find project to associate recording to');
+        }
+
+        if (!$user->can('create', [Recording::class, $project]) {
+            throw new AuthorizationException('User does not have permission to create a recording on this project');
+        }
+
+        return $project->recordings()->create($args['input']);
     }
 }
