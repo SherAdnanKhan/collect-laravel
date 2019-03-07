@@ -56,4 +56,14 @@ abstract class Resource extends NovaResource
     {
         return parent::relatableQuery($request, $query);
     }
+
+    /**
+     * Determine if the given resource is authorizable.
+     *
+     * @return bool
+     */
+    public static function authorizable()
+    {
+        return false;
+    }
 }
