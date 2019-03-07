@@ -59,7 +59,7 @@ class Session extends Model implements UserAccessible
      */
     public function type(): BelongsTo
     {
-        return $this->belongsTo(SessionType::class);
+        return $this->belongsTo(SessionType::class, 'session_type_id');
     }
 
     /**
