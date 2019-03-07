@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Recording;
+use App\Policies\CommentPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\RecordingPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Project::class   => ProjectPolicy::class,
         Recording::class => RecordingPolicy::class,
+        Comment::class   => CommentPolicy::class,
     ];
 
     /**
