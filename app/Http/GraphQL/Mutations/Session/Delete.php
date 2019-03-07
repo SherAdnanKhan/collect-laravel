@@ -2,7 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Session;
 
-use App\Models\Song;
+use App\Models\Session;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -22,14 +22,14 @@ class Delete
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $song = Song::where('id', $id)->userDeletable()->first();
+        $session = Session::where('id', $id)->userDeletable()->first();
 
-        if (!$song) {
-            throw new AuthorizationException('Unable to find Song to delete');
+        if (!$session) {
+            throw new AuthorizationException('Unable to find session to delete');
         }
 
-        $song->delete();
+        $session->delete();
 
-        return $song;
+        return $session;
     }
 }

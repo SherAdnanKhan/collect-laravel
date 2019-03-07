@@ -2,7 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Session;
 
-use App\Models\Song;
+use App\Models\Session;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -21,20 +21,20 @@ class Update
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $input = $args['input'];
-        $id = (int) $input['id'];
+        $id = (int) array_get($args, 'input.id');
 
-        $song = Song::where('id', $id)->userUpdatable()->first();
+        $session = Session::where('id', $id)->userUpdatable()->first();
 
-        if (!$song) {
-            throw new AuthorizationException('Unable to find Song to update');
+        if (!$session) {
+            throw new AuthorizationException('Unable to find session to update');
         }
 
-        $saved = $song->fill($input)->save();
+        $saved = $session->fill($input)->save();
 
         if (!$saved) {
-            throw new GenericException('Error saving song');
+            throw new GenericException('Error saving session');
         }
 
-        return $song;
+        return $session;
     }
 }
