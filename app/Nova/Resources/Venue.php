@@ -7,27 +7,25 @@ use App\Nova\Resources\Person;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Session extends Resource
+class Venue extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Session';
+    public static $model = 'App\\Models\\Venue';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -36,15 +34,13 @@ class Session extends Resource
      */
     public static $title = 'name';
 
-    public static $with = ['project'];
-
     /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'name', 'started_at', 'ended_at'
+        'name'
     ];
 
     /**
@@ -58,55 +54,33 @@ class Session extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Project'),
-
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            DateTime::make('Started At')
+            Text::make('Address 1')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('max:255'),
 
-            DateTime::make('Ended At')
+            Text::make('Address 2')
+                ->rules('max:255')
+                ->onlyOnForms(),
+
+            Text::make('City')
                 ->sortable()
-                ->rules('required', 'max:255'),
-
-            BelongsTo::make('Session Type'),
-
-            Boolean::make('Union Session')
-                ->onlyOnForms(),
-            Boolean::make('Analog Session')
-                ->onlyOnForms(),
-
-            BelongsTo::make('Venue'),
-
-            Text::make('Venue Room')
-                ->onlyOnForms()
                 ->rules('max:255'),
 
-            Number::make('Bit Depth', 'bitdepth')
-                ->onlyOnForms(),
-
-            Number::make('Sample Rate', 'samplerate')
-                ->onlyOnForms(),
-
-            Text::make('Timecode Type')
-                ->onlyOnForms()
+            Text::make('State')
+                ->sortable()
                 ->rules('max:255'),
 
-            Text::make('Timecode Frame Rate')
-                ->onlyOnForms()
+            Text::make('Zip')
+                ->sortable()
                 ->rules('max:255'),
 
-            Boolean::make('Drop Frame')
-                ->onlyOnForms(),
-
-            Textarea::make('Description')
-                ->onlyOnForms()
+            Text::make('Country')
+                ->sortable()
                 ->rules('max:255'),
-
-            BelongsToMany::make('Recordings'),
         ];
     }
 

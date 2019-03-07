@@ -21,17 +21,44 @@ class Session extends Model implements UserAccessible
     use UserAccesses;
 
     protected $fillable = [
-        'project_id', 'studio', 'name', 'description',
+        'project_id', 'session_type_id', 'venue_id', 'name', 'description', 'started_at',
+        'ended_at', 'union_session', 'analog_session', 'drop_frame', 'venue_room', 'bitdepth',
+        'samplerate', 'timecode_type', 'timecode_frame_rate'
+    ];
+
+    protected $casts = [
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime'
     ];
 
     /**
-     * The user who owns this song.
+     * The project who owns this song.
      *
      * @return BelongsTo
      */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * The venue who owns this song.
+     *
+     * @return BelongsTo
+     */
+    public function venue(): BelongsTo
+    {
+        return $this->belongsTo(Venue::class);
+    }
+
+    /**
+     * The venue who owns this song.
+     *
+     * @return BelongsTo
+     */
+    public function session_type(): BelongsTo
+    {
+        return $this->belongsTo(SessionType::class);
     }
 
     /**

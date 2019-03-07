@@ -109,9 +109,20 @@ type Session implements Favoured & Creditable & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
-	studio: String!
+	session_type: SessionType @belongsTo
+	venue: Venue @belongsTo
 	name: String!
 	description: String
+	startedAt: String! @rename(attribute: "started_at")
+	endedAt: String! @rename(attribute: "ended_at")
+	unionSession: Boolean! @rename(attribute: "union_session")
+	analogSession: Boolean! @rename(attribute: "analog_session")
+	dropFrame: Boolean! @rename(attribute: "drop_frame")
+	venueRoom: String @rename(attribute: "venue_room")
+	bitdepth: Int
+	samplerate: Int
+	timecodeType: String! @rename(attribute: "timecode_type")
+	timecodeFrameRate: String! @rename(attribute: "timecode_frame_rate")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording] @belongsToMany(type: "paginator")
@@ -138,6 +149,28 @@ type EventLog {
 	resourceId: Int @rename(attribute: "resource_id")
 	resourceType: String @rename(attribute: "resource_type")
 	message: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Venue {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	name: String!
+	address1: String @rename(attribute: "address_1")
+	address2: String @rename(attribute: "address_2")
+	city: String
+	state: String
+	zip: String
+	country: String
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type SessionType {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	name: String!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
