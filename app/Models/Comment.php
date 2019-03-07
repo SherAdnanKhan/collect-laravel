@@ -54,4 +54,19 @@ class Comment extends Model implements UserAccessible
     {
         return $this->morphTo(null, 'resource_type', 'resource_id');
     }
+
+    /**
+     * Determine how we filter out comments which can be
+     * deleted by the currently auth'd user.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
+    {
+        // Only the user who wrote the comment can
+        // delete their comment.
+        return $query->where('user_id', auth()->user()->getAuthIdentifier());
+    }
 }

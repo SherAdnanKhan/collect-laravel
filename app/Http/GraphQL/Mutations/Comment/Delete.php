@@ -22,6 +22,7 @@ class Delete
         $comment = auth()->user()
             ->comments()
             ->where('id', (int) array_get('input.id', $args))
+            ->userDeletable()
             ->first();
 
         if (!$comment) {
