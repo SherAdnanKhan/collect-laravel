@@ -127,14 +127,4 @@ class Project extends Resource
     {
         return [];
     }
-
-    /**
-     * Determine if the given resource is authorizable.
-     *
-     * @return bool
-     */
-    public static function authorizable()
-    {
-        return false;
-    }
 }
