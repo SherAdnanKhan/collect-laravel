@@ -84,8 +84,7 @@ trait UserAccesses
     private function wrapUserRelationCheck(User $user, Builder $query): Builder
     {
         if (method_exists($this, 'user')) {
-            $key = array_get($this->user()->meta(), 'belongsToId');
-            $query = $query->orWhere($key, $user->getAuthIdentifier());
+            $query = $query->orWhere('user_id', $user->getAuthIdentifier());
         }
 
         return $query;
