@@ -2,6 +2,8 @@
 
 namespace App\Http\GraphQL\Mutations\Comment;
 
+use App\Models\Comment;
+use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -18,14 +20,19 @@ class Create
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $input = $args['input'];
+        $user = auth()->user();
+        $projectId = (int) array_get($args, 'input.project_id');
 
-        try {
-            $comment = auth()->user()->comments()->create($input);
-        } catch (\Exception $e) {
-            throw new GenericException($e->getMessage());
+        $project = Project::find($projectId);
+
+        if (!$project) {
+            throw new AuthorizationException('Unable to find project to associate comment to');
         }
 
-        return $comment;
+        if (!$user->can('create', [Comment::class, $project])) {
+            throw new AuthorizationException('User does not have permission to create a comment on this project');
+        }
+
+        return $project->comments()->create(array_get($args, 'input'));
     }
 }
