@@ -21,13 +21,16 @@ class Delete
     {
         $comment = auth()->user()
             ->comments()
-            ->where('id', (int) array_get('input.id', $args))
+            ->where('id', (int) array_get($args, 'input.id'))
+            ->userDeletable()
             ->first();
 
         if (!$comment) {
             throw new AuthorizationException('Unable to find comment to delete');
         }
 
-        return $comment->delete();
+        $comment->delete();
+
+        return $comment;
     }
 }

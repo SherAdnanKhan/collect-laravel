@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Song;
+namespace App\Http\GraphQL\Mutations\Recording;
 
-use App\Models\Song;
+use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
-use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Update
+class Delete
 {
     /**
      * @param $rootValue
@@ -23,18 +22,14 @@ class Update
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $song = Song::where('id', $id)->userUpdatable()->first();
+        $recording = Recording::where('id', $id)->userDeletable()->first();
 
-        if (!$song) {
-            throw new AuthorizationException('Unable to find Song to update');
+        if (!$recording) {
+            throw new AuthorizationException('Unable to find recording to delete');
         }
 
-        $saved = $song->fill($input)->save();
+        $recording->delete();
 
-        if (!$saved) {
-            throw new GenericException('Error saving song');
-        }
-
-        return $song;
+        return $recording;
     }
 }

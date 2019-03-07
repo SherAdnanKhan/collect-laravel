@@ -213,8 +213,41 @@ class Project extends Model implements UserAccessible
 
         // Add to the query a check to see if the user
         // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['read']))
+        return (new CollaboratorPermission($query, $user, ['project'], ['read']))
             ->getQuery()
             ->orWhere('user_id', $user->getAuthIdentifier());
+    }
+
+    /**
+     * A scope to filter projects who're updatable by the
+     * current authed user.
+     *
+     * @param  Builder $query
+     * @param  Model   $model
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+
+        // Add to the query a check to see if the user
+        // has read permission on the project, or owns it.
+        return (new CollaboratorPermission($query, $user, ['project'], ['update']))
+            ->getQuery()
+            ->orWhere('user_id', $user->getAuthIdentifier());
+    }
+
+    /**
+     * A scope to filter projects who're deletable by the
+     * current authed user.
+     *
+     * @param  Builder $query
+     * @param  Model   $model
+     * @return Builder
+     */
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
+    {
+        // Only the person who owns the project can delete it.
+        return $query->where('user_id', auth()->user()->getAuthIdentifier());
     }
 }
