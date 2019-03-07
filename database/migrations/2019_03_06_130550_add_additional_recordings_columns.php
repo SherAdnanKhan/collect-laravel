@@ -20,16 +20,16 @@ class AddAdditionalRecordingsColumns extends Migration
             $table->unsignedInteger('song_id')->nullable()->after('person_id');
             $table->foreign('song_id')->references('id')->on('songs')
                 ->onDelete('set null');
-            $table->string('isrc')->after('description');
-            $table->string('subtitle')->after('name');
-            $table->string('version')->after('isrc');
-            $table->date('recorded_on')->after('version');
-            $table->date('mixed_on')->after('recorded_on');
-            $table->integer('duration')->after('mixed_on');
-            $table->string('language', 20)->after('duration');
-            $table->string('key_signature')->after('language');
-            $table->string('time_signature')->after('key_signature');
-            $table->mediumInteger('tempo')->after('time_signature');
+            $table->string('isrc')->nullable()->after('description');
+            $table->string('subtitle')->nullable()->after('name');
+            $table->string('version')->nullable()->after('isrc');
+            $table->date('recorded_on')->nullable()->after('version');
+            $table->date('mixed_on')->nullable()->after('recorded_on');
+            $table->integer('duration')->nullable()->after('mixed_on');
+            $table->string('language', 20)->nullable()->after('duration');
+            $table->string('key_signature')->nullable()->after('language');
+            $table->string('time_signature')->nullable()->after('key_signature');
+            $table->mediumInteger('tempo')->nullable()->after('time_signature');
         });
     }
 

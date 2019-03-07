@@ -22,8 +22,8 @@ class AddAdditionalSessionColumns extends Migration
             $table->unsignedInteger('venue_id')->nullable()->after('session_type_id');
             $table->foreign('venue_id')->references('id')->on('venues')
                 ->onDelete('set null');
-            $table->dateTime('started_at')->nullable()->after('description');
-            $table->dateTime('ended_at')->nullable()->after('started_at');
+            $table->dateTime('started_at')->nullable()->default(null)->after('description');
+            $table->dateTime('ended_at')->nullable()->default(null)->after('started_at');
             $table->boolean('union_session')->default(0)->after('ended_at');
             $table->boolean('analog_session')->default(0)->after('union_session');
             $table->boolean('drop_frame')->default(0)->after('analog_session');
