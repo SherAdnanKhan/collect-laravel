@@ -94,8 +94,60 @@ class Song extends Model implements UserAccessible
         return $query->whereHas('recordings', function($q) use ($user) {
             // We grab the project for the recording and check permission or
             // ownership access on that.
-            return (new ProjectAccess($q, $user, ['read']))->getQuery()
+            return (new ProjectAccess($q, $user, ['recording'], ['read']))->getQuery()
                 ->select(['recordings.id', 'recordings.project_id']);
         })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('iswc');
+    }
+
+    /**
+     * A scope to filter songs which are updatable by
+     * the currently authed user.
+     *
+     * @param  Builder $query
+     * @param  Model  $model
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+
+        // TODO:
+        // They should not be able to update if iswc and they don't own it.
+
+        // We check to see if the user is a collaborator or
+        // owner on a project that this song has been used on or if
+        // this song is owned by this user.
+        return $query->whereHas('recordings', function($q) use ($user) {
+            // We grab the project for the recording and check permission or
+            // ownership access on that.
+            return (new ProjectAccess($q, $user, ['recording'], ['update']))->getQuery()
+                ->select(['recordings.id', 'recordings.project_id']);
+        })->orWhere('user_id', $user->getAuthIdentifier());
+    }
+
+    /**
+     * A scope to filter songs which are deletable by
+     * the currently authed user.
+     *
+     * @param  Builder $query
+     * @param  Model  $model
+     * @return Builder
+     */
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+
+        // TODO:
+        // They should not be able to delete if iswc and they don't own it.
+
+        // We check to see if the user is a collaborator or
+        // owner on a project that this song has been used on or if
+        // this song is owned by this user.
+        return $query->whereHas('recordings', function($q) use ($user) {
+            // We grab the project for the recording and check permission or
+            // ownership access on that.
+            return (new ProjectAccess($q, $user, ['recording'], ['delete']))->getQuery()
+                ->select(['recordings.id', 'recordings.project_id']);
+        })->orWhere('user_id', $user->getAuthIdentifier());
     }
 }
