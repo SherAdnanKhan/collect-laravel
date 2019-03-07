@@ -56,22 +56,17 @@ class Comment extends Model implements UserAccessible
     }
 
     /**
-     * A scope to filter comments to only those viewable
-     * by the user if they have access to the project.
+     * Determine how we filter out comments which can be
+     * deleted by the currently auth'd user.
      *
      * @param  Builder $query
-     * @param  Model   $model
+     * @param  array   $data
      * @return Builder
      */
-    public function scopeUserViewable(Builder $query, $data = []): Builder
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
-
-        // Check to see if the current user owns or
-        // has read access as a collaborator on the project
-        // with which this is on.
-        return (new ProjectAccess($query, $user, ['read']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
+        // Only the user who wrote the comment can
+        // delete their comment.
+        return $query->where('user_id', auth()->user()->getAuthIdentifier());
     }
 }

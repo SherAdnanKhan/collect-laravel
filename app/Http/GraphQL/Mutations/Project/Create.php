@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Project;
 
+use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -20,8 +21,14 @@ class Create
     {
         $input = $args['input'];
 
+        $user = auth()->user();
+
+        if (!$user->can('create', Project::class)) {
+            throw new AuthorizationException('The user does not have the ability to create a project');
+        }
+
         try {
-            $project = auth()->user()->projects()->create($input);
+            $project = $user->projects()->create($input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }

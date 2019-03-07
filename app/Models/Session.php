@@ -90,16 +90,4 @@ class Session extends Model implements UserAccessible
     {
         return $this->morphMany(Credit::class, 'contribution');
     }
-
-    /**
-     * A scope to filter the sessions by user access to a project.
-     *
-     * @param  Builder $query
-     * @param  Model   $model
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $query, $data = []): Builder
-    {
-        return (new ProjectAccess($query, auth()->user(), ['read']))->getQuery();
-    }
 }

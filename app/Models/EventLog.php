@@ -68,7 +68,7 @@ class EventLog extends Model
     {
         $user = auth()->user();
 
-        return (new ProjectAccess($q, $user, ['read']))->getQuery()
+        return (new ProjectAccess($q, $user))->getQuery()
             ->orWhere('user_id', $user->getAuthIdentifier());
     }
 }

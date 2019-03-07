@@ -105,22 +105,4 @@ class Recording extends Model implements UserAccessible
     {
         return $this->morphMany(Credit::class, 'contribution');
     }
-
-    /**
-     * A scope to filter recordings with which the current user has
-     * access to view, either by ownership or read access
-     *
-     * @param  Builder $query
-     * @param  Model   $model
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $query, $data = []): Builder
-    {
-        $user = auth()->user();
-
-        // Check to see if the current user owns or
-        // has read access as a collaborator on the project
-        // with which this recording is in.
-        return (new ProjectAccess($query, $user, ['read']))->getQuery();
-    }
 }
