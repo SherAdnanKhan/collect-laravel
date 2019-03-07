@@ -247,12 +247,7 @@ class Project extends Model implements UserAccessible
      */
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
-
-        // Add to the query a check to see if the user
-        // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['project'], ['delete']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
+        // Only the person who owns the project can delete it.
+        return $query->where('user_id', auth()->user()->getAuthIdentifier());
     }
 }
