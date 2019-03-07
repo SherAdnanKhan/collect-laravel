@@ -82,7 +82,7 @@ class DownloadFiles
             }
 
             $file = File::where('id', $file['id'])->userViewable()->first();
-            if (!$file || $file->status !== File::STATUS_PENDING) {
+            if (!$file || $file->status === File::STATUS_PENDING) {
                 continue;
             }
 
