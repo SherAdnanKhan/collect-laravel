@@ -22,12 +22,14 @@ class Delete
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $project = Project::where('id', $id)->userViewable()->first();
+        $project = Project::where('id', $id)->userDeletable()->first();
 
         if (!$project) {
             throw new AuthorizationException('Unable to find project to delete');
         }
 
-        return $project->delete();
+        $project->delete();
+
+        return $project;
     }
 }

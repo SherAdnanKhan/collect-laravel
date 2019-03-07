@@ -23,7 +23,7 @@ class Update
         $input = $args['input'];
         $id = (int) $input['id'];
 
-        $project = Project::where('id', $id)->userViewable()->first();
+        $project = Project::where('id', $id)->userUpdatable()->first();
 
         if (!$project) {
             throw new AuthorizationException('Unable to find project to update');
