@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Song;
+namespace App\Http\GraphQL\Mutations\Session;
 
 use App\Models\Song;
 use GraphQL\Type\Definition\ResolveInfo;
