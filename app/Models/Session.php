@@ -8,6 +8,8 @@ use App\Models\Person;
 use App\Models\PersonSession;
 use App\Models\Project;
 use App\Models\Recording;
+use App\Models\SessionType;
+use App\Models\Venue;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,7 +30,7 @@ class Session extends Model implements UserAccessible
 
     protected $casts = [
         'started_at' => 'datetime',
-        'ended_at' => 'datetime'
+        'ended_at'   => 'datetime'
     ];
 
     /**
@@ -52,11 +54,10 @@ class Session extends Model implements UserAccessible
     }
 
     /**
-     * The venue who owns this song.
-     *
+     * The type of the session
      * @return BelongsTo
      */
-    public function session_type(): BelongsTo
+    public function type(): BelongsTo
     {
         return $this->belongsTo(SessionType::class);
     }

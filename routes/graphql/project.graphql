@@ -109,7 +109,7 @@ type Session implements Favoured & Creditable & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
-	session_type: SessionType @belongsTo
+	type: SessionType @belongsTo
 	venue: Venue @belongsTo
 	name: String!
 	description: String
