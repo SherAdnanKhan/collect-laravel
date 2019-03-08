@@ -59,4 +59,42 @@ class Person extends Model implements UserAccessible
     {
         return $this->hasMany(Credit::class);
     }
+
+    /**
+     * A person is viewable to everyone.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query, $data = []): Builder
+    {
+        return $query;
+    }
+
+    /**
+     * A user can update a person if they own it.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+        return $query->where('user_id', $user->id);
+    }
+
+    /**
+     * A user can delete a person if they own it.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+        return $query->where('user_id', $user->id);
+    }
 }

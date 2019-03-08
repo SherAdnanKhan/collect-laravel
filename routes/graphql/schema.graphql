@@ -19,7 +19,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Person (People) Queries
 	getPerson(id: Int! @eq): Person @find
-	getPeople(userId: Int @eq(key: "user_id")): [Person] @all(scopes: ["userViewable"])
+	getPeople: [Person] @all(scopes: ["userViewable"])
 
 	# Project Queries
 	getProject(id: ID! @eq): Project @find
@@ -119,6 +119,11 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createSong(input: CreateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Create@resolve")
 	updateSong(input: UpdateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Update@resolve")
 	deleteSong(input: DeleteSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Delete@resolve")
+
+	# Person Mutations
+	createPerson(input: CreatePersonInput!): Person @field(resolver: "App\\Http\\GraphQL\\Mutations\\Person\\Create@resolve")
+	updatePerson(input: UpdatePersonInput!): Person @field(resolver: "App\\Http\\GraphQL\\Mutations\\Person\\Update@resolve")
+	deletePerson(input: DeletePersonInput!): Person @field(resolver: "App\\Http\\GraphQL\\Mutations\\Person\\Delete@resolve")
 
 	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
