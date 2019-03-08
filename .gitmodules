@@ -1,3 +1,3 @@
 [submodule "veva-laradock"]
 	path = veva-laradock
-	url = https://bitbucket.org/analogrepublic/veva-laradock.git
+	url = git@bitbucket.org:analogrepublic/veva-laradock.git
