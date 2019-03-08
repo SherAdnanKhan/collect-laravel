@@ -111,9 +111,6 @@ class Song extends Model implements UserAccessible
     {
         $user = auth()->user();
 
-        // TODO:
-        // They should not be able to update if iswc and they don't own it. (they can't change the iswc)
-
         // User must own a song to update it
         return $query->where('user_id', $user->getAuthIdentifier());
     }
@@ -129,9 +126,6 @@ class Song extends Model implements UserAccessible
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
         $user = auth()->user();
-
-        // TODO:
-        // They should not be able to delete if iswc and they don't own it.
 
         // User must own a song to delete it.
         return $query->where('user_id', $user->getAuthIdentifier());
