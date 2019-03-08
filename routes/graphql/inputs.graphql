@@ -130,7 +130,7 @@ input CreateSongInput {
     title: String! @rules(apply: ["required"])
     type: String! @rules(apply: ["required"])
     subtitle: String
-    iswc: String
+    isrc: String
     artist: String! @rules(apply: ["required"])
     genre: String! @rules(apply: ["required"])
 }
@@ -140,7 +140,7 @@ input UpdateSongInput {
     title: String
     type: String
     subtitle: String
-    iswc: String
+    isrc: String
     artist: String
     genre: String
 }
