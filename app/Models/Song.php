@@ -112,17 +112,10 @@ class Song extends Model implements UserAccessible
         $user = auth()->user();
 
         // TODO:
-        // They should not be able to update if iswc and they don't own it.
+        // They should not be able to update if iswc and they don't own it. (they can't change the iswc)
 
-        // We check to see if the user is a collaborator or
-        // owner on a project that this song has been used on or if
-        // this song is owned by this user.
-        return $query->whereHas('recordings', function($q) use ($user) {
-            // We grab the project for the recording and check permission or
-            // ownership access on that.
-            return (new ProjectAccess($q, $user, ['recording'], ['update']))->getQuery()
-                ->select(['recordings.id', 'recordings.project_id']);
-        })->orWhere('user_id', $user->getAuthIdentifier());
+        // User must own a song to update it
+        return $query->where('user_id', $user->getAuthIdentifier());
     }
 
     /**
@@ -140,14 +133,7 @@ class Song extends Model implements UserAccessible
         // TODO:
         // They should not be able to delete if iswc and they don't own it.
 
-        // We check to see if the user is a collaborator or
-        // owner on a project that this song has been used on or if
-        // this song is owned by this user.
-        return $query->whereHas('recordings', function($q) use ($user) {
-            // We grab the project for the recording and check permission or
-            // ownership access on that.
-            return (new ProjectAccess($q, $user, ['recording'], ['delete']))->getQuery()
-                ->select(['recordings.id', 'recordings.project_id']);
-        })->orWhere('user_id', $user->getAuthIdentifier());
+        // User must own a song to delete it.
+        return $query->where('user_id', $user->getAuthIdentifier());
     }
 }
