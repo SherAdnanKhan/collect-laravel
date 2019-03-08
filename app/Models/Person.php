@@ -9,6 +9,7 @@ use App\Models\PersonSession;
 use App\Models\Session;
 use App\Models\User;
 use App\Traits\UserAccesses;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -58,5 +59,43 @@ class Person extends Model implements UserAccessible
     public function credits(): HasMany
     {
         return $this->hasMany(Credit::class);
+    }
+
+    /**
+     * A person is viewable to everyone.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query, $data = []): Builder
+    {
+        return $query;
+    }
+
+    /**
+     * A user can update a person if they own it.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+        return $query->where('user_id', $user->id);
+    }
+
+    /**
+     * A user can delete a person if they own it.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserDeletable(Builder $query, $data = []): Builder
+    {
+        $user = auth()->user();
+        return $query->where('user_id', $user->id);
     }
 }
