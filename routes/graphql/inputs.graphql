@@ -155,6 +155,7 @@ input CreatePersonInput {
 }
 
 input UpdatePersonInput {
+    id: ID!
     name: String
     email: String @rules(apply: ["email"])
 }
