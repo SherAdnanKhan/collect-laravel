@@ -20,10 +20,11 @@ class Update
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $input = $args['input'];
-        $id = (int) $input['id'];
+        $input = array_get($args, 'input');
 
-        $song = Song::where('id', $id)->userUpdatable()->first();
+        $song = Song::where('id', (int) array_get($input, 'id'))
+            ->userUpdatable()
+            ->first();
 
         if (!$song) {
             throw new AuthorizationException('Unable to find Song to update');
