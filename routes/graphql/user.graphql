@@ -20,6 +20,7 @@
 	files: [File] @hasMany(type: "paginator")
 	songs: [Song] @hasMany(type: "paginator")
 	comments: [Comment] @hasMany(type: "paginator")
+	collaborators: [Collaborator] @hasMany
 }
 
 type UserProfile {
