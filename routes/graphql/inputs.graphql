@@ -125,3 +125,25 @@ input UpdateSessionInput {
 input DeleteSessionInput {
     id: ID!
 }
+
+input CreateSongInput {
+    title: String! @rules(apply: ["required"])
+    type: String! @rules(apply: ["required"])
+    subtitle: String
+    iswc: String
+    artist: String! @rules(apply: ["required"])
+    genre: String! @rules(apply: ["required"])
+}
+
+input UpdateSongInput {
+    title: String! @rules(apply: ["required"])
+    type: String! @rules(apply: ["required"])
+    subtitle: String
+    iswc: String
+    artist: String! @rules(apply: ["required"])
+    genre: String! @rules(apply: ["required"])
+}
+
+input DeleteSongInput {
+    id: ID!
+}
