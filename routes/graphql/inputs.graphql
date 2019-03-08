@@ -149,7 +149,7 @@ input DeleteSongInput {
     id: ID!
 }
 
-input CreatePersonInput {
+input CreateCollaboratorInput {
     name: String! @rules(apply: ["required"])
     email: String! @rules(apply: ["required", "email"])
 }
@@ -161,5 +161,14 @@ input UpdatePersonInput {
 }
 
 input DeletePersonInput {
+    id: ID!
+}
+
+input CreateCollaboratorInput {
+    user_id: ID! @rules(apply: ["required", "exists:users,id"])
+    project_id: ID! @rules(apply: ["required", "exists:projects,id"])
+}
+
+input DeleteCollaboratorInput {
     id: ID!
 }
