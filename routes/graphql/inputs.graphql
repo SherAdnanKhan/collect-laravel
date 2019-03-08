@@ -76,11 +76,75 @@ input CreateRecordingInput {
 
 input UpdateRecordingInput {
     id: ID!
-    project_id: ID! @rules(apply: ["required"])
-    name: String! @rules(apply: ["required"])
-    type: String! @rules(apply: ["required"])
+    project_id: ID!
+    name: String!
+    type: String!
 }
 
 input DeleteRecordingInput {
+    id: ID!
+}
+
+input CreateSessionInput {
+    project_id: ID! @rules(apply: ["required"])
+    session_type_id: ID! @rules(apply: ["required"])
+    venue_id: ID! @rules(apply: ["required"])
+    name: String! @rules(apply: ["required"])
+    description: String
+    union_session: Boolean!
+    analog_session: Boolean!
+    drop_frame: Boolean!
+    venue_room: String
+    bitdepth: Int
+    samplerate: Int
+    timecode_type: String!
+    timecode_frame_rate: String!
+    started_at: String!
+    ended_at: String!
+}
+
+input UpdateSessionInput {
+    id: ID!
+    project_id: ID!
+    session_type_id: ID!
+    venue_id: ID!
+    name: String!
+    description: String
+    union_session: Boolean!
+    analog_session: Boolean!
+    drop_frame: Boolean!
+    venue_room: String
+    bitdepth: Int
+    samplerate: Int
+    timecode_type: String!
+    timecode_frame_rate: String!
+    started_at: String!
+    ended_at: String!
+}
+
+input DeleteSessionInput {
+    id: ID!
+}
+
+input CreateSongInput {
+    title: String! @rules(apply: ["required"])
+    type: String! @rules(apply: ["required"])
+    subtitle: String
+    iswc: String
+    artist: String! @rules(apply: ["required"])
+    genre: String! @rules(apply: ["required"])
+}
+
+input UpdateSongInput {
+    id: ID!
+    title: String
+    type: String
+    subtitle: String
+    iswc: String
+    artist: String
+    genre: String
+}
+
+input DeleteSongInput {
     id: ID!
 }
