@@ -39,7 +39,7 @@ class Song extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'artist', 'genre', 'isrc'
+        'id', 'title', 'artist', 'genre'
     ];
 
     /**
@@ -55,7 +55,7 @@ class Song extends Resource
 
             BelongsTo::make('User'),
 
-            Text::make('ISRC')
+            Text::make('ISWC')
                 ->rules('max:255'),
 
             Text::make('Type')

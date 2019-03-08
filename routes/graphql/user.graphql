@@ -82,7 +82,7 @@ type Song implements Favoured & Creditable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
-	isrc: String
+	iswc: String
 	type: String!
 	title: String!
 	subtitle: String

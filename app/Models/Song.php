@@ -21,7 +21,7 @@ class Song extends Model implements UserAccessible
     use UserAccesses;
 
     protected $fillable = [
-        'user_id', 'isrc', 'title', 'type', 'subtitle',
+        'user_id', 'iswc', 'title', 'type', 'subtitle',
         'genre', 'artist'
     ];
 
@@ -96,7 +96,7 @@ class Song extends Model implements UserAccessible
             // ownership access on that.
             return (new ProjectAccess($q, $user, ['recording'], ['read']))->getQuery()
                 ->select(['recordings.id', 'recordings.project_id']);
-        })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('isrc');
+        })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('iswc');
     }
 
     /**
@@ -112,7 +112,7 @@ class Song extends Model implements UserAccessible
         $user = auth()->user();
 
         // TODO:
-        // They should not be able to update if isrc and they don't own it.
+        // They should not be able to update if iswc and they don't own it.
 
         // We check to see if the user is a collaborator or
         // owner on a project that this song has been used on or if
@@ -138,7 +138,7 @@ class Song extends Model implements UserAccessible
         $user = auth()->user();
 
         // TODO:
-        // They should not be able to delete if isrc and they don't own it.
+        // They should not be able to delete if iswc and they don't own it.
 
         // We check to see if the user is a collaborator or
         // owner on a project that this song has been used on or if
