@@ -148,3 +148,17 @@ input UpdateSongInput {
 input DeleteSongInput {
     id: ID!
 }
+
+input CreatePersonInput {
+    name: String! @rules(apply: ["required"])
+    email: String! @rules(apply: ["required", "email"])
+}
+
+input UpdatePersonInput {
+    name: String
+    email: String @rules(apply: ["email"])
+}
+
+input DeletePersonInput {
+    id: ID!
+}
