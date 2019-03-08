@@ -36,6 +36,11 @@ class Recording extends Model implements UserAccessible
         'language', 'key_signature', 'time_signature', 'tempo'
     ];
 
+    protected $casts = [
+        'recorded_on' => 'date',
+        'mixed_on' => 'date'
+    ];
+
     /**
      * Get the project that this recording is associated to.
      *
