@@ -13,9 +13,10 @@ class CollaboratorPolicy
      *
      * @param  User $user
      * @param  Project $project
+     * @param  User $userToAdd
      * @return bool
      */
-    public function create(User $user, Project $project)
+    public function create(User $user, Project $project, User $userToAdd)
     {
         $query = $project->newQuery();
         return $query->select('projects.id')
@@ -24,6 +25,10 @@ class CollaboratorPolicy
                 return (new CollaboratorPermission($q, $user, ['collaborator'], ['create']))
                     ->getQuery()
                     ->orWhere('projects.user_id', $user->getAuthIdentifier());
-            })->exists();
+            })
+            ->whereDoesntHave('collaborators', function($q) use ($userToAdd) {
+                return $q->where('user_id', $userToAdd->id);
+            })
+            ->exists();
     }
 }

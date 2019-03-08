@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\CollaboratorPermission;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -12,8 +14,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Collaborator extends Model
+class Collaborator extends Model implements UserAccessible
 {
+    use UserAccesses;
+
     /**
      * The attributes that are mass assignable.
      *
