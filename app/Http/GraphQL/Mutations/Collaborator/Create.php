@@ -24,10 +24,13 @@ class Create
         $authedUser = auth()->user();
         $input = array_get($args, 'input');
         $userId = (int) array_get($input, 'user_id');
+        $projectId = (int) array_get($input, 'project_id');
 
         if ($userId == $authedUser->id) {
             throw new AuthorizationException('User cannot make themselves a collaborator');
         }
+
+        $project = Project::find($projectId);
 
         if (!$user->can('create', [Collaborator::class, $project])) {
             throw new AuthorizationException('User does not have permission to create a collaborator on this project');

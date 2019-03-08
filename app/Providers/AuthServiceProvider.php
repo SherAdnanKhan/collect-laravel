@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Collaborator;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
+use App\Policies\CollaboratorPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\RecordingPolicy;
@@ -21,10 +23,11 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Project::class   => ProjectPolicy::class,
-        Recording::class => RecordingPolicy::class,
-        Comment::class   => CommentPolicy::class,
-        Session::class   => SessionPolicy::class,
+        Project::class      => ProjectPolicy::class,
+        Recording::class    => RecordingPolicy::class,
+        Comment::class      => CommentPolicy::class,
+        Session::class      => SessionPolicy::class,
+        Collaborator::class => CollaboratorPolicy::class,
     ];
 
     /**
