@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "aws/aws-sdk-php": "^3.87",
+        "barryvdh/laravel-cors": "^0.11.3",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "~4.0",
         "laravel/cashier": "^9.0",
