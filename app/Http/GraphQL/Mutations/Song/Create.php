@@ -18,7 +18,7 @@ class Create
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $input = $args['input'];
+        $input = array_get($args, 'input');
 
         try {
             $song = auth()->user()->songs()->create($input);

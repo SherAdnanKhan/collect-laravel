@@ -110,6 +110,16 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	updateRecording(input: UpdateRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Update@resolve")
 	deleteRecording(input: DeleteRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Delete@resolve")
 
+	# Recording Mutations
+	createSession(input: CreateSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Create@resolve")
+	updateSession(input: UpdateSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Update@resolve")
+	deleteSession(input: DeleteSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Delete@resolve")
+
+	# Song Mutations
+	createSong(input: CreateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Create@resolve")
+	updateSong(input: UpdateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Update@resolve")
+	deleteSong(input: DeleteSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Delete@resolve")
+
 	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
 	deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")

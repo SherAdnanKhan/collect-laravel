@@ -72,7 +72,7 @@ class Session extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            BelongsTo::make('Session Type'),
+            BelongsTo::make('Session Type', 'type'),
 
             Boolean::make('Union Session')
                 ->onlyOnForms(),

@@ -58,7 +58,7 @@ trait UserAccesses
 
         return $this->wrapUserRelationCheck(
             $user,
-            (new ProjectAccess($query, auth()->user(), [$this->getTypeName()], ['update']))->getQuery()
+            (new ProjectAccess($query, $user, [$this->getTypeName()], ['update']))->getQuery()
         );
     }
 
@@ -77,7 +77,7 @@ trait UserAccesses
 
         return $this->wrapUserRelationCheck(
             $user,
-            (new ProjectAccess($query, auth()->user(), [$this->getTypeName()], ['delete']))->getQuery()
+            (new ProjectAccess($query, $user, [$this->getTypeName()], ['delete']))->getQuery()
         );
     }
 

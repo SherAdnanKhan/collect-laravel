@@ -58,7 +58,7 @@ class Recording extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Project'),
-            BelongsTo::make('Main Artist', 'Person', Person::class),
+            BelongsTo::make('Main Artist', 'person', Person::class),
             BelongsTo::make('Song'),
 
             Text::make('Name')
