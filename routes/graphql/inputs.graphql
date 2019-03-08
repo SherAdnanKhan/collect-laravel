@@ -136,12 +136,13 @@ input CreateSongInput {
 }
 
 input UpdateSongInput {
-    title: String! @rules(apply: ["required"])
-    type: String! @rules(apply: ["required"])
+    id: ID!
+    title: String
+    type: String
     subtitle: String
     iswc: String
-    artist: String! @rules(apply: ["required"])
-    genre: String! @rules(apply: ["required"])
+    artist: String
+    genre: String
 }
 
 input DeleteSongInput {
