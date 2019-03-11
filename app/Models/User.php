@@ -121,7 +121,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function collaborators(): HasMany
     {
-        return $this->hasMany(Collaborators::class);
+        return $this->hasMany(Collaborator::class);
     }
 
     /**
