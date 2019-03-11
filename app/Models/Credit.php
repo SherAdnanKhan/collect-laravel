@@ -48,6 +48,16 @@ class Credit extends Model implements UserAccessible
     }
 
     /**
+     * Get the projects this credit is a part of.
+     *
+     * @return BelongsToMany
+     */
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'credits_to_projects');
+    }
+
+    /**
      * Users can view a credit if they own the person.
      *
      * @param  Builder $query
