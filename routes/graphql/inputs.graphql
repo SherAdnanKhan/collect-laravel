@@ -184,3 +184,11 @@ input CreateCreditInput {
 input DeleteCreditInput {
     id: ID!
 }
+
+input UpdateUserProfileInput {
+    studio_type: String
+    label: String
+    job_role: String
+    genre: String
+    workload: Int
+}

@@ -24,7 +24,8 @@
 }
 
 type UserProfile {
-	id: ID! @globalId
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
 	user: User! @belongsTo
 	studioType: String! @rename(attribute: "studio_type")
 	label: String!
