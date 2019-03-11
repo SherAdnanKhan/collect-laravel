@@ -34,7 +34,7 @@ class Project extends Model implements UserAccessible
      */
     protected $fillable = [
         'user_id', 'name', 'description', 'artist',
-        'number', 'label', 'image',
+        'number', 'label', 'image', 'total_storage_used'
     ];
 
     /**
