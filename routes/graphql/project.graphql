@@ -2,6 +2,7 @@ type Project implements Favoured & Creditable & Commentable {
 	id: ID!
 	# _id: ID! @globalId @rename(attribute: "id")
 	user: User! @belongsTo
+	userId: ID! @rename(attribute: "user_id")
 	name: String!
 	description: String!
 	image: String
