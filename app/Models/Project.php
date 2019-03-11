@@ -190,16 +190,6 @@ class Project extends Model implements UserAccessible
     }
 
     /**
-     * Grab the credits/contributions directly on this resource.
-     *
-     * @return MorphMany
-     */
-    public function credits(): MorphMany
-    {
-        return $this->morphMany(Credit::class, 'contribution');
-    }
-
-    /**
      * Get the path to this projects root files
      *
      * @return string
