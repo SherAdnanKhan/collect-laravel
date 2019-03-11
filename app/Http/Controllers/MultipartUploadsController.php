@@ -62,7 +62,7 @@ class MultipartUploadsController extends Controller
 
             $depth = $depth + 1;
 
-            $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)].)/', '', $name);
+            $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $name);
 
             $folder = Folder::where('project_id', $project->id)->where('name', $name);
             if ($currentFolder) {
@@ -86,7 +86,7 @@ class MultipartUploadsController extends Controller
         }
 
         // Check the filename for duplicates
-        $original_filename = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)].)/', '', $pathinfo['filename']);
+        $original_filename = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $pathinfo['filename']);
         $extension = $pathinfo['extension'];
         $existing_file_query_base = File::where('project_id', $project->id);
         if ($currentFolder) {

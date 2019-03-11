@@ -38,7 +38,9 @@ class LambdaController extends Controller
                 transcoded_path = '.$pdo->quote($file['TranscodedPath']).',
                 status = '.$pdo->quote(File::STATUS_COMPLETE).',
                 updated_at = now()
-                where path = '.$pdo->quote($file['Key']).' limit 1';
+                where path = '.$pdo->quote($file['Key']).'
+                and deleted_at is null
+                limit 1';
         }
 
         $pdo->exec(implode(";\n\n", $queries));
