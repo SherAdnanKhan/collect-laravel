@@ -170,6 +170,16 @@ class Project extends Model implements UserAccessible
     }
 
     /**
+     * Get the credits for this project
+     *
+     * @return BelongsToMany
+     */
+    public function credits(): BelongsToMany
+    {
+        return $this->belongsToMany(Credit::class, 'credits_to_projects');
+    }
+
+    /**
      * Get the projects invites for new collaborators.
      *
      * @return HasMany
