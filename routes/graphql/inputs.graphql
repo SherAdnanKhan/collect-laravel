@@ -192,3 +192,8 @@ input UpdateUserProfileInput {
     genre: String
     workload: Int
 }
+
+input OrderingInput {
+    field: String!
+    direction: String
+}
