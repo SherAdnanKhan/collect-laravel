@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class EventLog extends Model
 {
+    use OrderScopes;
+
     /**
      * The attributes that are mass assignable.
      *

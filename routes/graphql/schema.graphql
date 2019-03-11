@@ -8,7 +8,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
 
 	# User Favourite Queries
-	getUserFavourites: [UserFavourite] @paginate(scopes: ["userViewable"])
+	getUserFavourites: [UserFavourite] @paginate(scopes: ["userViewable", "recent"])
 
 	# User Token Queries
 	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all

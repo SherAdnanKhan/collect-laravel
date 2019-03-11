@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\UserAccessible;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Comment extends Model implements UserAccessible
 {
     use UserAccesses;
+    use OrderScopes;
 
     protected $fillable = [
         'project_id', 'user_id', 'resource_type', 'resource_id', 'message',
