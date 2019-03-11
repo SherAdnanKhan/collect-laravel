@@ -15,10 +15,10 @@ class CreateCreditsToProjectsTable extends Migration
     {
         Schema::create('credits_to_projects', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('credit_id')->after('id');
+            $table->unsignedInteger('credit_id');
             $table->foreign('credit_id')->references('id')->on('credits')
                 ->onDelete('cascade');
-            $table->unsignedInteger('project_id')->after('id');
+            $table->unsignedInteger('project_id');
             $table->foreign('project_id')->references('id')->on('projects')
                 ->onDelete('cascade');
         });
