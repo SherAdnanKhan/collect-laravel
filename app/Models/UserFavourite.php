@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class UserFavourite extends Model implements UserAccessible
 {
     use UserAccesses;
+    use OrderScopes;
 
     /**
      * The attributes that are mass assignable.

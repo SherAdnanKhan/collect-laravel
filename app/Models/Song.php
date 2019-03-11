@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Song extends Model implements UserAccessible
 {
     use UserAccesses;
+    use OrderScopes;
 
     protected $fillable = [
         'user_id', 'iswc', 'title', 'type', 'subtitle',
