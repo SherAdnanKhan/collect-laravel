@@ -28,6 +28,7 @@ class Create
     {
         $user = auth()->user();
         $input = array_get($args, 'input');
+        $personId = (int) array_get($args, 'input.person_id');
 
         $types = [
             'project'   => Project::class,
@@ -36,18 +37,16 @@ class Create
             'recording' => Recording::class
         ];
 
-        if (!in_array(array_get($input, 'resource_type'), array_keys($types))) {
-            throw new \Exception('The resource type is not valid');
+        if (!in_array(array_get($input, 'contribution_type'), array_keys($types))) {
+            throw new AuthorizationException('The contribution type is not valid');
         }
-
-        $id = (int) array_get($input, 'resource_id');
-        $type = array_get($input, 'resource_type');
 
         $person = Person::where('id', $personId)->userViewable()->first();
 
         if (!$person) {
             throw new AuthorizationException('Unable to find person to save credit for');
         }
+
         return $person->credits()->firstOrCreate(array_only($input, [
             'contribution_id',
             'contribution_type',
