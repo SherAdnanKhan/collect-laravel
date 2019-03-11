@@ -1,7 +1,8 @@
 type Project implements Favoured & Creditable & Commentable {
 	id: ID!
-	_id: ID! @globalId @rename(attribute: "id")
+	# _id: ID! @globalId @rename(attribute: "id")
 	user: User! @belongsTo
+	userId: ID! @rename(attribute: "user_id")
 	name: String!
 	description: String!
 	image: String
@@ -29,6 +30,7 @@ type Collaborator {
 	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
+	projectId: ID! @rename(attribute: "project_id")
 	permissions: [CollaboratorPermission] @hasMany
 }
 
