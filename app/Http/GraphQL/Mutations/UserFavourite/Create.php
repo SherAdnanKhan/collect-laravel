@@ -11,6 +11,7 @@ use App\Models\Session;
 use App\Models\Song;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Create
@@ -38,7 +39,7 @@ class Create
         ];
 
         if (!in_array($input['resource_type'], array_keys($types))) {
-            throw new \Exception('The resource type is not valid');
+            throw new AuthorizationException('The resource type is not valid');
         }
 
         $id = (int) $input['resource_id'];
@@ -47,7 +48,7 @@ class Create
         $model = $types[$type];
 
         if (!$model::where('id', $id)->userViewable()->first()) {
-            throw new \Exception('Unable to find resource to favourite');
+            throw new AuthorizationException('Unable to find resource to favourite');
         }
 
         $user = auth()->user();

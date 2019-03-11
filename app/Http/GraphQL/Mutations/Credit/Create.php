@@ -3,7 +3,11 @@
 namespace App\Http\GraphQL\Mutations\Credit;
 
 use App\Models\Credit;
+use App\Models\Person;
 use App\Models\Project;
+use App\Models\Recording;
+use App\Models\Session;
+use App\Models\Song;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
@@ -24,6 +28,31 @@ class Create
     {
         $user = auth()->user();
         $input = array_get($args, 'input');
-        // Todo, complete this mutation.
+
+        $types = [
+            'project'   => Project::class,
+            'session'   => Session::class,
+            'song'      => Song::class,
+            'recording' => Recording::class
+        ];
+
+        if (!in_array(array_get($input, 'resource_type'), array_keys($types))) {
+            throw new \Exception('The resource type is not valid');
+        }
+
+        $id = (int) array_get($input, 'resource_id');
+        $type = array_get($input, 'resource_type');
+
+        $person = Person::where('id', $personId)->userViewable()->first();
+
+        if (!$person) {
+            throw new AuthorizationException('Unable to find person to save credit for');
+        }
+        return $person->credits()->firstOrCreate(array_only($input, [
+            'contribution_id',
+            'contribution_type',
+            'role',
+            'performing',
+        ]));
     }
 }

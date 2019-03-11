@@ -73,6 +73,7 @@ class Credit extends Resource
                 Recording::class,
                 Song::class,
             ])->nullable(),
+
         ];
     }
 

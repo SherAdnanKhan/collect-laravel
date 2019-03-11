@@ -172,3 +172,15 @@ input CreateCollaboratorInput {
 input DeleteCollaboratorInput {
     id: ID!
 }
+
+input CreateCreditInput {
+    person_id: ID! @rules(apply: ["required"])
+    contribution_id: ID! @rules(apply: ["required"])
+    contribution_type: String! @rules(apply: ["required"])
+    role: String! @rules(apply: ["required"])
+    performing: Boolean
+}
+
+input DeleteCreditInput {
+    id: ID!
+}

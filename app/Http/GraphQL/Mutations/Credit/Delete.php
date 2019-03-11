@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Collaborator;
+namespace App\Http\GraphQL\Mutations\Credit;
 
-use App\Models\Collaborator;
+use App\Models\Credit;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -19,16 +19,16 @@ class Delete
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $collaborator = Collaborator::where('id', (int) array_get($args, 'input.id'))
+        $credit = Credit::where('id', (int) array_get($args, 'input.id'))
             ->userDeletable()
             ->first();
 
-        if (!$collaborator) {
-            throw new AuthorizationException('Unable to find collaborator to delete');
+        if (!$credit) {
+            throw new AuthorizationException('Unable to find credit to delete');
         }
 
-        $collaborator->delete();
+        $credit->delete();
 
-        return $collaborator;
+        return $credit;
     }
 }
