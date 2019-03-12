@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Person;
+namespace App\Http\GraphQL\Mutations\Party;
 
-use App\Models\Person;
+use App\Models\Party;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
-use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Update
+class Delete
 {
     /**
      * @param $rootValue
@@ -22,20 +21,16 @@ class Update
     {
         $input = array_get($args, 'input');
 
-        $person = Person::where('id', (int) array_get($input, 'id'))
-            ->userUpdatable()
+        $party = Party::where('id', (int) array_get($input, 'id'))
+            ->userDeletable()
             ->first();
 
-        if (!$person) {
-            throw new AuthorizationException('Unable to find person to update');
+        if (!$party) {
+            throw new AuthorizationException('Unable to find party to delete');
         }
 
-        $saved = $person->fill($input)->save();
+        $party->delete();
 
-        if (!$saved) {
-            throw new GenericException('Error saving person');
-        }
-
-        return $person;
+        return $party;
     }
 }

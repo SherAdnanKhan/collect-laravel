@@ -17,9 +17,9 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getSubscription(id: Int! @eq): UserSubscription @find(model: "Laravel\\Cashier\\Subscription")
 	getSubscriptions(userId: Int! @eq(key: "user_id")): [UserSubscription] @paginate(model: "Laravel\\Cashier\\Subscription", defaultCount: 1)
 
-	# Person (People) Queries
-	getPerson(id: Int! @eq): Person @find
-	getPeople: [Person] @all(scopes: ["userViewable"])
+	# Party Queries
+	getParty(id: Int! @eq): Party @find
+	getParties: [Party] @all(scopes: ["userViewable"])
 
 	# Project Queries
 	getProject(id: ID! @eq): Project @find
@@ -87,7 +87,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Collaborator] @paginate
 
 	# Credit Queries
-	getCredits(personId: Int! @eq(key: "person_id")): [Credit] @all(scopes: ["userViewable"])
+	getCredits(PartyId: Int! @eq(key: "Party_id")): [Credit] @all(scopes: ["userViewable"])
 	getCreditsByProject(projectId: Int!): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
 
 	# Instrument Queries
@@ -132,10 +132,10 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	updateSong(input: UpdateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Update@resolve")
 	deleteSong(input: DeleteSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Delete@resolve")
 
-	# Person Mutations
-	createPerson(input: CreatePersonInput!): Person @field(resolver: "App\\Http\\GraphQL\\Mutations\\Person\\Create@resolve")
-	updatePerson(input: UpdatePersonInput!): Person @field(resolver: "App\\Http\\GraphQL\\Mutations\\Person\\Update@resolve")
-	deletePerson(input: DeletePersonInput!): Person @field(resolver: "App\\Http\\GraphQL\\Mutations\\Person\\Delete@resolve")
+	# Party Mutations
+	createParty(input: CreatePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Create@resolve")
+	updateParty(input: UpdatePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Update@resolve")
+	deleteParty(input: DeletePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Delete@resolve")
 
 	# Collaborator Mutations
 	createCollaborator(input: CreateCollaboratorInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Create@resolve")
