@@ -7,7 +7,7 @@ type Project implements Favoured & Creditable & Commentable {
 	description: String!
 	image: String
 	label: String
-	number: String!
+	number: String
 	artist: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
