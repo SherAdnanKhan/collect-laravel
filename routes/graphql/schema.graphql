@@ -34,7 +34,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		ordering: OrderingInput
 	): [Song] @all(scopes: ["userViewable", "orderByField"])
-	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
+	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\SongByProject@resolve")
 
 	# File Queries
 	getFile(id: Int! @eq): File @find
@@ -88,7 +88,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Credit Queries
 	getCredits(personId: Int! @eq(key: "person_id")): [Credit] @all(scopes: ["userViewable"])
-	getCreditsByProject(projectId: Int!): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
+	getCreditsByProject(projectId: Int!): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\CreditByProject@resolve")
 
 	# Instrument Queries
 	getInstruments: [Instrument] @all
