@@ -71,7 +71,6 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
         foreach ($users_to_update as $user_id) {
             $total_storage_used = DB::table('projects')
                                   ->where('user_id', $user_id)
-                                  // ->whereNull('deleted_at')
                                   ->sum('total_storage_used');
 
             User::where('id', $user_id)
