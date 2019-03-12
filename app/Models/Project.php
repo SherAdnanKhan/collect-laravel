@@ -13,6 +13,7 @@ use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
 use App\Models\UserFavourite;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\CollaboratorPermission;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Project extends Model implements UserAccessible
 {
     use UserAccesses;
+    use OrderScopes;
 
     /**
      * The attributes that are mass assignable.
