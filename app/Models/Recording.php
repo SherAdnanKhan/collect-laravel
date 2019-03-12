@@ -11,6 +11,7 @@ use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Recording extends Model implements UserAccessible
 {
     use UserAccesses;
+    use OrderScopes;
 
     /**
      * The attributes that are mass assignable.

@@ -170,6 +170,16 @@ class Project extends Model implements UserAccessible
     }
 
     /**
+     * Get the credits for this project
+     *
+     * @return BelongsToMany
+     */
+    public function credits(): BelongsToMany
+    {
+        return $this->belongsToMany(Credit::class, 'credits_to_projects');
+    }
+
+    /**
      * Get the projects invites for new collaborators.
      *
      * @return HasMany
@@ -177,16 +187,6 @@ class Project extends Model implements UserAccessible
     public function collaboratorInvites(): HasMany
     {
         return $this->hasMany(CollaboratorInvite::class);
-    }
-
-    /**
-     * Grab the credits/contributions directly on this resource.
-     *
-     * @return MorphMany
-     */
-    public function credits(): MorphMany
-    {
-        return $this->morphMany(Credit::class, 'contribution');
     }
 
     /**

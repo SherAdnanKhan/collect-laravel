@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\UserAccessible;
 use App\Models\File;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +21,7 @@ class Folder extends Model implements UserAccessible
 {
     use UserAccesses;
     use SoftDeletes;
+    use OrderScopes;
 
     protected $fillable = [
         'user_id', 'project_id', 'folder_id', 'name', 'depth'

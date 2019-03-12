@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Collaborator;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class CollaboratorInvite extends Model
      * @var array
      */
     protected $fillable = [
-        'project_id', 'email', 'token',
+        'project_id', 'collaborator_id', 'email', 'token', 'name',
     ];
 
     /**
@@ -26,5 +27,15 @@ class CollaboratorInvite extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the collaborator row associated to this invite.
+     *
+     * @return BelongsTo
+     */
+    public function collaborator(): BelongsTo
+    {
+        return $this->belongsTo(Collaborator::class);
     }
 }

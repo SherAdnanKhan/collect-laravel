@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\UserAccessible;
+use App\Models\CollaboratorInvite;
 use App\Models\CollaboratorPermission;
 use App\Models\Project;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Collaborator extends Model implements UserAccessible
@@ -65,6 +67,16 @@ class Collaborator extends Model implements UserAccessible
     public function permissions(): HasMany
     {
         return $this->hasMany(CollaboratorPermission::class);
+    }
+
+    /**
+     * Get the invite for this collaborator
+     *
+     * @return HasOne
+     */
+    public function invite(): HasOne
+    {
+        return $this->hasOne(CollaboratorInvite::class);
     }
 
     /**
