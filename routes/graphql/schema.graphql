@@ -8,7 +8,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
 
 	# User Favourite Queries
-	getUserFavourites: [UserFavourite] @paginate(scopes: ["userViewable"])
+	getUserFavourites(ordering: OrderingInput): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
 	# User Token Queries
 	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
@@ -23,11 +23,17 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Project Queries
 	getProject(id: ID! @eq): Project @find
-	getProjects(userId: Int @eq(key: "user_id")): [Project] @all(scopes: ["userViewable"])
+	getProjects(
+		userId: Int @eq(key: "user_id")
+		ordering: OrderingInput
+	): [Project] @all(scopes: ["userViewable", "orderByField"])
 
 	# Song Queries
 	getSong(id: Int! @eq): Song @find
-	getSongs(userId: Int @eq(key: "user_id")): [Song] @all(scopes: ["userViewable"])
+	getSongs(
+		userId: Int @eq(key: "user_id")
+		ordering: OrderingInput
+	): [Song] @all(scopes: ["userViewable", "orderByField"])
 	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
 
 	# File Queries
@@ -36,7 +42,8 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
-	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable"], defaultCount: 1000)
+		ordering: OrderingInput
+	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable", "orderByField"], defaultCount: 1000)
 	getFilePreview(id: Int!): GetFilePreviewPayload @field(resolver: "App\\Http\\GraphQL\\Queries\\File\\GetPreview@resolve")
 
 	# Folder Queries
@@ -45,15 +52,22 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
-	): [Folder] @all
+		ordering: OrderingInput
+	): [Folder] @all(scopes: ["orderByField"])
 
 	# Recording Queries
 	getRecording(id: Int! @eq): Recording @find
-	getRecordings(projectId: Int @eq(key: "project_id")): [Recording] @paginate(scopes: ["userViewable"], defaultCount: 1000)
+	getRecordings(
+		projectId: Int @eq(key: "project_id")
+		ordering: OrderingInput
+	): [Recording] @paginate(scopes: ["userViewable", "orderByField"], defaultCount: 1000)
 
 	# Session Queries
 	getSession(id: Int! @eq): Session @find
-	getSessions(projectId: Int! @eq(key: "project_id")): [Session] @paginate(scopes: ["userViewable"], model: "App\\Models\\Session", defaultCount: 1000)
+	getSessions(
+		projectId: Int! @eq(key: "project_id")
+		ordering: OrderingInput
+	): [Session] @paginate(scopes: ["userViewable", "orderByField"], model: "App\\Models\\Session", defaultCount: 1000)
 
 	# Comment Queries
 	getComment(id: Int! @eq): Comment @find
@@ -62,7 +76,8 @@ extend type Query @group(middleware: ["auth:api"]) {
 		projectId: Int @eq(key: "project_id")
 		resourceType: String @eq(key: "resource_type")
 		resourceId: Int @eq(key: "resource_id")
-	): [Comment] @all
+		ordering: OrderingInput
+	): [Comment] @all(scopes: ["orderByField"])
 
 	# Collaborator Queries
 	getCollaborator(id: Int! @eq): Collaborator @find
@@ -72,12 +87,8 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Collaborator] @paginate
 
 	# Credit Queries
-	getCredit(id: Int! @eq): Credit @find
-	getCredits(
-		personId: Int @eq(key: "person_id")
-		contributionType: String @eq(key: "contribution_type")
-		contributionId: Int @eq(key: "contribution_id")
-	): [Credit] @all
+	getCredits(personId: Int! @eq(key: "person_id")): [Credit] @all(scopes: ["userViewable"])
+	# getCreditsByProject(projectId: Int!): [Credit] @all(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
 
 	# Instrument Queries
 	getInstruments: [Instrument] @all
@@ -91,6 +102,7 @@ type Mutation {
 extend type Mutation @group(middleware: ["auth:api"]) {
 	# User Mutations
 	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
+	updateUserProfile(input: UpdateUserProfileInput!): UserProfile @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserProfile\\Update@resolve")
 
 	# User Favourite Mutations
 	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Create@resolve")

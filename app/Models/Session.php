@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SessionType;
 use App\Models\Venue;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Session extends Model implements UserAccessible
 {
     use UserAccesses;
+    use OrderScopes;
 
     protected $fillable = [
         'project_id', 'session_type_id', 'venue_id', 'name', 'description', 'started_at',

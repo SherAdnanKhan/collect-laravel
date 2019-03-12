@@ -6,6 +6,7 @@ use App\Contracts\UserAccessible;
 use App\Models\Folder;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +22,7 @@ class File extends Model implements UserAccessible
 {
     use UserAccesses;
     use SoftDeletes;
+    use OrderScopes;
 
     const STATUS_PENDING = 'pending';
     const STATUS_PROCESSING = 'processing';
