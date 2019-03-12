@@ -17,14 +17,14 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Person extends Resource
+class Party extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Person';
+    public static $model = 'App\\Models\\Party';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

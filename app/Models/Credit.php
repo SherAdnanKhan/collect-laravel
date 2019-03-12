@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\UserAccessible;
-use App\Models\Person;
+use App\Models\Party;
 use App\Models\Project;
 use App\Models\SongRecording;
 use App\Traits\UserAccesses;
@@ -24,7 +24,7 @@ class Credit extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'person_id', 'contribution_id', 'contribution_type', 'role', 'performing',
+        'party_id', 'contribution_id', 'contribution_type', 'role', 'performing',
     ];
 
     /**
@@ -38,13 +38,13 @@ class Credit extends Model implements UserAccessible
     }
 
     /**
-     * Get the person who is being credited.
+     * Get the party who is being credited.
      *
      * @return BelongsTo
      */
-    public function person(): BelongsTo
+    public function party(): BelongsTo
     {
-        return $this->belongsTo(Person::class);
+        return $this->belongsTo(Party::class);
     }
 
     /**
@@ -58,7 +58,7 @@ class Credit extends Model implements UserAccessible
     }
 
     /**
-     * Users can view a credit if they own the person.
+     * Users can view a credit if they own the party.
      *
      * @param  Builder $query
      * @param  array   $data
@@ -70,7 +70,7 @@ class Credit extends Model implements UserAccessible
     }
 
     /**
-     * Users can view a credit if they own the person.
+     * Users can view a credit if they own the party.
      *
      * @param  Builder $query
      * @param  array   $data

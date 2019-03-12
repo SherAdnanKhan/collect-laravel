@@ -3,7 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
-use App\Nova\Resources\Person;
+use App\Nova\Resources\Party;
 use App\Nova\Resources\UserProfile;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
@@ -93,7 +93,7 @@ class User extends Resource
 
             HasMany::make('Songs', 'songs'),
 
-            HasMany::make('People', 'persons', Person::class),
+            HasMany::make('Party', 'parties', Party::class),
         ];
     }
 

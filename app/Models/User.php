@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\File;
+use App\Models\Party;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\Song;
@@ -125,13 +126,13 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get the people on this users accounts.
+     * Get the parties on this users accounts.
      *
      * @return HasMany
      */
-    public function persons(): HasMany
+    public function parties(): HasMany
     {
-        return $this->hasMany(Person::class);
+        return $this->hasMany(Party::class);
     }
 
     /**

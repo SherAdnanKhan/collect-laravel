@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Person;
+namespace App\Http\GraphQL\Mutations\Party;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
@@ -21,7 +21,7 @@ class Create
         $input = array_get($args, 'input');
 
         try {
-            $person = auth()->user()->persons()->create($input);
+            $person = auth()->user()->parties()->create($input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }

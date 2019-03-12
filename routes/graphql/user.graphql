@@ -16,7 +16,7 @@
 	favourites: [UserFavourite] @hasMany
 	subscriptions: [UserSubscription] @hasMany(type: "paginator")
 	projects: [Project] @hasMany(type: "paginator")
-	persons: [Person] @hasMany(type: "paginator")
+	parties: [Party] @hasMany(type: "paginator")
 	files: [File] @hasMany(type: "paginator")
 	songs: [Song] @hasMany(type: "paginator")
 	comments: [Comment] @hasMany(type: "paginator")
@@ -64,7 +64,7 @@ type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type Person implements Favoured {
+type Party implements Favoured {
 	id: ID! @globalId
 	user: User @belongsTo
 	name: String!
@@ -108,7 +108,7 @@ type SongRecording {
 type Credit {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
-	person: Person! @belongsTo
+	party: Party! @belongsTo
 	role: String!
 	performing: Boolean
 	contributionId: Int! @rename(attribute: "contribution_id")
