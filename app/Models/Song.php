@@ -55,7 +55,7 @@ class Song extends Model implements UserAccessible
      */
     public function projects(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class)->using(SongRecording::class);
+        return $this->belongsToMany(Project::class, 'songs_to_recordings', 'song_id', 'project_id')->using(SongRecording::class);
     }
 
     /**

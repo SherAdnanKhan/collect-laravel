@@ -88,7 +88,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Credit Queries
 	getCredits(personId: Int! @eq(key: "person_id")): [Credit] @all(scopes: ["userViewable"])
-	# getCreditsByProject(projectId: Int!): [Credit] @all(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
+	getCreditsByProject(projectId: Int!): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
 
 	# Instrument Queries
 	getInstruments: [Instrument] @all
