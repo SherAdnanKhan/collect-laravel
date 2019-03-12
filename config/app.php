@@ -181,6 +181,7 @@ return [
 
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Nuwave\Lighthouse\Providers\LighthouseServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
         'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
 
         'GraphQL' => \Nuwave\Lighthouse\Support\Facades\GraphQLFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

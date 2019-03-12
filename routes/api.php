@@ -24,6 +24,8 @@ Route::prefix('multipart-uploads')->middleware('auth:api')->group(function () {
     Route::post('/complete', '\App\Http\Controllers\MultipartUploadsController@complete');
 });
 
+Route::post('project-thumbnail-upload', '\App\Http\Controllers\ProjectThumbnailUpload@handle')->middleware('auth:api');
+
 // Any routes defined in this group adhere to basic token authentication
 // for the api routing, using the 'token' guard.
 Route::middleware('auth:token')->group(function() {
