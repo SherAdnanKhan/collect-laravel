@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\GraphQL\Directives\RenameInputDirective;
+use App\Models\Credit;
 use App\Models\File;
 use App\Models\Folder;
 use App\Models\Person;
@@ -10,6 +11,7 @@ use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
+use App\Observers\CreditObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -40,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
 
         Folder::observe(FolderObserver::class);
         Project::observe(ProjectObserver::class);
+        Credit::observe(CreditObserver::class);
     }
 
     /**
