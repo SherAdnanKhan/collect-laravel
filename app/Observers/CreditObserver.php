@@ -20,7 +20,6 @@ class CreditObserver
         $credit->projects()->detach();
         $contribution = $credit->contribution;
 
-        Log::debug($contribution);
         $projects = [];
 
         if ($contribution instanceof Song) {
@@ -32,7 +31,6 @@ class CreditObserver
                 $projects[] = $contribution->project->id;
             }
         }
-
 
         $credit->projects()->attach($projects);
     }
