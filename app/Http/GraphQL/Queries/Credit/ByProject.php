@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Queries\Song;
+namespace App\Http\GraphQL\Queries\Credit;
 
 use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -21,14 +21,15 @@ class ByProject
     {
         $projectId = (int) $args['projectId'];
 
-        $project = Project::where('id', $projectId)->userViewable()->first();
+        $project = Project::where('id', $projectId)
+            ->with('credits')
+            ->userViewable()
+            ->first();
 
         if (!$project) {
             throw new AuthorizationException('The user does not have access to view this projects credits');
         }
 
-        // TODO:
-        // Fetch all credits for the project,
-        // this is for all all sub-resources.
+        return $project->credits;
     }
 }
