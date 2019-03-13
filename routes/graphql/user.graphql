@@ -67,9 +67,44 @@ type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
 type Party implements Favoured {
 	id: ID! @globalId
 	user: User @belongsTo
-	name: String!
-	email: String
+	type: String!
+	isni: String
+	title: String!
+	prefix: String
+	firstName: String! @rename(attribute: "first_name")
+	middleName: String
+	lastName: String! @rename(attribute: "last_name")
+	suffix: String
+	birthDate: String
+	deathDate: String
+	comments: String
 	credits: [Credit] @hasMany
+	contacts: [PartyContact] @hasMany
+	addresses: [PartyAddress] @hasMany
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type PartyContact {
+	id: ID! @globalId
+	party: Party @belongsTo
+	type: String!
+	value: String!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type PartyAddress {
+	id: ID! @globalId
+	party: Party @belongsTo
+	line1: String! @rename(attribute: "line_1")
+	line2: String @rename(attribute: "line_2")
+	line3: String @rename(attribute: "line_3")
+	city: String!
+	district: String!
+	postalCode: String! @rename(attribute: "postal_code")
+	territoryCode: String! @rename(attribute: "territory_code")
+	territoryCodeType: String! @rename(attribute: "territory_code_type")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
