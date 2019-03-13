@@ -21,11 +21,11 @@ class Create
         $input = array_get($args, 'input');
 
         try {
-            $person = auth()->user()->parties()->create($input);
+            $party = auth()->user()->parties()->create($input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }
 
-        return $person;
+        return $party;
     }
 }

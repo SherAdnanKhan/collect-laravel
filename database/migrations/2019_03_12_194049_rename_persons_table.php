@@ -14,7 +14,15 @@ class RenamePersonsTable extends Migration
     public function up()
     {
         Schema::rename('persons', 'parties');
+
         Schema::table('credits', function(Blueprint $table) {
+            $table->dropForeign(['person_id']);
+            $table->renameColumn('person_id', 'party_id');
+            $table->foreign('party_id')->references('id')->on('parties')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('recordings', function(Blueprint $table) {
             $table->dropForeign(['person_id']);
             $table->renameColumn('person_id', 'party_id');
             $table->foreign('party_id')->references('id')->on('parties')
@@ -30,6 +38,14 @@ class RenamePersonsTable extends Migration
     public function down()
     {
         Schema::rename('parties', 'persons');
+
+        Schema::table('credits', function(Blueprint $table) {
+            $table->dropForeign(['party_id']);
+            $table->renameColumn('party_id', 'person_id');
+            $table->foreign('person_id')->references('id')->on('persons')
+                ->onDelete('cascade');
+        });
+
         Schema::table('credits', function(Blueprint $table) {
             $table->dropForeign(['party_id']);
             $table->renameColumn('party_id', 'person_id');

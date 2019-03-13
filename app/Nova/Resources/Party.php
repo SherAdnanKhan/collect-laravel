@@ -2,7 +2,6 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\FieldGroups\PersonSessionFields;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
