@@ -99,6 +99,8 @@ type Recording implements Favoured & Creditable & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
+	person: Person! @belongsTo
+	song: Song! @belongsTo
 	name: String!
 	subtitle: String
 	isrc: String
