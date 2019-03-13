@@ -3,12 +3,10 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
-use App\Nova\Resources\PartyAddress;
-use App\Nova\Resources\PartyContact;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
@@ -16,24 +14,25 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Textarea;
 
-class Party extends Resource
+class PartyContact extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Party';
+    public static $model = 'App\\Models\\PartyContact';
+
+    public static $displayInNavigation = false;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'first_name';
+    public static $title = 'type';
 
     /**
      * The columns that should be searched.
@@ -41,7 +40,7 @@ class Party extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'user_id', 'first_name', 'last_name',
+        'id', 'party_id', 'type', 'value', 'primary',
     ];
 
     /**
@@ -55,47 +54,19 @@ class Party extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
-
-            Text::make('ISNI')
-                ->sortable()
-                ->rules('max:255'),
+            BelongsTo::make('Party'),
 
             Select::make('Type')->options([
-                'person'       => 'Person',
-                'organisation' => 'Organisation',
-                'label'        => 'Label',
-            ])->displayUsingLabels()->sortable()->rules('required'),
+                'phone' => 'Phone Number',
+                'email' => 'Email Address',
+            ])->displayUsingLabels()->rules('required'),
 
-            Text::make('Title')
-                ->rules('max:255'),
-
-            Text::make('Prefix')
-                ->rules('max:255'),
-
-            Text::make('First Name')
+            Text::make('Value')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Middle Name')
-                ->rules('max:255'),
-
-            Text::make('Last Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Suffix')
-                ->rules('max:255'),
-
-            Date::make('Birth Date')->sortable(),
-            Date::make('Death Date')->sortable(),
-
-            Textarea::make('Comments'),
-
-            HasMany::make('Addresses', 'addresses', PartyAddress::class),
-            HasMany::make('Contacts', 'contacts', PartyContact::class),
-
-            HasMany::make('Credits'),
+            Boolean::make('Primary')
+                ->sortable(),
         ];
     }
 
