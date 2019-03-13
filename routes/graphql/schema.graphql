@@ -56,7 +56,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Folder] @all(scopes: ["orderByField"])
 
 	# Recording Queries
-	getRecording(id: Int! @eq): Recording @find
+	getRecording(id: ID! @eq): Recording @find
 	getRecordings(
 		projectId: Int @eq(key: "project_id")
 		ordering: OrderingInput

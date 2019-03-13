@@ -109,6 +109,7 @@ type Recording implements Favoured & Creditable & Commentable {
 	language: String
 	keySignature: String @rename(attribute: "key_signature")
 	timeSignature: String @rename(attribute: "time_signature")
+	tempo: Int
 	type: String
 	description: String
 	createdAt: String! @rename(attribute: "created_at")
