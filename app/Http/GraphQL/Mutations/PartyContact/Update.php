@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Party;
+namespace App\Http\GraphQL\Mutations\PartyContact;
 
-use App\Models\Party;
+use App\Models\PartyContact;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -22,20 +22,20 @@ class Update
     {
         $input = array_get($args, 'input');
 
-        $party = Party::where('id', (int) array_get($input, 'id'))
+        $contact = PartyContact::where('id', (int) array_get($input, 'id'))
             ->userUpdatable()
             ->first();
 
-        if (!$party) {
-            throw new AuthorizationException('Unable to find party to update');
+        if (!$contact) {
+            throw new AuthorizationException('Unable to find party contact to update');
         }
 
-        $saved = $party->fill($input)->save();
+        $saved = $contact->fill($input)->save();
 
         if (!$saved) {
-            throw new GenericException('Error saving party');
+            throw new GenericException('Error saving contact');
         }
 
-        return $party;
+        return $contact;
     }
 }

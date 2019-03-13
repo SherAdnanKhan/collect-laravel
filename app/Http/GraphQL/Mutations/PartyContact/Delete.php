@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Party;
+namespace App\Http\GraphQL\Mutations\PartyContact;
 
-use App\Models\Party;
+use App\Models\PartyContact;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -21,16 +21,16 @@ class Delete
     {
         $input = array_get($args, 'input');
 
-        $party = Party::where('id', (int) array_get($input, 'id'))
+        $contact = PartyContact::where('id', (int) array_get($input, 'id'))
             ->userDeletable()
             ->first();
 
-        if (!$party) {
-            throw new AuthorizationException('Unable to find party to delete');
+        if (!$contact) {
+            throw new AuthorizationException('Unable to find party contact to delete');
         }
 
-        $party->delete();
+        $contact->delete();
 
-        return $party;
+        return $contact;
     }
 }
