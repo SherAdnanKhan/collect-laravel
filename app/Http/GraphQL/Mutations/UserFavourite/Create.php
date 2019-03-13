@@ -4,6 +4,7 @@ namespace App\Http\GraphQL\Mutations\UserFavourite;
 
 use App\Models\File;
 use App\Models\Folder;
+use App\Models\Party;
 use App\Models\Person;
 use App\Models\Project;
 use App\Models\Recording;
@@ -34,7 +35,7 @@ class Create
             'project'   => Project::class,
             'session'   => Session::class,
             'song'      => Song::class,
-            'person'    => Person::class,
+            'party'     => Party::class,
             'recording' => Recording::class
         ];
 

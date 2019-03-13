@@ -3,7 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
-use App\Nova\Resources\Person;
+use App\Nova\Resources\Party;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -58,7 +58,7 @@ class Recording extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Project'),
-            BelongsTo::make('Main Artist', 'person', Person::class),
+            BelongsTo::make('Main Artist', 'party', Party::class),
             BelongsTo::make('Song'),
 
             Text::make('Name')
