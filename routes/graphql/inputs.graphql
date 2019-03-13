@@ -150,14 +150,32 @@ input DeleteSongInput {
 }
 
 input CreatePartyInput {
-    name: String! @rules(apply: ["required"])
-    email: String! @rules(apply: ["required", "email"])
+    isni: String
+    type: String! @rules(apply: ["required", "in:person,organisation,label"])
+    title: String! @rules(apply: ["required"])
+    prefix: String
+    first_name: String! @rules(apply: ["required"])
+    middle_name: String
+    last_name: String! @rules(apply: ["required"])
+    suffix: String
+    birth_date: String @rules(apply: ["date"])
+    death_date: String @rules(apply: ["date"])
+    comments: String
 }
 
 input UpdatePartyInput {
     id: ID!
-    name: String
-    email: String @rules(apply: ["email"])
+    isni: String
+    type: String! @rules(apply: ["required", "in:person,organisation,label"])
+    title: String! @rules(apply: ["required"])
+    prefix: String
+    first_name: String! @rules(apply: ["required"])
+    middle_name: String
+    last_name: String! @rules(apply: ["required"])
+    suffix: String
+    birth_date: String @rules(apply: ["date"])
+    death_date: String @rules(apply: ["date"])
+    comments: String
 }
 
 input DeletePartyInput {
