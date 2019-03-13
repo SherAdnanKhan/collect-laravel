@@ -113,4 +113,24 @@ class PartyContact extends Resource
     {
         return [];
     }
+
+        /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'Party Contact';
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return 'Party Contact';
+    }
 }

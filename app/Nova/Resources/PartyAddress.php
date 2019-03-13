@@ -61,10 +61,10 @@ class PartyAddress extends Resource
                 ->rules('required', 'max:255'),
 
             Text::make('Line 2')
-                ->rules('required', 'max:255'),
+                ->rules('max:255'),
 
             Text::make('Line 3')
-                ->rules('required', 'max:255'),
+                ->rules('max:255'),
 
             Text::make('City')
                 ->rules('required', 'max:255'),
@@ -125,5 +125,25 @@ class PartyAddress extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'Party Addresses';
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return 'Party Address';
     }
 }
