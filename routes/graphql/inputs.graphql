@@ -182,6 +182,46 @@ input DeletePartyInput {
     id: ID!
 }
 
+input CreateContactInput {
+    type: String! @rules(apply: ["required", "in:email,phone"])
+    value: String! @rules(apply: ["required"])
+}
+
+input UpdateContactInput {
+    type: String! @rules(apply: ["required", "in:email,phone"])
+    value: String! @rules(apply: ["required"])
+}
+
+input DeleteContactInput {
+    id: ID!
+}
+
+input CreateAddressInput {
+    line_1: String! @rules(apply: ["required"])
+    line_2: String
+    line_3: String
+    city: String! @rules(apply: ["required"])
+    district: String! @rules(apply: ["required"])
+    postal_code: String! @rules(apply: ["required"])
+    territory_code: String! @rules(apply: ["required"])
+    territory_code_type: String! @rules(apply: ["required"])
+}
+
+input UpdateAddressInput {
+    line_1: String! @rules(apply: ["required"])
+    line_2: String
+    line_3: String
+    city: String! @rules(apply: ["required"])
+    district: String! @rules(apply: ["required"])
+    postal_code: String! @rules(apply: ["required"])
+    territory_code: String! @rules(apply: ["required"])
+    territory_code_type: String! @rules(apply: ["required"])
+}
+
+input DeleteAddressInput {
+    id: ID!
+}
+
 input CreateCollaboratorInput {
     user_id: ID! @rules(apply: ["required"])
     project_id: ID! @rules(apply: ["required"])

@@ -136,6 +136,12 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createParty(input: CreatePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Create@resolve")
 	updateParty(input: UpdatePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Update@resolve")
 	deleteParty(input: DeletePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Delete@resolve")
+	createPartyAddress(input: CreatePartyAddressInput!): PartyAddress @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Create@resolve")
+	updatePartyAddress(input: UpdatePartyAddressInput!): PartyAddress @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Update@resolve")
+	deletePartyAddress(input: DeletePartyAddressInput!): PartyAddress @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Delete@resolve")
+	createPartyContact(input: CreatePartyContactInput!): PartyContact @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Create@resolve")
+	updatePartyContact(input: UpdatePartyContactInput!): PartyContact @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Update@resolve")
+	deletePartyContact(input: DeletePartyContactInput!): PartyContact @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Delete@resolve")
 
 	# Collaborator Mutations
 	createCollaborator(input: CreateCollaboratorInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Create@resolve")
