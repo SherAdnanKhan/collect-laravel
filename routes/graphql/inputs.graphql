@@ -183,6 +183,7 @@ input DeletePartyInput {
 }
 
 input CreateContactInput {
+    party_id: Int!
     type: String! @rules(apply: ["required", "in:email,phone"])
     value: String! @rules(apply: ["required"])
 }
@@ -197,6 +198,7 @@ input DeleteContactInput {
 }
 
 input CreateAddressInput {
+    party_id: Int!
     line_1: String! @rules(apply: ["required"])
     line_2: String
     line_3: String
