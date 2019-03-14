@@ -3,7 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Credit;
 
 use App\Models\Credit;
-use App\Models\Person;
+use App\Models\Party;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
@@ -28,7 +28,7 @@ class Create
     {
         $user = auth()->user();
         $input = array_get($args, 'input');
-        $personId = (int) array_get($args, 'input.person_id');
+        $partyId = (int) array_get($args, 'input.party_id');
 
         $types = [
             'project'   => Project::class,
@@ -41,13 +41,13 @@ class Create
             throw new AuthorizationException('The contribution type is not valid');
         }
 
-        $person = Person::where('id', $personId)->userViewable()->first();
+        $party = Party::where('id', $partyId)->userViewable()->first();
 
-        if (!$person) {
-            throw new AuthorizationException('Unable to find person to save credit for');
+        if (!$party) {
+            throw new AuthorizationException('Unable to find party to save credit for');
         }
 
-        return $person->credits()->firstOrCreate(array_only($input, [
+        return $party->credits()->firstOrCreate(array_only($input, [
             'contribution_id',
             'contribution_type',
             'role',

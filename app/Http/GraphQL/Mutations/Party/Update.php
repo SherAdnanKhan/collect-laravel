@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Person;
+namespace App\Http\GraphQL\Mutations\Party;
 
-use App\Models\Person;
+use App\Models\Party;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -22,20 +22,20 @@ class Update
     {
         $input = array_get($args, 'input');
 
-        $person = Person::where('id', (int) array_get($input, 'id'))
+        $party = Party::where('id', (int) array_get($input, 'id'))
             ->userUpdatable()
             ->first();
 
-        if (!$person) {
-            throw new AuthorizationException('Unable to find person to update');
+        if (!$party) {
+            throw new AuthorizationException('Unable to find party to update');
         }
 
-        $saved = $person->fill($input)->save();
+        $saved = $party->fill($input)->save();
 
         if (!$saved) {
-            throw new GenericException('Error saving person');
+            throw new GenericException('Error saving party');
         }
 
-        return $person;
+        return $party;
     }
 }

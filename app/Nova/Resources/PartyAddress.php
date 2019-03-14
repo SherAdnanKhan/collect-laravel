@@ -3,39 +3,36 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
-use App\Nova\Resources\Party;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Recording extends Resource
+class PartyAddress extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Recording';
+    public static $model = 'App\\Models\\PartyAddress';
+
+    public static $displayInNavigation = false;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
-
-    public static $with = ['project'];
+    public static $title = 'line_1';
 
     /**
      * The columns that should be searched.
@@ -43,7 +40,8 @@ class Recording extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'type', 'description',
+        'id', 'line_1', 'line_2', 'line_3',
+        'city', 'district', 'postal_code', 'territory_code',
     ];
 
     /**
@@ -57,63 +55,31 @@ class Recording extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Project'),
-            BelongsTo::make('Main Artist', 'party', Party::class),
-            BelongsTo::make('Song'),
+            BelongsTo::make('Party'),
 
-            Text::make('Name')
-                ->sortable()
+            Text::make('Line 1')
                 ->rules('required', 'max:255'),
 
-            Text::make('Sub Title', 'subtitle')
-                ->sortable()
+            Text::make('Line 2')
                 ->rules('max:255'),
 
-            Text::make('Type')
-                ->sortable()
+            Text::make('Line 3')
+                ->rules('max:255'),
+
+            Text::make('City')
                 ->rules('required', 'max:255'),
 
-            Text::make('ISRC')
-                ->sortable()
-                ->rules('max:255'),
+            Text::make('District')
+                ->rules('required', 'max:255'),
 
-            Text::make('Version')
-                ->sortable()
-                ->rules('max:255'),
+            Text::make('Postal Code')
+                ->rules('required', 'max:255'),
 
-            Date::make('Recorded On')
-                ->sortable(),
+            Text::make('Territory', 'territory_code')
+                ->rules('required', 'max:255'),
 
-            Date::make('Mixed On')
-                ->sortable(),
-
-            Number::make('Duration')
-                ->help('In Seconds')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('Version')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('Language Code', 'language')
-                ->help('eg. en_US, en_GB, es_MX...')
-                ->sortable()
-                ->rules('max:20'),
-
-            Text::make('Key Signature')
-                ->rules('max:255'),
-
-            Text::make('Time Signature')
-                ->rules('max:255'),
-
-            Number::make('Tempo')
-                ->rules('max:255'),
-
-            Textarea::make('Description')
-                ->rules('max:255'),
-
-            BelongsToMany::make('Sessions'),
+            Text::make('Territory Code Type', 'territory_code_type')
+                ->rules('required', 'max:255'),
         ];
     }
 
@@ -159,5 +125,25 @@ class Recording extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'Party Addresses';
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return 'Party Address';
     }
 }

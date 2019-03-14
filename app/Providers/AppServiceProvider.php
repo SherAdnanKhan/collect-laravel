@@ -6,7 +6,7 @@ use App\Http\GraphQL\Directives\RenameInputDirective;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\Folder;
-use App\Models\Person;
+use App\Models\Party;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
@@ -34,7 +34,8 @@ class AppServiceProvider extends ServiceProvider
             'file'      => File::class,
             'folder'    => Folder::class,
             'project'   => Project::class,
-            'person'    => Person::class,
+            'party'     => Party::class,
+            'person'    => Party::class,
             'session'   => Session::class,
             'recording' => Recording::class,
             'song'      => Song::class,

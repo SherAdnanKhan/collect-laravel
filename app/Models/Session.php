@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\Models\Credit;
-use App\Models\Person;
-use App\Models\PersonSession;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SessionType;
