@@ -90,6 +90,7 @@ type PartyContact {
 	party: Party @belongsTo
 	type: String!
 	value: String!
+	primary: Boolean
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
