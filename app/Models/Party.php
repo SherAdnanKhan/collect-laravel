@@ -32,7 +32,11 @@ class Party extends Model implements UserAccessible
         'suffix', 'isni', 'type', 'comments',
     ];
 
-    protected $dates = ['birth_date', 'death_date'];
+    protected $casts = [
+        'birth_date' => 'date',
+        'death_date' => 'date'
+    ];
+
 
     /**
      * The user owner for this project.
