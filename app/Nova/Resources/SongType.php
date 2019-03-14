@@ -3,10 +3,11 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
-use App\Nova\Resources\SongType;
+use App\Nova\Resources\Person;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
@@ -17,23 +18,21 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Song extends Resource
+class SongType extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Song';
+    public static $model = 'App\\Models\\SongType';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
-
-    public static $with = ['user'];
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -41,7 +40,7 @@ class Song extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'name'
     ];
 
     /**
@@ -55,33 +54,9 @@ class Song extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
-            BelongsTo::make('Type', 'type', SongType::class),
-
-            Text::make('ISWC')
-                ->rules('max:255'),
-
-            Date::make('Created On'),
-
-            Text::make('Title')
+            Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
-
-            Text::make('Subtitle')
-                ->rules('max:255'),
-
-            Text::make('Title Alt')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('Subtitle Alt')
-                ->rules('max:255'),
-
-            Textarea::make('Description'),
-
-            Textarea::make('Lyrics'),
-
-            Textarea::make('Notes'),
         ];
     }
 
@@ -127,5 +102,25 @@ class Song extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'Song Types';
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return 'Song Type';
     }
 }

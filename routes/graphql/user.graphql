@@ -65,7 +65,8 @@ type UserSubscription @model(class: "Laravel\\Cashier\\Subscription") {
 }
 
 type Person implements Favoured {
-	id: ID! @globalId
+	id: ID!
+	_id: ID! @globalId @rename(attribute: "id")
 	user: User @belongsTo
 	name: String!
 	email: String
@@ -84,13 +85,17 @@ type Song implements Favoured & Creditable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
-	iswc: String
-	type: String!
+	userId: String! @rename(attribute: "user_id")
+	type: SongType! @belongsTo
 	title: String!
 	subtitle: String
-	genre: String
-	artist: String
-	songRecording: SongRecording @rename(attribute: "pivot")
+	iswc: String
+	titleAlt: String! @rename(attribute: "title_alt")
+	subtitleAlt: String @rename(attribute: "subtitle_alt")
+	createdOn: String @rename(attribute: "created_on")
+	description: String
+	lyrics: String
+	notes: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
@@ -114,6 +119,13 @@ type Credit {
 	contributionId: Int! @rename(attribute: "contribution_id")
 	contributionType: String! @rename(attribute: "contribution_type")
 	contribution: Creditable!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type SongType {
+	id: ID!
+	name: String!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }

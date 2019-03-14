@@ -151,22 +151,28 @@ input DeleteSessionInput {
 }
 
 input CreateSongInput {
+    song_type_id: ID! @rules(apply: ["required"])
     title: String! @rules(apply: ["required"])
-    type: String! @rules(apply: ["required"])
     subtitle: String
-    iswc: String
-    artist: String! @rules(apply: ["required"])
-    genre: String! @rules(apply: ["required"])
+    title_alt: String
+    subtitle_alt: String
+    created_on: String
+    description: String
+    lyrics: String
+    notes: String
 }
 
 input UpdateSongInput {
     id: ID!
-    title: String
-    type: String
+    song_type_id: String! @rules(apply: ["required"])
+    title: String! @rules(apply: ["required"])
     subtitle: String
-    iswc: String
-    artist: String
-    genre: String
+    title_alt: String
+    subtitle_alt: String
+    created_on: String
+    description: String
+    lyrics: String
+    notes: String
 }
 
 input DeleteSongInput {

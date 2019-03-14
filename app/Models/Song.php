@@ -7,6 +7,7 @@ use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SongRecording;
+use App\Models\SongType;
 use App\Models\User;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
@@ -23,8 +24,13 @@ class Song extends Model implements UserAccessible
     use OrderScopes;
 
     protected $fillable = [
-        'user_id', 'iswc', 'title', 'type', 'subtitle',
-        'genre', 'artist'
+        'user_id', 'song_type_id', 'iswc', 'title', 'subtitle',
+        'title_alt', 'subtitle_alt', 'created_on', 'description',
+        'lyrics', 'notes'
+    ];
+
+    protected $casts = [
+        'created_on' => 'date'
     ];
 
     /**
@@ -35,6 +41,16 @@ class Song extends Model implements UserAccessible
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The user who owns this song.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(SongType::class, 'song_type_id');
     }
 
     /**
