@@ -35,6 +35,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		ordering: OrderingInput
 	): [Song] @all(scopes: ["userViewable", "orderByField"])
 	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
+	getSongTypes: [SongType] @all
 
 	# File Queries
 	getFile(id: Int! @eq): File @find
