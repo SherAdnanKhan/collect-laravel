@@ -2,8 +2,9 @@
 
 namespace App\Nova\Resources;
 
-use App\Nova\FieldGroups\PersonSessionFields;
 use App\Nova\Resource;
+use App\Nova\Resources\PartyAddress;
+use App\Nova\Resources\PartyContact;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -15,23 +16,24 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Textarea;
 
-class Person extends Resource
+class Party extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Person';
+    public static $model = 'App\\Models\\Party';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'first_name';
 
     /**
      * The columns that should be searched.
@@ -39,7 +41,7 @@ class Person extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'user_id', 'name', 'email',
+        'id', 'user_id', 'first_name', 'last_name',
     ];
 
     /**
@@ -55,13 +57,43 @@ class Person extends Resource
 
             BelongsTo::make('User'),
 
-            Text::make('Name')
+            Text::make('ISNI')
+                ->sortable()
+                ->rules('max:255'),
+
+            Select::make('Type')->options([
+                'person'       => 'Person',
+                'organisation' => 'Organisation',
+                'label'        => 'Label',
+            ])->displayUsingLabels()->sortable()->rules('required'),
+
+            Text::make('Title')
+                ->rules('max:255'),
+
+            Text::make('Prefix')
+                ->rules('max:255'),
+
+            Text::make('First Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Email')
+            Text::make('Middle Name')
+                ->rules('max:255'),
+
+            Text::make('Last Name')
                 ->sortable()
-                ->rules('max:255', 'email'),
+                ->rules('required', 'max:255'),
+
+            Text::make('Suffix')
+                ->rules('max:255'),
+
+            Date::make('Birth Date')->sortable(),
+            Date::make('Death Date')->sortable(),
+
+            Textarea::make('Comments'),
+
+            HasMany::make('Addresses', 'addresses', PartyAddress::class),
+            HasMany::make('Contacts', 'contacts', PartyContact::class),
 
             HasMany::make('Credits'),
         ];

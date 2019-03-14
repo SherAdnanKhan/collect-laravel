@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Person;
+namespace App\Http\GraphQL\Mutations\PartyAddress;
 
+use App\Models\Party;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Auth\Access\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Create
@@ -19,13 +22,20 @@ class Create
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $input = array_get($args, 'input');
+        $partyId = (int) array_get($args, 'input.party_id');
+
+        $party = Party::where('id', $partyId)->userUpdatable()->first();
+
+        if (!$party) {
+            throw new AuthorizationException('Unable to find party to add address to');
+        }
 
         try {
-            $person = auth()->user()->persons()->create($input);
+            $address = $party->addresses()->create($input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }
 
-        return $person;
+        return $address;
     }
 }

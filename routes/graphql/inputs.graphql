@@ -179,18 +179,82 @@ input DeleteSongInput {
     id: ID!
 }
 
-input CreatePersonInput {
-    name: String! @rules(apply: ["required"])
-    email: String! @rules(apply: ["required", "email"])
+input CreatePartyInput {
+    isni: String
+    type: String! @rules(apply: ["required", "in:person,organisation,label"])
+    title: String
+    prefix: String
+    first_name: String! @rules(apply: ["required"])
+    middle_name: String
+    last_name: String
+    suffix: String
+    birth_date: String @rules(apply: ["date"])
+    death_date: String @rules(apply: ["date"])
+    comments: String
 }
 
-input UpdatePersonInput {
+input UpdatePartyInput {
     id: ID!
-    name: String
-    email: String @rules(apply: ["email"])
+    isni: String
+    type: String! @rules(apply: ["required", "in:person,organisation,label"])
+    title: String
+    prefix: String
+    first_name: String! @rules(apply: ["required"])
+    middle_name: String
+    last_name: String
+    suffix: String
+    birth_date: String @rules(apply: ["date"])
+    death_date: String @rules(apply: ["date"])
+    comments: String
 }
 
-input DeletePersonInput {
+input DeletePartyInput {
+    id: ID!
+}
+
+input CreatePartyContactInput {
+    party_id: Int!
+    type: String! @rules(apply: ["required", "in:email,phone"])
+    value: String! @rules(apply: ["required"])
+    primary: Boolean @rules(apply: ["boolean"])
+}
+
+input UpdatePartyContactInput {
+    id: ID!
+    type: String! @rules(apply: ["required", "in:email,phone"])
+    value: String! @rules(apply: ["required"])
+    primary: Boolean @rules(apply: ["boolean"])
+}
+
+input DeletePartyContactInput {
+    id: ID!
+}
+
+input CreatePartyAddressInput {
+    party_id: Int!
+    line_1: String! @rules(apply: ["required"])
+    line_2: String
+    line_3: String
+    city: String! @rules(apply: ["required"])
+    district: String! @rules(apply: ["required"])
+    postal_code: String! @rules(apply: ["required"])
+    territory_code: String! @rules(apply: ["required"])
+    territory_code_type: String! @rules(apply: ["required"])
+}
+
+input UpdatePartyAddressInput {
+    id: ID!
+    line_1: String! @rules(apply: ["required"])
+    line_2: String
+    line_3: String
+    city: String! @rules(apply: ["required"])
+    district: String! @rules(apply: ["required"])
+    postal_code: String! @rules(apply: ["required"])
+    territory_code: String! @rules(apply: ["required"])
+    territory_code_type: String! @rules(apply: ["required"])
+}
+
+input DeletePartyAddressInput {
     id: ID!
 }
 
@@ -204,7 +268,7 @@ input DeleteCollaboratorInput {
 }
 
 input CreateCreditInput {
-    person_id: ID! @rules(apply: ["required"])
+    party_id: ID! @rules(apply: ["required"])
     contribution_id: ID! @rules(apply: ["required"])
     contribution_type: String! @rules(apply: ["required"])
     role: String! @rules(apply: ["required"])
