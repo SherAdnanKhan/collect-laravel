@@ -36,9 +36,9 @@ class Credit extends Resource
      *
      * @var string
      */
-    public static $title = 'person.name';
+    public static $title = 'party.name';
 
-    public static $with = ['person', 'contribution'];
+    public static $with = ['party', 'contribution'];
 
     /**
      * The columns that should be searched.
@@ -46,7 +46,7 @@ class Credit extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'person.name', 'role',
+        'id', 'party.name', 'role',
     ];
 
     /**
@@ -60,7 +60,7 @@ class Credit extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Person'),
+            BelongsTo::make('Party'),
 
             Text::make('Role')
                 ->rules('required'),
@@ -73,7 +73,6 @@ class Credit extends Resource
                 Recording::class,
                 Song::class,
             ])->nullable(),
-
         ];
     }
 

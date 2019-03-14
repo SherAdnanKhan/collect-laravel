@@ -3,6 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+use App\Models\File as FileModel;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Gravatar;
@@ -92,9 +93,9 @@ class File extends Resource
                 ->sortable(),
 
             Select::make('Status')->options([
-                \App\Models\File::STATUS_PENDING    => 'Pending',
-                \App\Models\File::STATUS_PROCESSING => 'Processing',
-                \App\Models\File::STATUS_COMPLETE   => 'Complete',
+                FileModel::STATUS_PENDING    => 'Pending',
+                FileModel::STATUS_PROCESSING => 'Processing',
+                FileModel::STATUS_COMPLETE   => 'Complete',
             ])->displayUsingLabels()->rules('required'),
         ];
     }
