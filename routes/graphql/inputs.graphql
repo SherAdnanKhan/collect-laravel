@@ -70,15 +70,39 @@ input DeleteCommentInput {
 
 input CreateRecordingInput {
     project_id: ID! @rules(apply: ["required"])
+    person_id: ID! @rules(apply: ["required"])
+    song_id: ID! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
-    type: String! @rules(apply: ["required"])
+    isrc: String
+    subtitle: String
+    version: String
+    recorded_on: String
+    mixed_on: String
+    duration: String
+    language: String
+    key_signature: String
+    time_signature: String
+    tempo: String
+    description: String
 }
 
 input UpdateRecordingInput {
     id: ID!
-    project_id: ID!
     name: String!
-    type: String!
+    person_id: ID! @rules(apply: ["required"])
+    song_id: ID! @rules(apply: ["required"])
+    name: String! @rules(apply: ["required"])
+    isrc: String
+    subtitle: String
+    version: String
+    recorded_on: String
+    mixed_on: String
+    duration: String
+    language: String
+    key_signature: String
+    time_signature: String
+    tempo: String
+    description: String
 }
 
 input DeleteRecordingInput {
