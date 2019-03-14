@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Credit;
-use App\Models\PersonSession;
-use App\Models\Session;
+use App\Models\PartyContact;
+use App\Models\PartyAddress;
 use App\Models\User;
 use App\Traits\UserAccesses;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Person extends Model implements UserAccessible
+class Party extends Model implements UserAccessible
 {
     use UserAccesses;
 
-    protected $table = 'persons';
+    protected $table = 'parties';
 
     /**
      * The attributes that are mass assignable.
@@ -28,8 +28,11 @@ class Person extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'email',
+        'user_id', 'title', 'prefix', 'first_name', 'last_name', 'middle_name',
+        'suffix', 'isni', 'type', 'comments',
     ];
+
+    protected $dates = ['birth_date', 'death_date'];
 
     /**
      * The user owner for this project.
@@ -42,7 +45,7 @@ class Person extends Model implements UserAccessible
     }
 
     /**
-     * Get the times this person has been favourited.
+     * Get the times this party has been favourited.
      *
      * @return MorphMany
      */
@@ -52,7 +55,7 @@ class Person extends Model implements UserAccessible
     }
 
     /**
-     * Get all of a persons credits.
+     * Get all of a parties credits.
      *
      * @return HasMany
      */
@@ -62,7 +65,27 @@ class Person extends Model implements UserAccessible
     }
 
     /**
-     * A person is viewable to everyone.
+     * Get the parties contact details.
+     *
+     * @return HasMany
+     */
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(PartyContact::class);
+    }
+
+    /**
+     * Get the parties addresses.
+     *
+     * @return HasMany
+     */
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(PartyAddress::class);
+    }
+
+    /**
+     * A party is viewable to everyone.
      *
      * @param  Builder $query
      * @param  array   $data
@@ -74,7 +97,7 @@ class Person extends Model implements UserAccessible
     }
 
     /**
-     * A user can update a person if they own it.
+     * A user can update a party if they own it.
      *
      * @param  Builder $query
      * @param  array   $data
@@ -87,7 +110,7 @@ class Person extends Model implements UserAccessible
     }
 
     /**
-     * A user can delete a person if they own it.
+     * A user can delete a party if they own it.
      *
      * @param  Builder $query
      * @param  array   $data
