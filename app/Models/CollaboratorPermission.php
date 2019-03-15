@@ -20,6 +20,30 @@ class CollaboratorPermission extends Model
         'collaborator_id', 'type', 'level'
     ];
 
+    const TYPES = [
+        'file', 'recording', 'project', 'session', 'collaborator',
+    ];
+
+    const LEVELS = [
+        'create', 'read', 'update', 'delete', 'download',
+    ];
+
+    const TYPES_WITH_LABELS = [
+        'file'         => 'Files & Folders',
+        'recording'    => 'Recordings',
+        'project'      => 'Project',
+        'session'      => 'Sessions',
+        'collaborator' => 'Collaborators',
+    ];
+
+    const LEVELS_WITH_LABELS = [
+        'create'   => 'Create',
+        'read'     => 'Read',
+        'update'   => 'Update',
+        'delete'   => 'Delete',
+        'download' => 'Download',
+    ];
+
     /**
      * Get the collaborator.
      *

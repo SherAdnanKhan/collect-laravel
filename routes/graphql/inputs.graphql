@@ -269,6 +269,16 @@ input DeleteCollaboratorInput {
     id: ID!
 }
 
+input UpdateCollaboratorPermissionsInput {
+    collaborator_id: ID! @rules(apply: ["required"])
+    permissions: [CollaboratorPermissionInput]!
+}
+
+type CollaboratorPermissionInput {
+    type: String!
+    level: String!
+}
+
 input CreateCreditInput {
     party_id: ID! @rules(apply: ["required"])
     contribution_id: ID! @rules(apply: ["required"])

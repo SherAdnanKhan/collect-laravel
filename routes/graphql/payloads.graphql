@@ -21,3 +21,7 @@ type GetFilePreviewPayload {
   name: String!
   url: String!
 }
+
+type CollaboratorPermissionPayload {
+	permissions: [CollaboratorPermission]
+}
