@@ -70,7 +70,7 @@ input DeleteCommentInput {
 
 input CreateRecordingInput {
     project_id: ID! @rules(apply: ["required"])
-    person_id: ID! @rules(apply: ["required"])
+    party_id: ID! @rules(apply: ["required"])
     song_id: ID! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
     isrc: String
@@ -89,7 +89,7 @@ input CreateRecordingInput {
 input UpdateRecordingInput {
     id: ID!
     name: String!
-    person_id: ID! @rules(apply: ["required"])
+    party_id: ID! @rules(apply: ["required"])
     song_id: ID! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
     isrc: String
