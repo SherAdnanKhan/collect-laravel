@@ -35,7 +35,7 @@ class Update
 
         $permissions = $this->processPermissions($permissions);
 
-        $collaborator->permissions()->detach();
+        $collaborator->permissions()->delete();
 
         return [
             'permissions' => $collaborator->permissions()->saveMany($permissions),
@@ -52,7 +52,7 @@ class Update
 
             if ($permissionLevel == 'full') {
                 foreach ($levels as $level) {
-                    $processed[] = ['type' => $permission['type'], 'level' => $level];
+                    $processed[] = new CollaboratorPermission(['type' => $permission['type'], 'level' => $level]);
                 }
 
                 continue;
@@ -62,7 +62,7 @@ class Update
                 continue;
             }
 
-            $processed[] = $permission;
+            $processed[] = new CollaboratorPermission($permission);
         }
 
         return $processed;
