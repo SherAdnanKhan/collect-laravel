@@ -2,7 +2,7 @@
 
 namespace App\Nova\Resources;
 
-use App\Models\CollaboratorPermission;
+use App\Models\CollaboratorPermission as Permission;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -57,9 +57,9 @@ class CollaboratorPermission extends Resource
 
             BelongsTo::make('Collaborator'),
 
-            Select::make('On Resource', 'type')->options(CollaboratorPermission::TYPES_WITH_LABELS)->displayUsingLabels()->rules('required'),
+            Select::make('On Resource', 'type')->options(Permission::TYPES_WITH_LABELS)->displayUsingLabels()->rules('required'),
 
-            Select::make('Level')->options(CollaboratorPermission::LEVELS_WITH_LABELS)->displayUsingLabels()->rules('required'),
+            Select::make('Level')->options(Permission::LEVELS_WITH_LABELS)->displayUsingLabels()->rules('required'),
         ];
     }
 
