@@ -271,10 +271,10 @@ input DeleteCollaboratorInput {
 
 input UpdateCollaboratorPermissionsInput {
     collaborator_id: ID! @rules(apply: ["required"])
-    permissions: [CollaboratorPermissionInput]!
+    permissions: [CollaboratorPermissionInput]
 }
 
-type CollaboratorPermissionInput {
+input CollaboratorPermissionInput {
     type: String!
     level: String!
 }
