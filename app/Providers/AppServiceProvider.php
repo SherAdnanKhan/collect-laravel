@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\GraphQL\Directives\RenameInputDirective;
+use App\Models\Collaborator;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\Folder;
@@ -11,6 +12,7 @@ use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
+use App\Observers\CollaboratorObserver;
 use App\Observers\CreditObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
@@ -44,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
         Folder::observe(FolderObserver::class);
         Project::observe(ProjectObserver::class);
         Credit::observe(CreditObserver::class);
+        Collaborator::observe(CollaboratorObserver::class);
     }
 
     /**

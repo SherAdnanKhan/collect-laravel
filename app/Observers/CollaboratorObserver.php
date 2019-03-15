@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Collaborator;
+use App\Models\CollaboratorPermission;
 use App\Models\Project;
 use App\Models\Song;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,11 @@ class CollaboratorObserver
     public function created(Collaborator $collaborator)
     {
         // Setup the default permissions.
-
-        $types = [];
+        $collaborator->permissions()
+            ->saveMany(
+                collect(CollaboratorPermission::TYPES)->map(function($type) {
+                    return new CollaboratorPermission(['type' => $type, 'level' => 'read']);
+                })->all()
+            );
     }
 }
