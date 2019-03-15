@@ -35,6 +35,7 @@ class Update
 
         $permissions = $this->processPermissions($permissions);
 
+        // Delete all other permissions
         $collaborator->permissions()->delete();
 
         return [
@@ -50,6 +51,8 @@ class Update
         foreach ($permissions as $permission) {
             $permissionLevel = array_get($permission, 'level');
 
+            // If we are provided with 'full', we'll give them
+            // all permissions for that resource.
             if ($permissionLevel == 'full') {
                 foreach ($levels as $level) {
                     $processed[] = new CollaboratorPermission(['type' => $permission['type'], 'level' => $level]);
@@ -58,10 +61,17 @@ class Update
                 continue;
             }
 
+            // If we have download we'll also have read.
+            if ($permissionLevel == 'download') {
+                $processed[] = new CollaboratorPermission(['type' => $permission['type'], 'level' => 'read']);
+            }
+
+            // If the level isn't in the list, we'll skip
             if (!in_array($permissionLevel, $levels)) {
                 continue;
             }
 
+            // Otherwise we'll just add the permission to be created.
             $processed[] = new CollaboratorPermission($permission);
         }
 
