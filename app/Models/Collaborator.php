@@ -78,19 +78,4 @@ class Collaborator extends Model implements UserAccessible
     {
         return $this->hasOne(CollaboratorInvite::class);
     }
-
-    /**
-     * Determine when a user can see the collaborators.
-     *
-     * @param  Builder $builder
-     * @param  array   $data
-     * @return Builder
-     */
-    public function scopeUserViewable(Builder $builder, $data = []): Builder
-    {
-        $user = auth()->user();
-
-        return (new ProjectAccess($q, $user, ['collaborator'], ['read']))->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
-    }
 }
