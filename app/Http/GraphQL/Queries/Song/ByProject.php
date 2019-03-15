@@ -26,7 +26,9 @@ class ByProject
         if (!$project) {
             throw new AuthorizationException('Unable to find to fetch songs for');
         }
-        // dd($project->songs()->get());
-        return $project->songs()->get();
+
+        return $project->with('recordings.songs')->recordings()->map(function($recording) {
+            return $recording->song;
+        })->all();
     }
 }

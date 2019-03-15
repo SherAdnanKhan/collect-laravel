@@ -56,22 +56,11 @@ class Song extends Model implements UserAccessible
     /**
      * Get all occurences of a recording of this song.
      *
-     * @return BelongsToMany
+     * @return HasMany
      */
-    public function recordings(): BelongsToMany
+    public function recordings(): HasMany
     {
-        return $this->belongsToMany(Recording::class, 'songs_to_recordings')->using(SongRecording::class);
-    }
-
-    /**
-     * Get all of the projects that this song
-     * is used in.
-     *
-     * @return BelongsToMany
-     */
-    public function projects(): BelongsToMany
-    {
-        return $this->belongsToMany(Project::class, 'songs_to_recordings', 'song_id', 'project_id')->using(SongRecording::class);
+        return $this->HasMany(Recording::class);
     }
 
     /**

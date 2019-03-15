@@ -40,7 +40,7 @@ class Recording extends Model implements UserAccessible
 
     protected $casts = [
         'recorded_on' => 'date',
-        'mixed_on' => 'date'
+        'mixed_on'    => 'date'
     ];
 
     /**
@@ -100,7 +100,7 @@ class Recording extends Model implements UserAccessible
      */
     public function songs(): HasMany
     {
-        return $this->hasMany(Song::class)->using(SongRecording::class)->withPivot('project_id');
+        return $this->hasMany(Song::class);
     }
 
     /**

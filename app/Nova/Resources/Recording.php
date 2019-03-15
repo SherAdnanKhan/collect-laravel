@@ -35,7 +35,7 @@ class Recording extends Resource
      */
     public static $title = 'name';
 
-    public static $with = ['project'];
+    public static $with = ['project', 'song'];
 
     /**
      * The columns that should be searched.
