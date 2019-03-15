@@ -94,16 +94,6 @@ class Recording extends Model implements UserAccessible
     }
 
     /**
-     * Get the songs for this recording.
-     *
-     * @return HasMany
-     */
-    public function songs(): HasMany
-    {
-        return $this->hasMany(Song::class);
-    }
-
-    /**
      * Grab the credits/contributions directly on this resource.
      *
      * @return MorphMany

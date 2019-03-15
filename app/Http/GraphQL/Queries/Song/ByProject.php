@@ -21,13 +21,13 @@ class ByProject
     {
         $projectId = (int) $args['projectId'];
 
-        $project = Project::find($projectId);
+        $project = Project::with(['recordings', 'recordings.song'])->where('id', $projectId)->first();
 
         if (!$project) {
             throw new AuthorizationException('Unable to find to fetch songs for');
         }
 
-        return $project->with('recordings.songs')->recordings()->map(function($recording) {
+        return $project->recordings->map(function($recording) {
             return $recording->song;
         })->all();
     }
