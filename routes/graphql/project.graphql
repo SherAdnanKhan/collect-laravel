@@ -143,8 +143,8 @@ type Session implements Favoured & Creditable & Commentable {
 }
 
 type SessionRecording {
-	session_id: ID!
-	recording_id: ID!
+	sessionId: ID! @rename(attribute: "session_id")
+	recordingId: ID! @rename(attribute: "recording_id")
 }
 
 type Comment {
