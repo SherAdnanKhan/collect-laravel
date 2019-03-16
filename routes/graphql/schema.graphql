@@ -127,6 +127,8 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createSession(input: CreateSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Create@resolve")
 	updateSession(input: UpdateSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Update@resolve")
 	deleteSession(input: DeleteSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Delete@resolve")
+	createSessionRecording(input: SessionRecordingInput!): SessionRecording @field(resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Create@resolve")
+	deleteSessionRecording(input: SessionRecordingInput!): SessionRecording @field(resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Delete@resolve")
 
 	# Song Mutations
 	createSong(input: CreateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Create@resolve")
