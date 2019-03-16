@@ -303,3 +303,8 @@ input OrderingInput {
     field: String!
     direction: String
 }
+
+input SessionRecordingInput {
+    session_id: ID!
+    recording_id: ID!
+}
