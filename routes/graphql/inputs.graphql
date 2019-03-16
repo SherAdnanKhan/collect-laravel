@@ -308,3 +308,28 @@ input SessionRecordingInput {
     session_id: ID!
     recording_id: ID!
 }
+
+input CreateVenueInput {
+    name: String!
+    address_1: String!
+    address_2: String
+    city: String!
+    state: String!
+    zip: String!
+    country: String!
+}
+
+input UpdateVenueInput {
+    id: ID!
+    name: String!
+    address_1: String!
+    address_2: String
+    city: String!
+    state: String!
+    zip: String!
+    country: String!
+}
+
+input DeleteVenueInput {
+    id: ID!
+}
