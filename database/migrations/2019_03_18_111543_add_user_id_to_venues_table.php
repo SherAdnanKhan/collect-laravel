@@ -17,7 +17,7 @@ class AddUserIdToVenuesTable extends Migration
             $table->unsignedInteger('user_id')->nullable()->after('id');
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('set null');
-            $table->boolean('approved')->after('country');
+            $table->boolean('approved')->default(false)->after('country');
         });
     }
 

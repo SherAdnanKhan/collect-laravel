@@ -5,6 +5,7 @@ namespace App\Http\GraphQL\Mutations\Venue;
 use App\Models\Venue;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Create

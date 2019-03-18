@@ -175,6 +175,8 @@ type EventLog {
 type Venue {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
+	user: User @belongsTo
+	userId: ID! @rename(attribute: "user_id")
 	name: String!
 	address1: String @rename(attribute: "address_1")
 	address2: String @rename(attribute: "address_2")
@@ -184,6 +186,7 @@ type Venue {
 	country: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+	approved: Boolean
 }
 
 type SessionType {
