@@ -75,6 +75,7 @@ type Party implements Favoured {
 	firstName: String! @rename(attribute: "first_name")
 	middleName: String
 	lastName: String! @rename(attribute: "last_name")
+	name: String!
 	suffix: String
 	birthDate: String
 	deathDate: String

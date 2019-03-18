@@ -37,6 +37,15 @@ class Party extends Model implements UserAccessible
         'death_date' => 'date'
     ];
 
+    /**
+     * Allow access to a 'name' attribute for display purposes.
+     *
+     * @return string
+     */
+    public function getNameAttribute(): string
+    {
+        return trim($this->attributes['first_name'] . ' ' . ($this->attributes['middle_name'] ? $this->attributes['middle_name'] . ' ' : '') . $this->attributes['last_name']);
+    }
 
     /**
      * The user owner for this project.
