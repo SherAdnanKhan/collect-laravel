@@ -157,8 +157,6 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 
 	# Venue Mutations
 	createVenue(input: CreateVenueInput!): Venue @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Create@resolve")
-	updateVenue(input: UpdateVenueInput!): Venue @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Update@resolve")
-	deleteVenue(input: DeleteVenueInput!): Venue @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Delete@resolve")
 
 	# File & Folder Mutations
 	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")

@@ -20,9 +20,10 @@ class Create
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $input = array_get($args, 'input');
+        $user = auth()->user();
 
         try {
-            $venue = Venue::create($input);
+            $venue = $user->venues()->firstOrCreate($input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }

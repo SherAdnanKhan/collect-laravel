@@ -13,6 +13,7 @@ use App\Models\UserFavourite;
 use App\Models\UserPluginCode;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
+use App\Models\Venue;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -163,6 +164,16 @@ class User extends Authenticatable implements JWTSubject
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get venues owned by a user.
+     *
+     * @return HasMany
+     */
+    public function venues(): HasMany
+    {
+        return $this->hasMany(Venue::class);
     }
 
     /**
