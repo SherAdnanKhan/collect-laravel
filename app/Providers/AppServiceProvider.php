@@ -14,6 +14,7 @@ use App\Models\Session;
 use App\Models\Song;
 use App\Observers\CollaboratorObserver;
 use App\Observers\CreditObserver;
+use App\Observers\EventLogObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -47,6 +48,11 @@ class AppServiceProvider extends ServiceProvider
         Project::observe(ProjectObserver::class);
         Credit::observe(CreditObserver::class);
         Collaborator::observe(CollaboratorObserver::class);
+
+        Project::observe(EventLogObserver::class);
+        Recording::observe(EventLogObserver::class);
+        Session::observe(EventLogObserver::class);
+        Collaborator::observe(EventLogObserver::class);
     }
 
     /**

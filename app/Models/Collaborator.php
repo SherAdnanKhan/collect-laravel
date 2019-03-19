@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\CollaboratorInvite;
 use App\Models\CollaboratorPermission;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\EventLogged;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,9 +18,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Collaborator extends Model implements UserAccessible
+class Collaborator extends Model implements UserAccessible, EventLoggable
 {
     use UserAccesses;
+    use EventLogged;
 
     /**
      * The attributes that are mass assignable.
@@ -77,5 +80,15 @@ class Collaborator extends Model implements UserAccessible
     public function invite(): HasOne
     {
         return $this->hasOne(CollaboratorInvite::class);
+    }
+
+    /**
+     * The identifier for event log will be the users name.
+     *
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return $this->user->name;
     }
 }
