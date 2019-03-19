@@ -71,6 +71,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		projectId: Int! @eq(key: "project_id")
 		ordering: OrderingInput
 	): [Session] @paginate(scopes: ["userViewable", "orderByField"], model: "App\\Models\\Session", defaultCount: 1000)
+	getSessionTypes: [SessionType] @all
 
 	# Comment Queries
 	getComment(id: Int! @eq): Comment @find

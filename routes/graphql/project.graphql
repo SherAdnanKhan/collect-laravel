@@ -142,6 +142,13 @@ type Session implements Favoured & Creditable & Commentable {
 	recordings: [Recording] @belongsToMany(type: "paginator")
 }
 
+type SessionType {
+	id: ID!
+	name: String!
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
 type SessionRecording {
 	sessionId: ID! @rename(attribute: "session_id")
 	recordingId: ID! @rename(attribute: "recording_id")
