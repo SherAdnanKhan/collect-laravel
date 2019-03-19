@@ -61,12 +61,13 @@ class EventLogObserver
 
     private function logEvent(EventLoggable $model, string $action, string $message)
     {
-        $eventLog = new EventLog();
-        $projectId = !is_null($model->getProject()) ? $model->getProject()->getKey() : null;
+        if (is_null($model->getProject())) {
+            return;
+        }
 
-        $eventLog->fill([
+        (new EventLog())->fill([
             'user_id'       => $this->user()->getAuthIdentifier(),
-            'project_id'    => $projectId,
+            'project_id'    => $model->getProject()->getKey(),
             'resource_id'   => $model->getKey(),
             'resource_type' => $model->getType(),
             'message'       => $message,

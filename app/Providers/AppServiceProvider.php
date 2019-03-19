@@ -50,6 +50,9 @@ class AppServiceProvider extends ServiceProvider
         Collaborator::observe(CollaboratorObserver::class);
 
         Project::observe(EventLogObserver::class);
+        Recording::observe(EventLogObserver::class);
+        Session::observe(EventLogObserver::class);
+        Collaborator::observe(EventLogObserver::class);
     }
 
     /**
