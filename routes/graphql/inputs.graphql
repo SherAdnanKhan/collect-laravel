@@ -218,7 +218,7 @@ input DeletePartyInput {
 }
 
 input CreatePartyContactInput {
-    party_id: Int!
+    party_id: ID!
     type: String! @rules(apply: ["required", "in:email,phone"])
     value: String! @rules(apply: ["required"])
     primary: Boolean @rules(apply: ["boolean"])
@@ -236,7 +236,7 @@ input DeletePartyContactInput {
 }
 
 input CreatePartyAddressInput {
-    party_id: Int!
+    party_id: ID!
     line_1: String! @rules(apply: ["required"])
     line_2: String
     line_3: String
@@ -244,7 +244,6 @@ input CreatePartyAddressInput {
     district: String! @rules(apply: ["required"])
     postal_code: String! @rules(apply: ["required"])
     territory_code: String! @rules(apply: ["required"])
-    territory_code_type: String! @rules(apply: ["required"])
 }
 
 input UpdatePartyAddressInput {
@@ -256,7 +255,6 @@ input UpdatePartyAddressInput {
     district: String! @rules(apply: ["required"])
     postal_code: String! @rules(apply: ["required"])
     territory_code: String! @rules(apply: ["required"])
-    territory_code_type: String! @rules(apply: ["required"])
 }
 
 input DeletePartyAddressInput {

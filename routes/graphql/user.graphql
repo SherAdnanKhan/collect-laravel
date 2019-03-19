@@ -89,7 +89,7 @@ type Party implements Favoured {
 }
 
 type PartyContact {
-	id: ID! @globalId
+	id: ID!
 	party: Party @belongsTo
 	type: String!
 	value: String!
@@ -99,7 +99,7 @@ type PartyContact {
 }
 
 type PartyAddress {
-	id: ID! @globalId
+	id: ID!
 	party: Party @belongsTo
 	line1: String! @rename(attribute: "line_1")
 	line2: String @rename(attribute: "line_2")
