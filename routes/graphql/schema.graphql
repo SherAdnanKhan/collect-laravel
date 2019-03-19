@@ -18,7 +18,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getSubscriptions(userId: Int! @eq(key: "user_id")): [UserSubscription] @paginate(model: "Laravel\\Cashier\\Subscription", defaultCount: 1)
 
 	# Party Queries
-	getParty(id: Int! @eq): Party @find
+	getParty(id: ID! @eq): Party @find
 	getParties: [Party] @all(scopes: ["userViewable"])
 
 	# Project Queries

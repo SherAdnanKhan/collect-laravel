@@ -70,15 +70,15 @@ type Party implements Favoured {
 	user: User @belongsTo
 	type: String!
 	isni: String
-	title: String!
+	title: String
 	prefix: String
 	firstName: String! @rename(attribute: "first_name")
-	middleName: String
-	lastName: String! @rename(attribute: "last_name")
+	middleName: String @rename(attribute: "middle_name")
+	lastName: String @rename(attribute: "last_name")
 	name: String!
 	suffix: String
-	birthDate: String
-	deathDate: String
+	birthDate: String @rename(attribute: "birth_date")
+	deathDate: String @rename(attribute: "death_date")
 	comments: String
 	credits: [Credit] @hasMany
 	contacts: [PartyContact] @hasMany
