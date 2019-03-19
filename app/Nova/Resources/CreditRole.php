@@ -2,8 +2,8 @@
 
 namespace App\Nova\Resources;
 
+use App\Models\CreditRole as CreditRoleModel;
 use App\Nova\Resource;
-use App\Nova\Resources\CreditRole;
 use App\Nova\Resources\Project;
 use App\Nova\Resources\Recording;
 use App\Nova\Resources\Session;
@@ -23,23 +23,23 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Credit extends Resource
+class CreditRole extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Credit';
+    public static $model = 'App\\Models\\CreditRole';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'party.name';
+    public static $title = 'name';
 
-    public static $with = ['party', 'contribution'];
+    public static $with = ['credits'];
 
     /**
      * The columns that should be searched.
@@ -47,7 +47,7 @@ class Credit extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'party.name', 'role',
+        'id', 'name', 'type',
     ];
 
     /**
@@ -61,18 +61,13 @@ class Credit extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Party'),
+            Select::make('Type')->options(CreditRoleModel::TYPES_WITH_LABELS)
+                ->displayUsingLabels()->rules('required'),
 
-            BelongsTo::make('Credit Role', 'role', CreditRole::class),
+            Text::make('Name')
+                ->rules('required'),
 
-            Boolean::make('Performing'),
-
-            MorphTo::make('Contribution')->types([
-                Project::class,
-                Session::class,
-                Recording::class,
-                Song::class,
-            ])->nullable(),
+            HasMany::make('Credits'),
         ];
     }
 

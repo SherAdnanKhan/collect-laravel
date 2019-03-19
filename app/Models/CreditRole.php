@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CreditRole extends Model
 {
+    const TYPES_WITH_LABEL = [
+        'project'   => 'Project',
+        'song'      => 'Song',
+        'recording' => 'Recording',
+        'session'   => 'Session',
+    ];
+
     /**
      * Mass assignable fields.
      *
