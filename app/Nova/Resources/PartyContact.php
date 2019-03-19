@@ -114,7 +114,7 @@ class PartyContact extends Resource
         return [];
     }
 
-        /**
+    /**
      * Get the displayable label of the resource.
      *
      * @return string
