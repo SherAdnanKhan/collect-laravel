@@ -243,4 +243,15 @@ class Project extends Model implements UserAccessible, EventLoggable
         // Only the person who owns the project can delete it.
         return $query->where('user_id', auth()->user()->getAuthIdentifier());
     }
+
+    /**
+     * When logging events fot the project, we'll say this
+     * project is the project.
+     *
+     * @return Project
+     */
+    public function getProject()
+    {
+        return $this;
+    }
 }

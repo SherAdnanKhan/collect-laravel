@@ -21,7 +21,7 @@ class EventLogObserver
     {
         $this->logEvent($model, 'create', sprintf(
             '%s has created %s: %s',
-            $this->user()->getName(),
+            $this->user()->name,
             $model->getTypeLabel(),
             $model->getIdentifier()
         ));
@@ -37,7 +37,7 @@ class EventLogObserver
     {
         $this->logEvent($model, 'update', sprintf(
             '%s has updated %s: %s',
-            $this->user()->getName(),
+            $this->user()->name,
             $model->getTypeLabel(),
             $model->getIdentifier()
         ));
@@ -53,7 +53,7 @@ class EventLogObserver
     {
         $this->logEvent($model, 'delete', sprintf(
             '%s has removed %s: %s',
-            $this->user()->getName(),
+            $this->user()->name,
             $model->getTypeLabel(),
             $model->getIdentifier()
         ));
@@ -65,7 +65,7 @@ class EventLogObserver
         $projectId = !is_null($model->getProject()) ? $model->getProject()->getKey() : null;
 
         $eventLog->fill([
-            'user'          => $this->user()->getAuthIdentifier(),
+            'user_id'       => $this->user()->getAuthIdentifier(),
             'project_id'    => $projectId,
             'resource_id'   => $model->getKey(),
             'resource_type' => $model->getType(),
