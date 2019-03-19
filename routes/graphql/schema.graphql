@@ -105,7 +105,7 @@ type Mutation {
 
 extend type Mutation @group(middleware: ["auth:api"]) {
 	# User Mutations
-	updateUser(id: ID!, input: UpdateUserInput!): User @update(flatten: true)
+	updateUser(input: UpdateUserInput!): User @field(resolver: "App\\Http\\GraphQL\\Mutations\\User\\Update@resolve")
 	updateUserProfile(input: UpdateUserProfileInput!): UserProfile @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserProfile\\Update@resolve")
 
 	# User Favourite Mutations
