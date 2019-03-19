@@ -16,4 +16,11 @@ class Instrument extends Model
     protected $fillable = [
         'name', 'category',
     ];
+
+    /**
+     * Disable timestamps.
+     *
+     * @var boolean
+     */
+    public $timestamps = false;
 }
