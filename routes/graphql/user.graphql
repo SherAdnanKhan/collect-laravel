@@ -142,13 +142,20 @@ type Credit {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	party: Party! @belongsTo
-	role: String!
+	role: CreditRole! @belongsTo
 	performing: Boolean
 	contributionId: Int! @rename(attribute: "contribution_id")
 	contributionType: String! @rename(attribute: "contribution_type")
 	contribution: Creditable!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type CreditRole {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	type: String!
+	name: String!
 }
 
 type SongType {

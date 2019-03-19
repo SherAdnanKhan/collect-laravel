@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\UserAccessible;
+use App\Models\CreditRole;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\SongRecording;
@@ -24,8 +25,18 @@ class Credit extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'party_id', 'contribution_id', 'contribution_type', 'role', 'performing',
+        'party_id', 'contribution_id', 'contribution_type', 'credit_role_id', 'performing',
     ];
+
+    /**
+     * Get the role for this credit.
+     *
+     * @return BelongsTo
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(CreditRole::class);
+    }
 
     /**
      * Get the contributed resource.

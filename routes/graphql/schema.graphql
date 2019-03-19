@@ -90,8 +90,9 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Collaborator] @paginate
 
 	# Credit Queries
-	getCredits(PartyId: Int! @eq(key: "Party_id")): [Credit] @all(scopes: ["userViewable"])
+	getCredits(partyId: Int! @eq(key: "party_id")): [Credit] @all(scopes: ["userViewable"])
 	getCreditsByProject(projectId: Int!): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
+	getCreditRoles(type: String @eq(key: "type")): [CreditRole] @all
 
 	# Instrument Queries
 	getInstruments: [Instrument] @all

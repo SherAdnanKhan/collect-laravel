@@ -3,6 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+use App\Nova\Resources\CreditRole;
 use App\Nova\Resources\Project;
 use App\Nova\Resources\Recording;
 use App\Nova\Resources\Session;
@@ -62,8 +63,7 @@ class Credit extends Resource
 
             BelongsTo::make('Party'),
 
-            Text::make('Role')
-                ->rules('required'),
+            BelongsTo::make('Credit Role', 'role', CreditRole::class),
 
             Boolean::make('Performing'),
 

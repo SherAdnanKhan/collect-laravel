@@ -2,37 +2,44 @@
 
 namespace App\Nova\Resources;
 
+use App\Models\CreditRole as CreditRoleModel;
 use App\Nova\Resource;
+use App\Nova\Resources\Project;
+use App\Nova\Resources\Recording;
+use App\Nova\Resources\Session;
+use App\Nova\Resources\Song;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class PartyContact extends Resource
+class CreditRole extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\PartyContact';
-
-    public static $displayInNavigation = false;
+    public static $model = 'App\\Models\\CreditRole';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'type';
+    public static $title = 'name';
+
+    public static $with = ['credits'];
 
     /**
      * The columns that should be searched.
@@ -40,7 +47,7 @@ class PartyContact extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'party_id', 'type', 'value', 'primary',
+        'id', 'name', 'type',
     ];
 
     /**
@@ -54,19 +61,13 @@ class PartyContact extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Party'),
+            Select::make('Type')->options(CreditRoleModel::TYPES_WITH_LABELS)
+                ->displayUsingLabels()->rules('required'),
 
-            Select::make('Type')->options([
-                'phone' => 'Phone Number',
-                'email' => 'Email Address',
-            ])->displayUsingLabels()->rules('required'),
+            Text::make('Name')
+                ->rules('required'),
 
-            Text::make('Value')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Boolean::make('Primary')
-                ->sortable(),
+            HasMany::make('Credits'),
         ];
     }
 
@@ -121,7 +122,7 @@ class PartyContact extends Resource
      */
     public static function label()
     {
-        return 'Party Contact';
+        return 'Credit Roles';
     }
 
     /**
@@ -131,6 +132,6 @@ class PartyContact extends Resource
      */
     public static function singularLabel()
     {
-        return 'Party Contact';
+        return 'Credit Role';
     }
 }
