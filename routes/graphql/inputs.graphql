@@ -15,8 +15,11 @@ input LoginInput {
 }
 
 input UpdateUserInput {
-    first_name: String
-    last_name: String
+    first_name: String! @rules(apply: ["required", "min:2", "max:255"])
+    last_name: String! @rules(apply: ["required", "min:2", "max:255"])
+    email: String! @rules(apply: ["required", "email"])
+    password: String @rules(apply: ["confirmed"])
+    password_confirmation: String @rules(apply: ["required_with:password"])
 }
 
 input DeleteUserFavouriteInput {
