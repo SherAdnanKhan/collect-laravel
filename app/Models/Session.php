@@ -37,6 +37,14 @@ class Session extends Model implements UserAccessible, EventLoggable
     ];
 
     /**
+     * When updating this, we'll mark these relationships
+     * as updated too.
+     *
+     * @var array
+     */
+    protected $touches = ['project'];
+
+    /**
      * The project who owns this song.
      *
      * @return BelongsTo

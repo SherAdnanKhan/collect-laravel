@@ -35,7 +35,7 @@ trait EventLogged
             return null;
         }
 
-        return $this->project()->get();
+        return $this->project;
     }
 
     /**

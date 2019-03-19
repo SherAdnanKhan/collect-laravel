@@ -47,6 +47,14 @@ class Recording extends Model implements UserAccessible, EventLoggable
     ];
 
     /**
+     * When updating this, we'll mark these relationships
+     * as updated too.
+     *
+     * @var array
+     */
+    protected $touches = ['sessions', 'project'];
+
+    /**
      * Get the project that this recording is associated to.
      *
      * @return BelongsTo
