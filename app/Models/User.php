@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendUserPasswordResetEmail;
 use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\File;
@@ -208,5 +209,16 @@ class User extends Authenticatable implements JWTSubject
         // TODO: Calculate space available based on subscription
         // and return true/false depending
         return true;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        SendUserPasswordResetEmail::dispatch($this, $token);
     }
 }
