@@ -319,3 +319,13 @@ input CreateVenueInput {
     zip: String!
     country: String!
 }
+
+input ForgotPasswordInput {
+    email: String! @rules(apply: ["required", "email"])
+}
+
+input ResetPasswordInput {
+    token: String!
+    password: String!
+    password_confirmation: String!
+}

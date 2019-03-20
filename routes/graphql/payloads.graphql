@@ -25,3 +25,11 @@ type GetFilePreviewPayload {
 type CollaboratorPermissionPayload {
 	permissions: [CollaboratorPermission]
 }
+
+type ForgotPasswordPayload {
+  success: Boolean!
+}
+
+type ResetPasswordPayload {
+  success: Boolean!
+}
