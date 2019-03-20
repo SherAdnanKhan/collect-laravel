@@ -15,6 +15,8 @@ use App\Models\UserPluginCode;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
 use App\Models\Venue;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,10 +25,11 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Cashier\Billable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, CanResetPassword
 {
     use Billable;
     use Notifiable;
+    use CanResetPasswordTrait;
 
     protected $guard = 'api';
 
