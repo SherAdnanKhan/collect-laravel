@@ -89,7 +89,15 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = Hash::make($password);
+        $hashInfo = Hash::info($password);
+
+        // Make sure it's not already hashed.
+        if (array_get($hashInfo, 'algo') == 0) {
+            $this->attributes['password'] = Hash::make($password);
+            return;
+        }
+
+        $this->attributes['password'] = $password;
     }
 
     /**
