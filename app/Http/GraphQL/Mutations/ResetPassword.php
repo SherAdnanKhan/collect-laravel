@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GraphQL\Mutations;
+namespace App\Http\GraphQL\Mutations;
 
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
