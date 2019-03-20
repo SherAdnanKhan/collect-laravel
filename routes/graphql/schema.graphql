@@ -66,7 +66,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Recording] @paginate(scopes: ["userViewable", "orderByField"], defaultCount: 1000)
 
 	# Session Queries
-	getSession(id: Int! @eq): Session @find
+	getSession(id: ID! @eq): Session @find
 	getSessions(
 		projectId: Int! @eq(key: "project_id")
 		ordering: OrderingInput

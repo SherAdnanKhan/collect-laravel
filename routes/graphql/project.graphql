@@ -123,6 +123,7 @@ type Session implements Favoured & Creditable & Commentable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
+	projectId: ID!  @rename(attribute: "project_id")
 	type: SessionType @belongsTo
 	venue: Venue @belongsTo
 	name: String!
@@ -139,7 +140,7 @@ type Session implements Favoured & Creditable & Commentable {
 	timecodeFrameRate: String! @rename(attribute: "timecode_frame_rate")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
-	recordings: [Recording] @belongsToMany(type: "paginator")
+	recordings: [Recording]
 }
 
 type SessionType {

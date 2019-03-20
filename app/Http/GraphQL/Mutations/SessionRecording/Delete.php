@@ -28,7 +28,7 @@ class Delete
             throw new AuthorizationException('Unable to find session to remove recording from.');
         }
 
-        $recording = Recording::where('id', array_get($input, 'session_id'))->userViewable()->first();
+        $recording = Recording::where('id', array_get($input, 'recording_id'))->userViewable()->first();
 
         if (!$recording) {
             throw new AuthorizationException('Unable to find recording to remove from session.');

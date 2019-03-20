@@ -124,8 +124,8 @@ input CreateSessionInput {
     venue_room: String
     bitdepth: Int
     samplerate: Int
-    timecode_type: String!
-    timecode_frame_rate: String!
+    timecode_type: String
+    timecode_frame_rate: String
     started_at: String!
     ended_at: String!
 }
@@ -143,8 +143,8 @@ input UpdateSessionInput {
     venue_room: String
     bitdepth: Int
     samplerate: Int
-    timecode_type: String!
-    timecode_frame_rate: String!
+    timecode_type: String
+    timecode_frame_rate: String
     started_at: String!
     ended_at: String!
 }
