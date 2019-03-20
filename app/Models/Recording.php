@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Credit;
@@ -11,6 +12,7 @@ use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
@@ -22,10 +24,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Recording extends Model implements UserAccessible
+class Recording extends Model implements UserAccessible, EventLoggable
 {
     use UserAccesses;
     use OrderScopes;
+    use EventLogged;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +45,14 @@ class Recording extends Model implements UserAccessible
         'recorded_on' => 'date',
         'mixed_on'    => 'date'
     ];
+
+    /**
+     * When updating this, we'll mark these relationships
+     * as updated too.
+     *
+     * @var array
+     */
+    protected $touches = ['sessions', 'project'];
 
     /**
      * Get the project that this recording is associated to.

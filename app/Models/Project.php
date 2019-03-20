@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
@@ -13,6 +14,7 @@ use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
 use App\Models\UserFavourite;
+use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\CollaboratorPermission;
@@ -24,8 +26,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Project extends Model implements UserAccessible
+class Project extends Model implements UserAccessible, EventLoggable
 {
+    use EventLogged;
     use UserAccesses;
     use OrderScopes;
 
@@ -239,5 +242,16 @@ class Project extends Model implements UserAccessible
     {
         // Only the person who owns the project can delete it.
         return $query->where('user_id', auth()->user()->getAuthIdentifier());
+    }
+
+    /**
+     * When logging events fot the project, we'll say this
+     * project is the project.
+     *
+     * @return Project
+     */
+    public function getProject()
+    {
+        return $this;
     }
 }

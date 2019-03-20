@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SessionType;
 use App\Models\Venue;
+use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
@@ -17,10 +19,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Session extends Model implements UserAccessible
+class Session extends Model implements UserAccessible, EventLoggable
 {
     use UserAccesses;
     use OrderScopes;
+    use EventLogged;
 
     protected $fillable = [
         'project_id', 'session_type_id', 'venue_id', 'name', 'description', 'started_at',
@@ -32,6 +35,14 @@ class Session extends Model implements UserAccessible
         'started_at' => 'datetime',
         'ended_at'   => 'datetime'
     ];
+
+    /**
+     * When updating this, we'll mark these relationships
+     * as updated too.
+     *
+     * @var array
+     */
+    protected $touches = ['project'];
 
     /**
      * The project who owns this song.
