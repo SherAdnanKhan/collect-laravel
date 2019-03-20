@@ -325,7 +325,8 @@ input ForgotPasswordInput {
 }
 
 input ResetPasswordInput {
-    token: String!
-    password: String!
-    password_confirmation: String!
+    token: String! @rules(apply: ["required"])
+    email: String! @rules(apply: ["required", "email"])
+    password: String! @rules(apply: ["required", "min:6"])
+    password_confirmation: String! @rules(apply: ["required", "min:6"])
 }
