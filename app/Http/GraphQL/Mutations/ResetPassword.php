@@ -22,9 +22,8 @@ class ResetPassword
         $input = array_get($args, 'input');
 
         $response = $this->broker()->reset($input, function ($user, $password) {
-                $this->resetPassword($user, $password);
-            }
-        );
+            $this->resetPassword($user, $password);
+        });
 
         return [
             'success' => $response == Password::PASSWORD_RESET
