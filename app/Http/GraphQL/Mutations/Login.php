@@ -18,7 +18,7 @@ class Login
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $credentials = $args['input'];
+        $credentials = array_get($args, 'input');
         $token = auth()->attempt($credentials);
 
         if (!$token) {

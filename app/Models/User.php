@@ -32,6 +32,9 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     use Notifiable;
     use CanResetPasswordTrait;
 
+    const SUBSCRIPTION_NAME = 'main';
+    const DEFAULT_SUBSCRIPTION_PLAN = 'free';
+
     protected $guard = 'api';
 
     /**
@@ -232,5 +235,26 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     public function sendPasswordResetNotification($token)
     {
         SendUserPasswordResetEmail::dispatch($this, $token);
+    }
+
+    /**
+     * Send the user a verification notification
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendRegistrationVerificationNotification($token)
+    {
+        SendRegistrationVerificationEmail::dispatch($this, $token);
+    }
+
+    /**
+     * Send the user a welcome notification
+     *
+     * @return void
+     */
+    public function sendWelcomeNotification()
+    {
+        SendWelcomeEmail::dispatch($this);
     }
 }
