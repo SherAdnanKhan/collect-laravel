@@ -63,11 +63,8 @@ class Register
             throw $e;
         }
 
-        return (new Login())->resolve(
-            $rootValue,
-            ['input' => array_only($args, ['email', 'password'])],
-            $context,
-            $resolveInfo
-        );
+        return [
+            'success' => true
+        ];
     }
 }

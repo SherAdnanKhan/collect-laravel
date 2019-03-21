@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\UserVerification;
+use App\Mail\UserPasswordReset;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,36 +11,25 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendRegistrationVerificationEmail implements ShouldQueue
+class SendWelcomeEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The user we're triggering a password
-     * reset email for.
-     *
+     * The user we're welcoming
      * @var User
      */
     protected $user;
 
     /**
-     * The token we're saving.
-     *
-     * @var string
-     */
-    protected $token;
-
-    /**
      * Create a new job instance.
      *
      * @param User $user
-     * @param string $token
      * @return void
      */
-    public function __construct(User $user, string $token)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->token = $token;
     }
 
     /**
@@ -50,6 +39,5 @@ class SendRegistrationVerificationEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new UserVerification($this->user, $this->token));
     }
 }

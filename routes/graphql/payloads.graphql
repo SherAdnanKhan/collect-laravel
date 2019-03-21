@@ -33,3 +33,7 @@ type ForgotPasswordPayload {
 type ResetPasswordPayload {
   success: Boolean!
 }
+
+type RegisterPayload {
+  success: Boolean!
+}

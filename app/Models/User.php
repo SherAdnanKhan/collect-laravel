@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Jobs\SendUserPasswordResetEmail;
+use App\Jobs\SendVerificationEmail;
+use App\Jobs\SendWelcomeEmail;
 use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\File;
@@ -244,7 +246,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function sendRegistrationVerificationNotification()
     {
-        SendRegistrationVerificationEmail::dispatch($this, $this->verification_token);
+        SendVerificationEmail::dispatch($this, $this->verification_token);
     }
 
     /**

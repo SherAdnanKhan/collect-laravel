@@ -2,11 +2,12 @@
 
 namespace App\Http\GraphQL\Mutations;
 
+use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Login
+class Verification
 {
     /**
      * @param $rootValue
@@ -18,12 +19,25 @@ class Login
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $credentials = array_merge(['status' => 'active'], array_get($args, 'input'));
-        $token = auth()->attempt($credentials);
+        $input = array_get($args, 'input');
+
+        $user = User::where('verification_token', array_get($input, 'token'))
+            ->where('status', 'inactive')
+            ->first();
+
+        if (!$user) {
+            throw new AuthenticationException('User is not verified.');
+        }
+
+        $token = auth()->fromUser($user);
 
         if (!$token) {
-            throw new AuthenticationException;
+            throw new AuthenticationException('Unable to generate token.');
         }
+
+        $user->verification_token = null;
+        $user->status = 'active';
+        $user->save();
 
         return [
             'access_token' => $token,

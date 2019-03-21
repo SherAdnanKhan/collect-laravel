@@ -338,3 +338,7 @@ input RegisterInput {
     password: String! @rules(apply: ["required", "min:6", "confirmed"])
     password_confirmation: String! @rules(apply: ["required_with:password", "min:6"])
 }
+
+input VerificationInput {
+    token: String!
+}

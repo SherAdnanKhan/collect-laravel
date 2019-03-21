@@ -110,7 +110,8 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 type Mutation {
 	# The user registration mutation
-    doRegister(input: RegisterInput!): LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Register@resolve")
+    doRegister(input: RegisterInput!): RegisterPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Register@resolve")
+    doVerification(input: VerificationInput!): LoginPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\Verification@resolve")
 
     # Auth mutations
 	doLogin(input: LoginInput): LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
