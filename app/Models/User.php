@@ -240,12 +240,11 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     /**
      * Send the user a verification notification
      *
-     * @param  string $token
      * @return void
      */
-    public function sendRegistrationVerificationNotification($token)
+    public function sendRegistrationVerificationNotification()
     {
-        SendRegistrationVerificationEmail::dispatch($this, $token);
+        SendRegistrationVerificationEmail::dispatch($this, $this->verification_token);
     }
 
     /**

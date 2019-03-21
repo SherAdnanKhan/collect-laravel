@@ -32,6 +32,12 @@ class Register
         try {
             $user = new User();
             $user->fill(array_except($input, 'password_confirmation'));
+
+            // Specify a user verification token, and that they're
+            // inactive until verified.
+            $user->verification_token = str_random(60);
+            $user->status = 'inactive';
+
             $saved = $user->save();
 
             if (!$saved) {
@@ -49,6 +55,8 @@ class Register
             }
 
             DB::commit();
+
+            $user->sendRegistrationVerificationNotification();
         } catch (\Exception $e) {
             DB::rollback();
 
