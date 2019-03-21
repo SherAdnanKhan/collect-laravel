@@ -342,3 +342,11 @@ input RegisterInput {
 input VerificationInput {
     token: String!
 }
+
+input SubscriptionUpdateInput {
+
+}
+
+input SubscriptionBillingUpdateInput {
+
+}
