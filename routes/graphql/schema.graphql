@@ -96,7 +96,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 		contributionType: String @eq(key: "contribution_type")
 	): [Credit] @all(scopes: ["userViewable"])
 	getCreditsByProject(
-		projectId: Int!
+		projectId: ID!
 		contributionType: String
 	): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
 	getCreditRoles(type: String @eq(key: "type")): [CreditRole] @all
