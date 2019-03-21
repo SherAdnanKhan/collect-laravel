@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Queries\Credit;
 
+use App\Models\Credit;
 use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
@@ -19,7 +20,7 @@ class ByProject
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $projectId = (int) $args['projectId'];
+        $projectId = (int) array_get($args, 'projectId');
 
         $project = Project::where('id', $projectId)
             ->with('credits')
@@ -30,6 +31,12 @@ class ByProject
             throw new AuthorizationException('The user does not have access to view this projects credits');
         }
 
-        return $project->credits;
+        $creditsQuery = $project->credits();
+
+        if (array_key_exists('contributionType', $args) && in_array(array_get($args, 'contributionType'), Credit::TYPES)) {
+            $creditsQuery = $creditsQuery->where('contribution_type', array_get($args, 'contributionType'));
+        }
+
+        return $creditsQuery->get();
     }
 }

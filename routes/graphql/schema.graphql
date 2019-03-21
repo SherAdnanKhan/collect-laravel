@@ -95,7 +95,10 @@ extend type Query @group(middleware: ["auth:api"]) {
 		partyId: Int @eq(key: "party_id")
 		contributionType: String @eq(key: "contribution_type")
 	): [Credit] @all(scopes: ["userViewable"])
-	getCreditsByProject(projectId: Int!): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
+	getCreditsByProject(
+		projectId: Int!
+		contributionType: String
+	): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
 	getCreditRoles(type: String @eq(key: "type")): [CreditRole] @all
 
 	# Instrument Queries

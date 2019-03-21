@@ -19,6 +19,13 @@ class Credit extends Model implements UserAccessible
 {
     use UserAccesses;
 
+    const TYPES = [
+        'project',
+        'session',
+        'recording',
+        'song',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
