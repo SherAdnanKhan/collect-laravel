@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendUserPasswordResetEmail;
 use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\File;
@@ -14,18 +15,22 @@ use App\Models\UserPluginCode;
 use App\Models\UserProfile;
 use App\Models\UserTwoFactorToken;
 use App\Models\Venue;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Billable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, CanResetPassword
 {
     use Billable;
     use Notifiable;
+    use CanResetPasswordTrait;
 
     protected $guard = 'api';
 
@@ -84,7 +89,15 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = Hash::make($password);
+        $hashInfo = Hash::info($password);
+
+        // Make sure it's not already hashed.
+        if (array_get($hashInfo, 'algo') == 0) {
+            $this->attributes['password'] = Hash::make($password);
+            return;
+        }
+
+        $this->attributes['password'] = $password;
     }
 
     /**
@@ -208,5 +221,16 @@ class User extends Authenticatable implements JWTSubject
         // TODO: Calculate space available based on subscription
         // and return true/false depending
         return true;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        SendUserPasswordResetEmail::dispatch($this, $token);
     }
 }
