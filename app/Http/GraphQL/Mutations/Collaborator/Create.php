@@ -35,6 +35,11 @@ class Create
         $userToAdd = null;
         if (!is_null($userId)) {
             $userToAdd = User::find($userId);
+
+            if ($userToAdd) {
+                $input['name'] = $userToAdd->name;
+                $input['email'] = $userToAdd->email;
+            }
         }
 
         $project = Project::find($projectId);
@@ -47,13 +52,6 @@ class Create
             throw new AuthorizationException('User does not have permission to create a collaborator on this project');
         }
 
-        $collaborator = $project->collaborators()->create($input);
-
-        $collaborator->createAndSendInvite(
-            array_get($input, 'email', ''),
-            array_get($input, 'name', '')
-        );
-
-        return $collaborator;
+        return $project->collaborators()->create($input);
     }
 }

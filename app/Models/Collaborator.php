@@ -29,18 +29,8 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
      * @var array
      */
     protected $fillable = [
-        'user_id', 'project_id',
+        'user_id', 'project_id', 'email', 'name'
     ];
-
-    /**
-     * Get the name of the user as the collaborator.
-     *
-     * @return string
-     */
-    public function getNameAttribute(): string
-    {
-        return $this->user->name;
-    }
 
     /**
      * The user who this collaborator represents
@@ -89,31 +79,24 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
      */
     public function getIdentifier(): string
     {
-        return $this->user->name;
+        if ($this->user) {
+            return $this->user->name;
+        }
+
+        return $this->name;
     }
 
     /**
      * Create a new invite and send it.
      *
-     * @param  string $email
-     * @param  string $name
-     * @return Boolean
+     * @return CollaboratorInvite
      */
-    public function createAndSendInvite($email, $name): bool
+    public function createAndSendInvite(): CollaboratorInvite
     {
         $invite = new CollaboratorInvite([
             'token'      => str_random(60),
             'project_id' => $this->project->id,
-            'name'       => $name,
-            'email'      => $email,
         ]);
-
-        // If they're inviting an existing user
-        // we'll just use the values from that user.
-        if ($this->user) {
-            $invite->name = $this->user->name;
-            $invite->email = $this->user->email;
-        }
 
         $saved = $this->invite()->save($invite);
 
@@ -121,6 +104,6 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
             $invite->sendNotification();
         }
 
-        return $saved;
+        return $invite;
     }
 }

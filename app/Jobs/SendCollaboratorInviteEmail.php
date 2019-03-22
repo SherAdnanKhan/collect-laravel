@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\CollaboratorInvite;
-use App\Models\CollaboratorInvite;
+use App\Models\CollaboratorInvite as CollaboratorInviteModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,17 +18,17 @@ class SendCollaboratorInviteEmail implements ShouldQueue
     /**
      * The invite.
      *
-     * @var CollaboratorInvite
+     * @var CollaboratorInviteModel
      */
     protected $invite;
 
     /**
      * Create a new job instance.
      *
-     * @param CollaboratorInvite $invite
+     * @param CollaboratorInviteModel $invite
      * @return void
      */
-    public function __construct(CollaboratorInvite $invite)
+    public function __construct(CollaboratorInviteModel $invite)
     {
         $this->invite = $invite;
     }

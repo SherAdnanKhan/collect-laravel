@@ -25,5 +25,7 @@ class CollaboratorObserver
                     return new CollaboratorPermission(['type' => $type, 'level' => 'read']);
                 })->all()
             );
+
+        $collaborator->createAndSendInvite();
     }
 }

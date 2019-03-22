@@ -18,7 +18,7 @@ class CollaboratorInvite extends Model
      * @var array
      */
     protected $fillable = [
-        'project_id', 'collaborator_id', 'email', 'token', 'name',
+        'project_id', 'collaborator_id', 'token',
     ];
 
     /**

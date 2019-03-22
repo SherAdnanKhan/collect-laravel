@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\CollaboratorInvite;
+use App\Models\CollaboratorInvite as CollaboratorInviteModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -15,7 +15,7 @@ class CollaboratorInvite extends Mailable
     /**
      * The invite instance
      *
-     * @var CollaboratorInvite
+     * @var CollaboratorInviteModel
      */
     protected $invite;
 
@@ -23,10 +23,10 @@ class CollaboratorInvite extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param CollaboratorInvite $invite
+     * @param CollaboratorInviteModel $invite
      * @return void
      */
-    public function __construct(CollaboratorInvite $invite)
+    public function __construct(CollaboratorInviteModel $invite)
     {
         $this->invite = $invite;
     }
@@ -40,10 +40,13 @@ class CollaboratorInvite extends Mailable
     {
         $inviteUrl = config('app.frontend_url') . '/accept-invite/' . $this->invite->token;
 
+        $name = $this->invite->collaborator->name;
+        $email = $this->invite->collaborator->email;
+
         return $this->view('emails.collaborators.invite')
             ->with([
-                'name'        => $this->invite->name,
-                'projectName' => $this->invite->project->name,
+                'name'        => $name,
+                'projectName' => $email,
                 'inviteUrl'   => $inviteUrl
             ]);
     }
