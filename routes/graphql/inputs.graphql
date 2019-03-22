@@ -285,7 +285,9 @@ input CreateCreditInput {
     contribution_id: ID! @rules(apply: ["required"])
     contribution_type: String! @rules(apply: ["required"])
     credit_role_id: ID! @rules(apply: ["required"])
+    instrument_id: ID
     performing: Boolean
+    split: Int
 }
 
 input DeleteCreditInput {

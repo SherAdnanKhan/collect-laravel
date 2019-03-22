@@ -144,7 +144,9 @@ type Credit {
 	id: ID!
 	party: Party! @belongsTo
 	role: CreditRole! @belongsTo
+	instrument: Instrument @belongsTo
 	performing: Boolean
+	split: Int
 	contributionId: Int! @rename(attribute: "contribution_id")
 	contributionType: String! @rename(attribute: "contribution_type")
 	contribution: Creditable!

@@ -18,6 +18,7 @@ use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -66,6 +67,10 @@ class Credit extends Resource
             BelongsTo::make('Credit Role', 'role', CreditRole::class),
 
             Boolean::make('Performing'),
+
+            BelongsTo::make('Instrument'),
+
+            Number::make('Split'),
 
             MorphTo::make('Contribution')->types([
                 Project::class,
