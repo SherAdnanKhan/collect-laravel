@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\Models\CreditRole;
+use App\Models\Instrument;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\SongRecording;
@@ -32,7 +33,7 @@ class Credit extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'party_id', 'contribution_id', 'contribution_type', 'credit_role_id', 'performing',
+        'party_id', 'contribution_id', 'contribution_type', 'credit_role_id', 'performing', 'instrument_id', 'split'
     ];
 
     /**
@@ -73,6 +74,16 @@ class Credit extends Model implements UserAccessible
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'credits_to_projects');
+    }
+
+    /**
+     * Get the instrument for this credit.
+     *
+     * @return BelongsTo
+     */
+    public function instrument(): BelongsTo
+    {
+        return $this->belongsTo(Instrument::class);
     }
 
     /**
