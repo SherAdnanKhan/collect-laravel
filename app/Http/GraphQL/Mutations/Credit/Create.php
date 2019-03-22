@@ -50,8 +50,10 @@ class Create
         return $party->credits()->firstOrCreate(array_only($input, [
             'contribution_id',
             'contribution_type',
-            'role',
+            'credit_role_id',
+            'instrument_id',
             'performing',
+            'split'
         ]));
     }
 }
