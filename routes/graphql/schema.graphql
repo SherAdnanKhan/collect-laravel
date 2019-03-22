@@ -186,7 +186,7 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	createFolder(input: CreateFolderInput!): Folder @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
 
 	# Subscription Mutations
-	doSubscriptionUpdate(input: SubscriptionUpdateInput!): Subscription @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\Update@resolve")
+	doSubscriptionUpdate(input: SubscriptionUpdateInput!): UserSubscription @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\Update@resolve")
 	doSubscriptionBillingUpdate(input: SubscriptionBillingUpdateInput!): User @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\UpdateBilling@resolve")
 }
 
