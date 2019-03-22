@@ -45,31 +45,11 @@ class Create
 
         $collaborator = $project->collaborators()->create($input);
 
-        $this->createAndSendInvite($collaborator, array_get($input, 'email', ''), array_get($input, 'name', ''));
+        $collaborator->createAndSendInvite(
+            array_get($input, 'email', ''),
+            array_get($input, 'name', '')
+        );
 
         return $collaborator;
-    }
-
-    private function createAndSendInvite(Collaborator $collaborator, $email, $name)
-    {
-        $invite = new CollaboratorInvite([
-            'token'      => str_random(60),
-            'project_id' => $collaborator->project->id,
-            'name'       => $name,
-            'email'      => $email,
-        ]);
-
-        // If they're inviting an existing user
-        // we'll just use the values from that user.
-        if ($collaborator->user) {
-            $invite->name = $collaborator->user->name;
-            $invite->email = $collaborator->user->email;
-        }
-
-        $saved = $collaborator->invite()->save($invite);
-
-        if ($saved) {
-            $invite->sendNotification();
-        }
     }
 }

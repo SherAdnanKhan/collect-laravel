@@ -91,4 +91,36 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
     {
         return $this->user->name;
     }
+
+    /**
+     * Create a new invite and send it.
+     *
+     * @param  string $email
+     * @param  string $name
+     * @return Boolean
+     */
+    public function createAndSendInvite($email, $name): bool
+    {
+        $invite = new CollaboratorInvite([
+            'token'      => str_random(60),
+            'project_id' => $this->project->id,
+            'name'       => $name,
+            'email'      => $email,
+        ]);
+
+        // If they're inviting an existing user
+        // we'll just use the values from that user.
+        if ($this->user) {
+            $invite->name = $this->user->name;
+            $invite->email = $this->user->email;
+        }
+
+        $saved = $this->invite()->save($invite);
+
+        if ($saved) {
+            $invite->sendNotification();
+        }
+
+        return $saved;
+    }
 }
