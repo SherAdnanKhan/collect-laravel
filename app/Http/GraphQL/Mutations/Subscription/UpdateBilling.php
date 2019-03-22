@@ -38,6 +38,6 @@ class UpdateBilling
             throw new GenericException('Something went wrong when updating the customers card.');
         }
 
-        return $user;
+        return $user->toArray();
     }
 }
