@@ -25,7 +25,7 @@ class Create
     {
         $user = auth()->user();
         $input = array_get($args, 'input');
-        $userId = (int) array_get($input, 'user_id');
+        $userId = (int) array_get($input, 'user_id', null);
         $projectId = (int) array_get($input, 'project_id');
 
         if ($userId == $user->id) {
