@@ -365,3 +365,7 @@ input SubscriptionUpdateInput {
 input SubscriptionBillingUpdateInput {
     stripe_token: String! @rules(apply: ["required"])
 }
+
+input AcceptCollaboratorInviteInput {
+    token: String! @rules(apply: ["required"])
+}
