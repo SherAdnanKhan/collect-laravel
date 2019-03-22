@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Subscription;
 
 use App\Http\GraphQL\Exceptions\ValidationException;
+use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -27,8 +28,20 @@ class Update
         ResolveInfo $resolveInfo
     ): array
     {
-        // TODO:
-        // Update the plan the user is on.
-        return [];
+        $plan = array_get($args, 'input.plan');
+
+        if (!in_array($plan, User::PLANS)) {
+            throw new AuthorizationException('Invalid plan chosen.');
+        }
+
+        $user = auth()->user();
+
+        if (!$user->hasCardOnFile()) {
+            throw new AuthorizationException('User does not have a card on file.');
+        }
+
+        $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
+
+        return $subscription;
     }
 }

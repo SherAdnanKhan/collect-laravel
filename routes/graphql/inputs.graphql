@@ -344,9 +344,9 @@ input VerificationInput {
 }
 
 input SubscriptionUpdateInput {
-
+    plan: String! @rules(apply: ["required"])
 }
 
 input SubscriptionBillingUpdateInput {
-
+    stripe_token: String! @rules(apply: ["required"])
 }
