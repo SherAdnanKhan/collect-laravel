@@ -42,7 +42,7 @@ class Credit extends Model implements UserAccessible
      */
     public function role(): BelongsTo
     {
-        return $this->belongsTo(CreditRole::class);
+        return $this->belongsTo(CreditRole::class, 'credit_role_id');
     }
 
     /**
