@@ -32,6 +32,7 @@ type Collaborator {
 	name: String!
 	email: String!
 	project: Project! @belongsTo
+	accepted: Boolean
 	projectId: ID! @rename(attribute: "project_id")
 	permissions: [CollaboratorPermission] @hasMany
 }
