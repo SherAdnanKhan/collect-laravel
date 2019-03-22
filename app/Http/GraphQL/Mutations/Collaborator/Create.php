@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Collaborator;
 
 use App\Models\Collaborator;
+use App\Models\CollaboratorInvite;
 use App\Models\Project;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -24,17 +25,26 @@ class Create
     {
         $user = auth()->user();
         $input = array_get($args, 'input');
-        $userId = (int) array_get($input, 'user_id');
+        $userId = (int) array_get($input, 'user_id', null);
         $projectId = (int) array_get($input, 'project_id');
 
         if ($userId == $user->id) {
             throw new AuthorizationException('User cannot make themselves a collaborator');
         }
 
-        $userToAdd = User::find($userId);
+        $userToAdd = null;
+        if (!is_null($userId)) {
+            $userToAdd = User::find($userId);
+
+            if ($userToAdd) {
+                $input['name'] = $userToAdd->name;
+                $input['email'] = $userToAdd->email;
+            }
+        }
+
         $project = Project::find($projectId);
 
-        $cannotCreate = !$userToAdd || !$project || !$user->can('create', [
+        $cannotCreate = !$project || !$user->can('create', [
             Collaborator::class, $project, $userToAdd
         ]);
 

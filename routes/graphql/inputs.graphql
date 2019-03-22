@@ -262,8 +262,10 @@ input DeletePartyAddressInput {
 }
 
 input CreateCollaboratorInput {
-    user_id: ID! @rules(apply: ["required"])
     project_id: ID! @rules(apply: ["required"])
+    user_id: ID @rules(apply: ["required_without_all:input.email,input.name"])
+    email: String @rules(apply: ["required_without:input.user_id"])
+    name: String @rules(apply: ["required_without:input.user_id", "required_with:input.email"])
 }
 
 input DeleteCollaboratorInput {
@@ -362,4 +364,8 @@ input SubscriptionUpdateInput {
 
 input SubscriptionBillingUpdateInput {
     stripe_token: String! @rules(apply: ["required"])
+}
+
+input AcceptCollaboratorInviteInput {
+    token: String! @rules(apply: ["required"])
 }

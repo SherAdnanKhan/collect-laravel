@@ -173,6 +173,8 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	deleteCollaborator(input: DeleteCollaboratorInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Delete@resolve")
 	updateCollaboratorPermissions(input: UpdateCollaboratorPermissionsInput!): CollaboratorPermissionPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorPermission\\Update@resolve")
 
+	acceptCollaboratorInvite(input: AcceptCollaboratorInviteInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorInvite\\Accept@resolve")
+
 	# Credit Mutations
 	createCredit(input: CreateCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Create@resolve")
 	updateCredit(input: UpdateCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Update@resolve")
