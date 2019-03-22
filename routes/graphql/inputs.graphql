@@ -262,8 +262,10 @@ input DeletePartyAddressInput {
 }
 
 input CreateCollaboratorInput {
-    user_id: ID! @rules(apply: ["required"])
     project_id: ID! @rules(apply: ["required"])
+    user_id: ID @rules(apply: ["required_without:email,name"])
+    email: String @rules(apply: ["required_unless:user_id"])
+    name: String @rules(apply: ["required_unless:user_id", "required_with:email"])
 }
 
 input DeleteCollaboratorInput {

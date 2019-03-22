@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Collaborator;
 
 use App\Models\Collaborator;
+use App\Models\CollaboratorInvite;
 use App\Models\Project;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -34,7 +35,7 @@ class Create
         $userToAdd = User::find($userId);
         $project = Project::find($projectId);
 
-        $cannotCreate = !$userToAdd || !$project || !$user->can('create', [
+        $cannotCreate = !$project || !$user->can('create', [
             Collaborator::class, $project, $userToAdd
         ]);
 
@@ -42,6 +43,33 @@ class Create
             throw new AuthorizationException('User does not have permission to create a collaborator on this project');
         }
 
-        return $project->collaborators()->create($input);
+        $collaborator = $project->collaborators()->create($input);
+
+        $this->createAndSendInvite($collaborator, array_get($input, 'email', ''), array_get($input, 'name', ''));
+
+        return $collaborator;
+    }
+
+    private function createAndSendInvite(Collaborator $collaborator, $email, $name)
+    {
+        $invite = new CollaboratorInvite([
+            'token'      => str_random(60),
+            'project_id' => $collaborator->project->id,
+            'name'       => $name,
+            'email'      => $email,
+        ]);
+
+        // If they're inviting an existing user
+        // we'll just use the values from that user.
+        if ($collaborator->user) {
+            $invite->name = $collaborator->user->name;
+            $invite->email = $collaborator->user->email;
+        }
+
+        $saved = $collaborator->invite()->save($invite);
+
+        if ($saved) {
+            $invite->sendNotification();
+        }
     }
 }
