@@ -23,7 +23,7 @@ class CreditObserver
         $projects = [];
 
         if ($contribution instanceof Song) {
-            $projects = $contribution->projects()->get()->pluck('id');
+            $projects = $contribution->projects()->pluck('id');
         } else if ($contribution instanceof Project) {
             $projects[] = $contribution->id;
         } else {

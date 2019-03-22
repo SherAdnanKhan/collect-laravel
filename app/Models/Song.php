@@ -17,7 +17,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 
 class Song extends Model implements UserAccessible
 {
@@ -52,6 +54,17 @@ class Song extends Model implements UserAccessible
     public function type(): BelongsTo
     {
         return $this->belongsTo(SongType::class, 'song_type_id');
+    }
+
+    /**
+     * Get projects for this song through the relationships
+     * to the recordings.
+     *
+     * @return Collection
+     */
+    public function projects(): Collection
+    {
+        return $this->recordings()->get()->pluck('project');
     }
 
     /**

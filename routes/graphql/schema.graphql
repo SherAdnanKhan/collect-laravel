@@ -175,6 +175,7 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 
 	# Credit Mutations
 	createCredit(input: CreateCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Create@resolve")
+	updateCredit(input: UpdateCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Update@resolve")
 	deleteCredit(input: DeleteCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Delete@resolve")
 
 	# Venue Mutations

@@ -87,7 +87,7 @@ class Credit extends Model implements UserAccessible
     }
 
     /**
-     * Users can view a credit if they own the party.
+     * Users can view a credit scope
      *
      * @param  Builder $query
      * @param  array   $data
@@ -99,7 +99,19 @@ class Credit extends Model implements UserAccessible
     }
 
     /**
-     * Users can view a credit if they own the party.
+     * Users can update a credit scope
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        return $query;
+    }
+
+    /**
+     * Users can delete a credit scope
      *
      * @param  Builder $query
      * @param  array   $data
