@@ -5,6 +5,7 @@ namespace App\Http\GraphQL\Mutations\Subscription;
 use App\Http\GraphQL\Exceptions\ValidationException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
+use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 /**
@@ -27,8 +28,16 @@ class UpdateBilling
         ResolveInfo $resolveInfo
     ): array
     {
-        // TODO:
-        // Handle updating the users billing info with the stripe logic.
-        return [];
+        $stripeToken = array_get($args, 'input.stripe_token');
+
+        $user = auth()->user();
+
+        try {
+            $user->updateCard($stripeToken);
+        } catch (\Exception $e) {
+            throw new GenericException('Something went wrong when updating the customers card.');
+        }
+
+        return $user;
     }
 }

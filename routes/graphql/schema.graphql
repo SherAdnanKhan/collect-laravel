@@ -187,7 +187,7 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 
 	# Subscription Mutations
 	doSubscriptionUpdate(input: SubscriptionUpdateInput!): Subscription @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\Update@resolve")
-	doSubscriptionBillingUpdate(input: SubscriptionBillingUpdateInput!): Subscription @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\UpdateBilling@resolve")
+	doSubscriptionBillingUpdate(input: SubscriptionBillingUpdateInput!): User @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\UpdateBilling@resolve")
 }
 
 #import inputs.graphql
