@@ -32,7 +32,11 @@ class Create
             throw new AuthorizationException('User cannot make themselves a collaborator');
         }
 
-        $userToAdd = User::find($userId);
+        $userToAdd = null;
+        if (!is_null($userId)) {
+            $userToAdd = User::find($userId);
+        }
+
         $project = Project::find($projectId);
 
         $cannotCreate = !$project || !$user->can('create', [
