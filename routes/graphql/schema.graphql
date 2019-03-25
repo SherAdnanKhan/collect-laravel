@@ -88,7 +88,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getCollaborators(
 		userId: Int @eq(key: "user_id")
 		projectId: Int @eq(key: "project_id")
-	): [Collaborator] @paginate
+	): [Collaborator] @all
 
 	# Credit Queries
 	getCredits(
