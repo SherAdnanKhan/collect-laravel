@@ -23,6 +23,10 @@ class Update
     {
         $user = auth()->user();
 
+        if (!$user->hasCollaboratorAccess()) {
+            throw new AuthorizationException('User does not have the plan to access this functionality');
+        }
+
         $input = array_get($args, 'input');
         $collaboratorId = array_get($input, 'collaborator_id');
         $permissions = array_get($input, 'permissions');
@@ -55,6 +59,11 @@ class Update
             // all permissions for that resource.
             if ($permissionLevel == 'full') {
                 foreach ($levels as $level) {
+                    // Ignore download permission from all types apart from files
+                    if ($permission['type'] !== 'files' && $level === 'download') {
+                        continue;
+                    }
+
                     $processed[] = new CollaboratorPermission(['type' => $permission['type'], 'level' => $level]);
                 }
 

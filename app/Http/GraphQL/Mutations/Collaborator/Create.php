@@ -24,6 +24,11 @@ class Create
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $user = auth()->user();
+
+        if (!$user->hasCollaboratorAccess()) {
+            throw new AuthorizationException('User does not have the plan to access this functionality');
+        }
+
         $input = array_get($args, 'input');
         $userId = (int) array_get($input, 'user_id', null);
         $projectId = (int) array_get($input, 'project_id');

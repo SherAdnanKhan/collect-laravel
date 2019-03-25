@@ -34,6 +34,11 @@ class CreateFolder
             throw new AuthorizationException;
         }
 
+        $user = auth()->user();
+        if (!$user->can('create', [Folder::class, $project])) {
+            throw new AuthorizationException;
+        }
+
         $parent_folder = false;
         if (isset($args['input']['folderId'])) {
             $parent_folder = Folder::where('project_id', $project->id)->where('id', $args['input']['folderId'])->userViewable()->first();
@@ -57,7 +62,7 @@ class CreateFolder
         $folder = Folder::create([
             'project_id' => $project->id,
             'folder_id' => ($parent_folder ? $parent_folder->id : null),
-            'user_id' => auth()->user()->id,
+            'user_id' => $user->id,
             'name' => $name,
             'depth' => ($parent_folder ? $parent_folder->depth + 1 : 0)
         ]);
