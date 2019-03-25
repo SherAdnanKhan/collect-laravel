@@ -23,6 +23,10 @@ class Update
     {
         $user = auth()->user();
 
+        if (!$user->hasCollaboratorAccess()) {
+            throw new AuthorizationException('User does not have the plan to access this functionality');
+        }
+
         $input = array_get($args, 'input');
         $collaboratorId = array_get($input, 'collaborator_id');
         $permissions = array_get($input, 'permissions');
