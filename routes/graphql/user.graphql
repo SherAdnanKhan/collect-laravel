@@ -114,7 +114,8 @@ type PartyAddress {
 }
 
 type Instrument {
-	id: ID! @globalId
+	id: ID!
+	_id: ID! @globalId @rename(attribute: "id")
 	category: String
 	name: String
 }
@@ -135,6 +136,7 @@ type Song implements Favoured & Creditable {
 	description: String
 	lyrics: String
 	notes: String
+	credits: [Credit] @hasMany
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
