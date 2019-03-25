@@ -3,6 +3,7 @@
 	id: ID!
 	firstName: String! @rename(attribute: "first_name")
 	lastName: String! @rename(attribute: "last_name")
+	name: String!
 	email: String!
 	status: String!
 	createdAt: String! @rename(attribute: "created_at")
