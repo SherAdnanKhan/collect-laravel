@@ -31,7 +31,7 @@ class DeleteFiles
         $success = false;
         foreach ($args['files'] as $file) {
             if ($file['type'] === 'folder') {
-                $folder = Folder::where('id', $file['id'])->userViewable()->first();
+                $folder = Folder::where('id', $file['id'])->userDeletable()->first();
                 if (!$folder) {
                     continue;
                 }
@@ -41,7 +41,7 @@ class DeleteFiles
                 continue;
             }
 
-            $file = File::where('id', $file['id'])->userViewable()->first();
+            $file = File::where('id', $file['id'])->userDeletable()->first();
             if (!$file) {
                 continue;
             }

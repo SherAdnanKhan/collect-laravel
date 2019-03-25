@@ -19,6 +19,12 @@ class Delete
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
+        $user = auth()->user();
+
+        if (!$user->hasCollaboratorAccess()) {
+            throw new AuthorizationException('User does not have the plan to access this functionality');
+        }
+
         $collaborator = Collaborator::where('id', (int) array_get($args, 'input.id'))
             ->userDeletable()
             ->first();

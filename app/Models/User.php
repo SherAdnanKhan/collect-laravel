@@ -45,6 +45,13 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
         'pro',
     ];
 
+    const PLAN_STORAGE_LIMITS = [
+        'free'       => 2 * 1000 * 1000 * 1000, // 2GB
+        'individual' => 1000 * 1000 * 1000 * 1000, // 1TB
+        'education'  => false, // unlimited
+        'pro'        => false, // unlimited
+    ];
+
     protected $guard = 'api';
 
     /**
@@ -237,13 +244,29 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     /**
      * Return whether the user has storage space available
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasStorageSpaceAvailable()
+    public function hasStorageSpaceAvailable(): bool
     {
-        // TODO: Calculate space available based on subscription
-        // and return true/false depending
-        return true;
+        $plan = $this->subscriptions()->first();
+        $limit = false;
+
+        if (array_key_exists($plan, self::PLAN_STORAGE_LIMITS)) {
+            $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);
+        }
+
+        return $this->total_storage_used < $limit || !$limit;
+    }
+
+    /**
+     * A user only has collaborator access if they're on the pro or
+     * education plan.
+     *
+     * @return bool
+     */
+    public function hasCollaboratorAccess(): bool
+    {
+        return $this->subscribedToPlan(['education', 'pro'], self::SUBSCRIPTION_NAME);
     }
 
     /**
