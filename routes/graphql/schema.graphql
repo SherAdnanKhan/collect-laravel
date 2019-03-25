@@ -14,7 +14,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getUserTwoFactorTokens: [UserTwoFactorToken] @all(scopes: ["userViewable"])
 
 	# User Subscription Queries
-	getSubscriptions: [Subscription] @all(scopes: ["userViewable"])
+	getSubscriptions: [UserSubscription] @all(scopes: ["userViewable"])
 
 	# Party Queries
 	getParty(id: ID! @eq): Party @find(scopes: ["userViewable"])

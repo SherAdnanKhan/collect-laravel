@@ -14,7 +14,7 @@
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
 	favourites: [UserFavourite] @hasMany
-	subscriptions: [Subscription] @hasMany(type: "paginator")
+	subscriptions: [UserSubscription] @hasMany(type: "paginator")
 	projects: [Project] @hasMany(type: "paginator")
 	parties: [Party] @hasMany(type: "paginator")
 	files: [File] @hasMany(type: "paginator")
@@ -51,7 +51,7 @@ type UserFavourite @model(class: "App\\Models\\UserFavourite") {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type Subscription @model(class: "App\\Models\\Subscription") {
+type UserSubscription @model(class: "App\\Models\\Subscription") {
 	id: ID! @globalId
 	user: User! @belongsTo
 	name: String!
