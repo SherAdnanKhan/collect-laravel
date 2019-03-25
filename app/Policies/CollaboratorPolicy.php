@@ -18,20 +18,12 @@ class CollaboratorPolicy
      */
     public function create(User $user, Project $project, $userToAdd = null)
     {
-        $query = $project->newQuery()->select('projects.id')
-            ->where('projects.id', $project->id)
-            ->where(function($q) use ($user) {
-                return (new CollaboratorPermission($q, $user, ['collaborator'], ['create']))
-                    ->getQuery()
-                    ->orWhere('projects.user_id', $user->getAuthIdentifier());
-            });
-
-        if ($userToAdd instanceof User) {
-            $query = $query->whereDoesntHave('collaborators', function($q) use ($userToAdd) {
-                return $q->where('user_id', $userToAdd->id);
-            });
-        }
-
-        return $query->exists();
+        return $project->userPolicy($user, ['collaborator'], ['create'], function($query) use ($userToAdd) {
+            if ($userToAdd instanceof User) {
+                return $query->whereDoesntHave('collaborators', function($q) use ($userToAdd) {
+                    return $q->where('user_id', $userToAdd->getKey());
+                });
+            }
+        });
     }
 }

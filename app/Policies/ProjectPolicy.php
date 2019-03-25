@@ -16,7 +16,7 @@ class ProjectPolicy
     {
         // TODO:
         // - A user can only create a project if they have a valid
-        // subscription?
+        // subscription? work out plan restriction logic.
         return true;
     }
 }

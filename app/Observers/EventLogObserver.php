@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Contracts\EventLoggable;
 use App\Models\EventLog;
+use Nuwave\Lighthouse\Execution\Utils\Subscription;
 
 /**
  * This observer is responsible for creating event logs "activities"
@@ -65,14 +66,18 @@ class EventLogObserver
             return;
         }
 
-        (new EventLog())->fill([
+        $eventLog = new EventLog([
             'user_id'       => $this->user()->getAuthIdentifier(),
             'project_id'    => $model->getProject()->getKey(),
             'resource_id'   => $model->getKey(),
             'resource_type' => $model->getType(),
             'message'       => $message,
             'action'        => $action,
-        ])->save();
+        ]);
+
+        $eventLog->save();
+
+        Subscription::broadcast('eventLogCreated', $eventLog);
     }
 
     /**

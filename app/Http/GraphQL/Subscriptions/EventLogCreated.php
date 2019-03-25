@@ -2,9 +2,10 @@
 
 namespace App\Http\GraphQL\Subscriptions;
 
+use App\Contracts\UserAccessible;
 use Illuminate\Http\Request;
-use Nuwave\Lighthouse\Subscriptions\Subscriber;
 use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
+use Nuwave\Lighthouse\Subscriptions\Subscriber;
 
 class EventLogCreated extends GraphQLSubscription
 {
@@ -17,8 +18,8 @@ class EventLogCreated extends GraphQLSubscription
      */
     public function authorize(Subscriber $subscriber, Request $request): bool
     {
-        // TODO implement authorize
-        $user = $subscriber->context->user;
+        // Any user can subscribe to this.
+        return true;
     }
 
     /**
@@ -30,7 +31,12 @@ class EventLogCreated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        // TODO implement filter
         $user = $subscriber->context->user;
+
+        if ($root instanceof UserAccessible) {
+            return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
+        }
+
+        return true;
     }
 }
