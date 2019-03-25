@@ -12,6 +12,7 @@ use App\Models\Party;
 use App\Models\Project;
 use App\Models\Session;
 use App\Models\Song;
+use App\Models\Subscription;
 use App\Models\UserFavourite;
 use App\Models\UserPluginCode;
 use App\Models\UserProfile;
@@ -221,6 +222,16 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     public function pluginCodes(Session $session): HasMany
     {
         return $this->hasMany(UserPluginCode::class)->where('session_id', $session->id);
+    }
+
+    /**
+     * Get all of the subscriptions for the Stripe model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, $this->getForeignKey())->orderBy('created_at', 'desc');
     }
 
     /**

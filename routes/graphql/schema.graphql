@@ -11,27 +11,26 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getUserFavourites(ordering: OrderingInput): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
 	# User Token Queries
-	getUserTwoFactorTokens(userId: Int! @eq(key: "user_id")): [UserTwoFactorToken] @all
+	getUserTwoFactorTokens: [UserTwoFactorToken] @all(scopes: ["userViewable"])
 
 	# User Subscription Queries
-	getSubscription(id: Int! @eq): UserSubscription @find(model: "Laravel\\Cashier\\Subscription")
-	getSubscriptions(userId: Int! @eq(key: "user_id")): [UserSubscription] @paginate(model: "Laravel\\Cashier\\Subscription", defaultCount: 1)
+	getSubscriptions: [Subscription] @all(scopes: ["userViewable"])
 
 	# Party Queries
-	getParty(id: ID! @eq): Party @find
+	getParty(id: ID! @eq): Party @find(scopes: ["userViewable"])
 	getParties: [Party] @all(scopes: ["userViewable"])
-	getPartyAddress(id: ID! @eq): PartyAddress @find
-	getPartyContact(id: ID! @eq): PartyContact @find
+	getPartyAddress(id: ID! @eq): PartyAddress @find(scopes: ["userViewable"])
+	getPartyContact(id: ID! @eq): PartyContact @find(scopes: ["userViewable"])
 
 	# Project Queries
-	getProject(id: ID! @eq): Project @find
+	getProject(id: ID! @eq): Project @find(scopes: ["userViewable"])
 	getProjects(
 		userId: Int @eq(key: "user_id")
 		ordering: OrderingInput
 	): [Project] @all(scopes: ["userViewable", "orderByField"])
 
 	# Song Queries
-	getSong(id: ID! @eq): Song @find
+	getSong(id: ID! @eq): Song @find(scopes: ["userViewable"])
 	getSongs(
 		userId: Int @eq(key: "user_id")
 		ordering: OrderingInput
@@ -40,7 +39,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getSongTypes: [SongType] @all
 
 	# File Queries
-	getFile(id: Int! @eq): File @find
+	getFile(id: Int! @eq): File @find(scopes: ["userViewable"])
 	getFiles(
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
@@ -50,23 +49,23 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getFilePreview(id: Int!): GetFilePreviewPayload @field(resolver: "App\\Http\\GraphQL\\Queries\\File\\GetPreview@resolve")
 
 	# Folder Queries
-	getFolder(id: Int! @eq): Folder @find
+	getFolder(id: Int! @eq): Folder @find(scopes: ["userViewable"])
 	getFolders(
 		userId: Int @eq(key: "user_id")
 		folderId: Int @eq(key: "folder_id")
 		projectId: Int @eq(key: "project_id")
 		ordering: OrderingInput
-	): [Folder] @all(scopes: ["orderByField"])
+	): [Folder] @all(scopes: ["userViewable", "orderByField"])
 
 	# Recording Queries
-	getRecording(id: ID! @eq): Recording @find
+	getRecording(id: ID! @eq): Recording @find(scopes: ["userViewable"])
 	getRecordings(
 		projectId: Int @eq(key: "project_id")
 		ordering: OrderingInput
 	): [Recording] @paginate(scopes: ["userViewable", "orderByField"], defaultCount: 1000)
 
 	# Session Queries
-	getSession(id: ID! @eq): Session @find
+	getSession(id: ID! @eq): Session @find(scopes: ["userViewable"])
 	getSessions(
 		projectId: Int! @eq(key: "project_id")
 		ordering: OrderingInput
@@ -74,21 +73,21 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getSessionTypes: [SessionType] @all
 
 	# Comment Queries
-	getComment(id: Int! @eq): Comment @find
+	getComment(id: Int! @eq): Comment @find(scopes: ["userViewable"])
 	getComments(
 		userId: Int @eq(key: "user_id")
 		projectId: Int @eq(key: "project_id")
 		resourceType: String @eq(key: "resource_type")
 		resourceId: Int @eq(key: "resource_id")
 		ordering: OrderingInput
-	): [Comment] @all(scopes: ["orderByField"])
+	): [Comment] @all(scopes: ["userViewable", "orderByField"])
 
 	# Collaborator Queries
-	getCollaborator(id: ID! @eq): Collaborator @find
+	getCollaborator(id: ID! @eq): Collaborator @find(scopes: ["userViewable"])
 	getCollaborators(
 		userId: ID @eq(key: "user_id")
 		projectId: ID! @eq(key: "project_id")
-	): [Collaborator] @all
+	): [Collaborator] @all(scopes: ["userViewable"])
 
 	# Credit Queries
 	getCredits(
