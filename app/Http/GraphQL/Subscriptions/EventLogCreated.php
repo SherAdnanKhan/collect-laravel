@@ -3,9 +3,12 @@
 namespace App\Http\GraphQL\Subscriptions;
 
 use App\Contracts\UserAccessible;
+use App\Models\EventLog;
+use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Http\Request;
 use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
 use Nuwave\Lighthouse\Subscriptions\Subscriber;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class EventLogCreated extends GraphQLSubscription
 {
@@ -38,5 +41,21 @@ class EventLogCreated extends GraphQLSubscription
         }
 
         return true;
+    }
+
+    /**
+     * Resolve the subscription.
+     *
+     * @param  \App\Models\EventLog  $root
+     * @param  mixed[]  $args
+     * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return \App\Models\EventLog
+     */
+    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): EventLog
+    {
+        $root->load(['user', 'project', 'resource']);
+
+        return $root;
     }
 }
