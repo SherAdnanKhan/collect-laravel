@@ -84,10 +84,10 @@ extend type Query @group(middleware: ["auth:api"]) {
 	): [Comment] @all(scopes: ["orderByField"])
 
 	# Collaborator Queries
-	getCollaborator(id: Int! @eq): Collaborator @find
+	getCollaborator(id: ID! @eq): Collaborator @find
 	getCollaborators(
-		userId: Int @eq(key: "user_id")
-		projectId: Int @eq(key: "project_id")
+		userId: ID @eq(key: "user_id")
+		projectId: ID! @eq(key: "project_id")
 	): [Collaborator] @all
 
 	# Credit Queries
