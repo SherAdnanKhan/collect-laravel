@@ -55,6 +55,11 @@ class Update
             // all permissions for that resource.
             if ($permissionLevel == 'full') {
                 foreach ($levels as $level) {
+                    // Ignore download permission from all types apart from files
+                    if ($permission['type'] !== 'files' && $level === 'download') {
+                        continue;
+                    }
+
                     $processed[] = new CollaboratorPermission(['type' => $permission['type'], 'level' => $level]);
                 }
 
