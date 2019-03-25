@@ -167,6 +167,10 @@ return [
         /*
          * Package Service Providers...
          */
+        \Nuwave\Lighthouse\Subscriptions\SubscriptionServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        \Nuwave\Lighthouse\LighthouseServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -178,10 +182,6 @@ return [
         App\Providers\NovaServiceProvider::class,
         App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-        Nuwave\Lighthouse\Providers\LighthouseServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
