@@ -28,11 +28,11 @@ type UserProfile {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
-	studioType: String! @rename(attribute: "studio_type")
-	label: String!
-	jobRole: String! @rename(attribute: "job_role")
-	genre: String!
-	workload: Int!
+	studioType: String @rename(attribute: "studio_type")
+	label: String
+	jobRole: String @rename(attribute: "job_role")
+	genre: String
+	workload: Int
 }
 
 type UserTwoFactorToken {
