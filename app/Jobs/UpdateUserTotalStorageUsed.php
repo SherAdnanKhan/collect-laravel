@@ -12,6 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Nuwave\Lighthouse\Execution\Utils\Subscription;
 
 /**
  * Calculates the users total storage used in bytes.
@@ -78,6 +79,13 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
 
             User::where('id', $user_id)
                 ->update(['total_storage_used' => $total_storage_used]);
+
+            // Update the users storage used.
+            Subscription::broadcast('userStorageUpdated', new User([
+                'id'                 => $user_id,
+                'total_storage_used' => $total_storage_used,
+            ]));
         }
+
     }
 }
