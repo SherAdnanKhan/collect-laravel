@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations\User;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -21,6 +22,21 @@ class Update
     {
         $input = array_get($args, 'input');
         $user = auth()->user();
+
+        if (array_key_exists('password', $input)) {
+            if (!array_key_exists('current_password', $input)) {
+                throw new AuthorizationException('Current password must be provided if updating the users password');
+            }
+
+            $authed = auth()->attempt([
+                'email'    => $user->email,
+                'password' => array_get($input, 'current_password'),
+            ]);
+
+            if (!$authed) {
+                throw new AuthenticationException('User is not authenticated when attempting to update their password');
+            }
+        }
 
         $data = array_except($input, ['password_confirmation']);
 
