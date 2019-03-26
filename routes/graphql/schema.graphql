@@ -196,6 +196,8 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 ## Subscriptions
 type Subscription {
 	eventLogCreated: EventLog
+	userStorageUpdated: User
+	userSubscriptionUpdated: UserSubscription
 }
 
 #import inputs.graphql

@@ -7,6 +7,7 @@ use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
+use Nuwave\Lighthouse\Execution\Utils\Subscription as GraphQLSubscription;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 /**
@@ -42,6 +43,8 @@ class Update
         }
 
         $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
+
+        GraphQLSubscription::broadcast('userSubscriptionUpdated', $subscription);
 
         return $subscription->toArray();
     }
