@@ -12,11 +12,13 @@ use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Models\Song;
+use App\Models\User;
 use App\Observers\CollaboratorObserver;
 use App\Observers\CreditObserver;
 use App\Observers\EventLogObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
+use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -48,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         Project::observe(ProjectObserver::class);
         Credit::observe(CreditObserver::class);
         Collaborator::observe(CollaboratorObserver::class);
+        User::observe(UserObserver::class);
 
         Project::observe(EventLogObserver::class);
         Recording::observe(EventLogObserver::class);
