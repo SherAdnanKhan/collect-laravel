@@ -22,6 +22,8 @@ class Update
         $input = array_get($args, 'input');
         $user = auth()->user();
 
-        return $user->profile()->updateOrCreate($input);
+        return $user->profile()->updateOrCreate([
+            'user_id' => $user->id
+        ], $input);
     }
 }
