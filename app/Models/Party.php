@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Credit;
-use App\Models\PartyContact;
 use App\Models\PartyAddress;
+use App\Models\PartyContact;
 use App\Models\User;
 use App\Traits\UserAccesses;
+use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -106,7 +107,14 @@ class Party extends Model implements UserAccessible
      */
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
-        return $query;
+        // i own it, it’s public, it’s already related to the project, owned by the owner or a collaborator on the project
+        $user = auth()->user();
+
+        return $query->where(function($q) use ($user) {
+            return $q->whereHas('credits', function($q) use ($user) {
+                return (new ProjectAccess($q, $user, ['project'], ['read'], 'projects'))->getQuery();
+            });
+        })->orWhere('user_id', $user->getKey())->orWhereNotNull('isni');
     }
 
     /**
@@ -119,7 +127,7 @@ class Party extends Model implements UserAccessible
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
         $user = auth()->user();
-        return $query->where('user_id', $user->id);
+        return $query->where('user_id', $user->getKey());
     }
 
     /**
@@ -132,6 +140,6 @@ class Party extends Model implements UserAccessible
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
         $user = auth()->user();
-        return $query->where('user_id', $user->id);
+        return $query->where('user_id', $user->getKey());
     }
 }
