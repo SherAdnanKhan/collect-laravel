@@ -15,7 +15,7 @@
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
 	favourites: [UserFavourite] @hasMany
-	subscriptions: [UserSubscription] @hasMany(type: "paginator")
+	subscriptions: [UserSubscription] @hasMany
 	projects: [Project] @hasMany(type: "paginator")
 	parties: [Party] @hasMany(type: "paginator")
 	files: [File] @hasMany(type: "paginator")
