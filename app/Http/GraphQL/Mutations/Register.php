@@ -44,16 +44,6 @@ class Register
                 throw new GenericException('User was not created');
             }
 
-            $user->profile()->save(new UserProfile());
-
-            $subscription = $user->newSubscription(User::SUBSCRIPTION_NAME, User::DEFAULT_SUBSCRIPTION_PLAN)->create(null, [
-                'email' => $user->email,
-            ]);
-
-            if (!$subscription) {
-                throw new GenericException('Subscription was not created');
-            }
-
             DB::commit();
 
             $user->sendRegistrationVerificationNotification();
