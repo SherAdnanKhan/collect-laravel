@@ -36,14 +36,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Relation::morphMap([
-            'file'      => File::class,
-            'folder'    => Folder::class,
-            'project'   => Project::class,
-            'party'     => Party::class,
-            'person'    => Party::class,
-            'session'   => Session::class,
-            'recording' => Recording::class,
-            'song'      => Song::class,
+            'file'         => File::class,
+            'folder'       => Folder::class,
+            'project'      => Project::class,
+            'party'        => Party::class,
+            'person'       => Party::class,
+            'session'      => Session::class,
+            'recording'    => Recording::class,
+            'song'         => Song::class,
+            'collaborator' => Collaborator::class,
         ]);
 
         Folder::observe(FolderObserver::class);
