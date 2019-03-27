@@ -7,6 +7,7 @@ use App\Jobs\SendVerificationEmail;
 use App\Jobs\SendWelcomeEmail;
 use App\Models\Collaborators;
 use App\Models\Comment;
+use App\Models\EventLog;
 use App\Models\File;
 use App\Models\Party;
 use App\Models\Project;
@@ -218,6 +219,16 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     public function venues(): HasMany
     {
         return $this->hasMany(Venue::class);
+    }
+
+    /**
+     * Get the event log items that this user has caused.
+     *
+     * @return HasMany
+     */
+    public function eventLogs(): HasMany
+    {
+        return $this->hasMany(EventLog::class);
     }
 
     /**

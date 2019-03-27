@@ -178,6 +178,7 @@ type EventLog {
 	project: Project! @belongsTo
 	resourceId: Int @rename(attribute: "resource_id")
 	resourceType: String @rename(attribute: "resource_type")
+	action: String
 	message: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
