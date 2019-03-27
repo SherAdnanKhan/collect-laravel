@@ -227,12 +227,13 @@ class MultipartUploadsController extends Controller
 
     private function getS3Client()
     {
+        $config = config('filesystems.disks.s3');
         return new \Aws\S3\S3Client([
-            'region'  => config('filesystems.disks.s3.region'),
+            'region'  => $config['region'],
             'version' => 'latest',
             'credentials' => [
-                'key'    => config('filesystems.disks.s3.key'),
-                'secret' => config('filesystems.disks.s3.secret'),
+                'key'    => $config['key'],
+                'secret' => $config['secret'],
             ]
         ]);
     }

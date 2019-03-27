@@ -35,7 +35,7 @@ class DownloadFiles
             return $this->getFileURL($this->files_to_download[0]['id']);
         }
 
-        CreateDownloadZip::dispatch($this->files_to_download);
+        CreateDownloadZip::dispatch(auth()->user()->id, $this->files_to_download);
 
         return [
             'success' => true
