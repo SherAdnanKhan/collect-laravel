@@ -27,6 +27,10 @@ class Kernel extends ConsoleKernel
         $schedule->job(new \App\Jobs\UpdateUserTotalStorageUsed)
                  ->everyFiveMinutes()
                  ->onOneServer();
+
+        $schedule->job(new \App\Jobs\DeleteFiles)
+                 ->hourly()
+                 ->onOneServer();
     }
 
     /**

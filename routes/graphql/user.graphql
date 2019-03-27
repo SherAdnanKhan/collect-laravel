@@ -15,7 +15,7 @@
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
 	favourites: [UserFavourite] @hasMany
-	subscriptions: [UserSubscription] @hasMany(type: "paginator")
+	subscriptions: [UserSubscription] @hasMany
 	projects: [Project] @hasMany(type: "paginator")
 	parties: [Party] @hasMany(type: "paginator")
 	files: [File] @hasMany(type: "paginator")
@@ -28,11 +28,11 @@ type UserProfile {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
-	studioType: String! @rename(attribute: "studio_type")
-	label: String!
-	jobRole: String! @rename(attribute: "job_role")
-	genre: String!
-	workload: Int!
+	studioType: String @rename(attribute: "studio_type")
+	label: String
+	jobRole: String @rename(attribute: "job_role")
+	genre: String
+	workload: Int
 }
 
 type UserTwoFactorToken {
@@ -108,8 +108,8 @@ type PartyAddress {
 	city: String!
 	district: String!
 	postalCode: String! @rename(attribute: "postal_code")
-	territoryCode: String! @rename(attribute: "territory_code")
-	territoryCodeType: String! @rename(attribute: "territory_code_type")
+	territoryCode: String @rename(attribute: "territory_code")
+	territoryCodeType: String @rename(attribute: "territory_code_type")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }

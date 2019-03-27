@@ -7,8 +7,22 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getUsers: [User] @paginate
 	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
 
+	# Query to return recently created/updated resources
+	getRecents(
+		count: Int
+		resourceType: String
+	): [EventLog] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetRecents@resolve")
+
+	getEventLogsByProject(
+		projectId: ID! @eq(key: "project_id")
+		ordering: OrderingInput
+	): [EventLog] @all(scopes: ["userViewable", "orderByField"])
+
 	# User Favourite Queries
-	getUserFavourites(ordering: OrderingInput): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
+	getUserFavourites(
+		resourceType: String @eq(key: "resource_type")
+		ordering: OrderingInput
+	): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
 	# User Token Queries
 	getUserTwoFactorTokens: [UserTwoFactorToken] @all(scopes: ["userViewable"])
