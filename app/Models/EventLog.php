@@ -73,11 +73,11 @@ class EventLog extends Model implements UserAccessible
     /**
      * Determine when a user can see the event log items.
      *
-     * @param  Builder $builder
+     * @param  Builder $query
      * @param  array   $data
      * @return Builder
      */
-    public function scopeUserViewable(Builder $builder, $data = []): Builder
+    public function scopeUserViewable(Builder $query, $data = []): Builder
     {
         $user = auth()->user();
 
