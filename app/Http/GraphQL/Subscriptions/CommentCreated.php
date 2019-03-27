@@ -11,7 +11,7 @@ use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
 use Nuwave\Lighthouse\Subscriptions\Subscriber;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class UserSubscriptionUpdated extends GraphQLSubscription
+class CommentCreated extends GraphQLSubscription
 {
     /**
      * Check if subscriber is allowed to listen to the subscription.
@@ -35,7 +35,13 @@ class UserSubscriptionUpdated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        return $subscriber->context->user->id == $root->user_id;
+        $user = $subscriber->context->user;
+
+        if ($root instanceof UserAccessible) {
+            return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
+        }
+
+        return false;
     }
 
     /**

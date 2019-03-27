@@ -22,7 +22,7 @@ class UserStorageUpdated extends GraphQLSubscription
     public function authorize(Subscriber $subscriber, Request $request): bool
     {
         // Any user can subscribe to this.
-        return true;
+        return !is_null($subscriber->context->user);
     }
 
     /**
