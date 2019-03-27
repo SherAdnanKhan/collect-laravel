@@ -13,6 +13,11 @@ extend type Query @group(middleware: ["auth:api"]) {
 		resourceType: String
 	): [EventLog] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetRecents@resolve")
 
+	getEventLogsByProject(
+		projectId: ID! @eq(key: "project_id")
+		ordering: OrderingInput
+	): [EventLog] @all(scopes: ["userViewable", "orderByField"])
+
 	# User Favourite Queries
 	getUserFavourites(
 		resourceType: String @eq(key: "resource_type")

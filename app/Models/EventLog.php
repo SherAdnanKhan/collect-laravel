@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Project;
 use App\Models\User;
 use App\Traits\OrderScopes;
+use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,8 +18,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Represents tracked events and actions on a resource
  * performed by a user.
  */
-class EventLog extends Model
+class EventLog extends Model implements UserAccessible
 {
+    use UserAccesses;
     use OrderScopes;
 
     const TYPES = [
@@ -78,7 +81,9 @@ class EventLog extends Model
     {
         $user = auth()->user();
 
-        return (new ProjectAccess($q, $user))->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
+        return $this->wrapUserRelationCheck(
+            $user,
+            (new ProjectAccess($query, $user, ['project'], ['read']))->getQuery()
+        );
     }
 }
