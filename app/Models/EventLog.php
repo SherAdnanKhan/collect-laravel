@@ -28,6 +28,8 @@ class EventLog extends Model implements UserAccessible
         'recording',
         'session',
         'collaborator',
+        'comment',
+        'folder',
     ];
 
     /**

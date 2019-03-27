@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
@@ -16,8 +18,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Represent a comment in a project on a resource.
  */
-class Comment extends Model implements UserAccessible
+class Comment extends Model implements UserAccessible, EventLoggable
 {
+    use EventLogged;
     use UserAccesses;
     use OrderScopes;
 
@@ -70,5 +73,10 @@ class Comment extends Model implements UserAccessible
         // Only the user who wrote the comment can
         // delete their comment.
         return $query->where('user_id', auth()->user()->getAuthIdentifier());
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->message;
     }
 }

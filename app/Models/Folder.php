@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\File;
 use App\Models\User;
+use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
@@ -17,8 +19,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Folders contain files and folders.
  */
-class Folder extends Model implements UserAccessible
+class Folder extends Model implements UserAccessible, EventLoggable
 {
+    use EventLogged;
     use UserAccesses;
     use SoftDeletes;
     use OrderScopes;
