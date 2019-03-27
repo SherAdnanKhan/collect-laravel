@@ -20,6 +20,13 @@ class EventLog extends Model
 {
     use OrderScopes;
 
+    const TYPES = [
+        'project',
+        'recording',
+        'session',
+        'collaborator',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
