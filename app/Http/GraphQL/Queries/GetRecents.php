@@ -29,9 +29,10 @@ class GetRecents
             $query = $query->where('resource_type', array_get($args, 'resourceType'));
         }
 
-        return $query->latest('updated_at')
-            ->latest('created_at')
-            ->groupBy('resource_id', 'resource_type')
+        return $query->where('event_logs.action', '<>', 'delete')
+            ->latest('event_logs.updated_at')
+            ->latest('event_logs.created_at')
+            ->groupBy('event_logs.resource_id', 'event_logs.resource_type')
             ->take($count)
             ->get();
     }

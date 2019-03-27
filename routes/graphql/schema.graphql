@@ -15,7 +15,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# User Favourite Queries
 	getUserFavourites(
-		resourceType: @eq(key: "resource_type")
+		resourceType: String @eq(key: "resource_type")
 		ordering: OrderingInput
 	): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
