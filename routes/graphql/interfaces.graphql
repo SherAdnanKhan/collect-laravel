@@ -9,3 +9,7 @@ interface Creditable {
 interface Commentable {
     id: ID! @globalId
 }
+
+interface EventLoggable {
+	id: ID! @globalId
+}
