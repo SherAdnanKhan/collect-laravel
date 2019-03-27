@@ -55,7 +55,7 @@ type CollaboratorInvite {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
-type File implements Favoured & Commentable {
+type File implements Favoured & Commentable & EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
