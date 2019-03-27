@@ -108,8 +108,8 @@ type PartyAddress {
 	city: String!
 	district: String!
 	postalCode: String! @rename(attribute: "postal_code")
-	territoryCode: String! @rename(attribute: "territory_code")
-	territoryCodeType: String! @rename(attribute: "territory_code_type")
+	territoryCode: String @rename(attribute: "territory_code")
+	territoryCodeType: String @rename(attribute: "territory_code_type")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
