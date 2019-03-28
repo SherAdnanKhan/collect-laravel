@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Subscriptions;
 
 use App\Contracts\UserAccessible;
+use App\Models\Collaborator;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Http\Request;
@@ -44,13 +45,13 @@ class CollaboratorRemoved extends GraphQLSubscription
     /**
      * Resolve the subscription.
      *
-     * @param  \App\Models\User  $root
+     * @param  \App\Models\Collaborator  $root
      * @param  mixed[]  $args
      * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
-     * @return \App\Models\User
+     * @return \App\Models\Collaborator
      */
-    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Subscription
+    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Collaborator
     {
         return $root;
     }

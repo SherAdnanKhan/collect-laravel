@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Subscriptions;
 
 use App\Contracts\UserAccessible;
+use App\Models\Comment;
 use App\Models\Subscription;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -22,8 +23,9 @@ class CommentCreated extends GraphQLSubscription
      */
     public function authorize(Subscriber $subscriber, Request $request): bool
     {
+        return true;
         // Any user can subscribe to this.
-        return !is_null($subscriber->context->user);
+        // return !is_null($subscriber->context->user);
     }
 
     /**
@@ -35,25 +37,26 @@ class CommentCreated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        $user = $subscriber->context->user;
+        return true;
+        // $user = $subscriber->context->user;
 
-        if ($root instanceof UserAccessible) {
-            return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
-        }
+        // if ($root instanceof UserAccessible) {
+        //     return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
+        // }
 
-        return false;
+        // return false;
     }
 
     /**
      * Resolve the subscription.
      *
-     * @param  \App\Models\User  $root
+     * @param  \App\Models\Comment  $root
      * @param  mixed[]  $args
      * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
-     * @return \App\Models\User
+     * @return \App\Models\Comment
      */
-    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Subscription
+    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Comment
     {
         return $root;
     }
