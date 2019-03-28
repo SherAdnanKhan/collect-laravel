@@ -34,13 +34,11 @@ class CollaboratorCreated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        $user = $subscriber->context->user;
-
-        if ($root instanceof UserAccessible) {
-            return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
+        if (is_null($subscriber->context->user)) {
+            return false;
         }
 
-        return false;
+        return $root->user_id == $subscriber->context->user->id;
     }
 
     /**
