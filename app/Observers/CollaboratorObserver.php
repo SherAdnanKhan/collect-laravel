@@ -7,6 +7,7 @@ use App\Models\CollaboratorPermission;
 use App\Models\Project;
 use App\Models\Song;
 use Illuminate\Support\Facades\Log;
+use Nuwave\Lighthouse\Execution\Utils\Subscription;
 
 class CollaboratorObserver
 {
@@ -27,5 +28,18 @@ class CollaboratorObserver
             );
 
         $collaborator->createAndSendInvite();
+
+        Subscription::broadcast('collaboratorCreated', $collaborator);
+    }
+
+    /**
+     * Handle the folder "deleted" event.
+     *
+     * @param  \App\Models\Collaborator  $collaborator
+     * @return void
+     */
+    public function deleted(Collaborator $collaborator)
+    {
+        Subscription::broadcast('collaboratorRemoved', $collaborator);
     }
 }
