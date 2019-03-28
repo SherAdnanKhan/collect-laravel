@@ -212,7 +212,11 @@ type Subscription {
 	eventLogCreated: EventLog
 	userStorageUpdated: User
 	userSubscriptionUpdated: UserSubscription
-	commentCreated: Comment
+	commentCreated(
+		projectId: ID!
+		resourceType: String!
+		resourceId: ID!
+	): Comment
 	collaboratorCreated: Collaborator
 	collaboratorRemoved: Collaborator
 }
