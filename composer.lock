@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e48317b55759b790a0d08bb1e54c174b",
-    "content-hash": "e484b20918efc28def80ea26d9e26aea",
+    "hash": "b9b8734c389046b93404e5e7293bedd7",
+    "content-hash": "c7c072dae51c646c28ff8b5b192c9228",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -61,16 +61,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.90.9",
+            "version": "3.90.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "b9d93ad14a504a0833bdafa2e80c9bd90d6cf47a"
+                "reference": "59ffa2a23553dfc4ed5a4f609377bd1881370ad6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b9d93ad14a504a0833bdafa2e80c9bd90d6cf47a",
-                "reference": "b9d93ad14a504a0833bdafa2e80c9bd90d6cf47a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/59ffa2a23553dfc4ed5a4f609377bd1881370ad6",
+                "reference": "59ffa2a23553dfc4ed5a4f609377bd1881370ad6",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-03-25 18:17:43"
+            "time": "2019-03-26 18:29:19"
         },
         {
             "name": "barryvdh/laravel-cors",
@@ -2345,35 +2345,35 @@
         },
         {
             "name": "nuwave/lighthouse",
-            "version": "v3.0-alpha.1",
+            "version": "v3.0-beta.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nuwave/lighthouse.git",
-                "reference": "603fbce9e8ce35586880b6eec38e31cdb4a6652e"
+                "reference": "dff751c820478fafd7fac38f2a4806255fd0d635"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nuwave/lighthouse/zipball/603fbce9e8ce35586880b6eec38e31cdb4a6652e",
-                "reference": "603fbce9e8ce35586880b6eec38e31cdb4a6652e",
+                "url": "https://api.github.com/repos/nuwave/lighthouse/zipball/dff751c820478fafd7fac38f2a4806255fd0d635",
+                "reference": "dff751c820478fafd7fac38f2a4806255fd0d635",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/contracts": "5.5.*|5.6.*|5.7.*",
-                "illuminate/http": "5.5.*|5.6.*|5.7.*",
-                "illuminate/pagination": "5.5.*|5.6.*|5.7.*",
-                "illuminate/routing": "5.5.*|5.6.*|5.7.*",
-                "illuminate/support": "5.5.*|5.6.*|5.7.*",
-                "illuminate/validation": "5.5.*|5.6.*|5.7.*",
+                "illuminate/contracts": "5.5.*|5.6.*|5.7.*|5.8.*",
+                "illuminate/http": "5.5.*|5.6.*|5.7.*|5.8.*",
+                "illuminate/pagination": "5.5.*|5.6.*|5.7.*|5.8.*",
+                "illuminate/routing": "5.5.*|5.6.*|5.7.*|5.8.*",
+                "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*",
+                "illuminate/validation": "5.5.*|5.6.*|5.7.*|5.8.*",
                 "opis/closure": "^3.0",
                 "php": ">= 7.1",
                 "webonyx/graphql-php": "^0.13"
             },
             "require-dev": {
                 "laravel/scout": "^4.0",
-                "mockery/mockery": "dev-master",
-                "orchestra/database": "3.5.*|3.6.*|3.7.*@dev",
-                "orchestra/testbench": "3.5.*|3.6.*|3.7.*",
+                "mockery/mockery": "^1.0",
+                "orchestra/database": "3.5.*|3.6.*|3.7.*|3.8.x-dev",
+                "orchestra/testbench": "3.5.*|3.6.*|3.7.*|3.8.*",
                 "pusher/pusher-php-server": "^3.2"
             },
             "suggest": {
@@ -2383,7 +2383,7 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Nuwave\\Lighthouse\\Providers\\LighthouseServiceProvider"
+                        "Nuwave\\Lighthouse\\LighthouseServiceProvider"
                     ],
                     "aliases": {
                         "graphql": "Nuwave\\Lighthouse\\GraphQL"
@@ -2393,10 +2393,7 @@
             "autoload": {
                 "psr-4": {
                     "Nuwave\\Lighthouse\\": "src/"
-                },
-                "files": [
-                    "src/Support/helpers.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2415,7 +2412,7 @@
                 "laravel",
                 "laravel-graphql"
             ],
-            "time": "2019-01-06 11:55:45"
+            "time": "2019-03-19 19:24:24"
         },
         {
             "name": "opis/closure",
@@ -6863,7 +6860,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "nuwave/lighthouse": 15,
+        "nuwave/lighthouse": 10,
         "tymon/jwt-auth": 5
     },
     "prefer-stable": false,

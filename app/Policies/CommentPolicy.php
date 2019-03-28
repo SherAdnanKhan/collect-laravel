@@ -17,13 +17,6 @@ class CommentPolicy
      */
     public function create(User $user, Project $project)
     {
-        $query = $project->newQuery();
-        return $query->select('projects.id')
-            ->where('projects.id', $project->id)
-            ->where(function($q) use ($user) {
-                return (new CollaboratorPermission($q, $user, ['project'], ['read']))
-                    ->getQuery()
-                    ->orWhere('projects.user_id', $user->getAuthIdentifier());
-            })->exists();
+        return $project->userPolicy($user, ['project'], ['read']);
     }
 }

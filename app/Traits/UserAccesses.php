@@ -2,9 +2,10 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Auth\User;
 
 /**
  * A trait which provides default implementations for the
@@ -35,7 +36,7 @@ trait UserAccesses
      */
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         return $this->wrapUserRelationCheck(
             $user,
@@ -54,7 +55,7 @@ trait UserAccesses
      */
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         return $this->wrapUserRelationCheck(
             $user,
@@ -73,12 +74,23 @@ trait UserAccesses
      */
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         return $this->wrapUserRelationCheck(
             $user,
             (new ProjectAccess($query, $user, [$this->getTypeName()], ['delete']))->getQuery()
         );
+    }
+
+    private function getUser($data = [])
+    {
+        $user = auth()->user();
+
+        if (array_key_exists('user', $data) && array_get($data, 'user') instanceof Authenticatable) {
+            $user = array_get($data, 'user');
+        }
+
+        return $user;
     }
 
     private function wrapUserRelationCheck(User $user, Builder $query): Builder

@@ -18,9 +18,9 @@
         "league/flysystem-aws-s3-v3": "~1.0",
         "naxon/nova-field-sortable": "^1.0",
         "nesbot/carbon": "1.*",
-        "nuwave/lighthouse": "v3.0-alpha.1",
+        "nuwave/lighthouse": "v3.0-beta.3",
         "predis/predis": "^1.1",
-        "pusher/pusher-php-server": "^3.4.1",
+        "pusher/pusher-php-server": "^3.4",
         "symfony/console": "4.*",
         "themsaid/nova-cashier-manager": "^0.2.1",
         "tymon/jwt-auth": "1.0.0-rc.3"

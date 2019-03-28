@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\GraphQL\Directives\RenameInputDirective;
 use App\Models\Collaborator;
+use App\Models\Comment;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\Folder;
@@ -14,6 +15,7 @@ use App\Models\Session;
 use App\Models\Song;
 use App\Models\User;
 use App\Observers\CollaboratorObserver;
+use App\Observers\CommentObserver;
 use App\Observers\CreditObserver;
 use App\Observers\EventLogObserver;
 use App\Observers\FolderObserver;
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
         Credit::observe(CreditObserver::class);
         Collaborator::observe(CollaboratorObserver::class);
         User::observe(UserObserver::class);
+        Comment::observe(CommentObserver::class);
 
         Project::observe(EventLogObserver::class);
         Recording::observe(EventLogObserver::class);

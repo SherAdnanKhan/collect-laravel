@@ -18,6 +18,7 @@ use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\CollaboratorPermission;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -253,5 +254,32 @@ class Project extends Model implements UserAccessible, EventLoggable
     public function getProject()
     {
         return $this;
+    }
+
+    /**
+     * Grab a boolean result of a query which we'll use to check permissions on
+     * resources from this project for the use in policies.
+     *
+     * @param  Authenticatable $user
+     * @param  array           $types
+     * @param  array           $permissions
+     * @param  function        $hook
+     * @return bool
+     */
+    public function userPolicy(Authenticatable $user, $types = ['project'], $permissions = ['read'], $hook = null): bool
+    {
+        $query = $this->newQuery()->select('projects.id')
+            ->where('projects.id', $this->getKey())
+            ->where(function($q) use ($user, $types, $permissions) {
+                return (new CollaboratorPermission($q, $user, $types, $permissions))
+                    ->getQuery()
+                    ->orWhere('projects.user_id', $user->getKey());
+            });
+
+        if (!is_null($hook) && is_callable($hook)) {
+            $query = $hook($query);
+        }
+
+        return $query->exists();
     }
 }
