@@ -209,7 +209,9 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 
 ## Subscriptions
 type Subscription {
-	eventLogCreated: EventLog
+	eventLogCreated(
+		projectId: ID!
+	): EventLog
 	userStorageUpdated: User
 	userSubscriptionUpdated: UserSubscription
 	commentCreated(
