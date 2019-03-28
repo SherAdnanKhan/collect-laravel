@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Jobs\SendUserPasswordResetEmail;
-use App\Jobs\SendVerificationEmail;
-use App\Jobs\SendWelcomeEmail;
+use App\Jobs\Email\SendUserPasswordResetEmail;
+use App\Jobs\Email\SendVerificationEmail;
+use App\Jobs\Email\SendWelcomeEmail;
 use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\EventLog;
