@@ -27,6 +27,8 @@ class GetRecents
 
         if (array_key_exists('resourceType', $args) && in_array(array_get($args, 'resourceType'), EventLog::TYPES)) {
             $query = $query->where('resource_type', array_get($args, 'resourceType'));
+        } else {
+            $query = $query->where('resource_type', '!=', 'collaborator');
         }
 
         return $query->where('event_logs.action', '<>', 'delete')
