@@ -23,9 +23,8 @@ class CommentCreated extends GraphQLSubscription
      */
     public function authorize(Subscriber $subscriber, Request $request): bool
     {
-        return true;
         // Any user can subscribe to this.
-        // return !is_null($subscriber->context->user);
+        return !is_null($subscriber->context->user);
     }
 
     /**
@@ -37,14 +36,36 @@ class CommentCreated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        return true;
-        // $user = $subscriber->context->user;
+        $user = $subscriber->context->user;
 
-        // if ($root instanceof UserAccessible) {
-        //     return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
-        // }
+        // Don't need to get this for the user who made it.
+        if ($user->id == $root->user_id) {
+            return false;
+        }
 
-        // return false;
+        $query = $root->newQuery();
+
+        // If the comment has the scopes
+        if ($root instanceof UserAccessible) {
+            $query = $query->scopeUserViewable(['user' => $user]);
+        }
+
+        // if a project id is provided we'll also filter by that.
+        if (array_key_exists('projectId', $subscriber->args)) {
+            $query = $query->where('project_id', array_get($subscriber->args, 'projectId'));
+        }
+
+        // if resource type is provided we'll filter by that.
+        if (array_key_exists('resourceType', $subscriber->args)) {
+            $query = $query->where('resource_type', array_get($subscriber->args, 'resourceType'));
+
+            // And if there's a type we can also filter down by id.
+            if (array_key_exists('resourceId', $subscriber->args)) {
+                $query = $query->where('resource_id', array_get($subscriber->args, 'resourceId'));
+            }
+        }
+
+        return $query->exists();
     }
 
     /**
