@@ -23,6 +23,9 @@ class EventLog extends Model implements UserAccessible
     use UserAccesses;
     use OrderScopes;
 
+    const UNREAD_CACHE_KEY_FORMAT = 'event-logs.unread-count.%s.%s';
+    const LAST_READ_CACHE_KEY_FORMAT = 'event-logs.last-read-at.%s.%s';
+
     const TYPES = [
         'project',
         'recording',

@@ -371,3 +371,7 @@ input SubscriptionBillingUpdateInput {
 input AcceptCollaboratorInviteInput {
     token: String! @rules(apply: ["required"])
 }
+
+input ResetUnreadActivityInput {
+    project_id: ID!
+}
