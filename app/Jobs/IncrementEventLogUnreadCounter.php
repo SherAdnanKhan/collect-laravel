@@ -69,6 +69,12 @@ class IncrementEventLogUnreadCounter implements ShouldQueue
             if (!Cache::has($lastReadKey)) {
                 Cache::set($lastReadKey, $user->created_at);
             }
+
+            Subscription::broadcast('userUnreadActivities', [
+                'project_id' => $project->id,
+                'user_id'    => $user->id,
+                'count'      => Cache::get($counterKey, 0),
+            ]);
         }
     }
 }

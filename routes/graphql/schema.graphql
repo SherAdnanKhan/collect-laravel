@@ -221,6 +221,7 @@ type Subscription {
 	): Comment
 	collaboratorCreated: Collaborator
 	collaboratorRemoved: Collaborator
+	userUnreadActivities(projectId: ID!): UnreadActivityPayload
 }
 
 #import inputs.graphql
