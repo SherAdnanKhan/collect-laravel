@@ -40,14 +40,18 @@ class IncrementEventLogUnreadCounter implements ShouldQueue
 
         // Get ids of all users who will see this,
         // excluding the id of the user who created this.
-        $users = User::where('id', '<>', $this->eventLog->user_id)
+        $users = User::select('users.id', 'users.created_at')
+            ->where('id', '<>', $this->eventLog->user_id)
             ->whereHas('projects', function($query) use ($project) {
-                return $query->where('id', $project->id);
+                return $query->select('projects.id')->where('id', $project->id);
             })
             ->orWhereHas('collaborators', function($query) use ($project) {
-                return $query->where('project_id', $project->id)
-                    ->whereHas('collaborator_permissions', function($query) {
-                        return $query->where('level', 'read')->where('type', 'project');
+                return $query->select('collaborators.id', 'collaborators.project_id', 'collaborators.user_id')
+                    ->where('project_id', $project->id)
+                    ->whereHas('permissions', function($query) {
+                        return $query->select('level', 'type')
+                            ->where('level', 'read')
+                            ->where('type', 'project');
                     });
             })->get();
 
