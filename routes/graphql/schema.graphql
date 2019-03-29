@@ -16,7 +16,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getEventLogsByProject(
 		projectId: ID! @eq(key: "project_id")
 		ordering: OrderingInput
-	): [EventLog] @all(scopes: ["userViewable", "orderByField"])
+	): [EventLog!]! @paginate(model: "App\\Models\\EventLog", scopes: ["userViewable", "orderByField"], defaultCount: 10)
 
 	# User Favourite Queries
 	getUserFavourites(
