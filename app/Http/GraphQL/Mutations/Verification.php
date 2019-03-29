@@ -22,6 +22,7 @@ class Verification
         $input = array_get($args, 'input');
 
         $user = User::where('verification_token', array_get($input, 'token'))
+            ->where('email', 'like', array_get($input, 'email'))
             ->where('status', 'inactive')
             ->first();
 
