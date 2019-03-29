@@ -60,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
         Recording::observe(EventLoggableObserver::class);
         Session::observe(EventLoggableObserver::class);
         Collaborator::observe(EventLoggableObserver::class);
+        Comment::observe(EventLoggableObserver::class);
     }
 
     /**
