@@ -38,7 +38,7 @@ class CommentCreated extends GraphQLSubscription
         $user = $subscriber->context->user;
 
         if ($root instanceof UserAccessible) {
-            return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
+            return $root->newQuery()->userViewable(['user' => $user])->exists();
         }
 
         return false;

@@ -40,6 +40,6 @@ class SendCollaboratorInviteEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->invite->email)->send(new CollaboratorInvite($this->invite));
+        Mail::to($this->invite->collaborator->email)->send(new CollaboratorInvite($this->invite));
     }
 }
