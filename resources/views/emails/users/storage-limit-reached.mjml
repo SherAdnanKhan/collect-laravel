@@ -1,0 +1,18 @@
+<mjml>
+   <mj-head>
+     <mj-font name="Source Sans Pro" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" />
+   </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+          Hello, {{ $name }}<br />
+          <br />
+          You have reached your allocated storage limit.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

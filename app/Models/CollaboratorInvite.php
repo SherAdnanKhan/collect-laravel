@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Jobs\SendCollaboratorInviteEmail;
+use App\Jobs\Emails\SendCollaboratorInviteEmail;
 use App\Models\Collaborator;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Model;

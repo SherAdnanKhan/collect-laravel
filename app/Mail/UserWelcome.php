@@ -5,7 +5,7 @@ namespace App\Mail;
 use App\Models\User;
 use Illuminate\Mail\Mailable;
 
-class UserVerification extends Mailable
+class UserWelcome extends Mailable
 {
 
     /**
@@ -16,23 +16,14 @@ class UserVerification extends Mailable
     protected $user;
 
     /**
-     * The token
-     *
-     * @var string
-     */
-    protected $token;
-
-    /**
      * Create a new message instance.
      *
      * @param User $user
-     * @param string $token
      * @return void
      */
-    public function __construct(User $user, string $token)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->token = $token;
     }
 
     /**
@@ -42,9 +33,9 @@ class UserVerification extends Mailable
      */
     public function build()
     {
-        $verifyUrl = config('app.frontend_url') . '/verify/' . $this->token;
-
-        return $this->view('emails.users.verification')
-            ->with(['verifyUrl' => $verifyUrl]);
+        return $this->view('emails.users.welcome')
+            ->with([
+                'name' => $this->user->name,
+            ]);
     }
 }

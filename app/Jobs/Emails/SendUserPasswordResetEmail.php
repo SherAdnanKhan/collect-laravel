@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Emails;
 
-use App\Mail\UserVerification;
+use App\Mail\UserPasswordReset;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,13 +11,13 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendVerificationEmail implements ShouldQueue
+class SendUserPasswordResetEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The user we're sending a verification
-     * email to.
+     * The user we're triggering a password
+     * reset email for.
      *
      * @var User
      */
@@ -50,6 +50,6 @@ class SendVerificationEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new UserVerification($this->user, $this->token));
+        Mail::to($this->user)->send(new UserPasswordReset($this->user, $this->token));
     }
 }

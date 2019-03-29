@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Emails;
 
+use App\Mail\SubscriptionUpdated;
 use App\Mail\UserPasswordReset;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,36 +13,32 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendUserPasswordResetEmail implements ShouldQueue
+class SendSubscriptionUpdatedEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The user we're triggering a password
-     * reset email for.
-     *
+     * The user we're welcoming
      * @var User
      */
     protected $user;
 
     /**
-     * The token we're saving.
-     *
-     * @var string
+     * The subscription that is being updated.
+     * @var Subscription
      */
-    protected $token;
+    protected $subscription;
 
     /**
      * Create a new job instance.
      *
      * @param User $user
-     * @param string $token
      * @return void
      */
-    public function __construct(User $user, string $token)
+    public function __construct(User $user, Subscription $subscription)
     {
         $this->user = $user;
-        $this->token = $token;
+        $this->subscription = $subscription;
     }
 
     /**
@@ -50,6 +48,6 @@ class SendUserPasswordResetEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new UserPasswordReset($this->user, $this->token));
+        Mail::to($this->user)->send(new SubscriptionUpdated($this->user, $this->subscription));
     }
 }

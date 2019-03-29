@@ -39,7 +39,7 @@ class CommentCreated extends GraphQLSubscription
         $user = $subscriber->context->user;
 
         // Don't need to get this for the user who made it.
-        if ($user->id == $root->user_id) {
+        if (is_null($user) || $user->id == $root->user_id) {
             return false;
         }
 
@@ -47,7 +47,7 @@ class CommentCreated extends GraphQLSubscription
 
         // If the comment has the scopes
         if ($root instanceof UserAccessible) {
-            $query = $query->scopeUserViewable(['user' => $user]);
+            $query = $query->userViewable(['user' => $user]);
         }
 
         // if a project id is provided we'll also filter by that.

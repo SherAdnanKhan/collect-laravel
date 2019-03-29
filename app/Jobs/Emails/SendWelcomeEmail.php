@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Emails;
 
-use App\Mail\CollaboratorInvite;
-use App\Models\CollaboratorInvite as CollaboratorInviteModel;
+use App\Mail\UserPasswordReset;
+use App\Mail\UserWelcome;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,26 +12,25 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendCollaboratorInviteEmail implements ShouldQueue
+class SendWelcomeEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The invite.
-     *
-     * @var CollaboratorInviteModel
+     * The user we're welcoming
+     * @var User
      */
-    protected $invite;
+    protected $user;
 
     /**
      * Create a new job instance.
      *
-     * @param CollaboratorInviteModel $invite
+     * @param User $user
      * @return void
      */
-    public function __construct(CollaboratorInviteModel $invite)
+    public function __construct(User $user)
     {
-        $this->invite = $invite;
+        $this->user = $user;
     }
 
     /**
@@ -40,6 +40,6 @@ class SendCollaboratorInviteEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->invite->email)->send(new CollaboratorInvite($this->invite));
+        Mail::to($this->user)->send(new UserWelcome($this->user));
     }
 }

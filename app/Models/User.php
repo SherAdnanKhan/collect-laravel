@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Jobs\SendUserPasswordResetEmail;
-use App\Jobs\SendVerificationEmail;
-use App\Jobs\SendWelcomeEmail;
+use App\Jobs\Emails\SendUserPasswordResetEmail;
+use App\Jobs\Emails\SendVerificationEmail;
+use App\Jobs\Emails\SendWelcomeEmail;
 use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\EventLog;
@@ -259,8 +259,14 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function hasStorageSpaceAvailable(): bool
     {
-        $plan = $this->subscriptions()->first();
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+
+        if (!$subscription) {
+            return false;
+        }
+
         $limit = false;
+        $plan = $subscription->stripe_plan;
 
         if (array_key_exists($plan, self::PLAN_STORAGE_LIMITS)) {
             $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);

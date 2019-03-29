@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Emails;
 
+use App\Mail\SubscriptionPaymentSuccessful;
 use App\Mail\UserPasswordReset;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendWelcomeEmail implements ShouldQueue
+class SendSubscriptionPaymentSuccessfulEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -22,14 +24,21 @@ class SendWelcomeEmail implements ShouldQueue
     protected $user;
 
     /**
+     * The subscription that is being updated.
+     * @var Subscription
+     */
+    protected $subscription;
+
+    /**
      * Create a new job instance.
      *
      * @param User $user
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, Subscription $subscription)
     {
         $this->user = $user;
+        $this->subscription = $subscription;
     }
 
     /**
@@ -39,5 +48,6 @@ class SendWelcomeEmail implements ShouldQueue
      */
     public function handle()
     {
+        Mail::to($this->user)->send(new SubscriptionPaymentSuccessful($this->user, $this->subscription));
     }
 }
