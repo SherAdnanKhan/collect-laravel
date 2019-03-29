@@ -60,12 +60,12 @@ class IncrementEventLogUnreadCounter implements ShouldQueue
         foreach ($users as $user) {
             // Increment the counter for the user in context
             // of the project which this event happened.
-            $counterKey = sprintf('event-logs.unread-count.%d.%d', $project->id, $user->id);
+            $counterKey = sprintf(EventLog::UNREAD_CACHE_KEY_FORMAT, $project->id, $user->id);
             Cache::increment($counterKey);
 
             // If the user doesn't have a last read in this context, we'll
             // set it to the timestamp they were created.
-            $lastReadKey = sprintf('event-logs.last-read.%d.%d', $project->id, $user->id);
+            $lastReadKey = sprintf(EventLog::LAST_READ_CACHE_KEY_FORMAT, $project->id, $user->id);
             if (!Cache::has($lastReadKey)) {
                 Cache::set($lastReadKey, $user->created_at);
             }
