@@ -3,7 +3,7 @@
 namespace App\Http\GraphQL\Subscriptions;
 
 use App\Contracts\UserAccessible;
-use App\Models\User;
+use App\Models\Collaborator;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Http\Request;
 use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
@@ -34,25 +34,23 @@ class CollaboratorCreated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        $user = $subscriber->context->user;
-
-        if ($root instanceof UserAccessible) {
-            return $root->newQuery()->scopeUserViewable(['user' => $user])->exists();
+        if (is_null($subscriber->context->user)) {
+            return false;
         }
 
-        return false;
+        return $root->user_id == $subscriber->context->user->id;
     }
 
     /**
      * Resolve the subscription.
      *
-     * @param  \App\Models\User  $root
+     * @param  \App\Models\Collaborator  $root
      * @param  mixed[]  $args
      * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
-     * @return \App\Models\User
+     * @return \App\Models\Collaborator
      */
-    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Subscription
+    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Collaborator
     {
         return $root;
     }
