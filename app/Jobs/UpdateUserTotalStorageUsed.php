@@ -40,11 +40,15 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
         // Grab projects which have files that have been updated or deleted
         // since we last ran this job. And eager load all the users, so we can
         // grab them all in a single query.
-        $projects = Project::whereHas('files', function($query) use ($last_ran) {
-            return $query->select('files.project_id', 'files.updated_at', 'files.deleted_at')
-                ->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
-                ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
-        })->select('projects.id', 'projects.user_id')->groupBy('projects.id')->with('user:id,first_name,last_name')->get();
+        $projects = Project::select('projects.id', 'projects.user_id')
+            ->whereHas('files', function($query) use ($last_ran) {
+                return $query->select('files.project_id', 'files.updated_at', 'files.deleted_at')
+                    ->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
+                    ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
+            })
+            ->groupBy('projects.id')
+            ->with('user:id,first_name,last_name')
+            ->get();
 
         // Array to keep track of which users nee to have
         // the storage recalculated.
