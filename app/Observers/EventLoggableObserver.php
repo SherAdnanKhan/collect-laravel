@@ -8,9 +8,9 @@ use Nuwave\Lighthouse\Execution\Utils\Subscription;
 
 /**
  * This observer is responsible for creating event logs "activities"
- * when actions happen on resources.
+ * when actions happen on resources which are EventLoggable
  */
-class EventLogObserver
+class EventLoggableObserver
 {
     /**
      * Handle the created event for an observed model.

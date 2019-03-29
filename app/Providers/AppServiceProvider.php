@@ -17,7 +17,7 @@ use App\Models\User;
 use App\Observers\CollaboratorObserver;
 use App\Observers\CommentObserver;
 use App\Observers\CreditObserver;
-use App\Observers\EventLogObserver;
+use App\Observers\EventLoggableObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
@@ -56,10 +56,10 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Comment::observe(CommentObserver::class);
 
-        Project::observe(EventLogObserver::class);
-        Recording::observe(EventLogObserver::class);
-        Session::observe(EventLogObserver::class);
-        Collaborator::observe(EventLogObserver::class);
+        Project::observe(EventLoggableObserver::class);
+        Recording::observe(EventLoggableObserver::class);
+        Session::observe(EventLoggableObserver::class);
+        Collaborator::observe(EventLoggableObserver::class);
     }
 
     /**
