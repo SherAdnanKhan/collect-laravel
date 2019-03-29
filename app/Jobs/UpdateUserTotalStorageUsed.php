@@ -47,7 +47,7 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
                     ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
             })
             ->groupBy('projects.id')
-            ->with('user:id,first_name,last_name')
+            ->with('user:id,first_name,last_name, user.subscriptions:stripe_plan')
             ->get();
 
         // Array to keep track of which users nee to have
@@ -82,8 +82,11 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
                 // Broadcast a GraphQL subscription for clients.
                 Subscription::broadcast('userStorageUpdated', $user);
 
-                // If the user no longer has enough storage left, then we need to email them.
-                SendUserStorageLimitReachedEmail::dispatch($user);
+
+                if (!$user->hasStorageSpaceAvailable()) {
+                    // If the user no longer has enough storage left, then we need to email them.
+                    SendUserStorageLimitReachedEmail::dispatch($user);
+                }
             }
         }
     }
