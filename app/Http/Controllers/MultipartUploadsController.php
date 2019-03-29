@@ -12,13 +12,16 @@ class MultipartUploadsController extends Controller
     public function create(Request $request)
     {
         $meta = $request->get('meta');
-        $project = Project::where('id', $meta['projectId'])->userViewable()->first();
+        $project = Project::where('id', $meta['projectId'])
+            ->with('user', 'user.subscriptions')
+            ->userViewable()
+            ->first();
+
         if (!$project) {
             abort(403, 'Unauthorized action.');
         }
 
-        $project_owner = $project->user;
-        if ($project_owner->hasStorageSpaceAvailable() === false) {
+        if ($project->user->hasStorageSpaceAvailable() === false) {
             return response()->json([
                 'upgradeRequired' => true
             ]);
@@ -34,7 +37,7 @@ class MultipartUploadsController extends Controller
             }
 
             // Build the path to this folder
-            $folder_path = array_map(function($item) {
+            $folder_path = array_map(function ($item) {
                 return $item['name'];
             }, $folder->path);
 
