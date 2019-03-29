@@ -21,5 +21,7 @@ class UserObserver
         $user->newSubscription(User::SUBSCRIPTION_NAME, User::DEFAULT_SUBSCRIPTION_PLAN)->create(null, [
             'email' => $user->email,
         ]);
+
+        $user->sendWelcomeNotification();
     }
 }
