@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 class UserWelcome extends Mailable
 {
-    use Queueable, SerializesModels;
+    // use Queueable, SerializesModels;
 
     /**
      * The user instance.
@@ -37,6 +37,9 @@ class UserWelcome extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.users.verification');
+        return $this->view('emails.users.welcome')
+            ->with([
+                'name' => $this->user->name,
+            ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Emails;
 
 use App\Mail\SubscriptionPaymentFailed;
 use App\Mail\UserPasswordReset;
