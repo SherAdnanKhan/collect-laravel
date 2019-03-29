@@ -6,6 +6,7 @@ use App\Http\GraphQL\Directives\RenameInputDirective;
 use App\Models\Collaborator;
 use App\Models\Comment;
 use App\Models\Credit;
+use App\Models\EventLog;
 use App\Models\File;
 use App\Models\Folder;
 use App\Models\Party;
@@ -17,6 +18,7 @@ use App\Models\User;
 use App\Observers\CollaboratorObserver;
 use App\Observers\CommentObserver;
 use App\Observers\CreditObserver;
+use App\Observers\EventLogObserver;
 use App\Observers\EventLoggableObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
@@ -61,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
         Session::observe(EventLoggableObserver::class);
         Collaborator::observe(EventLoggableObserver::class);
         Comment::observe(EventLoggableObserver::class);
+
+        EventLog::observe(EventLogObserver::class);
     }
 
     /**
