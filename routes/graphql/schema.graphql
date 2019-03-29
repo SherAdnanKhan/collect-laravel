@@ -205,6 +205,9 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 	# Subscription Mutations
 	doSubscriptionUpdate(input: SubscriptionUpdateInput!): UserSubscription @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\Update@resolve")
 	doSubscriptionBillingUpdate(input: SubscriptionBillingUpdateInput!): User @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\UpdateBilling@resolve")
+
+	# Mutation to mark unread activity as read for a project.
+	doResetUnreadActivity(input: ResetUnreadActivityInput!): UnreadActivityPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\ResetUnreadActivity@resolve")
 }
 
 ## Subscriptions

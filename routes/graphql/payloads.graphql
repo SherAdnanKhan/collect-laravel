@@ -42,4 +42,5 @@ type UnreadActivityPayload {
   count: Int!
   projectId: ID! @rename(attribute: "project_id")
   userId: ID! @rename(attribute: "user_id")
+  lastRead: String! @rename(attribute: "last_read")
 }
