@@ -33,7 +33,7 @@ class CollaboratorInvite extends Mailable
      */
     public function build()
     {
-        $inviteUrl = config('app.frontend_url') . '/accept-invite/' . $this->invite->token;
+        $inviteUrl = config('app.frontend_url') . '/invite/' . $this->invite->token;
 
         $name = $this->invite->collaborator->name;
         $email = $this->invite->collaborator->email;
