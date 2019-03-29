@@ -20,7 +20,7 @@ class EventLogObserver
 
         // Get ids of all users who will see this,
         // excluding the id of the user who created this.
-        $users = User::where('user_id', '<>', $eventLog->user_id)
+        $users = User::where('id', '<>', $eventLog->user_id)
             ->whereHas('projects', function($query) use ($project) {
                 return $query->where('id', $project->id);
             })
