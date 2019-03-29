@@ -129,6 +129,7 @@ type Mutation {
 
     # Auth mutations
 	doLogin(input: LoginInput): LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+	doRefresh: LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@refresh")
 	doLogout: LogoutPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Logout@resolve")
 
  	# Forgot password flow.
