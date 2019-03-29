@@ -40,6 +40,8 @@ class Verification
         $user->status = 'active';
         $user->save();
 
+        $user->sendWelcomeNotification();
+
         return [
             'access_token' => $token,
             'token_type'   => 'bearer',
