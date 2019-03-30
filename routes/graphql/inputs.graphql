@@ -375,3 +375,8 @@ input AcceptCollaboratorInviteInput {
 input ResetUnreadActivityInput {
     project_id: ID!
 }
+
+input TwoFactorInput {
+    token: String!
+    code: String!
+}
