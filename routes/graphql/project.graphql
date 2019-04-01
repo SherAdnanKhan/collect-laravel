@@ -63,7 +63,7 @@ type File implements Favoured & Commentable & EventLoggable {
 	project: Project! @belongsTo
 	folder: Folder @belongsTo
 	folderId: ID @rename(attribute: "folder_id")
-	type: String!
+	type: String
 	name: String!
 	path: String!
 	transcoded_path: String
@@ -129,6 +129,7 @@ type Session implements Favoured & Creditable & Commentable & EventLoggable {
 	project: Project! @belongsTo
 	projectId: ID!  @rename(attribute: "project_id")
 	type: SessionType @belongsTo
+	sessionType: SessionType @belongsTo
 	venue: Venue @belongsTo
 	name: String!
 	description: String

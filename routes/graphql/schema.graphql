@@ -119,7 +119,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 	getVenues: [Venue] @all(scopes: ["userViewable"])
 
 	# Get unread activity count
-	getUnreadActivity(projectId: ID!): UnreadActivityPayload @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
+	getUnreadActivity(projectId: ID!): UnreadActivityPayload! @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
 }
 
 type Mutation {

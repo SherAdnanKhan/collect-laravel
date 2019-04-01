@@ -42,4 +42,9 @@ Route::middleware('auth:token')->group(function() {
         'lamdba/update-file-info',
         '\App\Http\Controllers\Webhooks\LambdaController@updateFileInfo'
     );
+
+    Route::post(
+        'zipgenerator/complete',
+        '\App\Http\Controllers\Webhooks\ZipGeneratorController@complete'
+    );
 });
