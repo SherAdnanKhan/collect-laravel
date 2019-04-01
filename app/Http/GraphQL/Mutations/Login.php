@@ -106,13 +106,14 @@ class Login
     public function twoFactor($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $token = array_get($args, 'input.token');
+        $cacheKey = '2fa.token.' . $token;
         $code = array_get($args, 'input.code');
 
-        if (!Cache::has('2fa.token.' . $token)) {
+        if (!Cache::has($cacheKey)) {
             throw new AuthenticationException('2FA token provided is invalid');
         }
 
-        $payload = Cache::get('2fa.token.' . $token);
+        $payload = Cache::get($cacheKey);
         $user = User::find((int) $payload['user']);
 
         if (!$user || !$user->requiresTwoFactor()) {
@@ -122,6 +123,8 @@ class Login
         if ($code != $payload['code']) {
             throw new AuthenticationException('2FA code is invalid');
         }
+
+        Cache::delete($cacheKey);
 
         $token = auth()->fromUser($user);
 
