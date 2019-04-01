@@ -27,9 +27,9 @@ class Update
         $input = array_get($args, 'input');
         $user = auth()->user();
 
-        if (array_key_exists('password', $input)) {
+        if (array_key_exists('password', $input) || array_key_exists('phone', $input)) {
             if (!array_key_exists('current_password', $input)) {
-                throw new AuthorizationException('Current password must be provided if updating the users password');
+                throw new AuthorizationException('Current password must be provided if updating the users password or phone');
             }
 
             $authed = auth()->attempt([
@@ -38,13 +38,13 @@ class Update
             ]);
 
             if (!$authed) {
-                throw new AuthenticationException('User is not authenticated when attempting to update their password');
+                throw new AuthenticationException('User is not authenticated when attempting to update their password or phone');
             }
         }
 
         try {
             // if the user sets a phone
-            if (array_key_exists('phone')) {
+            if (array_key_exists('phone', $input)) {
                 // Make sure it's formatted
                 $phone = PhoneNumber::make(array_get($input, 'phone'))->formatE164();
                 $input['phone'] = $phone;
