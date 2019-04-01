@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Models\Collaborator;
 use App\Models\Comment;
+use App\Models\Folder;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\Session;
 use App\Policies\CollaboratorPolicy;
 use App\Policies\CommentPolicy;
+use App\Policies\FolderPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\RecordingPolicy;
 use App\Policies\SessionPolicy;
@@ -28,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Comment::class      => CommentPolicy::class,
         Session::class      => SessionPolicy::class,
         Collaborator::class => CollaboratorPolicy::class,
+        Folder::class       => FolderPolicy::class,
     ];
 
     /**
