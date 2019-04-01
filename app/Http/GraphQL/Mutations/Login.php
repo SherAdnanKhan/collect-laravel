@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations;
 
+use App\Jobs\SMS\SendTwoFactorSMS;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Cache;
@@ -34,33 +35,27 @@ class Login
             // We'll create a new token which we'll use to auth the
             // request to verify the 2fa code.
             $token = str_random(32);
-            $expiry = 5*60;
+            $expiry = 5 * 60;
+
+            $code = User::generateTwoFactorCode();
+            $payload = [
+                'user'  => $user->getKey(),
+                'code'  => $code,
+                'phone' => $user->phone,
+            ];
 
             // We'll cache it.
-            Cache::put('2fa.token.' . $token, $user->id, $expiry);
+            Cache::put('2fa.token.' . $token, $payload, $expiry);
 
-            $client = resolve('Nexmo\Client');
-
-            if (!is_null($user->two_factor_verification_id)) {
-                $client->verify()->cancel($user->two_factor_verification_id);
-            }
-
-            $verification = $client->verify()->start([
-                'number'      => $user->phone,
-                'brand'       => config('services.nexmo.from'),
-                'code_length' => config('services.nexmo.code_length', '6'),
-            ]);
-
-            $user->two_factor_verification_id = $verification->getRequestId();
-            Log::debug($user->two_factor_verification_id);
-            $user->save();
+            // Trigger the job to send the SMS.
+            SendTwoFactorSMS::dispatch($user->phone, $code);
 
             // And we'll send back a different payload so
             // the client knows we're about to do 2fa.
             return [
                 'access_token' => $token,
                 'token_type'   => 'token',
-                'expires_in'   => 5 * 60,
+                'expires_in'   => $expiry,
                 'two_factor'   => true,
             ];
         }
@@ -117,21 +112,15 @@ class Login
             throw new AuthenticationException('2FA token provided is invalid');
         }
 
-        $userId = Cache::get('2fa.token.' . $token);
-        $user = User::find($userId);
+        $payload = Cache::get('2fa.token.' . $token);
+        $user = User::find((int) $payload['user']);
 
         if (!$user || !$user->requiresTwoFactor()) {
             throw new AuthenticationException('2FA token provided is invalid');
         }
 
-        $client = resolve('Nexmo\Client');
-        $verification = new \Nexmo\Verify\Verification($user->two_factor_verification_id);
-
-        try {
-            $client->verify()->check($verification, $code);
-            $client->verify()->cancel($user->two_factor_verification_id);
-        } catch (\Exception $e) {
-            throw new AuthenticationException('2FA Authentication failed.');
+        if ($code != $payload['code']) {
+            throw new AuthenticationException('2FA code is invalid');
         }
 
         $token = auth()->fromUser($user);

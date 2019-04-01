@@ -63,7 +63,6 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     protected $fillable = [
         'first_name', 'last_name', 'email',
         'password', 'phone', 'two_factor_enabled',
-        'two_factor_verification_id',
     ];
 
     /**
@@ -285,8 +284,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function requiresTwoFactor(): bool
     {
-        // return (bool) $this->two_factor_enabled && !is_null($this->phone);
-        return true;
+        return (bool) $this->two_factor_enabled && !is_null($this->phone);
     }
 
     /**
@@ -318,5 +316,25 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     public function sendWelcomeNotification()
     {
         SendWelcomeEmail::dispatch($this);
+    }
+
+    /**
+     * Generate a string of numbers in a length
+     * specified by a config setting.
+     *
+     * @return string
+     */
+    public static function generateTwoFactorCode()
+    {
+        $length = (int) config('services.nexmo.code_length', 6);
+
+        // Generated this way to always include the range from 0-9
+        // on each digit.
+        $digits = [];
+        for ($i = 0; $i < $length; $i++) {
+            $digits[] = random_int(0, 9);
+        }
+
+        return (string) join('', $digits);
     }
 }
