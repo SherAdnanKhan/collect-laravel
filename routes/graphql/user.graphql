@@ -5,7 +5,9 @@
 	lastName: String! @rename(attribute: "last_name")
 	name: String!
 	email: String!
+	phone: String!
 	status: String!
+	twoFactorEnabled: Boolean @rename(attribute: "two_factor_enabled")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	stripeId: String @rename(attribute: "stripe_id")
@@ -13,7 +15,6 @@
 	cardLastFour: String @rename(attribute: "card_last_four")
 	trialEndsAt: String @rename(attribute: "trial_ends_at")
 	profile: UserProfile @hasOne
-	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
 	favourites: [UserFavourite] @hasMany
 	subscriptions: [UserSubscription] @hasMany
 	projects: [Project] @hasMany(type: "paginator")
@@ -33,13 +34,6 @@ type UserProfile {
 	jobRole: String @rename(attribute: "job_role")
 	genre: String
 	workload: Int
-}
-
-type UserTwoFactorToken {
-	id: ID! @globalId
-	user: User! @belongsTo
-	token: String!
-	expiresAt: String! @rename(attribute: "expires_at")
 }
 
 type UserFavourite @model(class: "App\\Models\\UserFavourite") {

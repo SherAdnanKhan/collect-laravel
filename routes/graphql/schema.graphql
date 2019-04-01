@@ -24,9 +24,6 @@ extend type Query @group(middleware: ["auth:api"]) {
 		ordering: OrderingInput
 	): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
-	# User Token Queries
-	getUserTwoFactorTokens: [UserTwoFactorToken] @all(scopes: ["userViewable"])
-
 	# User Subscription Queries
 	getSubscriptions: [UserSubscription] @all(scopes: ["userViewable"])
 

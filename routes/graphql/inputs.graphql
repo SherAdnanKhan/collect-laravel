@@ -18,6 +18,7 @@ input UpdateUserInput {
     first_name: String! @rules(apply: ["required", "min:2", "max:255"])
     last_name: String! @rules(apply: ["required", "min:2", "max:255"])
     email: String! @rules(apply: ["required", "email"])
+    phone: String @rules(apply: ["phone"])
     current_password: String @rules(apply: ["required_with:password"])
     password: String @rules(apply: ["confirmed", "min:6"])
     password_confirmation: String @rules(apply: ["required_with:password", "min:6"])

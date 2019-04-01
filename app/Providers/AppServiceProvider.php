@@ -82,5 +82,9 @@ class AppServiceProvider extends ServiceProvider
                 )
             );
         });
+
+        // $this->app->bind('App\Util\TwoFactorAuthentication', function() {
+        //     return new \App\Util\TwoFactorAuthentication()
+        // });
     }
 }

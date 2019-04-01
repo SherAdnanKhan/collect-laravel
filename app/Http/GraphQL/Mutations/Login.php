@@ -34,28 +34,15 @@ class Login
         if ($user->requiresTwoFactor()) {
             // We'll create a new token which we'll use to auth the
             // request to verify the 2fa code.
-            $token = str_random(32);
-            $expiry = 5 * 60;
-
-            $code = User::generateTwoFactorCode();
-            $payload = [
-                'user'  => $user->getKey(),
-                'code'  => $code,
-                'phone' => $user->phone,
-            ];
-
-            // We'll cache it.
-            Cache::put('2fa.token.' . $token, $payload, $expiry);
-
-            // Trigger the job to send the SMS.
-            SendTwoFactorSMS::dispatch($user->phone, $code);
+            $twoFactor = resolve('App\Util\TwoFactorAuthentication');
+            $token = $twoFactor->setPhone($user->phone)->setUser($user)->send();
 
             // And we'll send back a different payload so
             // the client knows we're about to do 2fa.
             return [
                 'access_token' => $token,
                 'token_type'   => 'token',
-                'expires_in'   => $expiry,
+                'expires_in'   => $twoFactor->getExpiry(),
                 'two_factor'   => true,
             ];
         }
@@ -106,25 +93,25 @@ class Login
     public function twoFactor($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $token = array_get($args, 'input.token');
-        $cacheKey = '2fa.token.' . $token;
         $code = array_get($args, 'input.code');
 
-        if (!Cache::has($cacheKey)) {
-            throw new AuthenticationException('2FA token provided is invalid');
+        $twoFactor = resolve('App\Util\TwoFactorAuthentication');
+        if (!$twoFactor->validate($token, $code)) {
+            throw new AuthenticationException;
         }
 
-        $payload = Cache::get($cacheKey);
-        $user = User::find((int) $payload['user']);
+        $payload = $twoFactor->getPayload($token);
+        $user = User::find(array_get($payload, 'user', false));
 
-        if (!$user || !$user->requiresTwoFactor()) {
-            throw new AuthenticationException('2FA token provided is invalid');
+        // Update the users phone on valid 2FA to be the phone we've
+        // authenticated via SMS
+        $phone = array_get($payload, 'phone');
+        if (is_null($user->phone) || $phone != $user->phone) {
+            $user->phone = $phone;
+            $user->save();
         }
 
-        if ($code != $payload['code']) {
-            throw new AuthenticationException('2FA code is invalid');
-        }
-
-        Cache::delete($cacheKey);
+        $twoFactor->finish($token);
 
         $token = auth()->fromUser($user);
 
@@ -151,19 +138,9 @@ class Login
     public function twoFactorResend($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $token = array_get($args, 'input.token');
-        $cacheKey = '2fa.token.' . $token;
 
-        if (!Cache::has($cacheKey)) {
-            throw new AuthenticationException('2FA token provided is invalid');
-        }
-
-        $payload = Cache::get($cacheKey);
-
-        // Trigger the job to send the SMS.
-        SendTwoFactorSMS::dispatch($payload['phone'], $payload['code']);
-
-        // Re-add the paylaod to the cache so that it increases the expiry
-        Cache::put($cacheKey, $payload, 5 * 60);
+        $twoFactor = resolve('App\Util\TwoFactorAuthentication');
+        $twoFactor->fromToken($token)->send();
 
         return [
             'resent' => true,
