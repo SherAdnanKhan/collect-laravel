@@ -139,4 +139,34 @@ class Login
             'two_factor'   => false,
         ];
     }
+
+    /**
+     * @param $rootValue
+     * @param array $args
+     * @param \Nuwave\Lighthouse\Support\Contracts\GraphQLContext|null $context
+     * @param \GraphQL\Type\Definition\ResolveInfo $resolveInfo
+     * @return array
+     * @throws \Exception
+     */
+    public function twoFactorResend($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
+    {
+        $token = array_get($args, 'input.token');
+        $cacheKey = '2fa.token.' . $token;
+
+        if (!Cache::has($cacheKey)) {
+            throw new AuthenticationException('2FA token provided is invalid');
+        }
+
+        $payload = Cache::get($cacheKey);
+
+        // Trigger the job to send the SMS.
+        SendTwoFactorSMS::dispatch($payload['phone'], $payload['code']);
+
+        // Re-add the paylaod to the cache so that it increases the expiry
+        Cache::put($cacheKey, $payload, 5 * 60);
+
+        return [
+            'resent' => true,
+        ];
+    }
 }

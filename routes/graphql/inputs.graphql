@@ -380,3 +380,7 @@ input TwoFactorInput {
     token: String!
     code: String!
 }
+
+input TwoFactorResendInput {
+    token: String!
+}

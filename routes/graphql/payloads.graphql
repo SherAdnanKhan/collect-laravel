@@ -44,3 +44,7 @@ type UnreadActivityPayload {
   userId: ID! @rename(attribute: "user_id")
   lastRead: String! @rename(attribute: "last_read")
 }
+
+type TwoFactorResendPayload {
+  resent: Boolean!
+}
