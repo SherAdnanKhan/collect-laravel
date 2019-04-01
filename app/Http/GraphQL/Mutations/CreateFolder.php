@@ -31,12 +31,12 @@ class CreateFolder
     {
         $project = Project::where('id', $args['input']['projectId'])->userViewable()->first();
         if (!$project) {
-            throw new AuthorizationException;
+            throw new AuthorizationException('Unable to find project to associate session to');
         }
 
         $user = auth()->user();
         if (!$user->can('create', [Folder::class, $project])) {
-            throw new AuthorizationException;
+            throw new AuthorizationException('User does not have permission to create a folder on this project');
         }
 
         $parent_folder = false;
@@ -66,9 +66,6 @@ class CreateFolder
             'name' => $name,
             'depth' => ($parent_folder ? $parent_folder->depth + 1 : 0)
         ]);
-
-        // var_dump($folder->toArray());
-        // die();
 
         return $folder->toArray();
     }
