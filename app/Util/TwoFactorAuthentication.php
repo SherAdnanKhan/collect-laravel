@@ -14,7 +14,7 @@ use Illuminate\Cache\Repository as CacheRepository;
 class TwoFactorAuthentication
 {
     const CACHE_KEY_PATTERN = '2fa.token.%s';
-    const DEFAULT_EXPIRY = 300;
+    const DEFAULT_EXPIRY = 5;
 
     /**
      * The cache provider we'll use to interact
@@ -61,7 +61,7 @@ class TwoFactorAuthentication
     }
 
     /**
-     * Set the expiry time in seconds.
+     * Set the expiry time in minutes.
      *
      * @param int $expiry
      * @return TwoFactorAuthentication
