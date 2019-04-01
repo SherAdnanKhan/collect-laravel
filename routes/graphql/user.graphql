@@ -12,6 +12,7 @@
 	cardBrand: String @rename(attribute: "card_brand")
 	cardLastFour: String @rename(attribute: "card_last_four")
 	trialEndsAt: String @rename(attribute: "trial_ends_at")
+	totalStorageUsed: Int! @rename(attribute: "total_storage_used")
 	profile: UserProfile @hasOne
 	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
 	favourites: [UserFavourite] @hasMany

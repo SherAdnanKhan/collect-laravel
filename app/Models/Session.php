@@ -74,6 +74,15 @@ class Session extends Model implements UserAccessible, EventLoggable
     }
 
     /**
+     * The type of the session
+     * @return BelongsTo
+     */
+    public function sessionType(): BelongsTo
+    {
+        return $this->belongsTo(SessionType::class, 'session_type_id');
+    }
+
+    /**
      * Get the recordings associated to this session.
      *
      * @return BelongsToMany
