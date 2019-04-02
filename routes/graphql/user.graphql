@@ -129,7 +129,7 @@ type Song implements Favoured & Creditable {
 	name: String! @rename(attribute: "title")
 	subtitle: String
 	iswc: String
-	titleAlt: String! @rename(attribute: "title_alt")
+	titleAlt: String @rename(attribute: "title_alt")
 	subtitleAlt: String @rename(attribute: "subtitle_alt")
 	createdOn: String @rename(attribute: "created_on")
 	description: String
