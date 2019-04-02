@@ -26,6 +26,13 @@ Route::prefix('multipart-uploads')->middleware('auth:api')->group(function () {
 
 Route::post('project-thumbnail-upload', '\App\Http\Controllers\ProjectThumbnailUpload@handle')->middleware('auth:api');
 
+// The RIN import/export routes.
+// Route::prefix('rin')->middleware('auth:api')->group(function () {
+Route::prefix('rin')->group(function () {
+    Route::any('/import', '\App\Http\Controllers\RINController@import');
+    Route::any('/export', '\App\Http\Controllers\RINController@export');
+});
+
 // Any routes defined in this group adhere to basic token authentication
 // for the api routing, using the 'token' guard.
 Route::middleware('auth:token')->group(function() {
