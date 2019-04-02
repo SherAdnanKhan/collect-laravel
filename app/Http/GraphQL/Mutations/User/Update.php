@@ -82,14 +82,13 @@ class Update
 
         // If we need two factor verification, pass the token back here.
         if ($twoFactorSent && !is_null($twoFactorToken)) {
-            return array_merge($user->toArray(), [
-                'two_factor' => [
-                    'access_token' => $twoFactorToken,
-                    'expires_in'   => $twoFactorExpiry,
-                    'token_type'   => '2fa',
-                    'two_factor'   => true,
-                ],
-            ]);
+            $user->two_factor = [
+                'access_token' => $twoFactorToken,
+                'expires_in'   => $twoFactorExpiry,
+                'token_type'   => '2fa',
+                'two_factor'   => true,
+            ];
+            return $user;
         }
 
         return $user;
