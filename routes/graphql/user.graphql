@@ -5,7 +5,7 @@
 	lastName: String! @rename(attribute: "last_name")
 	name: String!
 	email: String!
-	phone: String!
+	phone: String
 	status: String!
 	twoFactorEnabled: Boolean @rename(attribute: "two_factor_enabled")
 	createdAt: String! @rename(attribute: "created_at")

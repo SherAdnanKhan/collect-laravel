@@ -60,7 +60,10 @@ class Update
                 if ($userPhoneChanged || $twoFactorChanged)  {
                     $twoFactor = resolve('App\Util\TwoFactorAuthentication');
                     $twoFactorToken = $twoFactor->setMeta([
-                        'user_update' => true,
+                        'user_update' => [
+                            'phone'              => $phone,
+                            'two_factor_enabled' => array_get($input, 'two_factor_enabled', 0),
+                        ],
                     ])->setPhone($phone)->setUser($user)->send();
 
                     $twoFactorExpiry = $twoFactor->getExpiry();

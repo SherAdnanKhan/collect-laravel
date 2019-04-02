@@ -34,21 +34,19 @@ class TwoFactor
         $payload = $twoFactor->getPayload($token);
         $user = User::find(array_get($payload, 'user', false));
 
-        $meta = array_get($payload, 'meta', []);
-
         // Is this from a user update?
-        $userUpdate = array_get($payload, 'update_user', false);
+        $userUpdate = array_get($payload, 'meta.user_update', false);
 
         // If we've come from the user update.
         if ($userUpdate) {
-            // Update the users phone on valid 2FA to be the phone we've
-            // authenticated via SMS
-            $phone = array_get($payload, 'phone');
+            // Update the users details using the user update info.
+
+            $phone = array_get($userUpdate, 'phone', null);
             if (is_null($user->phone) || $phone != $user->phone) {
                 $user->phone = $phone;
             }
 
-            $user->two_factor_enabled = true;
+            $user->two_factor_enabled = (bool) array_get($userUpdate, 'two_factor_enabled', false);
             $user->save();
         }
 
