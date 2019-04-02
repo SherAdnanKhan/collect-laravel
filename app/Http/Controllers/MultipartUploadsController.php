@@ -57,6 +57,10 @@ class MultipartUploadsController extends Controller
 
         // Build the directory structure
         $data = $request->get('data');
+        if (!isset($data['fullPath'])) {
+            $data['fullPath'] = $meta['name'];
+        }
+
         $pathinfo = pathinfo($data['fullPath']);
         foreach (explode('/', $pathinfo['dirname']) as $name) {
             if (empty($name)) {
