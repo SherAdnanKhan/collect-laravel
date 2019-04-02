@@ -18,7 +18,9 @@ input UpdateUserInput {
     first_name: String! @rules(apply: ["required", "min:2", "max:255"])
     last_name: String! @rules(apply: ["required", "min:2", "max:255"])
     email: String! @rules(apply: ["required", "email"])
-    current_password: String @rules(apply: ["required_with:password"])
+    phone: String @rules(apply: ["phone:LENIENT"])
+    two_factor_enabled: Boolean
+    current_password: String @rules(apply: ["required_with:password,phone"])
     password: String @rules(apply: ["confirmed", "min:6"])
     password_confirmation: String @rules(apply: ["required_with:password", "min:6"])
 }
@@ -374,4 +376,13 @@ input AcceptCollaboratorInviteInput {
 
 input ResetUnreadActivityInput {
     project_id: ID!
+}
+
+input TwoFactorInput {
+    token: String!
+    code: String!
+}
+
+input TwoFactorResendInput {
+    token: String!
 }

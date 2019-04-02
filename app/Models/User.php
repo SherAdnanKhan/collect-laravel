@@ -61,7 +61,8 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'first_name', 'last_name', 'email',
+        'password', 'phone', 'two_factor_enabled',
     ];
 
     /**
@@ -129,16 +130,6 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     public function profile(): HasOne
     {
         return $this->hasOne(UserProfile::class);
-    }
-
-    /**
-     * The two factor tokens for the user.
-     *
-     * @return HasMany
-     */
-    public function tokens(): HasMany
-    {
-        return $this->hasMany(UserTwoFactorToken::class);
     }
 
     /**
@@ -284,6 +275,16 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     public function hasCollaboratorAccess(): bool
     {
         return $this->subscribedToPlan(['education', 'pro'], self::SUBSCRIPTION_NAME);
+    }
+
+    /**
+     * Does the user require 2 factor authentication?
+     *
+     * @return bool
+     */
+    public function requiresTwoFactor(): bool
+    {
+        return (bool) $this->two_factor_enabled && !is_null($this->phone);
     }
 
     /**

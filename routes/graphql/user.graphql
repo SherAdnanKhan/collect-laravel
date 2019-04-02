@@ -5,7 +5,9 @@
 	lastName: String! @rename(attribute: "last_name")
 	name: String!
 	email: String!
+	phone: String
 	status: String!
+	twoFactorEnabled: Boolean @rename(attribute: "two_factor_enabled")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	stripeId: String @rename(attribute: "stripe_id")
@@ -14,7 +16,6 @@
 	trialEndsAt: String @rename(attribute: "trial_ends_at")
 	totalStorageUsed: Int! @rename(attribute: "total_storage_used")
 	profile: UserProfile @hasOne
-	tokens: [UserTwoFactorToken] @hasMany(type: "paginator")
 	favourites: [UserFavourite] @hasMany
 	subscriptions: [UserSubscription] @hasMany
 	projects: [Project] @hasMany(type: "paginator")
@@ -23,6 +24,9 @@
 	songs: [Song] @hasMany(type: "paginator")
 	comments: [Comment] @hasMany(type: "paginator")
 	collaborators: [Collaborator] @hasMany
+
+	# Optional field, returned when user is updating and needs 2fa verification.
+	twoFactor: AuthTokenPayload @rename(attribute: "two_factor")
 }
 
 type UserProfile {
@@ -34,13 +38,6 @@ type UserProfile {
 	jobRole: String @rename(attribute: "job_role")
 	genre: String
 	workload: Int
-}
-
-type UserTwoFactorToken {
-	id: ID! @globalId
-	user: User! @belongsTo
-	token: String!
-	expiresAt: String! @rename(attribute: "expires_at")
 }
 
 type UserFavourite @model(class: "App\\Models\\UserFavourite") {

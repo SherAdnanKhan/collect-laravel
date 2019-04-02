@@ -24,9 +24,6 @@ extend type Query @group(middleware: ["auth:api"]) {
 		ordering: OrderingInput
 	): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
-	# User Token Queries
-	getUserTwoFactorTokens: [UserTwoFactorToken] @all(scopes: ["userViewable"])
-
 	# User Subscription Queries
 	getSubscriptions: [UserSubscription] @all(scopes: ["userViewable"])
 
@@ -128,11 +125,13 @@ extend type Query @group(middleware: ["auth:api"]) {
 type Mutation {
 	# The user registration mutation
     doRegister(input: RegisterInput!): RegisterPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Register@resolve")
-    doVerification(input: VerificationInput!): LoginPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\Verification@resolve")
+    doVerification(input: VerificationInput!): AuthTokenPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\Verification@resolve")
 
     # Auth mutations
-	doLogin(input: LoginInput): LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
-	doRefresh: LoginPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@refresh")
+	doLogin(input: LoginInput): AuthTokenPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+	doRefresh: AuthTokenPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@refresh")
+	doTwoFactor(input: TwoFactorInput!): AuthTokenPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\TwoFactor@resolve")
+	doTwoFactorResend(input: TwoFactorResendInput!): TwoFactorResendPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\TwoFactor@resend")
 	doLogout: LogoutPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Logout@resolve")
 
  	# Forgot password flow.

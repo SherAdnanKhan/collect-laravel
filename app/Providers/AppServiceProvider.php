@@ -74,6 +74,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('Nexmo\Client', function() {
+            return new \Nexmo\Client(
+                new \Nexmo\Client\Credentials\Basic(
+                    config('services.nexmo.key'),
+                    config('services.nexmo.secret')
+                )
+            );
+        });
+
+        // $this->app->bind('App\Util\TwoFactorAuthentication', function() {
+        //     return new \App\Util\TwoFactorAuthentication()
+        // });
     }
 }
