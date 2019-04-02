@@ -20,7 +20,7 @@ input UpdateUserInput {
     email: String! @rules(apply: ["required", "email"])
     phone: String @rules(apply: ["phone:LENIENT"])
     two_factor_enabled: Boolean
-    current_password: String @rules(apply: ["required_with:password"])
+    current_password: String @rules(apply: ["required_with:password,phone"])
     password: String @rules(apply: ["confirmed", "min:6"])
     password_confirmation: String @rules(apply: ["required_with:password", "min:6"])
 }

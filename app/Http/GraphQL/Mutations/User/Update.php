@@ -43,6 +43,10 @@ class Update
         }
 
         try {
+            $twoFactorSent = false;
+            $twoFactorToken = null;
+            $twoFactorExpiry = null;
+
             // if the user sets a phone
             if (array_key_exists('phone', $input)) {
                 // Make sure it's formatted
@@ -55,14 +59,34 @@ class Update
                 // If the user has changed their phone, or their 2fa setting has changed.
                 if ($userPhoneChanged || $twoFactorChanged)  {
                     $twoFactor = resolve('App\Util\TwoFactorAuthentication');
-                    $twoFactor->setPhone($phone)->setUser($user)->send();
+                    $twoFactorToken = $twoFactor->setMeta([
+                        'user_update' => true,
+                    ])->setPhone($phone)->setUser($user)->send();
+
+                    $twoFactorExpiry = $twoFactor->getExpiry();
+                    $twoFactorSent = true;
+
+                    unset($input['phone']);
+                    unset($input['two_factor_enabled']);
                 }
             }
 
-            $data = array_except($input, ['password_confirmation']);
+            $data = array_except($input, ['password_confirmation', 'current_password']);
             $user->fill($data)->save();
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
+        }
+
+        // If we need two factor verification, pass the token back here.
+        if ($twoFactorSent && !is_null($twoFactorToken)) {
+            return array_merge($user->toArray(), [
+                'two_factor' => [
+                    'access_token' => $twoFactorToken,
+                    'expires_in'   => $twoFactorExpiry,
+                    'token_type'   => '2fa',
+                    'two_factor'   => true,
+                ],
+            ]);
         }
 
         return $user;

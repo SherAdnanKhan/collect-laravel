@@ -24,6 +24,9 @@
 	songs: [Song] @hasMany(type: "paginator")
 	comments: [Comment] @hasMany(type: "paginator")
 	collaborators: [Collaborator] @hasMany
+
+	# Optional field, returned when user is updating and needs 2fa verification.
+	twoFactor: AuthTokenPayload @rename(attribute: "two_factor")
 }
 
 type UserProfile {

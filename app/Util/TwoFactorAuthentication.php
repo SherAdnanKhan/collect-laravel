@@ -45,6 +45,14 @@ class TwoFactorAuthentication
      */
     protected $expiry;
 
+    /**
+     * Extra metadata to inject into the payload
+     * so that we can pass custom data in.
+     *
+     * @var array
+     */
+    protected $meta = [];
+
     private $code;
     private $token;
 
@@ -95,6 +103,18 @@ class TwoFactorAuthentication
     public function setUser(User $user): TwoFactorAuthentication
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Set the metadata for the payload.
+     *
+     * @param array $meta
+     */
+    public function setMeta(array $meta): TwoFactorAuthentication
+    {
+        $this->meta = $meta;
 
         return $this;
     }
@@ -197,6 +217,7 @@ class TwoFactorAuthentication
             'user'  => $this->user->getKey(),
             'code'  => $code,
             'phone' => $this->phone,
+            'meta'  => $this->meta,
         ], $this->expiry);
 
         // Trigger the job to send the SMS to the new number.
