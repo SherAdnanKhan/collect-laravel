@@ -6,10 +6,13 @@ type LogoutPayload {
   loggedOut: Boolean @rename(attribute: "logged_out")
 }
 
-type LoginPayload {
-  accessToken: String! @rename(attribute: "access_token")
-  expiresIn: Int! @rename(attribute: "expires_in")
-  tokenType: String! @rename(attribute: "token_type")
+## Used for both login and 2fa auth requests.
+type AuthTokenPayload {
+  accessToken: String @rename(attribute: "access_token")
+  expiresIn: Int @rename(attribute: "expires_in")
+  tokenType: String @rename(attribute: "token_type")
+  twoFactor: Boolean @rename(attribute: "two_factor")
+  authenticated: Boolean
 }
 
 type DownloadFilesPayload {
@@ -43,4 +46,8 @@ type UnreadActivityPayload {
   projectId: ID! @rename(attribute: "project_id")
   userId: ID! @rename(attribute: "user_id")
   lastRead: String! @rename(attribute: "last_read")
+}
+
+type TwoFactorResendPayload {
+  resent: Boolean!
 }

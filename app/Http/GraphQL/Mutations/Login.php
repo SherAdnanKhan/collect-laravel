@@ -2,7 +2,11 @@
 
 namespace App\Http\GraphQL\Mutations;
 
+use App\Jobs\SMS\SendTwoFactorSMS;
+use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -26,10 +30,28 @@ class Login
             throw new AuthenticationException;
         }
 
+        $user = auth()->user();
+        if ($user->requiresTwoFactor()) {
+            // We'll create a new token which we'll use to auth the
+            // request to verify the 2fa code.
+            $twoFactor = resolve('App\Util\TwoFactorAuthentication');
+            $token = $twoFactor->setPhone($user->phone)->setUser($user)->send();
+
+            // And we'll send back a different payload so
+            // the client knows we're about to do 2fa.
+            return [
+                'access_token' => $token,
+                'token_type'   => '2fa',
+                'expires_in'   => $twoFactor->getExpiry(),
+                'two_factor'   => true,
+            ];
+        }
+
         return [
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60
+            'expires_in'   => auth()->factory()->getTTL() * 60,
+            'two_factor'   => false,
         ];
     }
 

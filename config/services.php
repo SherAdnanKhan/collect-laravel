@@ -35,4 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'nexmo' => [
+        'key'         => env('NEXMO_KEY'),
+        'secret'      => env('NEXMO_SECRET'),
+        'from'        => env('NEXMO_FROM'),
+        'code_length' => env('NEXMO_CODE_LENGTH', '6')
+    ],
 ];
