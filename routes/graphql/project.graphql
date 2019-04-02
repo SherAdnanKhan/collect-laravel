@@ -164,7 +164,7 @@ type Comment implements EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	project: Project! @belongsTo
-	user: User! @belongsTo
+	user: User @belongsTo
 	resourceId: Int @rename(attribute: "resource_id")
 	resourceType: String @rename(attribute: "resource_type")
 	resource: Commentable @rename(attribute: "commentable")
