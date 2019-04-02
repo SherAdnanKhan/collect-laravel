@@ -4,6 +4,7 @@ namespace App\Http\GraphQL\Mutations\Song;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Create
