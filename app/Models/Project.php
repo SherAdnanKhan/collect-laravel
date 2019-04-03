@@ -26,12 +26,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model implements UserAccessible, EventLoggable
 {
     use EventLogged;
     use UserAccesses;
     use OrderScopes;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
