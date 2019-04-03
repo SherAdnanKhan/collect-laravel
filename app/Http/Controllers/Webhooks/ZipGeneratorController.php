@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Webhooks;
 use App\Http\Controllers\Controller;
 use App\Jobs\Emails\SendZipCreatedEmail;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use \Illuminate\Http\Request;
 
 /**
@@ -14,6 +15,11 @@ class ZipGeneratorController extends Controller
 {
     public function complete(Request $request)
     {
+        $user = auth()->user();
+        if ($user->name !== 'ZipGenerator') {
+            throw new AuthenticationException;
+        }
+
         $userId = $request->get('userId');
         $fileName = $request->get('fileName');
 

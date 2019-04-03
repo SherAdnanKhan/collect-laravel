@@ -29,7 +29,10 @@ class MultipartUploadsController extends Controller
 
         // Get the current folder
         $folder = null;
-        $path = [$project->getUploadFolderPath()];
+        $path = [
+            'uploads',
+            $project->getUploadFolderPath()
+        ];
         if (isset($meta['folderId'])) {
             $folder = Folder::where('id', $meta['folderId'])->where('project_id', $project->id)->first();
             if (!$folder) {
@@ -58,18 +61,17 @@ class MultipartUploadsController extends Controller
         // Build the directory structure
         $data = $request->get('data');
         if (!isset($data['fullPath'])) {
-            $data['fullPath'] = $meta['name'];
+            $data['fullPath'] = '/' . $meta['name'];
         }
 
         $pathinfo = pathinfo($data['fullPath']);
         foreach (explode('/', $pathinfo['dirname']) as $name) {
-            if (empty($name)) {
+            $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $name);
+            if (empty($name) || str_replace('.', '', $name) == '') {
                 continue;
             }
 
             $depth = $depth + 1;
-
-            $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $name);
 
             $folder = Folder::where('project_id', $project->id)->where('name', $name);
             if ($currentFolder) {

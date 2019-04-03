@@ -31,7 +31,8 @@ class GetRecents
             $query = $query->where('resource_type', '!=', 'collaborator');
         }
 
-        return $query->where('event_logs.action', '<>', 'delete')
+        return $query->where('resource_type', '!=', 'comment')
+            ->where('event_logs.action', '<>', 'delete')
             ->latest('event_logs.updated_at')
             ->latest('event_logs.created_at')
             ->groupBy('event_logs.resource_id', 'event_logs.resource_type')

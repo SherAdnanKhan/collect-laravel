@@ -23,6 +23,7 @@
         "predis/predis": "^1.1",
         "propaganistas/laravel-phone": "^4.1",
         "pusher/pusher-php-server": "^3.4",
+        "s-ichikawa/laravel-sendgrid-driver": "^2.0",
         "symfony/console": "4.*",
         "themsaid/nova-cashier-manager": "^0.2.1",
         "tymon/jwt-auth": "1.0.0-rc.3"

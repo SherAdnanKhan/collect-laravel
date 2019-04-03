@@ -49,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
             'recording'    => Recording::class,
             'song'         => Song::class,
             'collaborator' => Collaborator::class,
+            'comment'      => Comment::class,
         ]);
 
         Folder::observe(FolderObserver::class);

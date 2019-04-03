@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Storage;
 
 class ZipCreated extends Mailable
 {

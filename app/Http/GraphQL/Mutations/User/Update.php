@@ -47,6 +47,12 @@ class Update
             $twoFactorToken = null;
             $twoFactorExpiry = null;
 
+            // Don't allow users to update their phone number
+            // when 2FA is enabled
+            if ($user->two_factor_enabled) {
+                unset($input['phone']);
+            }
+
             // if the user sets a phone
             if (array_key_exists('phone', $input)) {
                 // Make sure it's formatted

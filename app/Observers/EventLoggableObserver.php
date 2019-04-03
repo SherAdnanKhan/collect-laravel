@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Contracts\EventLoggable;
 use App\Models\EventLog;
+use App\Models\Project;
 use Nuwave\Lighthouse\Execution\Utils\Subscription;
 
 /**
@@ -52,6 +53,10 @@ class EventLoggableObserver
      */
     public function deleted(EventLoggable $model)
     {
+        if ($model instanceof Project) {
+            return;
+        }
+
         $this->logEvent($model, 'delete', sprintf(
             '%s has removed %s: %s',
             $this->user()->name,

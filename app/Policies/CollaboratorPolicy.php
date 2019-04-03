@@ -24,6 +24,8 @@ class CollaboratorPolicy
                     return $q->where('user_id', $userToAdd->getKey());
                 });
             }
+
+            return $query;
         });
     }
 }
