@@ -18,7 +18,11 @@ use SimpleXMLElement;
 class Importer
 {
 
-    const PROJECT_ID_PREFIX = 'VeVa-Project-';
+    const PROJECT_ID_PREFIX = 'J-';
+    const PARTY_ID_PREFIX = 'P-';
+    const SESSION_ID_PREFIX = 'O-';
+    const SONG_ID_PREFIX = 'W-';
+    const RECORDING_ID_PREFIX = 'A-';
 
     /**
      * Import a RIN from an XML document object.
@@ -28,23 +32,100 @@ class Importer
      */
     public function fromXML(SimpleXMLElement $xml): Importer
     {
-        $fileId = (int) str_replace(self::PROJECT_ID_PREFIX, '', $xml->FileHeader->FileId);
+        $fileId = $xml->FileHeader->FileId;
 
-        $project = $xml->ProjectList->Project;
+        $project = $this->mapProject($xml->ProjectList->Project);
+        $parties = $this->mapParties($xml->PartyList->children());
 
-        $parties = $xml->PartyList->children();
-        $recordings = $xml->ResourceList->children();
-        $sessions = $xml->SessionList->children();
-        $songs = $xml->MusicalWorkList->children();
+        $recordings = $this->mapRecordings($xml->ResourceList->children());
+        // $sessions = $xml->SessionList->children();
+        // $songs = $xml->MusicalWorkList->children();
 
         dump($project);
         dump($parties);
-        dump($songs);
         dump($recordings);
-        dump($sessions);
+        // dump($songs);
+        // dump($sessions);
 
         die();
 
         return $this;
+    }
+
+    /**
+     * Map the project element to an array.
+     *
+     * @param  SimpleXMLElement $project
+     * @return array
+     */
+    private function mapProject(SimpleXMLElement $project): array
+    {
+        $projectId = (int) str_replace(self::PROJECT_ID_PREFIX, '', $project->ProjectReference);
+
+        return [
+            'id'          => $projectId,
+            'name'        => (string) $project->Title,
+            'description' => (string) $project->Comment,
+        ];
+    }
+
+    /**
+     * Map a list of Party elements to an array of usable data.
+     *
+     * @param  SimpleXMLElement $parties
+     * @return array
+     */
+    private function mapParties(SimpleXMLElement $parties): array
+    {
+        $partyData = [];
+
+        foreach ($parties as $party) {
+            $isOrganization = ((string) $party->IsOrganization) === "true";
+
+            $partyId = (int) str_replace(self::PARTY_ID_PREFIX, '', $party->PartyReference);
+            $firstName = (string) $party->PartyName->FullName;
+            $middleName = '';
+            $lastName = '';
+
+            if (!$isOrganization) {
+                $firstNames = explode(' ', (string) $party->PartyName->NamesBeforeKeyName);
+                $firstName = array_shift($firstNames);
+                $middleName = join(' ', $firstNames);
+                $lastName = (string) $party->PartyName->KeyName;
+            }
+
+            $partyData[] = [
+                'id'          => $partyId,
+                'type'        => $isOrganization ? 'organisation' : 'person',
+                'first_name'  => $firstName,
+                'middle_name' => $middleName,
+                'last_name'   => $lastName,
+            ];
+        }
+
+        return $partyData;
+    }
+
+    private function mapRecordings(SimpleXMLElement $recordings): array
+    {
+        $recordingData = [];
+
+        foreach ($recordings as $recording) {
+            $recordingId = (int) str_replace(self::RECORDING_ID_PREFIX, '', $recording->ResourceReference);
+
+            $isrc = null;
+
+            if (isset($recording->SoundRecordingId->ISRC)) {
+                $isrc = (string) $recording->SoundRecordingId->ISRC;
+            }
+
+            $recordingData[] = [
+                'id'   => $recordingId,
+                'isrc' => $isrc,
+                'name' => (string) $recording->Title->TitleText,
+            ];
+        }
+
+        return $recordingData;
     }
 }
