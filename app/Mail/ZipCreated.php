@@ -34,7 +34,7 @@ class ZipCreated extends Mailable
     public function build()
     {
 
-        $url = Storage::temporaryUrl(
+        $url = Storage::disk('s3')->temporaryUrl(
             $this->fileName, now()->addHours(24)
         );
 
