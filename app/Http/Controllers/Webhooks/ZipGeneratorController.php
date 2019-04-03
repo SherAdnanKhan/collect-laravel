@@ -14,6 +14,11 @@ class ZipGeneratorController extends Controller
 {
     public function complete(Request $request)
     {
+        $user = auth()->user();
+        if ($user->name !== 'ZipGenerator') {
+            throw new AuthenticationException;
+        }
+
         $userId = $request->get('userId');
         $fileName = $request->get('fileName');
 

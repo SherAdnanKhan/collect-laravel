@@ -41,4 +41,8 @@ return [
         'from'        => env('NEXMO_FROM'),
         'code_length' => env('NEXMO_CODE_LENGTH', '6')
     ],
+
+    'sendgrid' => [
+        'api_key' => env('SENDGRID_API_KEY'),
+    ],
 ];

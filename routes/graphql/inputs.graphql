@@ -67,7 +67,7 @@ input CreateCommentInput {
     project_id: ID! @rules(apply: ["required"])
     resource_id: ID! @rules(apply: ["required"])
     resource_type: String! @rules(apply: ["required"])
-    message: String! @rules(apply: ["required", "min:2"])
+    message: String! @rules(apply: ["required", "min:1"])
 }
 
 input DeleteCommentInput {
