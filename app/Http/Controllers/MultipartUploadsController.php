@@ -29,7 +29,10 @@ class MultipartUploadsController extends Controller
 
         // Get the current folder
         $folder = null;
-        $path = [$project->getUploadFolderPath()];
+        $path = [
+            'uploads',
+            $project->getUploadFolderPath()
+        ];
         if (isset($meta['folderId'])) {
             $folder = Folder::where('id', $meta['folderId'])->where('project_id', $project->id)->first();
             if (!$folder) {
