@@ -114,15 +114,23 @@ class Importer
             $recordingId = (int) str_replace(self::RECORDING_ID_PREFIX, '', $recording->ResourceReference);
 
             $isrc = null;
-
             if (isset($recording->SoundRecordingId->ISRC)) {
                 $isrc = (string) $recording->SoundRecordingId->ISRC;
             }
 
+            $artistId = null;
+            if (isset($recording->SoundRecordingId->MainArtist)) {
+                $artistId = (int) str_replace(self::PARTY_ID_PREFIX, '', $recording->SoundRecordingId->MainArtist);
+            }
+
             $recordingData[] = [
-                'id'   => $recordingId,
-                'isrc' => $isrc,
-                'name' => (string) $recording->Title->TitleText,
+                'id'          => $recordingId,
+                'isrc'        => $isrc,
+                'name'        => (string) $recording->Title->TitleText,
+                'recorded_on' => (string) $recording->CreationDate,
+                'party_id'    => $artistId,
+                'description' => (string) $recording->Comment,
+                'credits'     => $recording->ContributorReference,
             ];
         }
 
