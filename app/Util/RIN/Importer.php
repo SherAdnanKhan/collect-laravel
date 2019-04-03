@@ -165,7 +165,7 @@ class Importer
             $sessionId = (int) str_replace(self::SESSION_ID_PREFIX, '', $session->SessionReference);
 
             $venueId = null;
-            $venue = Venue::select('venues.id')->where('name', 'LIKE', '%' . (string) $session->VenueName . '%')->first();
+            $venue = Venue::select('venues.id', 'venues.name')->where('name', 'LIKE', '%' . (string) $session->VenueName . '%')->first();
 
             if ($venue) {
                 $venueId = $venue->getKey();
@@ -198,10 +198,19 @@ class Importer
 
         foreach ($songs as $song) {
             $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $song->MusicalWorkReference);
+
+            $songTypeId = null;
+            $songType = SongType::select('song_types.id', 'song_types.name')->where('name', 'LIKE', '%'. (string) $song->MusicalWorkType .'%')->first();
+
+            if ($songType) {
+                $songTypeId = $songType->getKey();
+            }
+
             $songData[] = [
-                'id'      => $songId,
-                'title'   => (string) $song->Title->TitleText,
-                'credits' => $song->ContributorReference,
+                'id'           => $songId,
+                'song_type_id' => $songTypeId,
+                'title'        => (string) $song->Title->TitleText,
+                'credits'      => $song->ContributorReference,
             ];
         }
 
