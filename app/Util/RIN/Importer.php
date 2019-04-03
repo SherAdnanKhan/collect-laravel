@@ -3,6 +3,7 @@
 namespace App\Util\RIN;
 
 use App\Models\Project;
+use App\Models\Venue;
 use SimpleXMLElement;
 
 // TODO:
@@ -38,14 +39,14 @@ class Importer
         $parties = $this->mapParties($xml->PartyList->children());
 
         $recordings = $this->mapRecordings($xml->ResourceList->children());
-        // $sessions = $xml->SessionList->children();
-        // $songs = $xml->MusicalWorkList->children();
+        $sessions = $this->mapSessions($xml->SessionList->children());
+        $songs = $this->mapSongs($xml->MusicalWorkList->children());
 
-        dump($project);
-        dump($parties);
-        dump($recordings);
-        // dump($songs);
+        // dump($project);
+        // dump($parties);
+        // dump($recordings);
         // dump($sessions);
+        dump($songs);
 
         die();
 
@@ -106,6 +107,12 @@ class Importer
         return $partyData;
     }
 
+    /**
+     * Map the recording data to an array
+     *
+     * @param  SimpleXMLElement $recordings
+     * @return array
+     */
     private function mapRecordings(SimpleXMLElement $recordings): array
     {
         $recordingData = [];
@@ -124,16 +131,80 @@ class Importer
             }
 
             $recordingData[] = [
-                'id'          => $recordingId,
-                'isrc'        => $isrc,
-                'name'        => (string) $recording->Title->TitleText,
-                'recorded_on' => (string) $recording->CreationDate,
-                'party_id'    => $artistId,
-                'description' => (string) $recording->Comment,
+                'id'             => $recordingId,
+                'isrc'           => $isrc,
+                'name'           => (string) $recording->Title->TitleText,
+                'recorded_on'    => (string) $recording->CreationDate,
+                'party_id'       => $artistId,
+                'description'    => (string) $recording->Comment,
+                'language'       => (string) $recording->LanguageOfPerformance,
+                'key_signature'  => (string) $recording->KeySignature,
+                'time_signature' => (string) $recording->TimeSignature,
+                'tempo'          => (string) $recording->Tempo,
+
+                // Relations
                 'credits'     => $recording->ContributorReference,
+                'sessions'    => $recording->SoundRecordingSessionReference,
             ];
         }
 
         return $recordingData;
+    }
+
+    /**
+     * Map the session data to an array
+     *
+     * @param  SimpleXMLElement $sessions
+     * @return array
+     */
+    private function mapSessions(SimpleXMLElement $sessions): array
+    {
+        $sessionData = [];
+
+        foreach ($sessions as $session) {
+            $sessionId = (int) str_replace(self::SESSION_ID_PREFIX, '', $session->SessionReference);
+
+            $venueId = null;
+            $venue = Venue::select('venues.id')->where('name', 'LIKE', '%' . (string) $session->VenueName . '%')->first();
+
+            if ($venue) {
+                $venueId = $venue->getKey();
+            }
+
+            // TODO: Maybe create the venue with the venue information if there isn't one?
+
+            $sessionData[] = [
+                'id'            => $sessionId,
+                'venue_id'      => $venueId,
+                'description'   => (string) $session->Comment,
+                'union_session' => (string) $session->IsUnionSession === "true" ? 1 : 0,
+                'venue_room'    => (string) $session->VenueRoom,
+                'recordings'    => $session->SessionSoundRecordingReference,
+            ];
+        }
+
+        return $sessionData;
+    }
+
+    /**
+     * Map the songs data to an array
+     *
+     * @param  SimpleXMLElement $songs
+     * @return array
+     */
+    private function mapSongs(SimpleXMLElement $songs): array
+    {
+        $songData = [];
+
+        foreach ($songs as $song) {
+            $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $song->MusicalWorkReference);
+            $songData[] = [
+                'id'      => $songId,
+                'title'   => (string) $song->Title->TitleText,
+                'credits' => $song->ContributorReference,
+            ];
+        }
+
+        return $songData;
     }
 }
