@@ -84,13 +84,11 @@ trait UserAccesses
 
     private function getUser($data = [])
     {
-        $user = auth()->user();
-
         if (array_key_exists('user', $data) && array_get($data, 'user') instanceof Authenticatable) {
-            $user = array_get($data, 'user');
+            return array_get($data, 'user');
         }
 
-        return $user;
+        return auth()->user();
     }
 
     private function wrapUserRelationCheck(User $user, Builder $query): Builder

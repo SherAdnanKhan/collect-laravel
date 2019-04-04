@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rin:RecordingInformationNotification xmlns:rin="http://ddex.net/xml/f-rin/10" xmlns:avs="http://ddex.net/xml/avs/avs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:schemaLocation="http://ddex.net/xml/f-rin/10 http://ddex.net/xml/rin/10/full-recording-information-notification.xsd" SchemaVersionId="f-rin/10" LanguageAndScriptCode="en">
   <FileHeader>
-    <FileId>VeVa-Project-4298590</FileId>
+    <FileId>VeVa-Project-11</FileId>
     <FileName>8013289A01_rin.xml</FileName>
     <FileCreatedDateTime>2018-09-24T13:54:38-05:00</FileCreatedDateTime>
     <FileControlType>LiveMessage</FileControlType>
@@ -5280,10 +5280,10 @@ Revised Aca, Inst, and TV delivered via FTP by Drew Bollman (drewbollman@comcast
       <ProjectId>
         <ProprietaryId Namespace="Project Number">8013289A01</ProprietaryId>
       </ProjectId>
-      <ProjectReference>J-4298590</ProjectReference>
+      <ProjectReference>J-11</ProjectReference>
       <MainArtist>P-493121</MainArtist>
       <ProjectArtist>Walker Hayes</ProjectArtist>
-      <Title>boom.</Title>
+      <Title>Example Update Project</Title>
       <Label>P-3939520</Label>
       <Status>Verified</Status>
       <ContributorReference>

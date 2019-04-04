@@ -21,6 +21,10 @@ class EventLoggableObserver
      */
     public function created(EventLoggable $model)
     {
+        if (!$this->user()) {
+            return;
+        }
+
         $this->logEvent($model, 'create', sprintf(
             '%s has created %s: %s',
             $this->user()->name,
@@ -37,6 +41,10 @@ class EventLoggableObserver
      */
     public function updated(EventLoggable $model)
     {
+        if (!$this->user()) {
+            return;
+        }
+
         $this->logEvent($model, 'update', sprintf(
             '%s has updated %s: %s',
             $this->user()->name,
@@ -54,6 +62,10 @@ class EventLoggableObserver
     public function deleted(EventLoggable $model)
     {
         if ($model instanceof Project) {
+            return;
+        }
+
+        if (!$this->user()) {
             return;
         }
 

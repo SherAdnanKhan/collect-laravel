@@ -3,6 +3,8 @@
 namespace App\Util\RIN;
 
 use App\Models\Project;
+use App\Models\SongType;
+use App\Models\User;
 use App\Models\Venue;
 use App\Util\RIN\Utilities;
 use SimpleXMLElement;
@@ -26,6 +28,15 @@ class Importer
     const SONG_ID_PREFIX = 'W-';
     const RECORDING_ID_PREFIX = 'A-';
 
+    private $currentUser;
+
+    private $fileId;
+    private $project;
+    private $parties;
+    private $recordings;
+    private $sessions;
+    private $songs;
+
     /**
      * Import a RIN from an XML document object.
      *
@@ -34,24 +45,66 @@ class Importer
      */
     public function fromXML(SimpleXMLElement $xml): Importer
     {
-        $fileId = $xml->FileHeader->FileId;
+        $this->fileId = $xml->FileHeader->FileId;
 
-        $project = $this->mapProject($xml->ProjectList->Project);
-        $parties = $this->mapParties($xml->PartyList->children());
+        $this->project = $this->mapProject($xml->ProjectList->Project);
+        $this->parties = $this->mapParties($xml->PartyList->children());
 
-        $recordings = $this->mapRecordings($xml->ResourceList->children());
-        $sessions = $this->mapSessions($xml->SessionList->children());
-        $songs = $this->mapSongs($xml->MusicalWorkList->children());
-
-        // dump($project);
-        // dump($parties);
-        // dump($recordings);
-        // dump($sessions);
-        dump($songs);
-
-        die();
+        $this->recordings = $this->mapRecordings($xml->ResourceList->children());
+        $this->sessions = $this->mapSessions($xml->SessionList->children());
+        $this->songs = $this->mapSongs($xml->MusicalWorkList->children());
 
         return $this;
+    }
+
+    /**
+     * Actually run the import into the database
+     *
+     * @param bool $override
+     */
+    public function import(bool $override)
+    {
+        $this->importProject($this->project, $override);
+    }
+
+    /**
+     * Set the current user.
+     *
+     * @param User $user
+     */
+    public function setUser(User $user): Importer
+    {
+        $this->currentUser = $user;
+        return $this;
+    }
+
+    /**
+     * Import the project into the database.s
+     *
+     * @param  array        $project
+     * @param  bool|boolean $override
+     * @return Project
+     */
+    private function importProject(array $project, bool $override = false): Project
+    {
+        $projectId = array_get($project, 'id', false);
+        $project = array_except($project, ['id']);
+
+        $project['user_id'] = $this->currentUser->id;
+
+        if ($override) {
+            $projectModel = Project::where('id', $projectId)->userViewable(['user' => $this->currentUser])->first();
+
+            if (!$projectModel) {
+                $projectModel = new Project();
+            }
+
+            $projectModel->fill($project);
+            $projectModel->save();
+            return $projectModel;
+        }
+
+        return Project::create($project);
     }
 
     /**
@@ -64,10 +117,18 @@ class Importer
     {
         $projectId = (int) str_replace(self::PROJECT_ID_PREFIX, '', $project->ProjectReference);
 
+        $projectNumber = '';
+        if (isset($project->ProjectId->ProprietaryId)) {
+            $projectNumber = (string) $project->ProjectId->ProprietaryId;
+        }
+
         return [
-            'id'          => $projectId,
-            'name'        => (string) $project->Title,
-            'description' => (string) $project->Comment,
+            'id'             => $projectId,
+            'name'           => (string) $project->Title,
+            'description'    => (string) $project->Comment,
+            'number'         => $projectNumber,
+            'label_id'       => (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->Label),
+            'main_artist_id' => (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->MainArtist),
         ];
     }
 

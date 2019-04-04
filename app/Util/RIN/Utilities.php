@@ -17,6 +17,10 @@ class Utilities
      */
     public static function parseDuration(string $duration): int
     {
+        if (empty($duration)) {
+            return 0;
+        }
+
         // convert from https://en.wikipedia.org/wiki/ISO_8601 :2004 to int.
         return (int) CarbonInterval::make($duration)->total('seconds');
     }

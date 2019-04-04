@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\User;
 use App\Util\RIN\Importer;
-use \Illuminate\Http\Request;
 use SimpleXMLElement;
+use \Illuminate\Http\Request;
 
 class RINController extends Controller
 {
@@ -17,10 +18,16 @@ class RINController extends Controller
      */
     public function import(Request $request)
     {
+        // $user = auth()->user();
+        $user = User::find(10);
+
         $importer = new Importer();
+        $importer->setUser($user);
 
         // For now just load in a RIN file.
         $importer->fromXML(new SimpleXMLElement(file_get_contents(__DIR__.'/../../../resources/8013289A01_rin.xml')));
+
+        $importer->import(true);
     }
 
     /**

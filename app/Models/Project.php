@@ -205,7 +205,7 @@ class Project extends Model implements UserAccessible, EventLoggable
      */
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         // Add to the query a check to see if the user
         // has read permission on the project, or owns it.
@@ -224,7 +224,7 @@ class Project extends Model implements UserAccessible, EventLoggable
      */
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         // Add to the query a check to see if the user
         // has read permission on the project, or owns it.
@@ -243,8 +243,10 @@ class Project extends Model implements UserAccessible, EventLoggable
      */
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
+        $user = $this->getUser($data);
+
         // Only the person who owns the project can delete it.
-        return $query->where('user_id', auth()->user()->getAuthIdentifier());
+        return $query->where('user_id', $user->getAuthIdentifier());
     }
 
     /**
