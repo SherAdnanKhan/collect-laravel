@@ -26,12 +26,12 @@ class GetRecents
         $query = $user->eventLogs();
 
         if (array_key_exists('resourceType', $args) && in_array(array_get($args, 'resourceType'), EventLog::TYPES)) {
-            $query = $query->where('resource_type', array_get($args, 'resourceType'));
+            $query = $query->where('event_logs.resource_type', array_get($args, 'resourceType'));
         } else {
-            $query = $query->where('resource_type', '!=', 'collaborator');
+            $query = $query->where('event_logs.resource_type', '!=', 'collaborator');
         }
 
-        return $query->where('resource_type', '!=', 'comment')
+        return $query->where('event_logs.resource_type', '!=', 'comment')
             ->where('event_logs.action', '<>', 'delete')
             ->latest('event_logs.updated_at')
             ->latest('event_logs.created_at')
