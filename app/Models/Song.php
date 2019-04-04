@@ -107,7 +107,7 @@ class Song extends Model implements UserAccessible
      */
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         // We check to see if the user is a collaborator or
         // owner on a project that this song has been used on or if
@@ -130,7 +130,7 @@ class Song extends Model implements UserAccessible
      */
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         // User must own a song to update it
         return $query->where('user_id', $user->getAuthIdentifier());
@@ -146,7 +146,7 @@ class Song extends Model implements UserAccessible
      */
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         // User must own a song to delete it.
         return $query->where('user_id', $user->getAuthIdentifier());

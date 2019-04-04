@@ -4,6 +4,8 @@ namespace App\Util\RIN;
 
 use App\Models\Party;
 use App\Models\Project;
+use App\Models\Recording;
+use App\Models\Song;
 use App\Models\SongType;
 use App\Models\User;
 use App\Models\Venue;
@@ -70,8 +72,12 @@ class Importer
         try {
             $parties = $this->importParties($this->parties, $override);
             dump($parties);
-            $projects = $this->importProject($this->project, $override);
-            dump($projects);
+            $project = $this->importProject($this->project, $override);
+            dump($project);
+            $songs = $this->importSongs($this->songs, $override);
+            dump($songs);
+            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $override);
+            dump($recordings);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -102,7 +108,7 @@ class Importer
         $projectId = array_get($project, 'id', false);
         $project = array_except($project, ['id']);
 
-        $project['user_id'] = $this->currentUser->id;
+        $project['user_id'] = $this->currentUser->getKey();
 
         if ($override) {
             $projectModel = Project::where('id', $projectId)->userViewable(['user' => $this->currentUser])->first();
@@ -159,18 +165,17 @@ class Importer
             $partyId = array_get($party, 'id', false);
             $party = array_except($party, ['id']);
 
-            $party['user_id'] = $this->currentUser->id;
-
             if ($override) {
                 $partyModel = Party::where('id', $partyId)->userViewable(['user' => $this->currentUser])->first();
 
                 if (!$partyModel) {
+                    $party['user_id'] = $this->currentUser->getKey();
                     $partyModel = new Party();
                 }
 
                 $partyModel->fill($party);
                 $partyModel->save();
-                $partyModels[] = $partyModel;
+                $partyModels[$partyId] = $partyModel;
             }
         }
 
@@ -215,6 +220,66 @@ class Importer
     }
 
     /**
+     * Import the recordings into the database.s
+     *
+     * @param  array        $recordings
+     * @param  Project      $project
+     * @param  bool|boolean $override
+     * @return array<Party>
+     */
+    private function importRecordings(
+        array $recordings,
+        Project $project,
+        array $songs,
+        array $parties,
+        bool $override = false
+    ): array
+    {
+        $recordingModels = [];
+
+        foreach ($recordings as $recording) {
+            $recordingId = array_get($recording, 'id', false);
+            $recording = array_except($recording, ['id']);
+
+            $recording['project_id'] = $project->getKey();
+
+            $partyId = array_get($recording, 'party_id', false);
+            if ($partyId && isset($parties[$partyId])) {
+                $party = $parties[$partyId];
+                $recording['party_id'] = $party->getKey();
+            }
+
+            $songId = array_get($recording, 'song_id', false);
+            if ($songId && isset($songs[$songId])) {
+                $song = $songs[$songId];
+                $recording['song_id'] = $song->getKey();
+            }
+
+            if ($override) {
+                $recordingModel = Recording::where('id', $recordingId)->userViewable(['user' => $this->currentUser])->first();
+
+                if (!$recordingModel) {
+                    $recording['user_id'] = $this->currentUser->getKey();
+                    $recordingModel = new Recording();
+                }
+
+                $recordingModel->fill($recording);
+                $recordingModel->save();
+
+                // TODO: assign credits and sessions based on id's
+                $credits = array_get($recording, 'credits');
+                $sessions = array_get($recording, 'sessions');
+                unset($recording['credits']);
+                unset($recording['sessions']);
+
+                $recordingModels[$recordingId] = $recordingModel;
+            }
+        }
+
+        return $recordingModels;
+    }
+
+    /**
      * Map the recording data to an array
      *
      * @param  SimpleXMLElement $recordings
@@ -233,8 +298,13 @@ class Importer
             }
 
             $artistId = null;
-            if (isset($recording->SoundRecordingId->MainArtist)) {
-                $artistId = (int) str_replace(self::PARTY_ID_PREFIX, '', $recording->SoundRecordingId->MainArtist);
+            if (isset($recording->MainArtist)) {
+                $artistId = (int) str_replace(self::PARTY_ID_PREFIX, '', $recording->MainArtist);
+            }
+
+            $songId = null;
+            if (isset($recording->SoundRecordingMusicalWorkReference)) {
+                $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $recording->SoundRecordingMusicalWorkReference);
             }
 
             $recordingData[] = [
@@ -243,6 +313,7 @@ class Importer
                 'name'           => (string) $recording->Title->TitleText,
                 'recorded_on'    => (string) $recording->CreationDate,
                 'party_id'       => $artistId,
+                'song_id'        => $songId,
                 'description'    => (string) $recording->Comment,
                 'language'       => (string) $recording->LanguageOfPerformance,
                 'key_signature'  => (string) $recording->KeySignature,
@@ -292,6 +363,38 @@ class Importer
         }
 
         return $sessionData;
+    }
+
+    /**
+     * Import the songs into the database.s
+     *
+     * @param  array        $songs
+     * @param  bool|boolean $override
+     * @return array<Party>
+     */
+    private function importsongs(array $songs, bool $override = false): array
+    {
+        $songModels = [];
+
+        foreach ($songs as $song) {
+            $songId = array_get($song, 'id', false);
+            $song = array_except($song, ['id']);
+
+            if ($override) {
+                $songModel = Song::where('id', $songId)->userViewable(['user' => $this->currentUser])->first();
+
+                if (!$songModel) {
+                    $song['user_id'] = $this->currentUser->getKey();
+                    $songModel = new Song();
+                }
+
+                $songModel->fill($song);
+                $songModel->save();
+                $songModels[$songId] = $songModel;
+            }
+        }
+
+        return $songModels;
     }
 
     /**
