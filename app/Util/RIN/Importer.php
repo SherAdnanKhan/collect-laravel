@@ -7,6 +7,7 @@ use App\Models\SongType;
 use App\Models\User;
 use App\Models\Venue;
 use App\Util\RIN\Utilities;
+use Illuminate\Support\Facades\DB;
 use SimpleXMLElement;
 
 // TODO:
@@ -64,7 +65,14 @@ class Importer
      */
     public function import(bool $override)
     {
-        $this->importProject($this->project, $override);
+        DB::beginTransaction();
+        try {
+            $this->importProject($this->project, $override);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
     }
 
     /**
