@@ -4,6 +4,7 @@ namespace App\Util\RIN;
 
 use App\Models\Project;
 use App\Models\Venue;
+use App\Util\RIN\Utilities;
 use SimpleXMLElement;
 
 // TODO:
@@ -141,6 +142,7 @@ class Importer
                 'key_signature'  => (string) $recording->KeySignature,
                 'time_signature' => (string) $recording->TimeSignature,
                 'tempo'          => (string) $recording->Tempo,
+                'duration'       => Utilities::parseDuration((string) $recording->Duration),
 
                 // Relations
                 'credits'     => $recording->ContributorReference,
