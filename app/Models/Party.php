@@ -108,7 +108,7 @@ class Party extends Model implements UserAccessible
     public function scopeUserViewable(Builder $query, $data = []): Builder
     {
         // i own it, it’s public, it’s already related to the project, owned by the owner or a collaborator on the project
-        $user = auth()->user();
+        $user = $this->getUser($data);
 
         return $query->where(function($q) use ($user) {
             return $q->whereHas('credits', function($q) use ($user) {
@@ -126,7 +126,7 @@ class Party extends Model implements UserAccessible
      */
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
         return $query->where('user_id', $user->getKey());
     }
 
@@ -139,7 +139,7 @@ class Party extends Model implements UserAccessible
      */
     public function scopeUserDeletable(Builder $query, $data = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($data);
         return $query->where('user_id', $user->getKey());
     }
 }

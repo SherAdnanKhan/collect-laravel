@@ -2,6 +2,7 @@
 
 namespace App\Util\RIN;
 
+use App\Models\Party;
 use App\Models\Project;
 use App\Models\SongType;
 use App\Models\User;
@@ -67,7 +68,10 @@ class Importer
     {
         DB::beginTransaction();
         try {
-            $this->importProject($this->project, $override);
+            $parties = $this->importParties($this->parties, $override);
+            dump($parties);
+            $projects = $this->importProject($this->project, $override);
+            dump($projects);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -138,6 +142,39 @@ class Importer
             'label_id'       => (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->Label),
             'main_artist_id' => (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->MainArtist),
         ];
+    }
+
+    /**
+     * Import the parties into the database.s
+     *
+     * @param  array        $parties
+     * @param  bool|boolean $override
+     * @return array<Party>
+     */
+    private function importParties(array $parties, bool $override = false): array
+    {
+        $partyModels = [];
+
+        foreach ($parties as $party) {
+            $partyId = array_get($party, 'id', false);
+            $party = array_except($party, ['id']);
+
+            $party['user_id'] = $this->currentUser->id;
+
+            if ($override) {
+                $partyModel = Party::where('id', $partyId)->userViewable(['user' => $this->currentUser])->first();
+
+                if (!$partyModel) {
+                    $partyModel = new Party();
+                }
+
+                $partyModel->fill($party);
+                $partyModel->save();
+                $partyModels[] = $partyModel;
+            }
+        }
+
+        return $partyModels;
     }
 
     /**
