@@ -19,12 +19,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
 class Song extends Model implements UserAccessible
 {
     use UserAccesses;
     use OrderScopes;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id', 'song_type_id', 'iswc', 'title', 'subtitle',
