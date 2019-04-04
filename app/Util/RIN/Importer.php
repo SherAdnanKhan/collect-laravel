@@ -5,6 +5,7 @@ namespace App\Util\RIN;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\Recording;
+use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongType;
 use App\Models\User;
@@ -76,12 +77,16 @@ class Importer
             dump($project);
             $songs = $this->importSongs($this->songs, $override);
             dump($songs);
-            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $override);
+            $sessions = $this->importSessions($this->sessions, $project, $override);
+            dump($sessions);
+            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
             dump($recordings);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+
+            throw $e;
         }
     }
 
@@ -232,6 +237,7 @@ class Importer
         Project $project,
         array $songs,
         array $parties,
+        array $sessions,
         bool $override = false
     ): array
     {
@@ -267,10 +273,25 @@ class Importer
                 $recordingModel->save();
 
                 // TODO: assign credits and sessions based on id's
-                $credits = array_get($recording, 'credits');
-                $sessions = array_get($recording, 'sessions');
-                unset($recording['credits']);
-                unset($recording['sessions']);
+                // $recording['credits'] = array_filter(array_map(function($credit) use ($credits) {
+                //     if (isset($credits[$credit])) {
+                //         $creditModel = $credits[$credit];
+                //         return $creditModel->getKey();
+                //     }
+                //     return null;
+                // }, array_get($recording, 'credits', [])));
+
+                $recordingSessions = [];
+                foreach ($recording['sessions'] as $session) {
+                    $sessionId = str_replace(self::SESSION_ID_PREFIX, '', $session);
+                    if (isset($sessions[$sessionId])) {
+                        $sessionModel = $sessions[$sessionId];
+                        $recordingSessions[] = $sessionModel->getKey();
+                    }
+                }
+                $recordingModel->sessions()->sync($recordingSessions);
+
+                // $recordingModel->credits()->sync($recording['credits']);
 
                 $recordingModels[$recordingId] = $recordingModel;
             }
@@ -331,6 +352,41 @@ class Importer
     }
 
     /**
+     * Import the sessions into the database.s
+     *
+     * @param  array        $sessions
+     * @param  Project      $project
+     * @param  bool|boolean $override
+     * @return array<Party>
+     */
+    private function importSessions(array $sessions, Project $project, bool $override = false): array
+    {
+        $sessionModels = [];
+
+        foreach ($sessions as $session) {
+            $sessionId = array_get($session, 'id', false);
+            $session = array_except($session, ['id']);
+
+            $session['project_id'] = $project->getKey();
+
+            if ($override) {
+                $sessionModel = Session::where('id', $sessionId)->userViewable(['user' => $this->currentUser])->first();
+
+                if (!$sessionModel) {
+                    $session['user_id'] = $this->currentUser->getKey();
+                    $sessionModel = new Session();
+                }
+
+                $sessionModel->fill($session);
+                $sessionModel->save();
+                $sessionModels[$sessionId] = $sessionModel;
+            }
+        }
+
+        return $sessionModels;
+    }
+
+    /**
      * Map the session data to an array
      *
      * @param  SimpleXMLElement $sessions
@@ -372,7 +428,7 @@ class Importer
      * @param  bool|boolean $override
      * @return array<Party>
      */
-    private function importsongs(array $songs, bool $override = false): array
+    private function importSongs(array $songs, bool $override = false): array
     {
         $songModels = [];
 
