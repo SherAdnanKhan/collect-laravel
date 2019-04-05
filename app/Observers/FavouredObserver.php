@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\File;
 use App\Models\UserFavourite;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,12 @@ class FavouredObserver
      */
     public function deleted(Model $model)
     {
-        UserFavourite::where('resource_type', $model->getType())
+        if ($model instanceof File) {
+            $type = 'file';
+        } else {
+            $type = $model->getType();
+        }
+        UserFavourite::where('resource_type', $type)
                      ->where('resource_id', $model->id)
                      ->delete();
     }
