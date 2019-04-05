@@ -2,6 +2,8 @@
 
 namespace App\Util\RIN;
 
+use App\Models\Credit;
+use App\Models\CreditRole;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\Recording;
@@ -272,32 +274,62 @@ class Importer
                 $recordingModel->fill($recording);
                 $recordingModel->save();
 
-                // TODO: assign credits and sessions based on id's
-                // $recording['credits'] = array_filter(array_map(function($credit) use ($credits) {
-                //     if (isset($credits[$credit])) {
-                //         $creditModel = $credits[$credit];
-                //         return $creditModel->getKey();
-                //     }
-                //     return null;
-                // }, array_get($recording, 'credits', [])));
-
-                $recordingSessions = [];
-                foreach ($recording['sessions'] as $session) {
-                    $sessionId = str_replace(self::SESSION_ID_PREFIX, '', $session);
-                    if (isset($sessions[$sessionId])) {
-                        $sessionModel = $sessions[$sessionId];
-                        $recordingSessions[] = $sessionModel->getKey();
-                    }
-                }
-                $recordingModel->sessions()->sync($recordingSessions);
-
-                // $recordingModel->credits()->sync($recording['credits']);
+                $this->importRecordingCredits($recordingModel, $recording['credits'], $parties);
+                $this->importRecordingSessions($recordingModel, $recording['sessions'], $sessions);
 
                 $recordingModels[$recordingId] = $recordingModel;
             }
         }
 
         return $recordingModels;
+    }
+
+    private function importRecordingCredits(Recording $recordingModel, array $recordingCredits, array $allParties)
+    {
+        $recordingCreditIds = [];
+        foreach($recordingCredits as $credit) {
+            $contributionId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $credit->SoundRecordingContributorReference);
+            $contributionRole = (string) $credit->Role;
+
+            if (array_key_exists($contributionId, $credits)) {
+                $contributionModel = array_get($credits, $contributionId);
+                $contributionId = $contributionModel->getKey();
+            }
+
+            $creditRoleId = null;
+            $creditRole = CreditRole::where('type', 'recording')->where('name', $contributionRole)->first();
+            if ($creditRole) {
+                $creditRoleId = $creditRole->getKey();
+            }
+
+            $creditModel = Credit::where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->where('party_id', $contributionId)->first();
+
+            if (!$creditModel) {
+                $creditModel = Credit::create([
+                    'party_id'          => $contributionId,
+                    'contribution_type' => 'recording',
+                    'contribution_id'   => $recordingModel->getKey(),
+                    'credit_role_id'    => $creditRoleId,
+                ]);
+            }
+
+            $recordingCreditIds[] = $creditModel;
+        }
+    }
+
+    private function importRecordingSessions(Recording $recordingModel, array $recordingSessions, array $allSessions)
+    {
+        $sessionIds = [];
+
+        foreach ($recordingSessions as $session) {
+            $sessionId = str_replace(self::SESSION_ID_PREFIX, '', $session);
+            if (array_key_exists($sessionId, $allSessions)) {
+                $sessionModel = array_get($allSessions, $sessionId);
+                $sessionIds[] = $sessionModel->getKey();
+            }
+        }
+
+        $recordingModel->sessions()->sync($sessionIds);
     }
 
     /**
