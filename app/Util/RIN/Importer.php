@@ -369,6 +369,22 @@ class Importer
 
             $session['project_id'] = $project->getKey();
 
+            $venue = array_get($session, 'venue');
+            unset($session['venue']);
+
+            $session['venue_id'] = null;
+            $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->user])->first();
+            if (!$venueModel) {
+                $venueModel = Venue::create([
+                    'user_id' => $this->user->getKey(),
+                    'name'    => $venue['name'],
+                    'country' => $venue['territory_code'],
+                    'address' => $venue['address'],
+                ]);
+            }
+
+            $session['venue_id'] = $venueModel->getKey();
+
             if ($override) {
                 $sessionModel = Session::where('id', $sessionId)->userViewable(['user' => $this->currentUser])->first();
 
@@ -399,18 +415,13 @@ class Importer
         foreach ($sessions as $session) {
             $sessionId = (int) str_replace(self::SESSION_ID_PREFIX, '', $session->SessionReference);
 
-            $venueId = null;
-            $venue = Venue::select('venues.id', 'venues.name')->where('name', 'LIKE', '%' . (string) $session->VenueName . '%')->first();
-
-            if ($venue) {
-                $venueId = $venue->getKey();
-            }
-
-            // TODO: Maybe create the venue with the venue information if there isn't one?
-
             $sessionData[] = [
                 'id'            => $sessionId,
-                'venue_id'      => $venueId,
+                'venue'         => [
+                    'name'      => (string) $session->VenueName,
+                    'address'   => (string) $session->VenueAddress,
+                    'territory' => (string) $session->TerritoryCode,
+                ],
                 'description'   => (string) $session->Comment,
                 'union_session' => (string) $session->IsUnionSession === "true" ? 1 : 0,
                 'venue_room'    => (string) $session->VenueRoom,

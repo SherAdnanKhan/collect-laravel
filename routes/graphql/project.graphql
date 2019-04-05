@@ -193,11 +193,7 @@ type Venue {
 	user: User @belongsTo
 	userId: ID! @rename(attribute: "user_id")
 	name: String!
-	address1: String @rename(attribute: "address_1")
-	address2: String @rename(attribute: "address_2")
-	city: String
-	state: String
-	zip: String
+	address: String
 	country: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")

@@ -58,25 +58,7 @@ class Venue extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Address 1')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('Address 2')
-                ->rules('max:255')
-                ->onlyOnForms(),
-
-            Text::make('City')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('State')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('Zip')
-                ->sortable()
-                ->rules('max:255'),
+            Textarea::make('Address'),
 
             Text::make('Country')
                 ->sortable()

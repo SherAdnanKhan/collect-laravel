@@ -24,11 +24,25 @@ class Create
         $user = auth()->user();
 
         try {
-            $venue = $user->venues()->firstOrCreate($input);
+            $input['address'] = $this->buildAddress($input);
+            $venue = $user->venues()->firstOrCreate(array_only($input, 'name', 'country', 'address'));
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }
 
         return $venue;
+    }
+
+    private function buildAddress(array $input)
+    {
+        $address = [
+            isset($input['address_1']) ? $input['address_1'] : null,
+            isset($input['address_2']) ? $input['address_2'] : null,
+            isset($input['city']) ? $input['city'] : null,
+            isset($input['state']) ? $input['state'] : null,
+            isset($input['zip']) ? $input['zip'] : null,
+        ];
+
+        return join(', ', array_filter($address));
     }
 }

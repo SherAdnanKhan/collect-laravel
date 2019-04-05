@@ -19,8 +19,7 @@ class Venue extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'name', 'address_1', 'address_2', 'city', 'state',
-        'zip', 'country'
+        'user_id', 'name', 'address', 'country'
     ];
 
     /**
@@ -42,7 +41,7 @@ class Venue extends Model implements UserAccessible
      */
     public function scopeUserViewable(Builder $query, $args = []): Builder
     {
-        $user = auth()->user();
+        $user = $this->getUser($args);
         return $query->where('user_id', $user->getAuthIdentifier())->orWhere('approved');
     }
 }
