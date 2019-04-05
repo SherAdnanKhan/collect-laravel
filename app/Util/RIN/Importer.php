@@ -284,15 +284,15 @@ class Importer
         return $recordingModels;
     }
 
-    private function importRecordingCredits(Recording $recordingModel, array $recordingCredits, array $allParties)
+    private function importRecordingCredits(Recording $recordingModel, SimpleXMLElement $recordingCredits, array $allParties)
     {
         $recordingCreditIds = [];
         foreach($recordingCredits as $credit) {
             $contributionId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $credit->SoundRecordingContributorReference);
             $contributionRole = (string) $credit->Role;
 
-            if (array_key_exists($contributionId, $credits)) {
-                $contributionModel = array_get($credits, $contributionId);
+            if (array_key_exists($contributionId, $allParties)) {
+                $contributionModel = array_get($allParties, $contributionId);
                 $contributionId = $contributionModel->getKey();
             }
 
@@ -317,7 +317,7 @@ class Importer
         }
     }
 
-    private function importRecordingSessions(Recording $recordingModel, array $recordingSessions, array $allSessions)
+    private function importRecordingSessions(Recording $recordingModel, SimpleXMLElement $recordingSessions, array $allSessions)
     {
         $sessionIds = [];
 
