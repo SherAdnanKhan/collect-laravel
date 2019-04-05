@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\UserFavourite;
 use Illuminate\Database\Eloquent\Model;
 
 /**

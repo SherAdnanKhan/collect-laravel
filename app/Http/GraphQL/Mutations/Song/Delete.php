@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Song;
 
+use App\Models\Recording;
 use App\Models\Song;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
@@ -27,6 +28,11 @@ class Delete
 
         if (!$song) {
             throw new AuthorizationException('Unable to find Song to delete');
+        }
+
+        $recordings_count = Recording::where('song_id', $song->id)->count();
+        if ($recordings_count > 0) {
+            throw new AuthorizationException('Unable to delete song');
         }
 
         $song->delete();
