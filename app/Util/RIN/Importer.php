@@ -373,12 +373,12 @@ class Importer
             unset($session['venue']);
 
             $session['venue_id'] = null;
-            $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->user])->first();
+            $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->currentUser])->first();
             if (!$venueModel) {
                 $venueModel = Venue::create([
-                    'user_id' => $this->user->getKey(),
+                    'user_id' => $this->currentUser->getKey(),
                     'name'    => $venue['name'],
-                    'country' => $venue['territory_code'],
+                    'country' => $venue['territory'],
                     'address' => $venue['address'],
                 ]);
             }
