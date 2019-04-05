@@ -9,6 +9,7 @@ use App\Models\CollaboratorInvite;
 use App\Models\Comment;
 use App\Models\Credit;
 use App\Models\Folder;
+use App\Models\Party;
 use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -41,8 +43,8 @@ class Project extends Model implements UserAccessible, EventLoggable
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'description', 'artist',
-        'number', 'label', 'image', 'total_storage_used'
+        'user_id', 'name', 'description', 'main_artist_id',
+        'number', 'label_id', 'image', 'total_storage_used'
     ];
 
     /**
@@ -183,6 +185,16 @@ class Project extends Model implements UserAccessible, EventLoggable
     public function collaboratorInvites(): HasMany
     {
         return $this->hasMany(CollaboratorInvite::class);
+    }
+
+    public function artist(): HasOne
+    {
+        return $this->hasOne(Party::class, 'main_artist_id');
+    }
+
+    public function label(): HasOne
+    {
+        return $this->hasOne(Party::class, 'label_id');
     }
 
     /**

@@ -6,9 +6,9 @@ type Project implements Favoured & Creditable & Commentable & EventLoggable {
 	name: String!
 	description: String!
 	image: String
-	label: String
+	label: Party @hasOne
 	number: String
-	artist: String
+	artist: Party @hasOne
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	collaborators: [Collaborator] @hasMany
