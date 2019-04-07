@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Util\RIN\Exporter;
 use App\Util\RIN\Importer;
-use SimpleXMLElement;
 use DOMDocument;
+use SimpleXMLElement;
 use \Illuminate\Http\Request;
 
 class RINController extends Controller
@@ -31,6 +32,8 @@ class RINController extends Controller
         if (true && $xml->schemaValidate(__DIR__.'/../../../resources/full-recording-information-notification.xsd')) {
             // For now just load in a RIN file.
             $importer->fromXML(simplexml_import_dom($xml));
+
+            // Import & override.
             $importer->import(true);
             return;
         }
@@ -46,6 +49,13 @@ class RINController extends Controller
      */
     public function export(Request $request)
     {
+        $user = User::find(10);
+        $project = Project::where('id', 11)->userViewable(['user' => $user])->first();
 
+        $exporter = new Exporter();
+
+        $exporter->setUser($user);
+
+        dd($exporter->toXML());
     }
 }

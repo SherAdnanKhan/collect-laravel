@@ -28,7 +28,6 @@ use SimpleXMLElement;
 
 class Importer
 {
-
     const PROJECT_ID_PREFIX = 'J-';
     const PARTY_ID_PREFIX = 'P-';
     const SESSION_ID_PREFIX = 'O-';
