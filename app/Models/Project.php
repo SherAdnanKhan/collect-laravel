@@ -19,6 +19,7 @@ use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\CollaboratorPermission;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,7 @@ class Project extends Model implements UserAccessible, EventLoggable
     use UserAccesses;
     use OrderScopes;
     use SoftDeletes;
+    use SoftCascadeTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +47,17 @@ class Project extends Model implements UserAccessible, EventLoggable
     protected $fillable = [
         'user_id', 'name', 'description', 'main_artist_id',
         'number', 'label_id', 'image', 'total_storage_used'
+    ];
+
+    /**
+     * The relationships that will also be
+     * soft deleted when this resource is.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'folders', 'files', 'recordings',
+        'sessions', 'credits'
     ];
 
     /**

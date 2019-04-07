@@ -18,12 +18,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Session extends Model implements UserAccessible, EventLoggable
 {
     use UserAccesses;
     use OrderScopes;
     use EventLogged;
+    use SoftDeletes;
 
     protected $fillable = [
         'project_id', 'session_type_id', 'venue_id', 'name', 'description', 'started_at',

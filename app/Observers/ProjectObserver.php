@@ -7,7 +7,7 @@ use App\Models\Project;
 class ProjectObserver
 {
     /**
-     * Handle the Project "deleting" event.
+     * Handle the Project "created" event.
      *
      * @param  \App\Project  $Project
      * @return void

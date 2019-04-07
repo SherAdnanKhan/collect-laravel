@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Emails;
 
+use App\Mail\ZipCreated;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -7,7 +7,7 @@ use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Nuwave\Lighthouse\Exceptions\TwoFactorAuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -28,7 +28,7 @@ class TwoFactor
 
         $twoFactor = resolve('App\Util\TwoFactorAuthentication');
         if (!$twoFactor->validate($token, $code)) {
-            throw new AuthenticationException;
+            throw new TwoFactorAuthenticationException;
         }
 
         $payload = $twoFactor->getPayload($token);
@@ -68,7 +68,7 @@ class TwoFactor
         $token = auth()->fromUser($user);
 
         if (!$token) {
-            throw new AuthenticationException;
+            throw new TwoFactorAuthenticationException;
         }
 
         return [

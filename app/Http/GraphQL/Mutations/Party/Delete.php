@@ -2,7 +2,9 @@
 
 namespace App\Http\GraphQL\Mutations\Party;
 
+use App\Models\Credit;
 use App\Models\Party;
+use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -27,6 +29,16 @@ class Delete
 
         if (!$party) {
             throw new AuthorizationException('Unable to find party to delete');
+        }
+
+        $recordings_count = Recording::where('party_id', $party->id)->count();
+        if ($recordings_count > 0) {
+            throw new AuthorizationException('Unable to delete party');
+        }
+
+        $credits_count = Credit::where('party_id', $party->id)->count();
+        if ($recordings_count > 0) {
+            throw new AuthorizationException('Unable to delete party');
         }
 
         $party->delete();
