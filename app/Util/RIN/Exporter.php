@@ -2,13 +2,17 @@
 
 namespace App\Util\RIN;
 
+use App\Models\Project;
 use App\Models\User;
-use SimpleXMLElement;
+use Carbon\Carbon;
 use DOMDocument;
 use DOMElement;
+use SimpleXMLElement;
 
 class Exporter
 {
+    const FILE_ID_PREFIX = 'VeVa-Project-';
+
     const PROJECT_ID_PREFIX = 'J-';
     const PARTY_ID_PREFIX = 'P-';
     const SESSION_ID_PREFIX = 'O-';
@@ -16,6 +20,14 @@ class Exporter
     const RECORDING_ID_PREFIX = 'A-';
 
     private $currentUser;
+    private $version;
+    private $project;
+
+    public function __construct(Project $project, $version = 1)
+    {
+        $this->project = $project;
+        $this->version = $version;
+    }
 
     /**
      * Set the current user context.
@@ -40,9 +52,23 @@ class Exporter
 
         // TODO: Start appending </FileHeader> and it's fields.
 
+        $fileHeader = $this->fileHeaderXMl($document, $rin);
+
+        $rin->appendChild($fileHeader);
         $document->appendChild($rin);
 
         return $document->saveXML();
+    }
+
+    private function filename()
+    {
+        $identifier = time();
+
+        if (!is_null($this->project->number)) {
+            $identifier = time() . '_' . $this->project->number;
+        }
+
+        return sprintf('%s_rin.xml', $identifier);
     }
 
     private function boilerplateXML(DOMDocument $document): DOMElement
@@ -55,5 +81,19 @@ class Exporter
         $rinElement->setAttribute('LanguageAndScriptCode', 'en');
 
         return $rinElement;
+    }
+
+    private function fileHeaderXMl(DOMDocument $document, DOMElement $parent): DOMElement
+    {
+        $fileHeader = $document->createElement('FileHeader');
+        $fileId = $document->createElement('FileId', self::FILE_ID_PREFIX . $this->version);
+        $fileName = $document->createElement('FileName', $this->filename());
+        $fileCreatedDateTime = $document->createElement('FileCreatedDateTime', Carbon::now()->toIso8601String());
+
+        $fileHeader->appendChild($fileId);
+        $fileHeader->appendChild($fileName);
+        $fileHeader->appendChild($fileCreatedDateTime);
+
+        return $fileHeader;
     }
 }

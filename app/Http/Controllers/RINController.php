@@ -52,7 +52,7 @@ class RINController extends Controller
         $user = User::find(10);
         $project = Project::where('id', 11)->userViewable(['user' => $user])->first();
 
-        $exporter = new Exporter();
+        $exporter = new Exporter($project, '1');
 
         $exporter->setUser($user);
 
