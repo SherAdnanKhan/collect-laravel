@@ -147,13 +147,23 @@ class Importer
             $projectNumber = (string) $project->ProjectId->ProprietaryId;
         }
 
+        $labelId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->Label);
+        if (!Party::find($labelId)) {
+            $labelId = null;
+        }
+
+        $mainArtistId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->MainArtist);
+        if (!Party::find($mainArtistId)) {
+            $mainArtistId = null;
+        }
+
         return [
             'id'             => $projectId,
             'name'           => (string) $project->Title,
             'description'    => (string) $project->Comment,
             'number'         => $projectNumber,
-            'label_id'       => (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->Label),
-            'main_artist_id' => (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->MainArtist),
+            'label_id'       => $labelId,
+            'main_artist_id' => $mainArtistId,
         ];
     }
 
@@ -172,18 +182,20 @@ class Importer
             $partyId = array_get($party, 'id', false);
             $party = array_except($party, ['id']);
 
+            $partyModel = null;
+
             if ($override) {
                 $partyModel = Party::where('id', $partyId)->userViewable(['user' => $this->currentUser])->first();
-
-                if (!$partyModel) {
-                    $party['user_id'] = $this->currentUser->getKey();
-                    $partyModel = new Party();
-                }
-
-                $partyModel->fill($party);
-                $partyModel->save();
-                $partyModels[$partyId] = $partyModel;
             }
+
+            if (!$partyModel) {
+                $party['user_id'] = $this->currentUser->getKey();
+                $partyModel = new Party();
+            }
+
+            $partyModel->fill($party);
+            $partyModel->save();
+            $partyModels[$partyId] = $partyModel;
         }
 
         return $partyModels;
@@ -263,22 +275,23 @@ class Importer
                 $recording['song_id'] = $song->getKey();
             }
 
+            $recordingModel = null;
             if ($override) {
                 $recordingModel = Recording::where('id', $recordingId)->userViewable(['user' => $this->currentUser])->first();
-
-                if (!$recordingModel) {
-                    $recording['user_id'] = $this->currentUser->getKey();
-                    $recordingModel = new Recording();
-                }
-
-                $recordingModel->fill($recording);
-                $recordingModel->save();
-
-                $this->importRecordingCredits($recordingModel, $recording['credits'], $parties);
-                $this->importRecordingSessions($recordingModel, $recording['sessions'], $sessions);
-
-                $recordingModels[$recordingId] = $recordingModel;
             }
+
+            if (!$recordingModel) {
+                $recording['user_id'] = $this->currentUser->getKey();
+                $recordingModel = new Recording();
+            }
+
+            $recordingModel->fill($recording);
+            $recordingModel->save();
+
+            $this->importRecordingCredits($recordingModel, $recording['credits'], $parties);
+            $this->importRecordingSessions($recordingModel, $recording['sessions'], $sessions);
+
+            $recordingModels[$recordingId] = $recordingModel;
         }
 
         return $recordingModels;
@@ -405,7 +418,12 @@ class Importer
             unset($session['venue']);
 
             $session['venue_id'] = null;
-            $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->currentUser])->first();
+
+            $venueModel = null;
+            if ($override) {
+                $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->currentUser])->first();
+            }
+
             if (!$venueModel) {
                 $venueModel = Venue::create([
                     'user_id' => $this->currentUser->getKey(),
@@ -417,18 +435,19 @@ class Importer
 
             $session['venue_id'] = $venueModel->getKey();
 
+            $sessionModel = null;
             if ($override) {
                 $sessionModel = Session::where('id', $sessionId)->userViewable(['user' => $this->currentUser])->first();
-
-                if (!$sessionModel) {
-                    $session['user_id'] = $this->currentUser->getKey();
-                    $sessionModel = new Session();
-                }
-
-                $sessionModel->fill($session);
-                $sessionModel->save();
-                $sessionModels[$sessionId] = $sessionModel;
             }
+
+            if (!$sessionModel) {
+                $session['user_id'] = $this->currentUser->getKey();
+                $sessionModel = new Session();
+            }
+
+            $sessionModel->fill($session);
+            $sessionModel->save();
+            $sessionModels[$sessionId] = $sessionModel;
         }
 
         return $sessionModels;
@@ -479,18 +498,19 @@ class Importer
             $songId = array_get($song, 'id', false);
             $song = array_except($song, ['id']);
 
+            $songModel = null;
             if ($override) {
                 $songModel = Song::where('id', $songId)->userViewable(['user' => $this->currentUser])->first();
-
-                if (!$songModel) {
-                    $song['user_id'] = $this->currentUser->getKey();
-                    $songModel = new Song();
-                }
-
-                $songModel->fill($song);
-                $songModel->save();
-                $songModels[$songId] = $songModel;
             }
+
+            if (!$songModel) {
+                $song['user_id'] = $this->currentUser->getKey();
+                $songModel = new Song();
+            }
+
+            $songModel->fill($song);
+            $songModel->save();
+            $songModels[$songId] = $songModel;
         }
 
         return $songModels;
