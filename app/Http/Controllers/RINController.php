@@ -28,7 +28,7 @@ class RINController extends Controller
         $xml = new DOMDocument();
         $xml->load(file_get_contents(__DIR__.'/../../../resources/8013289A01_rin.xml'));
 
-        if ($xml->schemaValidate(__DIR__.'/../../../resources/full-recording-information-notification.xsd')) {
+        if (true && $xml->schemaValidate(__DIR__.'/../../../resources/full-recording-information-notification.xsd')) {
             // For now just load in a RIN file.
             $importer->fromXML(simplexml_import_dom($xml));
             $importer->import(true);
