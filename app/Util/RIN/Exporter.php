@@ -55,9 +55,12 @@ class Exporter
 
         $fileHeader = $this->fileHeader($document);
         $projectList = $this->projectList($document);
+        $sessionList = $this->sessionList($document);
 
         $rin->appendChild($fileHeader);
         $rin->appendChild($projectList);
+        $rin->appendChild($sessionList);
+
         $document->appendChild($rin);
 
         return $document->saveXML();
@@ -159,18 +162,51 @@ class Exporter
     {
         $sessionList = $document->createElement('SessionList');
 
-        $sesionModels = $this->project->sessions;
-        foreach ($sesionModels as $sessionModel) {
+        $sessionModels = $this->project->sessions;
+        foreach ($sessionModels as $sessionModel) {
             $session = $document->createElement('Session');
             $session->appendChild($document->createElement('SessionReference', self::SESSION_ID_PREFIX . $sessionModel->getKey()));
 
             $session->appendChild($document->createElement('SessionType', $sessionModel->type->name));
             $session->appendChild($document->createElement('VenueName', $sessionModel->venue->name));
             $session->appendChild($document->createElement('VenueAddress', $sessionModel->venue->address));
+
+            // TODO: this will be changing to an id, so pull the code that way.
             $session->appendChild($document->createElement('TerritoryCode', $sessionModel->venue->country));
+
             $session->appendChild($document->createElement('VenueRoom', $sessionModel->venue_room));
             $session->appendChild($document->createElement('IsUnionSession', $sessionModel->union_session ? 'true' : 'false'));
             $session->appendChild($document->createElement('IsAnalogSession', $sessionModel->analog_session ? 'true' : 'false'));
+            $session->appendChild($document->createElement('Comment', $sessionModel->description));
+
+            if (!is_null($sessionModel->started_at)) {
+                $dt = Carbon::parse($sessionModel->started_at);
+                $session->appendChild($document->createElement('StartDateTime', $dt->toIso8601String()));
+            }
+
+            if (!is_null($sessionModel->ended_at)) {
+                $dt = Carbon::parse($sessionModel->ended_at);
+                $session->appendChild($document->createElement('EndDateTime', $dt->toIso8601String()));
+            }
+
+            if (!is_null($sessionModel->bit_depth)) {
+                $session->appendChild($document->createElement('BitDepth', $sessionModel->bit_depth));
+            }
+
+            if (!is_null($sessionModel->sample_rate)) {
+                $session->appendChild($document->createElement('SampleRate', $sessionModel->sample_rate));
+            }
+
+            if (!is_null($sessionModel->timecode_type)) {
+                $timecode = $document->createElement('TimeCode');
+                $timecode->appendChild($document->createElement('TimecodeType', $sessionModel->timecode_type));
+                $timecode->appendChild($document->createElement('FrameRate', $sessionModel->timecode_frame_rate));
+                $timecode->appendChild($document->createElement('IsDropFrame', $sessionModel->drop_frame ? 'true' : 'false'));
+
+                $session->appendChild($timecode);
+            }
+
+            $sessionList->appendChild($session);
         }
 
         return $sessionList;
