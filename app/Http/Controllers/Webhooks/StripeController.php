@@ -64,7 +64,7 @@ class StripeController extends CashierController
 
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
-                return $subscription->stripe_id === $payload['data']['object']['id'];
+                return $subscription->stripe_id === $payload['data']['object']['subscription'];
             })->each(function ($subscription) {
                 Log::debug('Send subscription payment failed email');
 
@@ -90,7 +90,7 @@ class StripeController extends CashierController
 
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
-                return $subscription->stripe_id === $payload['data']['object']['id'];
+                return $subscription->stripe_id === $payload['data']['object']['subscription'];
             })->each(function ($subscription) use ($payload) {
                 Log::debug('Send subscription payment successful email');
 
