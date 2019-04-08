@@ -93,9 +93,12 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
      */
     public function createAndSendInvite(): CollaboratorInvite
     {
+        $user = auth()->user();
+
         $invite = new CollaboratorInvite([
             'token'      => str_random(60),
             'project_id' => $this->project->id,
+            'user_id'    => ($user ? $user->id : null)
         ]);
 
         $saved = $this->invite()->save($invite);

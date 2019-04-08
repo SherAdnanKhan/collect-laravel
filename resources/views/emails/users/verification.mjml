@@ -8,10 +8,12 @@
         <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
 
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Welcome,<br />
+          Hey {{ $name }},<br />
+          <br />
+          We’re almost there! Please click the button below to verify your email.
         </mj-text>
         <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#212141" color="white" border-radius="4px" href="{{ $verifyUrl }}">
-          Click here to verify your account.
+          Verify
          </mj-button>
       </mj-column>
     </mj-section>
