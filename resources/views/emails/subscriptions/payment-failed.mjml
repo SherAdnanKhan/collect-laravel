@@ -8,9 +8,14 @@
         <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
 
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Hello {{ $name }},<br />
+          Hey {{ $name }},<br />
           <br />
-          We failed to take payment for your subscription.
+          It looks like we were unable to process the payment for your VEVA Collect subscription.<br />
+          <br />
+          Please <a href="{{ $accountUrl }}" style="color: #212141">click here</a> to update your payment details.<br />
+          <br />
+          Many thanks<br />
+          VEVA Collect
         </mj-text>
       </mj-column>
     </mj-section>

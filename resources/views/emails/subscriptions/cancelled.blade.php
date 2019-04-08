@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
 <head>
-  <title>
-  </title>
+  <title> </title>
   <!--[if !mso]><!-- -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!--<![endif]-->
@@ -60,7 +59,6 @@
       @-ms-viewport {
         width: 320px;
       }
-
       @viewport {
         width: 320px;
       }
@@ -114,9 +112,9 @@
             <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;">
               <!--[if mso | IE]>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                
+
         <tr>
-      
+
             <td
                class="" style="vertical-align:top;width:600px;"
             >
@@ -125,8 +123,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
                   <tr>
                     <td style="font-size:0px;padding:10px 25px;padding-bottom:40px;word-break:break-word;">
-                      <p style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:100%;">
-                      </p>
+                      <p style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:100%;"> </p>
                       <!--[if mso | IE]>
         <table
            align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px"
@@ -142,17 +139,17 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#212141;"> Hello {{ $name }},<br />
-                        <br /> Your subscription has been cancelled and you are now on the Lite plan. </div>
+                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#212141;"> Hello {{ $name }},<br /> <br /> We’re sorry to see you go! <br /> <br /> Thank you for using VEVA Collect, if there’s any way you we can improve the platform to suit your needs more, please drop us a quick note at <a href="mailto:hello@vevacollect.com"
+                          style="color: #212141;">hello@vevacollect.com</a><br /> <br /> Many thanks<br /> VEVA Collect </div>
                     </td>
                   </tr>
                 </table>
               </div>
               <!--[if mso | IE]>
             </td>
-          
+
         </tr>
-      
+
                   </table>
                 <![endif]-->
             </td>

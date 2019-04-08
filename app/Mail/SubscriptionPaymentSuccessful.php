@@ -23,6 +23,11 @@ class SubscriptionPaymentSuccessful extends Mailable
      */
     protected $subscription;
 
+    /**
+     * The total amount of this payment
+     * @var string
+     */
+    protected $invoiceAmountPaid;
 
     /**
      * Create a new message instance.
@@ -30,10 +35,11 @@ class SubscriptionPaymentSuccessful extends Mailable
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, Subscription $subscription)
+    public function __construct(User $user, Subscription $subscription, $invoiceAmountPaid)
     {
         $this->user = $user;
         $this->subscription = $subscription;
+        $this->invoiceAmountPaid = $invoiceAmountPaid;
     }
 
     /**
@@ -44,8 +50,11 @@ class SubscriptionPaymentSuccessful extends Mailable
     public function build()
     {
         return $this->view('emails.subscriptions.payment-successful')
+            ->subject('Thank you for your payment!')
             ->with([
-                'name' => $this->user->name,
+                'name'              => $this->user->first_name,
+                'invoiceAmountPaid' => $this->invoiceAmountPaid,
+                'planName'          => ucfirst($this->subscription->stripe_plan)
             ]);
     }
 }

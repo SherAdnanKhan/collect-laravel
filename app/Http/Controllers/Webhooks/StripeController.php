@@ -76,9 +76,13 @@ class StripeController extends CashierController
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['id'];
-            })->each(function ($subscription) {
+            })->each(function ($subscription) use ($payload) {
+
+                $formatter = new \NumberFormatter("en-US", \NumberFormatter::CURRENCY);
+                $invoiceAmountPaid = $formatter->formatCurrency($payload['data']['object']['amount_paid'] / 100, strtoupper($payload['data']['object']['currency']));
+
                 // Dispatch the sending of the payment success email.
-                SendSubscriptionPaymentSuccessfulEmail::dispatch($user, $subscription);
+                SendSubscriptionPaymentSuccessfulEmail::dispatch($user, $subscription, $invoiceAmountPaid);
             });
         }
 

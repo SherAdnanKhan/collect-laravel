@@ -30,15 +30,22 @@ class SendSubscriptionPaymentSuccessfulEmail implements ShouldQueue
     protected $subscription;
 
     /**
+     * The total amount of this payment
+     * @var string
+     */
+    protected $invoiceAmountPaid;
+
+    /**
      * Create a new job instance.
      *
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, Subscription $subscription)
+    public function __construct(User $user, Subscription $subscription, $invoiceAmountPaid)
     {
         $this->user = $user;
         $this->subscription = $subscription;
+        $this->invoiceAmountPaid = $invoiceAmountPaid;
     }
 
     /**
@@ -48,6 +55,6 @@ class SendSubscriptionPaymentSuccessfulEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new SubscriptionPaymentSuccessful($this->user, $this->subscription));
+        Mail::to($this->user)->send(new SubscriptionPaymentSuccessful($this->user, $this->subscription, $this->invoiceAmountPaid));
     }
 }
