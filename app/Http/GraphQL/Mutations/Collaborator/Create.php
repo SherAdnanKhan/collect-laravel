@@ -41,6 +41,10 @@ class Create
         if (!is_null($userId)) {
             $userToAdd = User::find($userId);
 
+            if (!$userToAdd) {
+                throw new AuthorizationException('User cannot add this collaborator');
+            }
+
             if ($userToAdd) {
                 $input['name'] = $userToAdd->name;
                 $input['email'] = $userToAdd->email;
