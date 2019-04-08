@@ -56,10 +56,12 @@ class Exporter
         $fileHeader = $this->fileHeader($document);
         $projectList = $this->projectList($document);
         $sessionList = $this->sessionList($document);
+        $recordingList = $this->recordingList($document);
 
         $rin->appendChild($fileHeader);
         $rin->appendChild($projectList);
         $rin->appendChild($sessionList);
+        $rin->appendChild($recordingList);
 
         $document->appendChild($rin);
 
@@ -206,10 +208,45 @@ class Exporter
                 $session->appendChild($timecode);
             }
 
+            $recordingModels = $sessionModel->recordings;
+            foreach ($recordingModels as $recordingModel) {
+                $session->appendChild($document->createElement('SessionSoundRecordingReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
+            }
+
             $sessionList->appendChild($session);
         }
 
         return $sessionList;
+    }
+
+    private function recordingList(DOMDocument $document): DOMElement
+    {
+        $recordingList = $document->createElement('ResourceList');
+
+        $recordingModels = $this->project->recordings;
+        foreach ($recordingModels as $recordingModel) {
+            $soundRecording = $document->createElement('SoundRecording');
+
+            if (!is_null($recordingModel->type)) {
+                $soundRecording->appendChild($document->createElement('SoundRecordingType', $recordingModel->type->name));
+            }
+
+            if (!is_null($recordingModel->party)) {
+                $soundRecording->appendChild($document->createElement('MainArtist', self::PARTY_ID_PREFIX . $recordingModel->party->getKey()));
+            }
+
+            if (!is_null($recordingModel->isrc)) {
+                $soundRecordingId = $document->createElement('SoundRecordingId');
+                $soundRecordingId->appendChild($document->createElement('ISRC', $recordingModel->isrc));
+                $soundRecording->appendChild($soundRecordingId);
+            }
+
+            $soundRecording->appendChild($document->createElement('ResourceReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
+
+            $recordingList->appendChild($soundRecording);
+        }
+
+        return $recordingList;
     }
 
     private function signature(DOMDocument $document): DOMElement
