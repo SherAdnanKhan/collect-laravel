@@ -57,7 +57,7 @@ class DeleteFiles implements ShouldQueue
             $folder->forceDelete();
         }
 
-        $s3 = Storage::disk('s3')->getDriver();
+        $s3 = Storage::disk('s3')->getDriver()->getAdapter()->getClient();
         try {
             $s3->deleteObjects([
                 'Bucket' => config('filesystems.disks.s3.bucket'),
