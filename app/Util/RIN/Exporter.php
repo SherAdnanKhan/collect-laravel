@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DOMDocument;
 use DOMElement;
+use Illuminate\Support\Facades\App;
 use SimpleXMLElement;
 
 class Exporter
@@ -86,13 +87,13 @@ class Exporter
     private function fileHeaderXMl(DOMDocument $document, DOMElement $parent): DOMElement
     {
         $fileHeader = $document->createElement('FileHeader');
-        $fileId = $document->createElement('FileId', self::FILE_ID_PREFIX . $this->version);
-        $fileName = $document->createElement('FileName', $this->filename());
-        $fileCreatedDateTime = $document->createElement('FileCreatedDateTime', Carbon::now()->toIso8601String());
 
-        $fileHeader->appendChild($fileId);
-        $fileHeader->appendChild($fileName);
-        $fileHeader->appendChild($fileCreatedDateTime);
+        $fileHeader->appendChild($document->createElement('FileId', self::FILE_ID_PREFIX . $this->version));
+        $fileHeader->appendChild($document->createElement('FileName', $this->filename()));
+        $fileHeader->appendChild($document->createElement('FileCreatedDateTime', Carbon::now()->toIso8601String()));
+        $fileHeader->appendChild($document->createElement('FileControlType', App::environment('production') ? 'LiveMessage' : 'TestMessage'));
+        $fileHeader->appendChild($document->createElement('SystemType', env('app.name', '')));
+        $fileHeader->appendChild($document->createElement('Version', ''));
 
         return $fileHeader;
     }
