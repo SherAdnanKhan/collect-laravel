@@ -45,9 +45,6 @@ class Update
 
         $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
 
-        GraphQLSubscription::broadcast('userSubscriptionUpdated', $subscription);
-        SendSubscriptionUpdatedEmail::dispatch($user, $subscription);
-
         return $subscription->toArray();
     }
 }
