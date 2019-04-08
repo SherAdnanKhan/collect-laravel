@@ -45,7 +45,7 @@ class SubscriptionUpdated extends Mailable
         return $this->view('emails.subscriptions.updated')
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
-                'name' => $this->user->name,
+                'name' => $this->user->first_name,
                 'planName' => ucfirst($this->subscription->stripe_plan),
             ]);
     }
