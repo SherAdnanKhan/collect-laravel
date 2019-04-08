@@ -37,7 +37,7 @@ class StripeController extends CashierController
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['id'];
-            })->each(function ($subscription) {
+            })->each(function ($subscription) use ($user) {
                 Log::debug(sprintf('Mark subscription for %s as cancelled', $subscription->user_id));
 
                 $subscription->markAsCancelled();
@@ -65,7 +65,7 @@ class StripeController extends CashierController
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['subscription'];
-            })->each(function ($subscription) {
+            })->each(function ($subscription) use ($user) {
                 Log::debug('Send subscription payment failed email');
 
                 // Dispatch the sending of the payment failed email.
@@ -91,7 +91,7 @@ class StripeController extends CashierController
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['subscription'];
-            })->each(function ($subscription) use ($payload) {
+            })->each(function ($subscription) use ($payload, $user) {
                 Log::debug('Send subscription payment successful email');
 
                 $formatter = new \NumberFormatter("en-US", \NumberFormatter::CURRENCY);
@@ -123,7 +123,7 @@ class StripeController extends CashierController
 
             $user->subscriptions->filter(function (Subscription $subscription) use ($data) {
                 return $subscription->stripe_id === $data['id'];
-            })->each(function (Subscription $subscription) use ($data) {
+            })->each(function (Subscription $subscription) use ($data, $user) {
                 Log::debug('Update customer subscription');
 
                 $originalStripePlan = $subscription->stripe_plan;
