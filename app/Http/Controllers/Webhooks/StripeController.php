@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Webhooks;
 
-use App\Http\GraphQL\Mutations\Subscription\GraphQLSubscription;
 use App\Jobs\Emails\SendSubscriptionCancelledEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentFailedEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentSuccessfulEmail;
 use App\Jobs\Emails\SendSubscriptionUpdatedEmail;
 use App\Models\Subscription;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
+use Nuwave\Lighthouse\Execution\Utils\Subscription as GraphQLSubscription;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
