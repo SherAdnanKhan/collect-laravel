@@ -155,6 +155,27 @@ class Exporter
         return $projectList;
     }
 
+    private function sessionList(DOMDocument $document): DOMElement
+    {
+        $sessionList = $document->createElement('SessionList');
+
+        $sesionModels = $this->project->sessions;
+        foreach ($sesionModels as $sessionModel) {
+            $session = $document->createElement('Session');
+            $session->appendChild($document->createElement('SessionReference', self::SESSION_ID_PREFIX . $sessionModel->getKey()));
+
+            $session->appendChild($document->createElement('SessionType', $sessionModel->type->name));
+            $session->appendChild($document->createElement('VenueName', $sessionModel->venue->name));
+            $session->appendChild($document->createElement('VenueAddress', $sessionModel->venue->address));
+            $session->appendChild($document->createElement('TerritoryCode', $sessionModel->venue->country));
+            $session->appendChild($document->createElement('VenueRoom', $sessionModel->venue_room));
+            $session->appendChild($document->createElement('IsUnionSession', $sessionModel->union_session ? 'true' : 'false'));
+            $session->appendChild($document->createElement('IsAnalogSession', $sessionModel->analog_session ? 'true' : 'false'));
+        }
+
+        return $sessionList;
+    }
+
     private function signature(DOMDocument $document): DOMElement
     {
         $signature = $document->createElement('Signature');
