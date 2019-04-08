@@ -80,9 +80,10 @@ class StripeController extends CashierController
 
                 $formatter = new \NumberFormatter("en-US", \NumberFormatter::CURRENCY);
                 $invoiceAmountPaid = $formatter->formatCurrency($payload['data']['object']['amount_paid'] / 100, strtoupper($payload['data']['object']['currency']));
+                $invoiceUrl = $payload['data']['object']['invoice_pdf'];
 
                 // Dispatch the sending of the payment success email.
-                SendSubscriptionPaymentSuccessfulEmail::dispatch($user, $subscription, $invoiceAmountPaid);
+                SendSubscriptionPaymentSuccessfulEmail::dispatch($user, $subscription, $invoiceAmountPaid, $invoiceUrl);
             });
         }
 

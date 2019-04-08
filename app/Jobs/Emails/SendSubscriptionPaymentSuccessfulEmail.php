@@ -36,16 +36,23 @@ class SendSubscriptionPaymentSuccessfulEmail implements ShouldQueue
     protected $invoiceAmountPaid;
 
     /**
+     * The url to the invoice for this payment
+     * @var string
+     */
+    protected $invoiceUrl;
+
+    /**
      * Create a new job instance.
      *
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, Subscription $subscription, $invoiceAmountPaid)
+    public function __construct(User $user, Subscription $subscription, $invoiceAmountPaid, $invoiceUrl)
     {
         $this->user = $user;
         $this->subscription = $subscription;
         $this->invoiceAmountPaid = $invoiceAmountPaid;
+        $this->invoiceUrl = $invoiceUrl;
     }
 
     /**
@@ -55,6 +62,6 @@ class SendSubscriptionPaymentSuccessfulEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new SubscriptionPaymentSuccessful($this->user, $this->subscription, $this->invoiceAmountPaid));
+        Mail::to($this->user)->send(new SubscriptionPaymentSuccessful($this->user, $this->subscription, $this->invoiceAmountPaid, $this->invoiceUrl));
     }
 }

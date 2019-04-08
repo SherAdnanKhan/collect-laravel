@@ -30,16 +30,23 @@ class SubscriptionPaymentSuccessful extends Mailable
     protected $invoiceAmountPaid;
 
     /**
+     * The url to the invoice for this payment
+     * @var string
+     */
+    protected $invoiceUrl;
+
+    /**
      * Create a new message instance.
      *
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, Subscription $subscription, $invoiceAmountPaid)
+    public function __construct(User $user, Subscription $subscription, $invoiceAmountPaid, $invoiceUrl)
     {
         $this->user = $user;
         $this->subscription = $subscription;
         $this->invoiceAmountPaid = $invoiceAmountPaid;
+        $this->invoiceUrl = $invoiceUrl;
     }
 
     /**
@@ -49,12 +56,18 @@ class SubscriptionPaymentSuccessful extends Mailable
      */
     public function build()
     {
+        $tmpfname = tempnam('/tmp', 'invoice');
+        file_put_contents($tmpfname, file_get_contents($this->invoiceUrl));
+
         return $this->view('emails.subscriptions.payment-successful')
             ->subject('Thank you for your payment!')
             ->with([
                 'name'              => $this->user->first_name,
                 'invoiceAmountPaid' => $this->invoiceAmountPaid,
                 'planName'          => ucfirst($this->subscription->stripe_plan)
+            ])
+            ->attach($tmpfname, [
+                'as' => 'invoice.pdf',
             ]);
     }
 }
