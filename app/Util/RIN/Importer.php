@@ -316,6 +316,10 @@ class Importer
 
             $creditModel = Credit::where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->where('party_id', $contributionId)->first();
 
+            // TODO: Handle ContributorType correctly
+            // TODO: InstrumentType handling
+            // TODO: handle RightSharePercentage, "split"
+
             if (!$creditModel) {
                 $creditModel = Credit::create([
                     'party_id'          => $contributionId,

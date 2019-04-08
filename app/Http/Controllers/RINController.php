@@ -49,13 +49,14 @@ class RINController extends Controller
      */
     public function export(Request $request)
     {
-        $user = User::find(10);
-        $project = Project::where('id', 11)->userViewable(['user' => $user])->first();
+        $user = User::find(1);
+        $project = Project::where('id', 1)->userViewable(['user' => $user])->first();
 
         $exporter = new Exporter($project, '1');
 
         $exporter->setUser($user);
 
-        dd($exporter->toXML());
+        header('Content-Type: application/xml');
+        echo $exporter->toXML();
     }
 }

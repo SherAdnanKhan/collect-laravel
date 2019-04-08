@@ -53,9 +53,11 @@ class Exporter
 
         // TODO: Start appending </FileHeader> and it's fields.
 
-        $fileHeader = $this->fileHeaderXMl($document, $rin);
+        $fileHeader = $this->fileHeader($document);
+        $projectList = $this->projectList($document);
 
         $rin->appendChild($fileHeader);
+        $rin->appendChild($projectList);
         $document->appendChild($rin);
 
         return $document->saveXML();
@@ -84,7 +86,7 @@ class Exporter
         return $rinElement;
     }
 
-    private function fileHeaderXMl(DOMDocument $document, DOMElement $parent): DOMElement
+    private function fileHeader(DOMDocument $document): DOMElement
     {
         $fileHeader = $document->createElement('FileHeader');
 
@@ -92,9 +94,96 @@ class Exporter
         $fileHeader->appendChild($document->createElement('FileName', $this->filename()));
         $fileHeader->appendChild($document->createElement('FileCreatedDateTime', Carbon::now()->toIso8601String()));
         $fileHeader->appendChild($document->createElement('FileControlType', App::environment('production') ? 'LiveMessage' : 'TestMessage'));
-        $fileHeader->appendChild($document->createElement('SystemType', env('app.name', '')));
-        $fileHeader->appendChild($document->createElement('Version', ''));
+        $fileHeader->appendChild($document->createElement('SystemType', config('app.name', '')));
+        $fileHeader->appendChild($document->createElement('Version', config('app.version', '')));
+
+        $fileCreator = $document->createElement('FileCreator');
+        $fileCreator->appendChild($document->createElement('PartyId'));
+        $fileHeader->appendChild($fileCreator);
+
+        $createdOnBehalfOf = $document->createElement('CreatedOnBehalfOf');
+        $createdOnBehalfOf->appendChild($document->createElement('PartyId'));
+        $fileHeader->appendChild($createdOnBehalfOf);
+
+        $fileHeader->appendChild($this->signature($document));
 
         return $fileHeader;
+    }
+
+    private function projectList(DOMDocument $document): DOMElement
+    {
+        $projectList = $document->createElement('ProjectList');
+
+        $project = $document->createElement('Project');
+
+        $projectId = $document->createElement('ProjectId');
+        $project->appendChild($projectId);
+
+        $proprietaryId = $document->createElement('ProprietaryId', $this->project->number);
+        $proprietaryId->setAttribute('Namespace', 'Project Number');
+        $projectId->appendChild($proprietaryId);
+        $project->appendChild($document->createElement('ProjectReference', self::PROJECT_ID_PREFIX . $this->project->getKey()));
+
+        if ($this->project->artist) {
+            $project->appendChild($document->createElement('MainArtist', self::PARTY_ID_PREFIX . $this->project->artist->getKey()));
+            $project->appendChild($document->createElement('ProjectArtist', $this->project->artist->name));
+        }
+
+        $project->appendChild($document->createElement('Title', $this->project->name));
+
+        if ($this->project->label) {
+            $project->appendChild($document->createElement('Label', self::PARTY_ID_PREFIX . $this->project->label->getKey()));
+        }
+
+        $project->appendChild($document->createElement('Status', 'Verified'));
+
+        $credits = $this->project->credits()->where('contribution_type', 'project')->where('contribution_id', $this->project->getKey())->get();
+        foreach ($credits as $credit) {
+            $contributorReference = $document->createElement('ContributorReference');
+            $contributorReference->appendChild($document->createElement('ProjectContributorReference', self::PARTY_ID_PREFIX . $credit->party_id));
+            $contributorReference->appendChild($document->createElement('Role', $credit->role->name));
+
+            if (!is_null($credit->split)) {
+                $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
+            }
+
+            $project->appendChild($contributorReference);
+        }
+
+        $projectList->appendChild($project);
+
+        return $projectList;
+    }
+
+    private function signature(DOMDocument $document): DOMElement
+    {
+        $signature = $document->createElement('Signature');
+        $signedInfo = $document->createElement('SignedInfo');
+
+        $canonicalizationMethod = $document->createElement('ds:CanonicalizationMethod');
+        $signatureMethod = $document->createElement('ds:SignatureMethod');
+
+        $reference = $document->createElement('ds:Reference');
+        $digestMethod = $document->createElement('ds:DigestMethod');
+        $digestValue = $document->createElement('ds:DigestValue');
+        $reference->appendChild($digestMethod);
+        $reference->appendChild($digestValue);
+
+        $signedInfo->appendChild($canonicalizationMethod);
+        $signedInfo->appendChild($signatureMethod);
+        $signedInfo->appendChild($reference);
+
+        $signatureValue = $document->createElement('SignatureValue');
+
+        $keyInfo = $document->createElement('KeyInfo');
+        $x509Data = $document->createElement('X509Data');
+        $x509Data->appendChild($document->createElement('X509SubjectName'));
+        $keyInfo->appendChild($x509Data);
+
+        $signature->appendChild($signedInfo);
+        $signature->appendChild($signatureValue);
+        $signature->appendChild($keyInfo);
+
+        return $signature;
     }
 }

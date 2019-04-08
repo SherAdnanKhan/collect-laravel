@@ -202,12 +202,12 @@ class Project extends Model implements UserAccessible, EventLoggable
 
     public function artist(): HasOne
     {
-        return $this->hasOne(Party::class, 'main_artist_id');
+        return $this->hasOne(Party::class, 'id', 'main_artist_id');
     }
 
     public function label(): HasOne
     {
-        return $this->hasOne(Party::class, 'label_id');
+        return $this->hasOne(Party::class, 'id', 'label_id');
     }
 
     /**
