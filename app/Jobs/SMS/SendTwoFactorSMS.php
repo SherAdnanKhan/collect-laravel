@@ -44,8 +44,8 @@ class SendTwoFactorSMS implements ShouldQueue
         $client = resolve('Nexmo\Client');
         $message = 'VeVa Two-Factor Code: %s';
         $text = new Text($this->phone, config('services.nexmo.from'), sprintf($message, $this->code));
-        $text->setClientRef('2fa-' . $this->phone)
-            ->setClass(Text::CLASS_FLASH);
+        // $text->setClientRef('2fa-' . $this->phone);
+        //     ->setClass(Text::CLASS_FLASH);
 
         $client->message()->send($text);
     }
