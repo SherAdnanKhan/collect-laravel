@@ -266,9 +266,8 @@ input DeletePartyAddressInput {
 
 input CreateCollaboratorInput {
     project_id: ID! @rules(apply: ["required"])
-    user_id: ID @rules(apply: ["required_without_all:input.email,input.name"])
-    email: String @rules(apply: ["required_without:input.user_id"])
-    name: String @rules(apply: ["required_without:input.user_id", "required_with:input.email"])
+    email: String! @rules(apply: ["required"])
+    name: String! @rules(apply: ["required"])
 }
 
 input DeleteCollaboratorInput {

@@ -30,27 +30,12 @@ class Create
         }
 
         $input = array_get($args, 'input');
-        $userId = (int) array_get($input, 'user_id', null);
         $projectId = (int) array_get($input, 'project_id');
-
-        if ($userId == $user->id) {
-            throw new AuthorizationException('User cannot make themselves a collaborator');
-        }
-
-        $userToAdd = null;
-        if (!is_null($userId)) {
-            $userToAdd = User::find($userId);
-
-            if ($userToAdd) {
-                $input['name'] = $userToAdd->name;
-                $input['email'] = $userToAdd->email;
-            }
-        }
 
         $project = Project::find($projectId);
 
         $cannotCreate = !$project || !$user->can('create', [
-            Collaborator::class, $project, $userToAdd
+            Collaborator::class, $project, null
         ]);
 
         if ($cannotCreate) {
