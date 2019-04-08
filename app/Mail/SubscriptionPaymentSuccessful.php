@@ -64,12 +64,12 @@ class SubscriptionPaymentSuccessful extends Mailable
                 'planName'          => ucfirst($this->subscription->stripe_plan)
             ]);
 
-        $tmpfname = tempnam('/tmp', 'invoice');
-        if (@file_put_contents($tmpfname, file_get_contents($this->invoiceUrl))) {
-            $email->attach($tmpfname, [
-                'as' => 'invoice.pdf',
-            ]);
-        }
+        // $tmpfname = tempnam('/tmp', 'invoice');
+        // if (@file_put_contents($tmpfname, file_get_contents($this->invoiceUrl))) {
+        //     $email->attach($tmpfname, [
+        //         'as' => 'invoice.pdf',
+        //     ]);
+        // }
 
         return $email;
     }
