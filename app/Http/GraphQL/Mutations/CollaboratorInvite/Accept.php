@@ -23,7 +23,7 @@ class Accept
         $user = auth()->user();
 
         $invite = CollaboratorInvite::where('token', array_get($input, 'token'))->whereHas('collaborator', function($query) use($user) {
-            return $query->where('user_id', $user->getAuthIdentifier())->orWhere('email', $user->email);
+            return $query->where('email', $user->email);
         })->first();
 
         if (!$invite) {
