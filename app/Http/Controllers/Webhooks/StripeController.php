@@ -105,6 +105,8 @@ class StripeController extends CashierController
             $user->subscriptions->filter(function (Subscription $subscription) use ($data) {
                 return $subscription->stripe_id === $data['id'];
             })->each(function (Subscription $subscription) use ($data) {
+                $originalStripePlan = $subscription->stripe_plan;
+
                 // Quantity...
                 if (isset($data['quantity'])) {
                     $subscription->quantity = $data['quantity'];
@@ -134,7 +136,16 @@ class StripeController extends CashierController
                 $subscription->save();
 
                 GraphQLSubscription::broadcast('userSubscriptionUpdated', $subscription);
-                SendSubscriptionUpdatedEmail::dispatch($user, $subscription);
+
+                // Send subscription updated email if they're not on the free plan
+                if ($data['plan']['id'] !== $subscription->stripe_plan && $subscription->stripe_plan !== 'free') {
+                    SendSubscriptionUpdatedEmail::dispatch($user, $subscription);
+                }
+
+                // Send cancelled email if they downgrade to free plan
+                if ($data['plan']['id'] === 'free' && $originalStripePlan !== 'free') {
+                    SendSubscriptionCancelledEmail::dispatch($user, $subscription);
+                }
             });
         }
 
