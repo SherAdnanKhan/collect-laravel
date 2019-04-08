@@ -7,6 +7,7 @@ use App\Jobs\Emails\SendSubscriptionPaymentFailedEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentSuccessfulEmail;
 use App\Jobs\Emails\SendSubscriptionUpdatedEmail;
 use App\Models\Subscription;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 use Nuwave\Lighthouse\Execution\Utils\Subscription as GraphQLSubscription;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,12 +30,16 @@ class StripeController extends CashierController
      */
     protected function handleCustomerSubscriptionDeleted(array $payload)
     {
+        Log::debug('Received customer subscription deleted webhook');
+
         $user = $this->getUserByStripeId($payload['data']['object']['customer']);
 
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['id'];
             })->each(function ($subscription) {
+                Log::debug(sprintf('Mark subscription for %s as cancelled', $subscription->user_id));
+
                 $subscription->markAsCancelled();
 
                 // Dispatch the sending of the cancelled email.
@@ -53,12 +58,16 @@ class StripeController extends CashierController
      */
     protected function handleInvoicePaymentFailed(array $payload)
     {
+        Log::debug('Received invoice payment failed webhook');
+
         $user = $this->getUserByStripeId($payload['data']['object']['customer']);
 
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['id'];
             })->each(function ($subscription) {
+                Log::debug('Send subscription payment failed email');
+
                 // Dispatch the sending of the payment failed email.
                 SendSubscriptionPaymentFailedEmail::dispatch($user, $subscription);
             });
@@ -75,12 +84,15 @@ class StripeController extends CashierController
      */
     protected function handleInvoicePaymentSucceeded(array $payload)
     {
+        Log::debug('Received invoice payment succeeded webhook');
+
         $user = $this->getUserByStripeId($payload['data']['object']['customer']);
 
         if ($user) {
             $user->subscriptions->filter(function ($subscription) use ($payload) {
                 return $subscription->stripe_id === $payload['data']['object']['id'];
             })->each(function ($subscription) use ($payload) {
+                Log::debug('Send subscription payment successful email');
 
                 $formatter = new \NumberFormatter("en-US", \NumberFormatter::CURRENCY);
                 $invoiceAmountPaid = $formatter->formatCurrency($payload['data']['object']['amount_paid'] / 100, strtoupper($payload['data']['object']['currency']));
@@ -102,6 +114,8 @@ class StripeController extends CashierController
      */
     protected function handleCustomerSubscriptionUpdated(array $payload)
     {
+        Log::debug('Received customer subscription updated webhook');
+
         $user = $this->getUserByStripeId($payload['data']['object']['customer']);
 
         if ($user) {
@@ -110,6 +124,8 @@ class StripeController extends CashierController
             $user->subscriptions->filter(function (Subscription $subscription) use ($data) {
                 return $subscription->stripe_id === $data['id'];
             })->each(function (Subscription $subscription) use ($data) {
+                Log::debug('Update customer subscription');
+
                 $originalStripePlan = $subscription->stripe_plan;
 
                 // Quantity...
@@ -144,11 +160,15 @@ class StripeController extends CashierController
 
                 // Send subscription updated email if they're not on the free plan
                 if ($data['plan']['id'] !== $subscription->stripe_plan && $subscription->stripe_plan !== 'free') {
+                    Log::debug('Send subscription updated email');
+
                     SendSubscriptionUpdatedEmail::dispatch($user, $subscription);
                 }
 
                 // Send cancelled email if they downgrade to free plan
                 if ($data['plan']['id'] === 'free' && $originalStripePlan !== 'free') {
+                    Log::debug('Send subscription cancelled email');
+
                     SendSubscriptionCancelledEmail::dispatch($user, $subscription);
                 }
             });
