@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
 <head>
-  <title>
-  </title>
+  <title> </title>
   <!--[if !mso]><!-- -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!--<![endif]-->
@@ -60,7 +59,6 @@
       @-ms-viewport {
         width: 320px;
       }
-
       @viewport {
         width: 320px;
       }
@@ -125,8 +123,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
                   <tr>
                     <td style="font-size:0px;padding:10px 25px;padding-bottom:40px;word-break:break-word;">
-                      <p style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:100%;">
-                      </p>
+                      <p style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:100%;"> </p>
                       <!--[if mso | IE]>
         <table
            align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px"
@@ -142,17 +139,16 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#212141;"> Welcome,<br />
-                      </div>
+                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#212141;"> Hey {{ $name }},<br /> <br /> We’re almost there! Please click the button below to verify your email. </div>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                         <tr>
-                          <td align="center" bgcolor="#212141" role="presentation" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#212141;" valign="middle">
-                            <a href="{{ $verifyUrl }}" style="display:inline-block;background:#212141;color:white;font-family:Source Sans Pro;font-size:14px;font-weight:700;line-height:120%;Margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;" target="_blank"> Click here to verify your account. </a>
-                          </td>
+                          <td align="center" bgcolor="#212141" role="presentation" style="border:none;border-radius:4px;cursor:auto;padding:10px 25px;background:#212141;" valign="middle"> <a href="{{ $verifyUrl }}" style="background:#212141;color:white;font-family:Source Sans Pro;font-size:14px;font-weight:700;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank">
+              Verify
+            </a> </td>
                         </tr>
                       </table>
                     </td>

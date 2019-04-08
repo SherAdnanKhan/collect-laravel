@@ -8,7 +8,16 @@
         <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
 
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Welcome {{ $name }}<br />
+          Hey {{ $name }},<br />
+<br />
+Welcome to VEVA Collect!<br />
+<br />
+All our new users get 2Gb of free file storage and the ability to manage their RIN file data on the Lite plan. <br />
+<br />
+For more great features like sharing data with collaborators and unlimited storage, check out our Pro Plan!<br />
+<br />
+Many thanks<br />
+VEVA Collect
         </mj-text>
       </mj-column>
     </mj-section>

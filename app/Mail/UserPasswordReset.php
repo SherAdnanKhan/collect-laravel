@@ -44,6 +44,10 @@ class UserPasswordReset extends Mailable
         $resetUrl = config('app.frontend_url') . '/reset-password/' . $this->token . '?email=' . $this->user->email;
 
         return $this->view('emails.users.password-reset')
-            ->with(['resetUrl' => $resetUrl]);
+            ->subject('Reset your VEVA Collect Password')
+            ->with([
+                'name'     => $this->user->first_name,
+                'resetUrl' => $resetUrl
+            ]);
     }
 }

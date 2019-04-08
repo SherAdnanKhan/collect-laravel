@@ -34,8 +34,9 @@ class UserWelcome extends Mailable
     public function build()
     {
         return $this->view('emails.users.welcome')
+            ->subject('Welcome to VEVA Collect')
             ->with([
-                'name' => $this->user->name,
+                'name' => $this->user->first_name,
             ]);
     }
 }

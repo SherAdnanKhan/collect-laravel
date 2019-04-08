@@ -8,9 +8,16 @@
         <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
 
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Hello, {{ $name }}<br />
+          Hey {{ $name }},<br />
           <br />
-          You have reached your allocated storage limit.
+          It looks like you’ve been working hard because you’ve reached your storage limit on VEVA Collect.<br />
+          <br />
+          You can either remove some of your files (make sure you have your own backup), or upgrade to one of our higher storage limit plans.  Our Pro Plan includes unlimited storage amongst other great benefits!<br />
+          <br />
+          To view our other plan options <a href="" style="color: #212141">click here</a>.<br />
+          <br />
+          Many thanks<br />
+          VEVA Collect
         </mj-text>
       </mj-column>
     </mj-section>

@@ -18,8 +18,18 @@ class CollaboratorInvite extends Model
      * @var array
      */
     protected $fillable = [
-        'project_id', 'collaborator_id', 'token',
+        'project_id', 'collaborator_id', 'token', 'user_id'
     ];
+
+    /**
+     * The user who this collaborator represents
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * The project this collaborator belongs to.

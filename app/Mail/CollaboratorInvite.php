@@ -35,13 +35,12 @@ class CollaboratorInvite extends Mailable
     {
         $inviteUrl = config('app.frontend_url') . '/invite/' . $this->invite->token;
 
-        $name = $this->invite->collaborator->name;
-        $email = $this->invite->collaborator->email;
-
         return $this->view('emails.collaborators.invite')
+            ->subject('VEVA Collect invitation from ' . $this->invite->user->name)
             ->with([
-                'name'        => $name,
-                'projectName' => $email,
+                'name'        => $this->invite->collaborator->name,
+                'projectName' => $this->invite->project->name,
+                'senderName'  => $this->invite->user->name,
                 'inviteUrl'   => $inviteUrl
             ]);
     }
