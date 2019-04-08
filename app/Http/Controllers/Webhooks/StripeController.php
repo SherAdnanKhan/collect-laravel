@@ -6,6 +6,7 @@ use App\Jobs\Emails\SendSubscriptionCancelledEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentFailedEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentSuccessfulEmail;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handle stripe webhook requests.
