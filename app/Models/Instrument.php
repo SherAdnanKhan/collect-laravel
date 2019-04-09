@@ -14,7 +14,7 @@ class Instrument extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'category',
+        'name', 'category', 'ddex_key'
     ];
 
     /**
