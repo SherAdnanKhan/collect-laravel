@@ -34,6 +34,6 @@ class Utilities
     public static function formatDuration(int $duration): string
     {
         // format as https://en.wikipedia.org/wiki/ISO_8601 :2004 from int.
-        return CarbonInterval::seconds($duration)->spec();
+        return CarbonInterval::seconds($duration)->cascade()->spec();
     }
 }

@@ -225,6 +225,10 @@ class Exporter
 
         $recordingModels = $this->project->recordings;
         foreach ($recordingModels as $recordingModel) {
+            if (!$recordingModel->song) {
+                continue;
+            }
+
             $soundRecording = $document->createElement('SoundRecording');
 
             if (!is_null($recordingModel->type)) {
@@ -242,6 +246,48 @@ class Exporter
             }
 
             $soundRecording->appendChild($document->createElement('ResourceReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
+            $soundRecording->appendChild($document->createElement('SoundRecordingMusicalWorkReference', self::SONG_ID_PREFIX . $recordingModel->song->getKey()));
+
+            $title = $document->createElement('Title');
+            $title->appendChild($document->createElement('TitleText', $recordingModel->name));
+            $title->appendChild($document->createElement('SubTitle', $recordingModel->subtitle));
+            $soundRecording->appendChild($title);
+
+            $soundRecording->appendChild($document->createElement('Version', $recordingModel->version));
+            $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language));
+            $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
+            $soundRecording->appendChild($document->createElement('KeySignature', $recordingModel->key_signature));
+            $soundRecording->appendChild($document->createElement('TimeSignature', $recordingModel->time_signature));
+            $soundRecording->appendChild($document->createElement('Tempo', $recordingModel->tempo));
+
+            $soundRecording->appendChild($document->createElement('Duration', Utilities::formatDuration($recordingModel->duration)));
+            if (!is_null($recordingModel->mixed_on)) {
+                $dt = Carbon::parse($recordingModel->mixed_on);
+                $soundRecording->appendChild($document->createElement('MasteredDate', $dt->toIso8601String()));
+            }
+
+            if (!is_null($recordingModel->recorded_on)) {
+                $dt = Carbon::parse($recordingModel->recorded_on);
+                $soundRecording->appendChild($document->createElement('EventDate', $dt->toIso8601String()));
+            }
+
+            if (!is_null($recordingModel->created_at)) {
+                $dt = Carbon::parse($recordingModel->created_at);
+                $soundRecording->appendChild($document->createElement('CreationDate', $dt->toIso8601String()));
+            }
+
+            $creditModels = $recordingModel->credits()->where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->get();
+            foreach ($creditModels as $creditModel) {
+                $contributorReference = $document->createElement('ContributorReference');
+                $contributorReference->appendChild($document->createElement('ProjectContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
+                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->name));
+
+                if (!is_null($creditModel->split)) {
+                    $contributorReference->appendChild($document->createElement('RightSharePercentage', $creditModel->split));
+                }
+
+                $soundRecording->appendChild($contributorReference);
+            }
 
             $recordingList->appendChild($soundRecording);
         }
