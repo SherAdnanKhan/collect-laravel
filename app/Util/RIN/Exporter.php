@@ -57,11 +57,13 @@ class Exporter
         $projectList = $this->projectList($document);
         $sessionList = $this->sessionList($document);
         $recordingList = $this->recordingList($document);
+        $songList = $this->songList($document);
 
         $rin->appendChild($fileHeader);
         $rin->appendChild($projectList);
         $rin->appendChild($sessionList);
         $rin->appendChild($recordingList);
+        $rin->appendChild($songList);
 
         $document->appendChild($rin);
 
@@ -279,7 +281,7 @@ class Exporter
             $creditModels = $recordingModel->credits()->where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->get();
             foreach ($creditModels as $creditModel) {
                 $contributorReference = $document->createElement('ContributorReference');
-                $contributorReference->appendChild($document->createElement('ProjectContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
+                $contributorReference->appendChild($document->createElement('SoundRecordingContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
                 $contributorReference->appendChild($document->createElement('Role', $creditModel->role->name));
 
                 if (!is_null($creditModel->split)) {
@@ -293,6 +295,57 @@ class Exporter
         }
 
         return $recordingList;
+    }
+
+    private function songList(DOMDocument $document): DOMElement
+    {
+        $songList = $document->createElement('MusicalWorkList');
+
+        $this->project->load('recordings.song');
+        $songModels = $this->project->recordings->pluck('song')->all();
+        foreach ($songModels as $songModel) {
+            $musicalWork = $document->createElement('MusicalWork');
+
+            if (!is_null($songModel->iswc)) {
+                $musicalWorkId = $document->createElement('MuscialWorkId');
+                $musicalWorkId->appendChild($document->createElement('ISWC', $songModel->iswc));
+                $musicalWork->appendChild($musicalWorkId);
+            }
+
+            $musicalWork->appendChild($document->createElement('MusicalWorkReference', self::SONG_ID_PREFIX . $songModel->getKey()));
+            $musicalWork->appendChild($document->createElement('CreationDate', Carbon::parse($songModel->created_on)->toDateString()));
+            $musicalWork->appendChild($document->createElement('Lyrics', $songModel->lyrics));
+            $musicalWork->appendChild($document->createElement('Comment', $songModel->notes));
+
+            $title = $document->createElement('Title');
+            $title->appendChild($document->createElement('TitleText', $songModel->title));
+            $title->appendChild($document->createElement('SubTitle', $songModel->subtitle));
+            $musicalWork->appendChild($title);
+
+            $altTitle = $document->createElement('AlternateTitle');
+            $altTitle->appendChild($document->createElement('TitleText', $songModel->title_alt));
+            $altTitle->appendChild($document->createElement('SubTitle', $songModel->subtitle_alt));
+            $musicalWork->appendChild($altTitle);
+
+            $musicalWork->appendChild($document->createElement('MusicalWorkType', $songModel->type->name));
+
+            $creditModels = $songModel->credits()->where('contribution_type', 'song')->where('contribution_id', $songModel->getKey())->get();
+            foreach ($creditModels as $creditModel) {
+                $contributorReference = $document->createElement('ContributorReference');
+                $contributorReference->appendChild($document->createElement('MusicalWorkContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
+                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->name));
+
+                if (!is_null($creditModel->split)) {
+                    $contributorReference->appendChild($document->createElement('RightSharePercentage', $creditModel->split));
+                }
+
+                $musicalWork->appendChild($contributorReference);
+            }
+
+            $songList->appendChild($musicalWork);
+        }
+
+        return $songList;
     }
 
     private function signature(DOMDocument $document): DOMElement

@@ -56,7 +56,9 @@ class RINController extends Controller
 
         $exporter->setUser($user);
 
+        $xml = $exporter->toXML();
+
         header('Content-Type: application/xml');
-        echo $exporter->toXML();
+        die($xml);
     }
 }
