@@ -73,15 +73,10 @@ class Importer
         DB::beginTransaction();
         try {
             $parties = $this->importParties($this->parties, $override);
-            dump($parties);
             $project = $this->importProject($this->project, $override);
-            dump($project);
             $songs = $this->importSongs($this->songs, $override);
-            dump($songs);
             $sessions = $this->importSessions($this->sessions, $project, $override);
-            dump($sessions);
             $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
-            dump($recordings);
 
             DB::commit();
         } catch (\Exception $e) {
