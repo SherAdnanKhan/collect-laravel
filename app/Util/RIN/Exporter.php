@@ -51,8 +51,6 @@ class Exporter
         $document = new DOMDocument("1.0", "UTF-8");
         $rin = $this->boilerplateXML($document);
 
-        // TODO: Start appending </FileHeader> and it's fields.
-
         $fileHeader = $this->fileHeader($document);
         $projectList = $this->projectList($document);
         $sessionList = $this->sessionList($document);
