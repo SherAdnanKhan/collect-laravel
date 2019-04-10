@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\SessionType;
+use App\Models\SongType;
 use Illuminate\Database\Seeder;
 
 class SongTypesTableSeeder extends Seeder
