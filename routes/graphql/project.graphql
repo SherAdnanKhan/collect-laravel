@@ -134,15 +134,15 @@ type Session implements Favoured & Creditable & Commentable & EventLoggable {
 	name: String!
 	description: String
 	startedAt: String! @rename(attribute: "started_at")
-	endedAt: String! @rename(attribute: "ended_at")
-	unionSession: Boolean! @rename(attribute: "union_session")
-	analogSession: Boolean! @rename(attribute: "analog_session")
+	endedAt: String @rename(attribute: "ended_at")
+	unionSession: Boolean @rename(attribute: "union_session")
+	analogSession: Boolean @rename(attribute: "analog_session")
 	dropFrame: Boolean! @rename(attribute: "drop_frame")
 	venueRoom: String @rename(attribute: "venue_room")
 	bitdepth: Int
 	samplerate: Int
-	timecodeType: String! @rename(attribute: "timecode_type")
-	timecodeFrameRate: String! @rename(attribute: "timecode_frame_rate")
+	timecodeType: String @rename(attribute: "timecode_type")
+	timecodeFrameRate: String @rename(attribute: "timecode_frame_rate")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording]
