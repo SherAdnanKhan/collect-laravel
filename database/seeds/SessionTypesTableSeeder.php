@@ -34,7 +34,8 @@ class SessionTypesTableSeeder extends Seeder
 
         foreach ($types as $key => $name) {
             SessionType::create([
-                'name' => $name
+                'name'     => $name,
+                'ddex_key' => $key,
             ]);
         }
     }
