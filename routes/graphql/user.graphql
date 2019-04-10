@@ -162,6 +162,7 @@ type CreditRole {
 	type: String!
 	name: String!
 	ddexKey: String! @rename(attribute: "ddex_key")
+	userDefined: Boolean! @rename(attribute: "user_defined")
 }
 
 type SongType {

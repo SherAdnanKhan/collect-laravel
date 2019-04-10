@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CreditRole extends Model
 {
     const TYPES_WITH_LABELS = [
-        'project'   => 'Project',
-        'song'      => 'Song',
-        'recording' => 'Recording',
-        'session'   => 'Session',
+        'ResourceContributorRole' => 'Resource Contributor Role',
+        'CreativeContributorRole' => 'Creative Contributor Role',
+        'BusinessContributorRole' => 'Business Contributor Role',
+        'NewStudioRole'           => 'New Studio Role',
+        'ArtistRole'              => 'Artist Role',
     ];
 
     /**
@@ -21,7 +22,7 @@ class CreditRole extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'name',
+        'type', 'name', 'ddex_key', 'user_defined'
     ];
 
     /**
