@@ -6,6 +6,7 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
@@ -60,6 +61,8 @@ class RecordingType extends Resource
             Text::make('DDEX key', 'ddex_key')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Boolean::make('User Defined'),
         ];
     }
 

@@ -58,6 +58,8 @@ class Recording extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Type'),
+            Text::make('User Defined Type Value', 'recording_type_user_defined_value'),
+
             BelongsTo::make('Project'),
             BelongsTo::make('Main Artist', 'party', Party::class),
             BelongsTo::make('Song'),
