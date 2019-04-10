@@ -19,6 +19,10 @@ class AddUserDefinedFieldsForRecordingTypes extends Migration
         });
 
         Schema::table('recordings', function(Blueprint $table) {
+            $table->dropColumn('type');
+            $table->unsignedInteger('recording_type_id')->nullable()->after('subtitle');
+            $table->foreign('recording_type_id')->references('id')->on('recording_types')
+                ->onDelete('set null');
             $table->string('recording_type_user_defined_value')->after('recording_type_id');
         });
     }
@@ -37,6 +41,9 @@ class AddUserDefinedFieldsForRecordingTypes extends Migration
 
         Schema::table('recordings', function(Blueprint $table) {
             $table->dropColumn('recording_type_user_defined_value');
+            $table->string('type')->nullable()->after('subtitle');
+            $table->dropForeign(['recording_type_id']);
+            $table->dropColumn('recording_type_id');
         });
     }
 }

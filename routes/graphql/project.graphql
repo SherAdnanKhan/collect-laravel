@@ -129,6 +129,7 @@ type RecordingType {
 	id: ID!
 	name: String!
 	ddexKey: String! @rename(attribute: "ddex_key")
+	userDefined: Boolean! @rename(attribute: "user_defined")
 }
 
 type Session implements Favoured & Creditable & Commentable & EventLoggable {

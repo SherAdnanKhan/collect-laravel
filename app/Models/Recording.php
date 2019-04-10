@@ -65,7 +65,7 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
      */
     public function type(): BelongsTo
     {
-        return $this->belongsTo(RecordingType::class);
+        return $this->belongsTo(RecordingType::class, 'recording_type_id');
     }
 
     /**
