@@ -72,6 +72,8 @@ class Credit extends Resource
 
             Number::make('Split'),
 
+            Text::make('User Defined Role Value', 'credit_role_user_defined_value'),
+
             MorphTo::make('Contribution')->types([
                 Project::class,
                 Session::class,
