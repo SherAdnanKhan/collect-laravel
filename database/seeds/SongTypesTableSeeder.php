@@ -46,7 +46,8 @@ class SongTypesTableSeeder extends Seeder
 
         foreach ($types as $name => $key) {
             SongType::create([
-                'name' => $name
+                'name' => $name,
+                'ddex_key' => $key
             ]);
         }
     }
