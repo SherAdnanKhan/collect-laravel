@@ -82,7 +82,7 @@ class Exporter
     private function boilerplateXML(DOMDocument $document): DOMElement
     {
         $rinElement = $document->createElementNS('http://ddex.net/xml/f-rin/10', 'rin:RecordingInformationNotification');
-        $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:avs', 'http://ddex.net/xml/avs/avs');
+        // $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:avs', 'http://ddex.net/xml/avs/avs');
         $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:ds', 'http://www.w3.org/2000/09/xmldsig#');
         $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:schemaLocation',  'http://ddex.net/xml/f-rin/10 http://ddex.net/xml/rin/10/full-recording-information-notification.xsd');
         $rinElement->setAttribute('SchemaVersionId', 'f-rin/10');
@@ -146,7 +146,7 @@ class Exporter
         foreach ($credits as $credit) {
             $contributorReference = $document->createElement('ContributorReference');
             $contributorReference->appendChild($document->createElement('ProjectContributorReference', self::PARTY_ID_PREFIX . $credit->party_id));
-            $contributorReference->appendChild($document->createElement('Role', $credit->role->name));
+            $contributorReference->appendChild($document->createElement('Role', $credit->role->ddex_key));
 
             if (!is_null($credit->split)) {
                 $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
@@ -169,12 +169,16 @@ class Exporter
             $session = $document->createElement('Session');
             $session->appendChild($document->createElement('SessionReference', self::SESSION_ID_PREFIX . $sessionModel->getKey()));
 
-            $session->appendChild($document->createElement('SessionType', $sessionModel->type->name));
+            $session->appendChild($document->createElement('SessionType', $sessionModel->type->ddex_key));
             $session->appendChild($document->createElement('VenueName', $sessionModel->venue->name));
             $session->appendChild($document->createElement('VenueAddress', $sessionModel->venue->address));
 
-            // TODO: this will be changing to an id, so pull the code that way.
-            $session->appendChild($document->createElement('TerritoryCode', $sessionModel->venue->country));
+            $countryCode = 'US';
+            if (!is_null($sessionModel->venue->country)) {
+                $countryCode = $sessionModel->venue->country->iso_code;
+            }
+
+            $session->appendChild($document->createElement('TerritoryCode', $countryCode));
 
             $session->appendChild($document->createElement('VenueRoom', $sessionModel->venue_room));
             $session->appendChild($document->createElement('IsUnionSession', $sessionModel->union_session ? 'true' : 'false'));
@@ -232,7 +236,7 @@ class Exporter
             $soundRecording = $document->createElement('SoundRecording');
 
             if (!is_null($recordingModel->type)) {
-                $soundRecording->appendChild($document->createElement('SoundRecordingType', $recordingModel->type->name));
+                $soundRecording->appendChild($document->createElement('SoundRecordingType', $recordingModel->type->ddex_key));
             }
 
             if (!is_null($recordingModel->party)) {
@@ -280,11 +284,13 @@ class Exporter
             foreach ($creditModels as $creditModel) {
                 $contributorReference = $document->createElement('ContributorReference');
                 $contributorReference->appendChild($document->createElement('SoundRecordingContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
-                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->name));
+                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->ddex_key));
 
                 if (!is_null($creditModel->split)) {
                     $contributorReference->appendChild($document->createElement('RightSharePercentage', $creditModel->split));
                 }
+
+                // TODO: Handle instrument
 
                 $soundRecording->appendChild($contributorReference);
             }
@@ -325,13 +331,13 @@ class Exporter
             $altTitle->appendChild($document->createElement('SubTitle', $songModel->subtitle_alt));
             $musicalWork->appendChild($altTitle);
 
-            $musicalWork->appendChild($document->createElement('MusicalWorkType', $songModel->type->name));
+            $musicalWork->appendChild($document->createElement('MusicalWorkType', $songModel->type->ddex_key));
 
             $creditModels = $songModel->credits()->where('contribution_type', 'song')->where('contribution_id', $songModel->getKey())->get();
             foreach ($creditModels as $creditModel) {
                 $contributorReference = $document->createElement('ContributorReference');
                 $contributorReference->appendChild($document->createElement('MusicalWorkContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
-                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->name));
+                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->ddex_key));
 
                 if (!is_null($creditModel->split)) {
                     $contributorReference->appendChild($document->createElement('RightSharePercentage', $creditModel->split));

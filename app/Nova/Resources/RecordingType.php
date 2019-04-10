@@ -6,7 +6,6 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
@@ -18,14 +17,14 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Venue extends Resource
+class RecordingType extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Venue';
+    public static $model = 'App\\Models\\RecordingType';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -40,7 +39,7 @@ class Venue extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'approved'
+        'name'
     ];
 
     /**
@@ -54,18 +53,13 @@ class Venue extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
-
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Textarea::make('Address'),
-
-            BelongsTo::make('Country'),
-
-            Boolean::make('Approved')
-                ->sortable(),
+            Text::make('DDEX key', 'ddex_key')
+                ->sortable()
+                ->rules('required', 'max:255'),
         ];
     }
 
@@ -111,5 +105,25 @@ class Venue extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return 'Recording Types';
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return 'Recording Type';
     }
 }

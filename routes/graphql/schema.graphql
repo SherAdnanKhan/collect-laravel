@@ -115,8 +115,9 @@ extend type Query @group(middleware: ["auth:api"]) {
 	# Instrument Queries
 	getInstruments: [Instrument] @all
 
-	# Venu Queries
+	# Venue Queries
 	getVenues: [Venue] @all(scopes: ["userViewable"])
+	getCountries: [Country] @all
 
 	# Get unread activity count
 	getUnreadActivity(projectId: ID!): UnreadActivityPayload! @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")

@@ -3,29 +3,32 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+use App\Nova\Resources\Project;
+use App\Nova\Resources\Recording;
+use App\Nova\Resources\Session;
+use App\Nova\Resources\Song;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class Venue extends Resource
+class Country extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\Models\\Venue';
+    public static $model = 'App\\Models\\Country';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -40,7 +43,7 @@ class Venue extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'approved'
+        'id', 'name', 'iso_code',
     ];
 
     /**
@@ -54,18 +57,8 @@ class Venue extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User'),
-
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Textarea::make('Address'),
-
-            BelongsTo::make('Country'),
-
-            Boolean::make('Approved')
-                ->sortable(),
+            Text::make('Name')->sortable()->rules('required'),
+            Text::make('ISO Code', 'iso_code')->sortable()->rules('required'),
         ];
     }
 

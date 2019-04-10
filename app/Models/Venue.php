@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\UserAccessible;
+use App\Models\Country;
 use App\Models\User;
 use App\Traits\UserAccesses;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +20,7 @@ class Venue extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'address', 'country'
+        'user_id', 'name', 'address', 'country_id'
     ];
 
     /**
@@ -30,6 +31,16 @@ class Venue extends Model implements UserAccessible
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the country this venue is in.
+     *
+     * @return BelongsTo
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
     }
 
     /**

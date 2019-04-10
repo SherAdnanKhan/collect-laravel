@@ -116,7 +116,8 @@ type Instrument {
 	id: ID!
 	_id: ID! @globalId @rename(attribute: "id")
 	category: String
-	name: String
+	name: String!
+	ddexKey: String! @rename(attribute: "ddex_key")
 }
 
 type Song implements Favoured & Creditable {
@@ -160,6 +161,7 @@ type CreditRole {
 	id: ID!
 	type: String!
 	name: String!
+	ddexKey: String! @rename(attribute: "ddex_key")
 }
 
 type SongType {

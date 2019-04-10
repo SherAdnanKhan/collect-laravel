@@ -8,6 +8,7 @@ use App\Models\Collaborators;
 use App\Models\Credit;
 use App\Models\Party;
 use App\Models\Project;
+use App\Models\RecordingType;
 use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
@@ -38,7 +39,7 @@ class Recording extends Model implements UserAccessible, EventLoggable
      * @var array
      */
     protected $fillable = [
-        'project_id', 'party_id', 'song_id', 'name', 'type', 'description',
+        'project_id', 'party_id', 'song_id', 'name', 'recording_type_id', 'description',
         'isrc', 'subtitle', 'version', 'recorded_on', 'mixed_on', 'duration',
         'language', 'key_signature', 'time_signature', 'tempo'
     ];
@@ -55,6 +56,16 @@ class Recording extends Model implements UserAccessible, EventLoggable
      * @var array
      */
     protected $touches = ['sessions', 'project'];
+
+    /**
+     * Get the type that this recording is associated to.
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(RecordingType::class);
+    }
 
     /**
      * Get the project that this recording is associated to.

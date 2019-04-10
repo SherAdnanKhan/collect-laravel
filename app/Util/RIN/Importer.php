@@ -311,9 +311,14 @@ class Importer
 
             $creditModel = Credit::where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->where('party_id', $contributionId)->first();
 
-            // TODO: Handle ContributorType correctly
+            // TODO: Handle ContributorType correctly, with proper ContributorRole and UserDefined, attr UserDefinedValue
             // TODO: InstrumentType handling
-            // TODO: handle RightSharePercentage, "split"
+            // TODO: Log out when we're missing a type.
+
+            $split = null;
+            if (isset($credit->RightSharePercentage)) {
+                $split = (string) $credit->RightSharePercentage;
+            }
 
             if (!$creditModel) {
                 $creditModel = Credit::create([
@@ -321,6 +326,7 @@ class Importer
                     'contribution_type' => 'recording',
                     'contribution_id'   => $recordingModel->getKey(),
                     'credit_role_id'    => $creditRoleId,
+                    'split'             => $split,
                 ]);
             }
 

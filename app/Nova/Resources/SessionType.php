@@ -56,6 +56,10 @@ class SessionType extends Resource
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Text::make('DDEX key', 'ddex_key')
+                ->sortable()
+                ->rules('required', 'max:255'),
         ];
     }
 

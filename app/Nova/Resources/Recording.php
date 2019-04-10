@@ -35,7 +35,7 @@ class Recording extends Resource
      */
     public static $title = 'name';
 
-    public static $with = ['project', 'song'];
+    public static $with = ['project', 'song', 'type'];
 
     /**
      * The columns that should be searched.
@@ -43,7 +43,7 @@ class Recording extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'type', 'description',
+        'id', 'name', 'type.name', 'description',
     ];
 
     /**
@@ -57,6 +57,7 @@ class Recording extends Resource
         return [
             ID::make()->sortable(),
 
+            BelongsTo::make('Type'),
             BelongsTo::make('Project'),
             BelongsTo::make('Main Artist', 'party', Party::class),
             BelongsTo::make('Song'),
@@ -68,10 +69,6 @@ class Recording extends Resource
             Text::make('Sub Title', 'subtitle')
                 ->sortable()
                 ->rules('max:255'),
-
-            Text::make('Type')
-                ->sortable()
-                ->rules('required', 'max:255'),
 
             Text::make('ISRC')
                 ->sortable()

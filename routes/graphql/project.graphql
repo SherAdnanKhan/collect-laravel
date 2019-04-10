@@ -116,11 +116,18 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	keySignature: String @rename(attribute: "key_signature")
 	timeSignature: String @rename(attribute: "time_signature")
 	tempo: Int
-	type: String
+	type: RecordingType @belongsTo
 	description: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	sessions: [Session] @belongsToMany
+}
+
+type RecordingType {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	name: String!
+	ddexKey: String! @rename(attribute: "ddex_key")
 }
 
 type Session implements Favoured & Creditable & Commentable & EventLoggable {
@@ -151,6 +158,7 @@ type Session implements Favoured & Creditable & Commentable & EventLoggable {
 type SessionType {
 	id: ID!
 	name: String!
+	ddexKey: String! @rename(attribute: "ddex_key")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
@@ -194,7 +202,7 @@ type Venue {
 	userId: ID! @rename(attribute: "user_id")
 	name: String!
 	address: String
-	country: String
+	country: Country @belongsTo
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	approved: Boolean
@@ -206,4 +214,11 @@ type SessionType {
 	name: String!
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Country {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	name: String!
+	isoCode: String! @rename(attribute: "iso_code")
 }

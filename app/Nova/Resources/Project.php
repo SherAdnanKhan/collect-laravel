@@ -3,6 +3,7 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+use App\Nova\Resources\Party;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Gravatar;
@@ -63,16 +64,11 @@ class Project extends Resource
                 ->sortable()
                 ->rules('max:255'),
 
-            Text::make('Artist')
-                ->sortable()
-                ->rules('max:255'),
-
-            Text::make('Label')
-                ->sortable()
-                ->rules('max:255'),
-
             Textarea::make('Description')
                 ->rules('max:255'),
+
+            HasOne::make('Label', 'label', Party::class),
+            HasOne::make('Main Artist', 'artist', Party::class),
 
             HasMany::make('Recordings', 'recordings'),
             HasMany::make('Sessions', 'sessions'),
