@@ -146,6 +146,7 @@ type Credit {
 	id: ID!
 	party: Party! @belongsTo
 	role: CreditRole! @belongsTo
+	creditRoleUserDefinedValue: String! @rename(attribute: "credit_role_user_defined_value")
 	instrument: Instrument @belongsTo
 	performing: Boolean
 	split: Int

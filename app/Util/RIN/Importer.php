@@ -18,16 +18,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SimpleXMLElement;
 
-// TODO:
-// This class should take in a valid XML document which is a RIN
-// file. This contains information about the project in the <FileHeader/>
-// Query the project via the <FileId/> format "VeVa-Project-{internalId}"
-// Go through the file and grab the parties, sessions, recordings, musical works (songs)
-// then build up a relational map of data, which I can then use to make the associations.
-// Wrap any DB changes in a transaction, and discard the changes if anything goes wrong.
-
-// If the Project doesn't exist then don't create it?
-
 class Importer
 {
     const PROJECT_ID_PREFIX = 'J-';
@@ -158,7 +148,7 @@ class Importer
             if ($creditRole) {
                 $creditRoleId = $creditRole->getKey();
 
-                if ($creditRole->user_defined) {
+                if ((bool) $creditRole->user_defined) {
                     $creditRoleAttributes = $credit->Role->attributes();
                     $userDefinedValue = array_get($creditRoleAttributes, 'UserDefinedValue', '');
                 }
