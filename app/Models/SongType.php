@@ -12,6 +12,6 @@ class SongType extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name', 'ddex_key'
     ];
 }
