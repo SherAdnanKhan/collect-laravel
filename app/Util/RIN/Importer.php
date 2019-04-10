@@ -18,16 +18,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SimpleXMLElement;
 
-// TODO:
-// This class should take in a valid XML document which is a RIN
-// file. This contains information about the project in the <FileHeader/>
-// Query the project via the <FileId/> format "VeVa-Project-{internalId}"
-// Go through the file and grab the parties, sessions, recordings, musical works (songs)
-// then build up a relational map of data, which I can then use to make the associations.
-// Wrap any DB changes in a transaction, and discard the changes if anything goes wrong.
-
-// If the Project doesn't exist then don't create it?
-
 class Importer
 {
     const PROJECT_ID_PREFIX = 'J-';
@@ -171,13 +161,12 @@ class Importer
             if ($creditRole) {
                 $creditRoleId = $creditRole->getKey();
 
-                if ($creditRole->user_defined) {
+                if ((bool) $creditRole->user_defined) {
                     $creditRoleAttributes = $credit->Role->attributes();
                     $userDefinedValue = array_get($creditRoleAttributes, 'UserDefinedValue', '');
                 }
             }
 
-            $creditModel = Credit::where('contribution_type', $model->getType())->where('contribution_id', $model->getKey())->where('party_id', $contributionId)->first();
 
             // TODO: InstrumentType handling
 
@@ -185,6 +174,28 @@ class Importer
             if (isset($credit->RightSharePercentage)) {
                 $split = (string) $credit->RightSharePercentage;
             }
+
+            $instrumentId = null;
+            $instrumentUserDefinedValue = null;
+            if (isset($credit->InstrumentType)) {
+                $instrument = Instrument::where('ddex_key', $credit->InstrumentType)->first();
+
+                if (!$instrument) {
+                    Log::debug(sprintf('Missing instrument for %s: %s', $credit->InstrumentType));
+                    $instrument = Instrument::where('ddex_key', 'UserDefined')->first();
+                }
+
+                if ((bool) $instrument->user_defined) {
+                    $instrumentTypeAttributes = $credit->InstrumentType->attributes();
+                    $instrumentUserDefinedValue = array_get($instrumentTypeAttributes, 'UserDefinedValue', '');
+                }
+
+                if ($instrument) {
+                    $instrumentId = $instrument->getKey();
+                }
+            }
+
+            $creditModel = Credit::where('contribution_type', $model->getType())->where('contribution_id', $model->getKey())->where('party_id', $contributionId)->first();
 
             if (!$creditModel) {
                 $creditModel = Credit::updateOrCreate([
@@ -199,6 +210,8 @@ class Importer
                     'credit_role_id'                 => $creditRoleId,
                     'split'                          => $split,
                     'credit_role_user_defined_value' => $userDefinedValue,
+                    'instrument_id'                  => $instrumentId,
+                    'instrument_user_defined_value'  => $instrumentUserDefinedValue,
                 ]);
             }
 
@@ -419,6 +432,8 @@ class Importer
             if (isset($recording->SoundRecordingMusicalWorkReference)) {
                 $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $recording->SoundRecordingMusicalWorkReference);
             }
+
+            // TODO: recording type.
 
             $recordingData[] = [
                 'id'             => $recordingId,

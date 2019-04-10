@@ -868,8 +868,9 @@ class InstrumentsTableSeeder extends Seeder
 
         foreach ($instruments as $ddex_key => $name) {
             Instrument::create([
-                'name' => $name,
-                'ddex_key' => $ddex_key
+                'name'         => $name,
+                'ddex_key'     => $ddex_key,
+                'user_defined' => $ddex_key === 'UserDefined',
             ]);
         }
     }

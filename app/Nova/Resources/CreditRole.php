@@ -67,6 +67,11 @@ class CreditRole extends Resource
             Text::make('Name')
                 ->rules('required'),
 
+            Text::make('DDEX Key', 'ddex_key')
+                ->rules('required'),
+
+            Boolean::make('User Defined'),
+
             HasMany::make('Credits'),
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Util\RIN;
 
+use App\Contracts\Creditable;
 use App\Models\Project;
 use App\Models\User;
 use Carbon\Carbon;
@@ -141,19 +142,7 @@ class Exporter
         }
 
         $project->appendChild($document->createElement('Status', 'Verified'));
-
-        $credits = $this->project->credits()->where('contribution_type', 'project')->where('contribution_id', $this->project->getKey())->get();
-        foreach ($credits as $credit) {
-            $contributorReference = $document->createElement('ContributorReference');
-            $contributorReference->appendChild($document->createElement('ProjectContributorReference', self::PARTY_ID_PREFIX . $credit->party_id));
-            $contributorReference->appendChild($document->createElement('Role', $credit->role->ddex_key));
-
-            if (!is_null($credit->split)) {
-                $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
-            }
-
-            $project->appendChild($contributorReference);
-        }
+        $project = $this->creditList($document, $project, $this->project);
 
         $projectList->appendChild($project);
 
@@ -216,6 +205,8 @@ class Exporter
             foreach ($recordingModels as $recordingModel) {
                 $session->appendChild($document->createElement('SessionSoundRecordingReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
             }
+
+            $session = $this->creditList($document, $session, $sessionModel);
 
             $sessionList->appendChild($session);
         }
@@ -280,20 +271,7 @@ class Exporter
                 $soundRecording->appendChild($document->createElement('CreationDate', $dt->toIso8601String()));
             }
 
-            $creditModels = $recordingModel->credits()->where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->get();
-            foreach ($creditModels as $creditModel) {
-                $contributorReference = $document->createElement('ContributorReference');
-                $contributorReference->appendChild($document->createElement('SoundRecordingContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
-                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->ddex_key));
-
-                if (!is_null($creditModel->split)) {
-                    $contributorReference->appendChild($document->createElement('RightSharePercentage', $creditModel->split));
-                }
-
-                // TODO: Handle instrument
-
-                $soundRecording->appendChild($contributorReference);
-            }
+            $soundRecording = $this->creditList($document, $soundRecording, $recordingModel);
 
             $recordingList->appendChild($soundRecording);
         }
@@ -333,23 +311,46 @@ class Exporter
 
             $musicalWork->appendChild($document->createElement('MusicalWorkType', $songModel->type->ddex_key));
 
-            $creditModels = $songModel->credits()->where('contribution_type', 'song')->where('contribution_id', $songModel->getKey())->get();
-            foreach ($creditModels as $creditModel) {
-                $contributorReference = $document->createElement('ContributorReference');
-                $contributorReference->appendChild($document->createElement('MusicalWorkContributorReference', self::PARTY_ID_PREFIX . $creditModel->party_id));
-                $contributorReference->appendChild($document->createElement('Role', $creditModel->role->ddex_key));
-
-                if (!is_null($creditModel->split)) {
-                    $contributorReference->appendChild($document->createElement('RightSharePercentage', $creditModel->split));
-                }
-
-                $musicalWork->appendChild($contributorReference);
-            }
+            $musicalWork = $this->creditList($document, $musicalWork, $songModel);
 
             $songList->appendChild($musicalWork);
         }
 
         return $songList;
+    }
+
+    private function creditList(DOMDocument $document, DOMElement $parent, Creditable $model): DOMElement
+    {
+        $credits = $model->credits()
+            ->where('contribution_type', $model->getType())
+            ->where('contribution_id', $model->getKey())
+            ->get();
+
+        foreach ($credits as $credit) {
+            $contributorReference = $document->createElement('ContributorReference');
+            $contributorReference->appendChild($document->createElement($model->getContributorReferenceKey(), self::PARTY_ID_PREFIX . $credit->party_id));
+
+            if (!is_null($credit->split)) {
+                $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
+            }
+
+            $contributorRole = $document->createElement('Role', $credit->role->ddex_key);
+            if ((bool) $credit->role->user_defined) {
+                $contributorRole->setAttribute('UserDefinedValue', $credit->credit_role_user_defined_value);
+            }
+
+            if (!is_null($credit->instrument)) {
+                $contributorInstrumentType = $document->createElement('InstrumentType', $credit->instrument->ddex_key);
+                if ((bool) $credit->instrument->user_defined) {
+                    $contributorInstrumentType->setAttribute('UserDefinedValue', $credit->instrument_user_defined_value);
+                }
+            }
+
+            $contributorReference->appendChild($contributorRole);
+            $parent->appendChild($contributorReference);
+        }
+
+        return $parent;
     }
 
     private function signature(DOMDocument $document): DOMElement
