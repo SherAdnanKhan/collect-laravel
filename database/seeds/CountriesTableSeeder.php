@@ -255,11 +255,11 @@ class CountriesTableSeeder extends Seeder
         ];
 
         foreach ($countries as $country) {
-            list($name, $ddex_key) = $country;
+            list($name, $iso_code) = $country;
 
             Country::create([
-                'name' => $name,
-                'ddex_key' => $ddex_key
+                'name'     => $name,
+                'iso_code' => $iso_code
             ]);
         }
     }
