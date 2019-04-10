@@ -8,9 +8,14 @@
         <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
 
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Hello {{ $name }},<br />
+          Hey {{ $name }},<br />
           <br />
-          We have successfully taken payment for your subscription.
+          Thank you for using VEVA Collect, we appreciate your business.<br />
+          <br />
+          We have processed your payment for {{ $invoiceAmountPaid }} for the {{ $planName }} Plan.<br />
+          <br />
+          Many thanks<br />
+          VEVA Collect
         </mj-text>
       </mj-column>
     </mj-section>

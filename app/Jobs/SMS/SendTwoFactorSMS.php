@@ -42,10 +42,10 @@ class SendTwoFactorSMS implements ShouldQueue
         Log::debug(sprintf('Sending code: %s to phone: %s', $this->code, $this->phone));
 
         $client = resolve('Nexmo\Client');
-        $message = 'VeVa Two-Factor Code: %s';
+        $message = 'Your 2FA Code is: %s';
         $text = new Text($this->phone, config('services.nexmo.from'), sprintf($message, $this->code));
-        $text->setClientRef('2fa-' . $this->phone)
-            ->setClass(Text::CLASS_FLASH);
+        // $text->setClientRef('2fa-' . $this->phone);
+        //     ->setClass(Text::CLASS_FLASH);
 
         $client->message()->send($text);
     }
