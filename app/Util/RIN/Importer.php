@@ -167,9 +167,6 @@ class Importer
                 }
             }
 
-
-            // TODO: InstrumentType handling
-
             $split = null;
             if (isset($credit->RightSharePercentage)) {
                 $split = (string) $credit->RightSharePercentage;
