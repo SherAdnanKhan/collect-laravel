@@ -36,9 +36,18 @@ class RINController extends Controller
 
         $user = auth()->user();
 
+        $projectId = $request->get('project');
+
+        $project = Project::where('id', $projectId)->userViewable(['user' => $user])->first();
+        if (!$project) {
+            abort(404, 'Unable to find the project to import to.');
+            return;
+        }
+
         try {
             $importer = new Importer();
             $importer->setUser($user);
+            $importer->setProjectId((int)$project->id);
 
             $uploadedRIN = $request->file('rin');
 

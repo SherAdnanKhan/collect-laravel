@@ -35,6 +35,8 @@ class Importer
     private $sessions;
     private $songs;
 
+    private $projectId;
+
     /**
      * Import a RIN from an XML document object.
      *
@@ -90,6 +92,17 @@ class Importer
     }
 
     /**
+     * Set the current projectId.
+     *
+     * @param string $projectId
+     */
+    public function setProjectId(int $projectId): Importer
+    {
+        $this->projectId = $projectId;
+        return $this;
+    }
+
+    /**
      * Import the project into the database.s
      *
      * @param  array        $project
@@ -97,7 +110,7 @@ class Importer
      * @param  bool|boolean $override
      * @return Project
      */
-    private function importProject(array $project, array $parties, bool $override = false): Project
+    private function importProject(array $project, array $parties,  bool $override = false): Project
     {
         $projectId = array_get($project, 'id', false);
         $project = array_except($project, ['id']);
@@ -194,6 +207,9 @@ class Importer
     private function mapProject(SimpleXMLElement $project): array
     {
         $projectId = (int) str_replace(self::PROJECT_ID_PREFIX, '', $project->ProjectReference);
+        if ($this->projectId) {
+            $projectId = $this->projectId;
+        }
 
         $projectNumber = '';
         if (isset($project->ProjectId->ProprietaryId)) {
