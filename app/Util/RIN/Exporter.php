@@ -226,9 +226,18 @@ class Exporter
 
             $soundRecording = $document->createElement('SoundRecording');
 
+            $recordingTypeKey = 'Unknown';
             if (!is_null($recordingModel->type)) {
-                $soundRecording->appendChild($document->createElement('SoundRecordingType', $recordingModel->type->ddex_key));
+                $recordingTypeKey = $recordingModel->type->ddex_key;
             }
+
+            $recordingType = $document->createElement('SoundRecordingType', $recordingModel->type->ddex_key);
+
+            if ((bool) $recordingModel->type->user_defined) {
+                $recordingType->setAttribute('UserDefinedValue', $recordingModel->recording_type_user_defined_value);
+            }
+
+            $soundRecording->appendChild($recordingType);
 
             if (!is_null($recordingModel->party)) {
                 $soundRecording->appendChild($document->createElement('MainArtist', self::PARTY_ID_PREFIX . $recordingModel->party->getKey()));
@@ -309,7 +318,12 @@ class Exporter
             $altTitle->appendChild($document->createElement('SubTitle', $songModel->subtitle_alt));
             $musicalWork->appendChild($altTitle);
 
-            $musicalWork->appendChild($document->createElement('MusicalWorkType', $songModel->type->ddex_key));
+            $musicalWorkTypeKey = 'Unknown';
+            if (!is_null($songModel->type)) {
+                $musicalWorkTypeKey = $songModel->type->ddex_key;
+            }
+
+            $musicalWork->appendChild($document->createElement('MusicalWorkType', $musicalWorkTypeKey));
 
             $musicalWork = $this->creditList($document, $musicalWork, $songModel);
 
