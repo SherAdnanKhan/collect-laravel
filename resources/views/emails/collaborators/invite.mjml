@@ -5,9 +5,11 @@
   <mj-body>
     <mj-section>
       <mj-column>
-        <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
+        <mj-image width="100px" src="{{ asset('images/email-logo.jpg') }}"></mj-image>
 
-        <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+        <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
 <br />
           Welcome to VEVA Collect!<br />
@@ -16,7 +18,7 @@
 <br />
           To accept the invitation, click the button below.
         </mj-text>
-        <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#212141" color="white" border-radius="4px" href="{{ $inviteUrl }}">
+        <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#0000000" color="white" border-radius="4px" href="{{ $inviteUrl }}">
           Accept
          </mj-button>
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
