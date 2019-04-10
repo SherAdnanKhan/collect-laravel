@@ -164,4 +164,9 @@ class Song extends Model implements UserAccessible, Creditable
     {
         return 'MusicalWorkContributorReference';
     }
+
+    public function getType(): string
+    {
+        return 'song';
+    }
 }
