@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Credit;
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Session extends Model implements UserAccessible, EventLoggable
+class Session extends Model implements UserAccessible, EventLoggable, Creditable
 {
     use UserAccesses;
     use OrderScopes;
@@ -112,5 +113,15 @@ class Session extends Model implements UserAccessible, EventLoggable
     public function credits(): MorphMany
     {
         return $this->morphMany(Credit::class, 'contribution');
+    }
+
+    public function getContributorRoleType(): string
+    {
+        return 'session';
+    }
+
+    public function getContributorReferenceKey(): string
+    {
+        return 'SessionContributorReference';
     }
 }

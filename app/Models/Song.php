@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Creditable;
 use App\Contracts\UserAccessible;
 use App\Models\Credit;
 use App\Models\Project;
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
-class Song extends Model implements UserAccessible
+class Song extends Model implements UserAccessible, Creditable
 {
     use UserAccesses;
     use OrderScopes;
@@ -152,5 +153,15 @@ class Song extends Model implements UserAccessible
 
         // User must own a song to delete it.
         return $query->where('user_id', $user->getAuthIdentifier());
+    }
+
+    public function getContributorRoleType(): string
+    {
+        return 'song';
+    }
+
+    public function getContributorReferenceKey(): string
+    {
+        return 'MusicalWorkContributorReference';
     }
 }

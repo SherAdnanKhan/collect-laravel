@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Recording extends Model implements UserAccessible, EventLoggable
+class Recording extends Model implements UserAccessible, EventLoggable, Creditable
 {
     use UserAccesses;
     use OrderScopes;
@@ -125,5 +126,15 @@ class Recording extends Model implements UserAccessible, EventLoggable
     public function credits(): MorphMany
     {
         return $this->morphMany(Credit::class, 'contribution');
+    }
+
+    public function getContributorRoleType(): string
+    {
+        return 'recording';
+    }
+
+    public function getContributorReferenceKey(): string
+    {
+        return 'SoundRecordingContributorReference';
     }
 }

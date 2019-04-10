@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborator;
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model implements UserAccessible, EventLoggable
+class Project extends Model implements UserAccessible, EventLoggable, Creditable
 {
     use EventLogged;
     use UserAccesses;
@@ -310,5 +311,15 @@ class Project extends Model implements UserAccessible, EventLoggable
         }
 
         return $query->exists();
+    }
+
+    public function getContributorRoleType(): string
+    {
+        return 'project';
+    }
+
+    public function getContributorReferenceKey(): string
+    {
+        return 'ProjectContributorReference';
     }
 }

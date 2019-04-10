@@ -2,6 +2,7 @@
 
 namespace App\Util\RIN;
 
+use App\Contracts\Creditable;
 use App\Models\Credit;
 use App\Models\CreditRole;
 use App\Models\Party;
@@ -14,6 +15,7 @@ use App\Models\User;
 use App\Models\Venue;
 use App\Util\RIN\Utilities;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use SimpleXMLElement;
 
 // TODO:
@@ -73,9 +75,9 @@ class Importer
         DB::beginTransaction();
         try {
             $parties = $this->importParties($this->parties, $override);
-            $project = $this->importProject($this->project, $override);
-            $songs = $this->importSongs($this->songs, $override);
-            $sessions = $this->importSessions($this->sessions, $project, $override);
+            $project = $this->importProject($this->project, $parties, $override);
+            $songs = $this->importSongs($this->songs, $parties, $override);
+            $sessions = $this->importSessions($this->sessions, $project, $parties, $override);
             $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
 
             DB::commit();
@@ -101,29 +103,96 @@ class Importer
      * Import the project into the database.s
      *
      * @param  array        $project
+     * @param  array        $parties
      * @param  bool|boolean $override
      * @return Project
      */
-    private function importProject(array $project, bool $override = false): Project
+    private function importProject(array $project, array $parties, bool $override = false): Project
     {
         $projectId = array_get($project, 'id', false);
         $project = array_except($project, ['id']);
 
         $project['user_id'] = $this->currentUser->getKey();
 
+        $projectModel = null;
         if ($override) {
             $projectModel = Project::where('id', $projectId)->userViewable(['user' => $this->currentUser])->first();
-
-            if (!$projectModel) {
-                $projectModel = new Project();
-            }
-
-            $projectModel->fill($project);
-            $projectModel->save();
-            return $projectModel;
         }
 
-        return Project::create($project);
+        if (!$projectModel) {
+            $projectModel = new Project();
+        }
+
+        $projectModel->fill(array_except($project, ['credits']));
+        $projectModel->save();
+
+        $this->importCredits($projectModel, $project['credits'], $parties);
+
+        return $projectModel;
+    }
+
+    private function importCredits(Creditable $model, SimpleXMLElement $credits, array $allParties): array
+    {
+        $creditIds = [];
+        $creditReferenceKey = $model->getContributorReferenceKey();
+
+        foreach($credits as $credit) {
+            $contributionId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $credit->{$creditReferenceKey});
+            $contributionRole = (string) $credit->Role;
+
+            if (array_key_exists($contributionId, $allParties)) {
+                $contributionModel = array_get($allParties, $contributionId);
+                $contributionId = $contributionModel->getKey();
+            }
+
+            $creditRoleType = $model->getContributorRoleType();
+            $creditRoleId = null;
+            $userDefinedValue = null;
+            $creditRole = CreditRole::where('type', $creditRoleType)->where('ddex_key', $contributionRole)->first();
+
+            if (!$creditRole) {
+                Log::debug(sprintf('Missing credit role for %s: %s', $creditRoleType, $contributionRole));
+                $creditRole = CreditRole::where('type', $creditRoleType)->where('ddex_key', 'UserDefined')->first();
+            }
+
+            if ($creditRole) {
+                $creditRoleId = $creditRole->getKey();
+
+                if ($creditRole->user_defined) {
+                    $creditRoleAttributes = $credit->Role->attributes();
+                    $userDefinedValue = array_get($creditRoleAttributes, 'UserDefinedValue', '');
+                }
+            }
+
+            $creditModel = Credit::where('contribution_type', $model->getType())->where('contribution_id', $model->getKey())->where('party_id', $contributionId)->first();
+
+            // TODO: InstrumentType handling
+
+            $split = null;
+            if (isset($credit->RightSharePercentage)) {
+                $split = (string) $credit->RightSharePercentage;
+            }
+
+            if (!$creditModel) {
+                $creditModel = Credit::updateOrCreate([
+                    'party_id'                       => $contributionId,
+                    'contribution_type'              => $model->getType(),
+                    'contribution_id'                => $model->getKey(),
+                    'credit_role_id'                 => $creditRoleId,
+                ], [
+                    'party_id'                       => $contributionId,
+                    'contribution_type'              => $model->getType(),
+                    'contribution_id'                => $model->getKey(),
+                    'credit_role_id'                 => $creditRoleId,
+                    'split'                          => $split,
+                    'credit_role_user_defined_value' => $userDefinedValue,
+                ]);
+            }
+
+            $creditIds[] = $creditModel;
+        }
+
+        return $creditIds;
     }
 
     /**
@@ -279,10 +348,10 @@ class Importer
                 $recordingModel = new Recording();
             }
 
-            $recordingModel->fill($recording);
+            $recordingModel->fill(array_except($recording, ['sessions', 'credits']));
             $recordingModel->save();
 
-            $this->importRecordingCredits($recordingModel, $recording['credits'], $parties);
+            $this->importCredits($recordingModel, $recording['credits'], $parties);
             $this->importRecordingSessions($recordingModel, $recording['sessions'], $sessions);
 
             $recordingModels[$recordingId] = $recordingModel;
@@ -291,48 +360,6 @@ class Importer
         return $recordingModels;
     }
 
-    private function importRecordingCredits(Recording $recordingModel, SimpleXMLElement $recordingCredits, array $allParties)
-    {
-        $recordingCreditIds = [];
-        foreach($recordingCredits as $credit) {
-            $contributionId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $credit->SoundRecordingContributorReference);
-            $contributionRole = (string) $credit->Role;
-
-            if (array_key_exists($contributionId, $allParties)) {
-                $contributionModel = array_get($allParties, $contributionId);
-                $contributionId = $contributionModel->getKey();
-            }
-
-            $creditRoleId = null;
-            $creditRole = CreditRole::where('type', 'recording')->where('name', $contributionRole)->first();
-            if ($creditRole) {
-                $creditRoleId = $creditRole->getKey();
-            }
-
-            $creditModel = Credit::where('contribution_type', 'recording')->where('contribution_id', $recordingModel->getKey())->where('party_id', $contributionId)->first();
-
-            // TODO: Handle ContributorType correctly, with proper ContributorRole and UserDefined, attr UserDefinedValue
-            // TODO: InstrumentType handling
-            // TODO: Log out when we're missing a type.
-
-            $split = null;
-            if (isset($credit->RightSharePercentage)) {
-                $split = (string) $credit->RightSharePercentage;
-            }
-
-            if (!$creditModel) {
-                $creditModel = Credit::create([
-                    'party_id'          => $contributionId,
-                    'contribution_type' => 'recording',
-                    'contribution_id'   => $recordingModel->getKey(),
-                    'credit_role_id'    => $creditRoleId,
-                    'split'             => $split,
-                ]);
-            }
-
-            $recordingCreditIds[] = $creditModel;
-        }
-    }
 
     private function importRecordingSessions(Recording $recordingModel, SimpleXMLElement $recordingSessions, array $allSessions)
     {
@@ -405,10 +432,11 @@ class Importer
      *
      * @param  array        $sessions
      * @param  Project      $project
+     * @param  array        $parties
      * @param  bool|boolean $override
      * @return array<Party>
      */
-    private function importSessions(array $sessions, Project $project, bool $override = false): array
+    private function importSessions(array $sessions, Project $project, array $parties, bool $override = false): array
     {
         $sessionModels = [];
 
@@ -449,8 +477,11 @@ class Importer
                 $sessionModel = new Session();
             }
 
-            $sessionModel->fill($session);
+            $sessionModel->fill(array_except($session, ['credits']));
             $sessionModel->save();
+
+            $this->importCredits($sessionModel, $session['credits'], $parties);
+
             $sessionModels[$sessionId] = $sessionModel;
         }
 
@@ -491,10 +522,11 @@ class Importer
      * Import the songs into the database.s
      *
      * @param  array        $songs
+     * @param  array        $parties
      * @param  bool|boolean $override
      * @return array<Party>
      */
-    private function importSongs(array $songs, bool $override = false): array
+    private function importSongs(array $songs, array $parties, bool $override = false): array
     {
         $songModels = [];
 
@@ -512,8 +544,11 @@ class Importer
                 $songModel = new Song();
             }
 
-            $songModel->fill($song);
+            $songModel->fill(array_except($song, ['credits']));
             $songModel->save();
+
+            $this->importCredits($songModel, $song['credits'], $parties);
+
             $songModels[$songId] = $songModel;
         }
 
