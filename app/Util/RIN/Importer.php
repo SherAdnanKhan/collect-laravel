@@ -148,14 +148,14 @@ class Importer
                 $contributionId = $contributionModel->getKey();
             }
 
-            $creditRoleType = $model->getContributorRoleType();
+            $creditRoleTypes = $model->getContributorRoleTypes();
             $creditRoleId = null;
             $userDefinedValue = null;
-            $creditRole = CreditRole::where('type', $creditRoleType)->where('ddex_key', $contributionRole)->first();
+            $creditRole = CreditRole::whereIn('type', $creditRoleTypes)->where('ddex_key', $contributionRole)->first();
 
             if (!$creditRole) {
                 Log::debug(sprintf('Missing credit role for %s: %s', $creditRoleType, $contributionRole));
-                $creditRole = CreditRole::where('type', $creditRoleType)->where('ddex_key', 'UserDefined')->first();
+                $creditRole = CreditRole::whereIn('type', $creditRoleTypes)->where('ddex_key', 'UserDefined')->first();
             }
 
             if ($creditRole) {

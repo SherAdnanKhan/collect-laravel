@@ -128,9 +128,9 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
         return $this->morphMany(Credit::class, 'contribution');
     }
 
-    public function getContributorRoleType(): string
+    public function getContributorRoleTypes(): array
     {
-        return 'recording';
+        return ['NewStudioRole', 'CreativeContributorRole'];
     }
 
     public function getContributorReferenceKey(): string
