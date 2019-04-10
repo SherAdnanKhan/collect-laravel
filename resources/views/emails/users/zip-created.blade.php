@@ -93,6 +93,14 @@
     }
   </style>
   <style type="text/css">
+    @media only screen and (max-width:480px) {
+      table.full-width-mobile {
+        width: 100% !important;
+      }
+      td.full-width-mobile {
+        width: auto !important;
+      }
+    }
   </style>
 </head>
 
@@ -122,11 +130,22 @@
               <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
                   <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                        <tbody>
+                          <tr>
+                            <td style="width:100px;"> <img height="auto" src="{{ asset('images/email-logo.jpg') }}" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="100" /> </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
                     <td style="font-size:0px;padding:10px 25px;padding-bottom:40px;word-break:break-word;">
-                      <p style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:100%;"> </p>
+                      <p style="border-top:solid 2px #ff9602;font-size:1;margin:0px auto;width:100%;"> </p>
                       <!--[if mso | IE]>
         <table
-           align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 2px #212141;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px"
+           align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 2px #ff9602;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px"
         >
           <tr>
             <td style="height:0;line-height:0;">
@@ -139,14 +158,14 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#212141;"> Hello,<br /> <br /> Your download is ready. Please click the button below to continue.<br /> <br /> <strong>Please Note: This link is only valid for 24 hours.</strong> </div>
+                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#000000;"> Hello,<br /> <br /> Your download is ready. Please click the button below to continue.<br /> <br /> <strong>Please Note: This link is only valid for 24 hours.</strong> </div>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                         <tr>
-                          <td align="center" bgcolor="#212141" role="presentation" style="border:none;border-radius:4px;cursor:auto;padding:10px 25px;background:#212141;" valign="middle"> <a href="{{ $zipUrl }}" style="background:#212141;color:white;font-family:Source Sans Pro;font-size:14px;font-weight:700;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank">
+                          <td align="center" bgcolor="#000000" role="presentation" style="border:none;border-radius:4px;cursor:auto;padding:10px 25px;background:#000000;" valign="middle"> <a href="{{ $zipUrl }}" style="background:#000000;color:white;font-family:Source Sans Pro;font-size:14px;font-weight:700;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank">
               Click here to continue.
             </a> </td>
                         </tr>

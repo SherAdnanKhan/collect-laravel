@@ -5,14 +5,16 @@
   <mj-body>
     <mj-section>
       <mj-column>
-        <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
+        <mj-image width="100px" src="{{ asset('images/email-logo.jpg') }}"></mj-image>
 
-        <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+        <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hello {{ $name }},<br />
           <br />
           We’re sorry to see you go! <br />
           <br />
-          Thank you for using VEVA Collect, if there’s any way you we can improve the platform to suit your needs more, please drop us a quick note at <a href="mailto:hello@vevacollect.com" style="color: #212141;">hello@vevacollect.com</a><br />
+          Thank you for using VEVA Collect, if there’s any way you we can improve the platform to suit your needs more, please drop us a quick note at <a href="mailto:hello@vevacollect.com" style="color: #000000;">hello@vevacollect.com</a><br />
           <br />
 Many thanks<br />
 VEVA Collect

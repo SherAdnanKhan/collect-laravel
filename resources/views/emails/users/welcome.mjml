@@ -5,14 +5,16 @@
   <mj-body>
     <mj-section>
       <mj-column>
-        <mj-divider border-color="#212141" border-width="2px" padding-bottom="40px"></mj-divider>
+        <mj-image width="100px" src="{{ asset('images/email-logo.jpg') }}"></mj-image>
 
-        <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+        <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
 <br />
 Welcome to VEVA Collect!<br />
 <br />
-All our new users get 2Gb of free file storage and the ability to manage their RIN file data on the Lite plan. <br />
+All our new users get 2GB of free file storage and the ability to manage their RIN file data on the Lite plan. <br />
 <br />
 For more great features like sharing data with collaborators and unlimited storage, check out our Pro Plan!<br />
 <br />
