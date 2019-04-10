@@ -338,6 +338,14 @@ class Exporter
             if ((bool) $credit->role->user_defined) {
                 $contributorRole->setAttribute('UserDefinedValue', $credit->credit_role_user_defined_value);
             }
+
+            if (!is_null($credit->instrument)) {
+                $contributorInstrumentType = $document->createElement('InstrumentType', $credit->instrument->ddex_key);
+                if ((bool) $credit->instrument->user_defined) {
+                    $contributorInstrumentType->setAttribute('UserDefinedValue', $credit->instrument_user_defined_value);
+                }
+            }
+
             $contributorReference->appendChild($contributorRole);
             $parent->appendChild($contributorReference);
         }

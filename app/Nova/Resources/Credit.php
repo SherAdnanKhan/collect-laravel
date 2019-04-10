@@ -8,6 +8,7 @@ use App\Nova\Resources\Project;
 use App\Nova\Resources\Recording;
 use App\Nova\Resources\Session;
 use App\Nova\Resources\Song;
+use Dompdf\FrameDecorator\Text;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
@@ -73,6 +74,7 @@ class Credit extends Resource
             Number::make('Split'),
 
             Text::make('User Defined Role Value', 'credit_role_user_defined_value'),
+            Text::make('User Defined Instrument Value', 'instrument_user_defined_value'),
 
             MorphTo::make('Contribution')->types([
                 Project::class,

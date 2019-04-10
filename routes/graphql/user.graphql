@@ -115,9 +115,9 @@ type PartyAddress {
 type Instrument {
 	id: ID!
 	_id: ID! @globalId @rename(attribute: "id")
-	category: String
 	name: String!
 	ddexKey: String! @rename(attribute: "ddex_key")
+	userDefined: Boolean! @rename(attribute: "user_defined")
 }
 
 type Song implements Favoured & Creditable {
@@ -147,6 +147,7 @@ type Credit {
 	party: Party! @belongsTo
 	role: CreditRole! @belongsTo
 	creditRoleUserDefinedValue: String! @rename(attribute: "credit_role_user_defined_value")
+	instrumentUserDefinedValue: String! @rename(attribute: "instrument_user_defined_value")
 	instrument: Instrument @belongsTo
 	performing: Boolean
 	split: Int

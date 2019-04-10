@@ -167,7 +167,6 @@ class Importer
                 }
             }
 
-            $creditModel = Credit::where('contribution_type', $model->getType())->where('contribution_id', $model->getKey())->where('party_id', $contributionId)->first();
 
             // TODO: InstrumentType handling
 
@@ -175,6 +174,28 @@ class Importer
             if (isset($credit->RightSharePercentage)) {
                 $split = (string) $credit->RightSharePercentage;
             }
+
+            $instrumentId = null;
+            $instrumentUserDefinedValue = null;
+            if (isset($credit->InstrumentType)) {
+                $instrument = Instrument::where('ddex_key', $credit->InstrumentType)->first();
+
+                if (!$instrument) {
+                    Log::debug(sprintf('Missing instrument for %s: %s', $credit->InstrumentType));
+                    $instrument = Instrument::where('ddex_key', 'UserDefined')->first();
+                }
+
+                if ((bool) $instrument->user_defined) {
+                    $instrumentTypeAttributes = $credit->InstrumentType->attributes();
+                    $instrumentUserDefinedValue = array_get($instrumentTypeAttributes, 'UserDefinedValue', '');
+                }
+
+                if ($instrument) {
+                    $instrumentId = $instrument->getKey();
+                }
+            }
+
+            $creditModel = Credit::where('contribution_type', $model->getType())->where('contribution_id', $model->getKey())->where('party_id', $contributionId)->first();
 
             if (!$creditModel) {
                 $creditModel = Credit::updateOrCreate([
@@ -189,6 +210,8 @@ class Importer
                     'credit_role_id'                 => $creditRoleId,
                     'split'                          => $split,
                     'credit_role_user_defined_value' => $userDefinedValue,
+                    'instrument_id'                  => $instrumentId,
+                    'instrument_user_defined_value'  => $instrumentUserDefinedValue,
                 ]);
             }
 
@@ -409,6 +432,8 @@ class Importer
             if (isset($recording->SoundRecordingMusicalWorkReference)) {
                 $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $recording->SoundRecordingMusicalWorkReference);
             }
+
+            // TODO: recording type.
 
             $recordingData[] = [
                 'id'             => $recordingId,

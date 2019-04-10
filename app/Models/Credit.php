@@ -35,7 +35,7 @@ class Credit extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'party_id', 'contribution_id', 'contribution_type', 'credit_role_id', 'performing', 'instrument_id', 'split', 'credit_role_user_defined_value',
+        'party_id', 'contribution_id', 'contribution_type', 'credit_role_id', 'performing', 'instrument_id', 'split', 'credit_role_user_defined_value', 'instrument_user_defined_value',
     ];
 
     /**

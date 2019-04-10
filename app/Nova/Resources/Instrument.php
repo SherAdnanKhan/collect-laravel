@@ -5,6 +5,7 @@ namespace App\Nova\Resources;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
@@ -55,9 +56,10 @@ class Instrument extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Category')
-                ->sortable()
-                ->rules('max:255'),
+            Text::make('DDEX Key', 'ddex_key')
+                ->rules('required'),
+
+            Boolean::make('User Defined'),
         ];
     }
 
