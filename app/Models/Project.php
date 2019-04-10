@@ -313,9 +313,9 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
         return $query->exists();
     }
 
-    public function getContributorRoleType(): string
+    public function getContributorRoleTypes(): array
     {
-        return 'project';
+        return ['NewStudioRole', 'CreativeContributorRole'];
     }
 
     public function getContributorReferenceKey(): string

@@ -155,9 +155,10 @@ class Song extends Model implements UserAccessible, Creditable
         return $query->where('user_id', $user->getAuthIdentifier());
     }
 
-    public function getContributorRoleType(): string
+
+    public function getContributorRoleTypes(): array
     {
-        return 'song';
+        return ['CreativeContributorRole'];
     }
 
     public function getContributorReferenceKey(): string

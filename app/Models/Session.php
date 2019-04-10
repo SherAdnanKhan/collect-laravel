@@ -115,9 +115,9 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
         return $this->morphMany(Credit::class, 'contribution');
     }
 
-    public function getContributorRoleType(): string
+    public function getContributorRoleTypes(): array
     {
-        return 'session';
+        return ['NewStudioRole', 'CreativeContributorRole'];
     }
 
     public function getContributorReferenceKey(): string
