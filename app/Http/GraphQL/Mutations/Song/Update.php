@@ -30,6 +30,10 @@ class Update
             throw new AuthorizationException('Unable to find Song to update');
         }
 
+        if ($song->iswc && empty($input['iswc'])) {
+            unset($input['iswc']);
+        }
+
         $saved = $song->fill($input)->save();
 
         if (!$saved) {
