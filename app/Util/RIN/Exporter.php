@@ -82,11 +82,12 @@ class Exporter
 
     private function boilerplateXML(DOMDocument $document): DOMElement
     {
-        $rinElement = $document->createElementNS('http://ddex.net/xml/f-rin/10', 'rin:RecordingInformationNotification');
+        $rinElement = $document->createElementNS('http://ddex.net/xml/f-rin/11', 'rin:RecordingInformationNotification');
         // $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:avs', 'http://ddex.net/xml/avs/avs');
         $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:ds', 'http://www.w3.org/2000/09/xmldsig#');
-        $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:schemaLocation',  'http://ddex.net/xml/f-rin/10 http://ddex.net/xml/rin/10/full-recording-information-notification.xsd');
-        $rinElement->setAttribute('SchemaVersionId', 'f-rin/10');
+        $rinElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $rinElement->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation',  'http://ddex.net/xml/f-rin/11 http://ddex.net/xml/rin/11/full-recording-information-notification.xsd');
+        $rinElement->setAttribute('SchemaVersionId', 'f-rin/11');
         $rinElement->setAttribute('LanguageAndScriptCode', 'en');
 
         return $rinElement;
@@ -131,10 +132,10 @@ class Exporter
         $project->appendChild($document->createElement('ProjectReference', self::PROJECT_ID_PREFIX . $this->project->getKey()));
 
         if ($this->project->artist) {
+            $project->appendChild($document->createElement('DisplayArtistName', $this->project->artist->name));
             $displayArtist = $document->createElement('DisplayArtist');
             $displayArtist->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $this->project->artist->getKey()));
             $project->appendChild($displayArtist);
-            $project->appendChild($document->createElement('DisplayArtistName', $this->project->artist->name));
         }
 
         $project->appendChild($document->createElement('ProjectName', $this->project->name));
@@ -242,8 +243,25 @@ class Exporter
             $soundRecording->appendChild($recordingType);
 
             if (!is_null($recordingModel->party)) {
+                $soundRecording->appendChild($document->createElement('DisplayArtistName', $recordingModel->party->name));
                 $displayArtist = $document->createElement('DisplayArtist');
                 $displayArtist->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $recordingModel->party->getKey()));
+
+                $titleDisplayInformation = $document->createElement('TitleDisplayInformation');
+                $titleDisplayInformation->appendChild($document->createElement('IsDisplayedInTitle', 'false'));
+
+                $displayArtist->appendChild($titleDisplayInformation);
+
+                if (!is_null($recordingModel->partyRole)) {
+                    // TODO: store a role for the party and a user_defined_value field.
+                    $artisticRole = $document->createElement('ArtisticRole', $recordingModel->partyRole->ddex_key);
+
+                    if ((bool) $recordingModel->partyRole->user_defined) {
+                        $artisticRole->setAttribute('UserDefinedValue', $recordingModel->party_role_user_defined_value);
+                    }
+
+                    $soundRecording->appendChild($artisticRole);
+                }
                 $soundRecording->appendChild($displayArtist);
             }
 
@@ -254,6 +272,8 @@ class Exporter
             }
 
             $soundRecording->appendChild($document->createElement('ResourceReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
+
+            $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
             $soundRecording->appendChild($document->createElement('SoundRecordingMusicalWorkReference', self::SONG_ID_PREFIX . $recordingModel->song->getKey()));
 
             $title = $document->createElement('Title');
@@ -272,7 +292,6 @@ class Exporter
             }
 
             $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language));
-            $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
             $soundRecording->appendChild($document->createElement('KeySignature', $recordingModel->key_signature));
             $soundRecording->appendChild($document->createElement('TimeSignature', $recordingModel->time_signature));
             $soundRecording->appendChild($document->createElement('Tempo', $recordingModel->tempo));
@@ -311,7 +330,7 @@ class Exporter
         foreach ($songModels as $songModel) {
             $musicalWork = $document->createElement('MusicalWork');
 
-            $musicalWorkId = $document->createElement('MuscialWorkId');
+            $musicalWorkId = $document->createElement('MusicalWorkId');
             if (!is_null($songModel->iswc)) {
                 $musicalWorkId->appendChild($document->createElement('ISWC', $songModel->iswc));
             }
@@ -322,13 +341,7 @@ class Exporter
                 $musicalWorkTypeKey = $songModel->type->ddex_key;
             }
 
-            $musicalWork->appendChild($document->createElement('Type', $musicalWorkTypeKey));
-
             $musicalWork->appendChild($document->createElement('MusicalWorkReference', self::SONG_ID_PREFIX . $songModel->getKey()));
-            $musicalWork->appendChild($document->createElement('CreationDate', Carbon::parse($songModel->created_on)->toDateString()));
-            $musicalWork->appendChild($document->createElement('Lyrics', $songModel->lyrics));
-            $musicalWork->appendChild($document->createElement('Comment', $songModel->notes));
-
 
             $title = $document->createElement('Title');
             $title->appendChild($document->createElement('TitleText', $songModel->title));
@@ -339,6 +352,11 @@ class Exporter
             $altTitle->appendChild($document->createElement('TitleText', $songModel->title_alt));
             $altTitle->appendChild($document->createElement('SubTitle', $songModel->subtitle_alt));
             $musicalWork->appendChild($altTitle);
+            $musicalWork->appendChild($document->createElement('CreationDate', Carbon::parse($songModel->created_on)->toDateString()));
+            $musicalWork->appendChild($document->createElement('Lyrics', $songModel->lyrics));
+            $musicalWork->appendChild($document->createElement('Comment', $songModel->notes));
+
+            $musicalWork->appendChild($document->createElement('MusicalWorkType', $musicalWorkTypeKey));
 
             $musicalWork = $this->creditList($document, $musicalWork, $songModel);
 
