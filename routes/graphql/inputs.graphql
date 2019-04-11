@@ -162,6 +162,7 @@ input DeleteSessionInput {
 
 input CreateSongInput {
     song_type_id: ID! @rules(apply: ["required"])
+    song_type_user_defined_value: String
     title: String! @rules(apply: ["required"])
     subtitle: String
     title_alt: String
@@ -176,6 +177,7 @@ input CreateSongInput {
 input UpdateSongInput {
     id: ID!
     song_type_id: ID! @rules(apply: ["required"])
+    song_type_user_defined_value: String
     title: String! @rules(apply: ["required"])
     subtitle: String
     title_alt: String

@@ -30,8 +30,8 @@ class Song extends Model implements UserAccessible, Creditable
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'song_type_id', 'iswc', 'title', 'subtitle',
-        'title_alt', 'subtitle_alt', 'created_on', 'description',
+        'user_id', 'song_type_id', 'song_type_user_defined_value', 'iswc', 'title',
+        'subtitle', 'title_alt', 'subtitle_alt', 'created_on', 'description',
         'lyrics', 'notes'
     ];
 
