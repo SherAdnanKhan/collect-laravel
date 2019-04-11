@@ -300,7 +300,7 @@ class CreditRolesTableSeeder extends Seeder
                     'name'         => $name,
                     'type'         => $type,
                     'ddex_key'     => $ddex_key,
-                    'user_defined' => ($ddex_key == 'UserDefined' ? true : false)
+                    'user_defined' => $ddex_key === 'UserDefined'
                 ]);
             }
         }
