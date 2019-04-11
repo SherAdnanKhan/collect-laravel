@@ -156,12 +156,12 @@ class Song extends Model implements UserAccessible, Creditable
     }
 
 
-    public function getContributorRoleTypes(): array
+    public function getContributorRoleTypes($version = '1.1'): array
     {
         return ['CreativeContributorRole'];
     }
 
-    public function getContributorReferenceKey(): string
+    public function getContributorReferenceKey($version = '1.1'): string
     {
         return 'MusicalWorkContributorReference';
     }

@@ -14,6 +14,7 @@ use App\Models\Session;
 use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
+use App\Models\VersionType;
 use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
@@ -128,13 +129,27 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
         return $this->morphMany(Credit::class, 'contribution');
     }
 
-    public function getContributorRoleTypes(): array
+    /**
+     * What version type is this?
+     *
+     * @return BelongsTo
+     */
+    public function version(): BelongsTo
+    {
+        return $this->belongsTo(VersionType::class, 'version_type_id');
+    }
+
+    public function getContributorRoleTypes($version = '1.1'): array
     {
         return ['NewStudioRole', 'CreativeContributorRole'];
     }
 
-    public function getContributorReferenceKey(): string
+    public function getContributorReferenceKey($version = '1.1'): string
     {
-        return 'SoundRecordingContributorReference';
+        if ($version == '1.0') {
+            return 'SoundRecordingContributorReference';
+        }
+
+        return 'ContributorPartyReference';
     }
 }

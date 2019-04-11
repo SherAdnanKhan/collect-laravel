@@ -16,6 +16,7 @@ use App\Models\Song;
 use App\Models\SongRecording;
 use App\Models\User;
 use App\Models\UserFavourite;
+use App\Models\CollaboratorPermission as CollaboratorPermissionModel;
 use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
@@ -276,6 +277,28 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     }
 
     /**
+     * A scope to filter projects so we only get projects which
+     * a user can import on, this requires full access to all sub-resources.
+     *
+     * @param  Builder $query
+     * @param  Model   $model
+     * @return Builder
+     */
+    public function scopeUserImportable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        // The user needs CRUD permissions on all types of resources.
+        return (new CollaboratorPermission(
+            $query,
+            $user,
+            CollaboratorPermissionModel::TYPES,
+            array_except(CollaboratorPermissionModel::LEVELS, ['download'])
+        ))->getQuery()->orWhere('user_id', $user->getAuthIdentifier());
+    }
+
+
+    /**
      * When logging events fot the project, we'll say this
      * project is the project.
      *
@@ -313,12 +336,16 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
         return $query->exists();
     }
 
-    public function getContributorRoleTypes(): array
+    public function getContributorRoleTypes($version = '1.1'): array
     {
-        return ['NewStudioRole', 'CreativeContributorRole'];
+        if ($version == '1.0') {
+            return ['NewStudioRole', 'CreativeContributorRole'];
+        }
+
+        return ['ResourceContributorRole'];
     }
 
-    public function getContributorReferenceKey(): string
+    public function getContributorReferenceKey($version = '1.1'): string
     {
         return 'ProjectContributorReference';
     }

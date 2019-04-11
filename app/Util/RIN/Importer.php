@@ -29,8 +29,6 @@ class Importer
     const SONG_ID_PREFIX = 'W-';
     const RECORDING_ID_PREFIX = 'A-';
 
-    private $currentUser;
-
     private $fileId;
     private $project;
     private $parties;
@@ -38,7 +36,8 @@ class Importer
     private $sessions;
     private $songs;
 
-    private $projectId;
+    private $projectOwner;
+    private $masterProject;
 
     /**
      * Import a RIN from an XML document object.
@@ -50,8 +49,8 @@ class Importer
     {
         $this->fileId = $xml->FileHeader->FileId;
 
-        $this->project = $this->mapProject($xml->ProjectList->Project);
         $this->parties = $this->mapParties($xml->PartyList->children());
+        $this->project = $this->mapProject($xml->ProjectList->Project);
 
         $this->recordings = $this->mapRecordings($xml->ResourceList->children());
         $this->sessions = $this->mapSessions($xml->SessionList->children());
@@ -84,24 +83,14 @@ class Importer
     }
 
     /**
-     * Set the current user.
+     * Set the current master project.
      *
-     * @param User $user
+     * @param App\Models\Project $project
      */
-    public function setUser(User $user): Importer
+    public function setProject(Project $project): Importer
     {
-        $this->currentUser = $user;
-        return $this;
-    }
-
-    /**
-     * Set the current projectId.
-     *
-     * @param string $projectId
-     */
-    public function setProjectId(int $projectId): Importer
-    {
-        $this->projectId = $projectId;
+        $this->masterProject = $project;
+        $this->projectOwner = $this->masterProject->user;
         return $this;
     }
 
@@ -118,14 +107,13 @@ class Importer
         $projectId = array_get($project, 'id', false);
         $project = array_except($project, ['id']);
 
-        $project['user_id'] = $this->currentUser->getKey();
-
         $projectModel = null;
         if ($override) {
-            $projectModel = Project::where('id', $projectId)->userViewable(['user' => $this->currentUser])->first();
+            $projectModel = Project::where('id', $projectId)->userUpdatable(['user' => $this->projectOwner])->first();
         }
 
         if (!$projectModel) {
+            $project['user_id'] = $this->projectOwner->getKey();
             $projectModel = new Project();
         }
 
@@ -143,6 +131,7 @@ class Importer
         $creditReferenceKey = $model->getContributorReferenceKey();
 
         foreach($credits as $credit) {
+            // TODO: Party requires user access.
             $contributionId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $credit->{$creditReferenceKey});
             $contributionRole = (string) $credit->Role;
 
@@ -230,8 +219,8 @@ class Importer
     private function mapProject(SimpleXMLElement $project): array
     {
         $projectId = (int) str_replace(self::PROJECT_ID_PREFIX, '', $project->ProjectReference);
-        if ($this->projectId) {
-            $projectId = $this->projectId;
+        if ($this->masterProject->getKey()) {
+            $projectId = $this->masterProject->getKey();
         }
 
         $projectNumber = '';
@@ -258,7 +247,7 @@ class Importer
             'main_artist_id' => $mainArtistId,
 
             // Project credits.
-            'credits'        => $project->ContributorReference,
+            'credits'        => $project->Contributor,
         ];
     }
 
@@ -280,11 +269,11 @@ class Importer
             $partyModel = null;
 
             if ($override) {
-                $partyModel = Party::where('id', $partyId)->userViewable(['user' => $this->currentUser])->first();
+                $partyModel = Party::where('id', $partyId)->userViewable(['user' => $this->projectOwner])->first();
             }
 
             if (!$partyModel) {
-                $party['user_id'] = $this->currentUser->getKey();
+                $party['user_id'] = $this->projectOwner->getKey();
                 $partyModel = new Party();
             }
 
@@ -372,11 +361,11 @@ class Importer
 
             $recordingModel = null;
             if ($override) {
-                $recordingModel = Recording::where('id', $recordingId)->userViewable(['user' => $this->currentUser])->first();
+                $recordingModel = Recording::where('id', $recordingId)->userViewable(['user' => $this->projectOwner])->first();
             }
 
             if (!$recordingModel) {
-                $recording['user_id'] = $this->currentUser->getKey();
+                $recording['user_id'] = $this->projectOwner->getKey();
                 $recordingModel = new Recording();
             }
 
@@ -476,7 +465,7 @@ class Importer
                 'duration'                          => Utilities::parseDuration((string) $recording->Duration),
 
                 // Relations
-                'credits'     => $recording->ContributorReference,
+                'credits'     => $recording->Contributor,
                 'sessions'    => $recording->SoundRecordingSessionReference,
             ];
         }
@@ -510,12 +499,12 @@ class Importer
 
             $venueModel = null;
             if ($override) {
-                $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->currentUser])->first();
+                $venueModel = Venue::where('name', 'LIKE', '%' . $venue['name'] . '%')->userViewable(['user' => $this->projectOwner])->first();
             }
 
             if (!$venueModel) {
                 $venueModel = Venue::create([
-                    'user_id' => $this->currentUser->getKey(),
+                    'user_id' => $this->projectOwner->getKey(),
                     'name'    => $venue['name'],
                     'country' => $venue['territory'],
                     'address' => $venue['address'],
@@ -526,11 +515,11 @@ class Importer
 
             $sessionModel = null;
             if ($override) {
-                $sessionModel = Session::where('id', $sessionId)->userViewable(['user' => $this->currentUser])->first();
+                $sessionModel = Session::where('id', $sessionId)->userViewable(['user' => $this->projectOwner])->first();
             }
 
             if (!$sessionModel) {
-                $session['user_id'] = $this->currentUser->getKey();
+                $session['user_id'] = $this->projectOwner->getKey();
                 $sessionModel = new Session();
             }
 
@@ -597,7 +586,7 @@ class Importer
 
                 // Relational data
                 'recordings' => $session->SessionSoundRecordingReference,
-                'credits'    => $session->ContributorReference,
+                'credits'    => $session->Contributor,
                 'venue'      => [
                     'name'      => (string) $session->VenueName,
                     'address'   => (string) $session->VenueAddress,
@@ -627,11 +616,11 @@ class Importer
 
             $songModel = null;
             if ($override) {
-                $songModel = Song::where('id', $songId)->userViewable(['user' => $this->currentUser])->first();
+                $songModel = Song::where('id', $songId)->userViewable(['user' => $this->projectOwner])->first();
             }
 
             if (!$songModel) {
-                $song['user_id'] = $this->currentUser->getKey();
+                $song['user_id'] = $this->projectOwner->getKey();
                 $songModel = new Song();
             }
 
@@ -704,7 +693,7 @@ class Importer
                 'created_on'                   => Carbon::parse((string) $song->CreationDate)->toDateString(),
 
                 // Related credits
-                'credits'                      => $song->ContributorReference,
+                'credits'                      => $song->Contributor,
             ];
         }
 

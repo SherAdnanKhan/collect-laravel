@@ -59,10 +59,10 @@ class Exporter
         $songList = $this->songList($document);
 
         $rin->appendChild($fileHeader);
-        $rin->appendChild($projectList);
-        $rin->appendChild($sessionList);
-        $rin->appendChild($recordingList);
         $rin->appendChild($songList);
+        $rin->appendChild($recordingList);
+        $rin->appendChild($sessionList);
+        $rin->appendChild($projectList);
 
         $document->appendChild($rin);
 
@@ -96,7 +96,7 @@ class Exporter
     {
         $fileHeader = $document->createElement('FileHeader');
 
-        $fileHeader->appendChild($document->createElement('FileId', self::FILE_ID_PREFIX . $this->version));
+        $fileHeader->appendChild($document->createElement('FileId', self::FILE_ID_PREFIX . $this->project->id));
         $fileHeader->appendChild($document->createElement('FileName', $this->filename()));
         $fileHeader->appendChild($document->createElement('FileCreatedDateTime', Carbon::now()->toIso8601String()));
         $fileHeader->appendChild($document->createElement('FileControlType', App::environment('production') ? 'LiveMessage' : 'TestMessage'));
@@ -131,14 +131,16 @@ class Exporter
         $project->appendChild($document->createElement('ProjectReference', self::PROJECT_ID_PREFIX . $this->project->getKey()));
 
         if ($this->project->artist) {
-            $project->appendChild($document->createElement('MainArtist', self::PARTY_ID_PREFIX . $this->project->artist->getKey()));
-            $project->appendChild($document->createElement('ProjectArtist', $this->project->artist->name));
+            $displayArtist = $document->createElement('DisplayArtist');
+            $displayArtist->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $this->project->artist->getKey()));
+            $project->appendChild($displayArtist);
+            $project->appendChild($document->createElement('DisplayArtistName', $this->project->artist->name));
         }
 
-        $project->appendChild($document->createElement('Title', $this->project->name));
+        $project->appendChild($document->createElement('ProjectName', $this->project->name));
 
         if ($this->project->label) {
-            $project->appendChild($document->createElement('Label', self::PARTY_ID_PREFIX . $this->project->label->getKey()));
+            $project->appendChild($document->createElement('ProjectLabelReference', self::PARTY_ID_PREFIX . $this->project->label->getKey()));
         }
 
         $project->appendChild($document->createElement('Status', 'Verified'));
@@ -231,7 +233,7 @@ class Exporter
                 $recordingTypeKey = $recordingModel->type->ddex_key;
             }
 
-            $recordingType = $document->createElement('SoundRecordingType', $recordingModel->type->ddex_key);
+            $recordingType = $document->createElement('Type', $recordingModel->type->ddex_key);
 
             if ((bool) $recordingModel->type->user_defined) {
                 $recordingType->setAttribute('UserDefinedValue', $recordingModel->recording_type_user_defined_value);
@@ -240,7 +242,9 @@ class Exporter
             $soundRecording->appendChild($recordingType);
 
             if (!is_null($recordingModel->party)) {
-                $soundRecording->appendChild($document->createElement('MainArtist', self::PARTY_ID_PREFIX . $recordingModel->party->getKey()));
+                $displayArtist = $document->createElement('DisplayArtist');
+                $displayArtist->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $recordingModel->party->getKey()));
+                $soundRecording->appendChild($displayArtist);
             }
 
             if (!is_null($recordingModel->isrc)) {
@@ -257,7 +261,16 @@ class Exporter
             $title->appendChild($document->createElement('SubTitle', $recordingModel->subtitle));
             $soundRecording->appendChild($title);
 
-            $soundRecording->appendChild($document->createElement('Version', $recordingModel->version));
+            if (!is_null($recordingModel->version)) {
+                $versionType = $document->createElement('VersionType', $recordingModel->version->ddex_key);
+
+                if ((bool) $recordingModel->version->user_defined) {
+                    $versionType->setAttribute('UserDefinedValue', $recordingModel->version_type_user_defined_value);
+                }
+
+                $soundRecording->appendChild($versionType);
+            }
+
             $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language));
             $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
             $soundRecording->appendChild($document->createElement('KeySignature', $recordingModel->key_signature));
@@ -267,17 +280,17 @@ class Exporter
             $soundRecording->appendChild($document->createElement('Duration', Utilities::formatDuration($recordingModel->duration)));
             if (!is_null($recordingModel->mixed_on)) {
                 $dt = Carbon::parse($recordingModel->mixed_on);
-                $soundRecording->appendChild($document->createElement('MasteredDate', $dt->toIso8601String()));
+                $soundRecording->appendChild($document->createElement('MasteredDate', $dt->toDateString()));
             }
 
             if (!is_null($recordingModel->recorded_on)) {
                 $dt = Carbon::parse($recordingModel->recorded_on);
-                $soundRecording->appendChild($document->createElement('EventDate', $dt->toIso8601String()));
+                $soundRecording->appendChild($document->createElement('EventDate', $dt->toDateString()));
             }
 
             if (!is_null($recordingModel->created_at)) {
                 $dt = Carbon::parse($recordingModel->created_at);
-                $soundRecording->appendChild($document->createElement('CreationDate', $dt->toIso8601String()));
+                $soundRecording->appendChild($document->createElement('CreationDate', $dt->toDateString()));
             }
 
             $soundRecording = $this->creditList($document, $soundRecording, $recordingModel);
@@ -293,20 +306,29 @@ class Exporter
         $songList = $document->createElement('MusicalWorkList');
 
         $this->project->load('recordings.song');
-        $songModels = $this->project->recordings->pluck('song')->all();
+        $songModels = $this->project->recordings->pluck('song')->unique();
+
         foreach ($songModels as $songModel) {
             $musicalWork = $document->createElement('MusicalWork');
 
+            $musicalWorkId = $document->createElement('MuscialWorkId');
             if (!is_null($songModel->iswc)) {
-                $musicalWorkId = $document->createElement('MuscialWorkId');
                 $musicalWorkId->appendChild($document->createElement('ISWC', $songModel->iswc));
-                $musicalWork->appendChild($musicalWorkId);
             }
+            $musicalWork->appendChild($musicalWorkId);
+
+            $musicalWorkTypeKey = 'Unknown';
+            if (!is_null($songModel->type)) {
+                $musicalWorkTypeKey = $songModel->type->ddex_key;
+            }
+
+            $musicalWork->appendChild($document->createElement('Type', $musicalWorkTypeKey));
 
             $musicalWork->appendChild($document->createElement('MusicalWorkReference', self::SONG_ID_PREFIX . $songModel->getKey()));
             $musicalWork->appendChild($document->createElement('CreationDate', Carbon::parse($songModel->created_on)->toDateString()));
             $musicalWork->appendChild($document->createElement('Lyrics', $songModel->lyrics));
             $musicalWork->appendChild($document->createElement('Comment', $songModel->notes));
+
 
             $title = $document->createElement('Title');
             $title->appendChild($document->createElement('TitleText', $songModel->title));
@@ -317,13 +339,6 @@ class Exporter
             $altTitle->appendChild($document->createElement('TitleText', $songModel->title_alt));
             $altTitle->appendChild($document->createElement('SubTitle', $songModel->subtitle_alt));
             $musicalWork->appendChild($altTitle);
-
-            $musicalWorkTypeKey = 'Unknown';
-            if (!is_null($songModel->type)) {
-                $musicalWorkTypeKey = $songModel->type->ddex_key;
-            }
-
-            $musicalWork->appendChild($document->createElement('MusicalWorkType', $musicalWorkTypeKey));
 
             $musicalWork = $this->creditList($document, $musicalWork, $songModel);
 
@@ -341,7 +356,7 @@ class Exporter
             ->get();
 
         foreach ($credits as $credit) {
-            $contributorReference = $document->createElement('ContributorReference');
+            $contributorReference = $document->createElement('Contributor');
             $contributorReference->appendChild($document->createElement($model->getContributorReferenceKey(), self::PARTY_ID_PREFIX . $credit->party_id));
 
             if (!is_null($credit->split)) {
@@ -373,10 +388,13 @@ class Exporter
         $signedInfo = $document->createElement('SignedInfo');
 
         $canonicalizationMethod = $document->createElement('ds:CanonicalizationMethod');
+        $canonicalizationMethod->setAttribute('Algorithm', '');
         $signatureMethod = $document->createElement('ds:SignatureMethod');
+        $signatureMethod->setAttribute('Algorithm', '');
 
         $reference = $document->createElement('ds:Reference');
         $digestMethod = $document->createElement('ds:DigestMethod');
+        $digestMethod->setAttribute('Algorithm', '');
         $digestValue = $document->createElement('ds:DigestValue');
         $reference->appendChild($digestMethod);
         $reference->appendChild($digestValue);
