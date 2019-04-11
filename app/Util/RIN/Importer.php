@@ -14,6 +14,7 @@ use App\Models\SongType;
 use App\Models\User;
 use App\Models\Venue;
 use App\Util\RIN\Utilities;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SimpleXMLElement;
@@ -154,7 +155,7 @@ class Importer
             $creditRole = CreditRole::whereIn('type', $creditRoleTypes)->where('ddex_key', $contributionRole)->first();
 
             if (!$creditRole) {
-                Log::debug(sprintf('Missing credit role for %s: %s', $creditRoleType, $contributionRole));
+                Log::debug(sprintf('Missing credit role for %s: %s', join(', ', $creditRoleTypes), $contributionRole));
                 $creditRole = CreditRole::whereIn('type', $creditRoleTypes)->where('ddex_key', 'UserDefined')->first();
             }
 
@@ -253,6 +254,9 @@ class Importer
             'number'         => $projectNumber,
             'label_id'       => $labelId,
             'main_artist_id' => $mainArtistId,
+
+            // Project credits.
+            'credits'        => $project->ContributorReference,
         ];
     }
 
@@ -529,6 +533,8 @@ class Importer
         foreach ($sessions as $session) {
             $sessionId = (int) str_replace(self::SESSION_ID_PREFIX, '', $session->SessionReference);
 
+            // TODO: the session type
+
             $sessionData[] = [
                 'id'            => $sessionId,
                 'venue'         => [
@@ -536,10 +542,14 @@ class Importer
                     'address'   => (string) $session->VenueAddress,
                     'territory' => (string) $session->TerritoryCode,
                 ],
-                'description'   => (string) $session->Comment,
-                'union_session' => (string) $session->IsUnionSession === "true" ? 1 : 0,
-                'venue_room'    => (string) $session->VenueRoom,
-                'recordings'    => $session->SessionSoundRecordingReference,
+                'description'    => (string) $session->Comment,
+                'union_session'  => (string) $session->IsUnionSession === "true" ? 1 : 0,
+                'analog_session' => (string) $session->IsAnalogSession === "true" ? 1 : 0,
+                'venue_room'     => (string) $session->VenueRoom,
+                'recordings'     => $session->SessionSoundRecordingReference,
+
+                // Relational credits
+                'credits'       => $session->ContributorReference,
             ];
         }
 
@@ -597,17 +607,50 @@ class Importer
             $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $song->MusicalWorkReference);
 
             $songTypeId = null;
-            $songType = SongType::select('song_types.id', 'song_types.name')->where('name', 'LIKE', '%'. (string) $song->MusicalWorkType .'%')->first();
+            $songTypeUserValue = null;
+            $songType = SongType::select('song_types.id', 'song_types.ddex_key')->where('song_types.ddex_key', (string) $song->MusicalWorkType)->first();
 
-            if ($songType) {
-                $songTypeId = $songType->getKey();
+            if (!$songType) {
+                $songType = SongType::select('song_types.id', 'song_types.ddex_key')->where('song_types.ddex_key', 'UserDefined')->first();
+                $songTypeUserValue = (string) $song->MusicalWorkType;
+            }
+
+            $songTypeId = $songType->getKey();
+
+            $title = null;
+            $subTitle = null;
+            if (isset($song->Title)) {
+                $title = (string) $song->Title->TitleText;
+                $subTitle = (string) $song->Title->Subtitle;
+            }
+
+            $titleAlt = null;
+            $subTitleAlt = null;
+            if (isset($song->AlternateTitle)) {
+                $titleAlt = (string) $song->AlternateTitle->TitleText;
+                $subTitleAlt = (string) $song->AlternateTitle->Subtitle;
+            }
+
+            $iswc = null;
+            if (isset($song->MusicalWorkId->ISWC)) {
+                $iswc = (string) $song->MusicalWorkId->ISWC;
             }
 
             $songData[] = [
-                'id'           => $songId,
-                'song_type_id' => $songTypeId,
-                'title'        => (string) $song->Title->TitleText,
-                'credits'      => $song->ContributorReference,
+                'id'                           => $songId,
+                'iswc'                         => $iswc,
+                'song_type_id'                 => $songTypeId,
+                'song_type_user_defined_value' => $songTypeUserValue,
+                'title'                        => $title,
+                'subtitle'                     => $subTitle,
+                'title_alt'                    => $titleAlt,
+                'subtitle_alt'                 => $subtitleAlt,
+                'lyrics'                       => (string) $song->Lyrics,
+                'notes'                        => (string) $song->Comments,
+                'created_on'                   => (string) $song->CreationDate,
+
+                // Related credits
+                'credits'                      => $song->ContributorReference,
             ];
         }
 

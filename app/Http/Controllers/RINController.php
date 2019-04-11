@@ -65,7 +65,7 @@ class RINController extends Controller
             // Import & override.
             $importer->import(true);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage() . ':' . $e->getTraceAsString());
             abort(400, 'Encountered an issue when importing RIN');
         }
 
