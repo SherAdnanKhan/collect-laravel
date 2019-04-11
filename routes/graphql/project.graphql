@@ -117,7 +117,7 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	timeSignature: String @rename(attribute: "time_signature")
 	tempo: Int
 	type: RecordingType @belongsTo
-	typeUserDefinedValue: String! @rename(attribute: "recording_type_user_defined_value")
+	typeUserDefinedValue: String @rename(attribute: "recording_type_user_defined_value")
 	description: String
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
