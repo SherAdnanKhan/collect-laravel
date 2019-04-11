@@ -7,6 +7,7 @@ use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\Models\Collaborators;
 use App\Models\Credit;
+use App\Models\CreditRole;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\RecordingType;
@@ -80,13 +81,23 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     }
 
     /**
-     * Get the Party that this recording is associated to.
+     * Get the Party (main artist) that this recording is associated to.
      *
      * @return BelongsTo
      */
     public function party(): BelongsTo
     {
         return $this->belongsTo(Party::class);
+    }
+
+    /**
+     * Get the role of the party (main artist)
+     *
+     * @return BelongsTo
+     */
+    public function partyRole(): BelongsTo
+    {
+        return $this->belongsTo(CreditRole::class, 'party_role_id');
     }
 
     /**
