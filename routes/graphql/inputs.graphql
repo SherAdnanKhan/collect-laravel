@@ -289,7 +289,9 @@ input CreateCreditInput {
     contribution_id: ID! @rules(apply: ["required"])
     contribution_type: String! @rules(apply: ["required"])
     credit_role_id: ID! @rules(apply: ["required"])
+    credit_role_user_defined_value: String
     instrument_id: ID
+    instrument_user_defined_value: String
     performing: Boolean
     split: Int
 }
@@ -300,7 +302,9 @@ input UpdateCreditInput {
     contribution_id: ID! @rules(apply: ["required"])
     contribution_type: String! @rules(apply: ["required"])
     credit_role_id: ID! @rules(apply: ["required"])
+    credit_role_user_defined_value: String
     instrument_id: ID
+    instrument_user_defined_value: String
     performing: Boolean
     split: Int
 }
