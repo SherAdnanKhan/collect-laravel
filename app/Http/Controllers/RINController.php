@@ -63,7 +63,8 @@ class RINController extends Controller
             $importer->fromXML(simplexml_import_dom($xml));
 
             // Import & override.
-            $importer->import(true);
+            $override = $request->get('override', 0);
+            $importer->import((bool) $override);
         } catch (\Exception $e) {
             Log::error($e->getMessage() . ':' . $e->getTraceAsString());
             abort(400, 'Encountered an issue when importing RIN');

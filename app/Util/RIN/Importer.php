@@ -450,9 +450,9 @@ class Importer
 
             $title = null;
             $subTitle = null;
-            if (isset($song->Title)) {
-                $title = (string) $song->Title->TitleText;
-                $subTitle = (string) $song->Title->Subtitle;
+            if (isset($recording->Title)) {
+                $title = (string) $recording->Title->TitleText;
+                $subTitle = (string) $recording->Title->Subtitle;
             }
 
             $recordingData[] = [
@@ -593,6 +593,7 @@ class Importer
                 'timecode_type'       => $timecodeType,
                 'timecode_frame_rate' => $timecodeFrameRate,
                 'drop_frame'          => $timecodeDropFrame == "true" ? 1 : 0,
+                'name'                => (string) $session->VenueName . ', ' . Carbon::parse((string) $session->StartDateTime)->toDateTimeString(),
 
                 // Relational data
                 'recordings' => $session->SessionSoundRecordingReference,
@@ -697,7 +698,7 @@ class Importer
                 'title'                        => $title,
                 'subtitle'                     => $subTitle,
                 'title_alt'                    => $titleAlt,
-                'subtitle_alt'                 => $subtitleAlt,
+                'subtitle_alt'                 => $subTitleAlt,
                 'lyrics'                       => (string) $song->Lyrics,
                 'notes'                        => (string) $song->Comments,
                 'created_on'                   => Carbon::parse((string) $song->CreationDate)->toDateString(),
