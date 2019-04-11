@@ -8,7 +8,9 @@ use App\Models\CreditRole;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\Recording;
+use App\Models\RecordingType;
 use App\Models\Session;
+use App\Models\SessionType;
 use App\Models\Song;
 use App\Models\SongType;
 use App\Models\User;
@@ -419,6 +421,18 @@ class Importer
         foreach ($recordings as $recording) {
             $recordingId = (int) str_replace(self::RECORDING_ID_PREFIX, '', $recording->ResourceReference);
 
+            $recordingTypeId = null;
+            $recordingTypeUserValue = null;
+            $recordingType = RecordingType::select('recording_types.id', 'recording_types.ddex_key')->where('recording_types.ddex_key', (string) $recording->SoundRecordingType)->first();
+
+            if (!$recordingType) {
+                Log::debug(sprintf('Missing recording type %s', (string) $recording->SoundRecordingType));
+                $recordingType = RecordingType::select('recording_types.id', 'recording_types.ddex_key')->where('recording_types.ddex_key', 'UserDefined')->first();
+                $recordingTypeUserValue = (string) $recording->SoundRecordingType;
+            }
+
+            $recordingTypeId = $recordingType->getKey();
+
             $isrc = null;
             if (isset($recording->SoundRecordingId->ISRC)) {
                 $isrc = (string) $recording->SoundRecordingId->ISRC;
@@ -434,21 +448,32 @@ class Importer
                 $songId = (int) str_replace(self::SONG_ID_PREFIX, '', $recording->SoundRecordingMusicalWorkReference);
             }
 
-            // TODO: recording type.
+            $title = null;
+            $subTitle = null;
+            if (isset($song->Title)) {
+                $title = (string) $song->Title->TitleText;
+                $subTitle = (string) $song->Title->Subtitle;
+            }
 
             $recordingData[] = [
-                'id'             => $recordingId,
-                'isrc'           => $isrc,
-                'name'           => (string) $recording->Title->TitleText,
-                'recorded_on'    => (string) $recording->CreationDate,
-                'party_id'       => $artistId,
-                'song_id'        => $songId,
-                'description'    => (string) $recording->Comment,
-                'language'       => (string) $recording->LanguageOfPerformance,
-                'key_signature'  => (string) $recording->KeySignature,
-                'time_signature' => (string) $recording->TimeSignature,
-                'tempo'          => (string) $recording->Tempo,
-                'duration'       => Utilities::parseDuration((string) $recording->Duration),
+                'id'                                => $recordingId,
+                'isrc'                              => $isrc,
+                'recording_type_id'                 => $recordingTypeId,
+                'recording_type_user_defined_value' => $recordingTypeUserValue,
+                'name'                              => $title,
+                'subtitle'                          => $subTitle,
+                'created_at'                        => Carbon::parse((string) $recording->CreationDate)->toDateTimeString(),
+                'recorded_on'                       => Carbon::parse((string) $recording->EventDate)->toDateString(),
+                'mixed_on'                          => Carbon::parse((string) $recording->MasteredDate)->toDateString(),
+                'party_id'                          => $artistId,
+                'song_id'                           => $songId,
+                'description'                       => (string) $recording->Comment,
+                'language'                          => (string) $recording->LanguageOfPerformance,
+                'key_signature'                     => (string) $recording->KeySignature,
+                'time_signature'                    => (string) $recording->TimeSignature,
+                'tempo'                             => (string) $recording->Tempo,
+                'version'                           => (string) $recording->Version,
+                'duration'                          => Utilities::parseDuration((string) $recording->Duration),
 
                 // Relations
                 'credits'     => $recording->ContributorReference,
@@ -533,23 +558,50 @@ class Importer
         foreach ($sessions as $session) {
             $sessionId = (int) str_replace(self::SESSION_ID_PREFIX, '', $session->SessionReference);
 
-            // TODO: the session type
+            $sessionTypeId = null;
+            $sessionTypeUserValue = null;
+            $sessionType = SessionType::select('session_types.id', 'session_types.ddex_key')->where('session_types.ddex_key', (string) $session->SessionType)->first();
+
+            if (!$sessionType) {
+                Log::debug(sprintf('Missing session type %s', (string) $session->SessionType));
+                $sessionType = SessionType::select('session_types.id', 'session_types.ddex_key')->where('session_types.ddex_key', 'Project')->first();
+            }
+
+            $sessionTypeId = $sessionType->getKey();
+
+            // Timecode stuff
+            $timecodeType = null;
+            $timecodeFrameRate = null;
+            $timecodeDropFrame = null;
+            if (isset($session->TimeCode)) {
+                $timecodeType = (string) $session->TimeCode->TimecodeType;
+                $timecodeFrameRate = (string) $session->TimeCode->FrameRate;
+                $timecodeDropFrame = (string) $session->TimeCode->TimecodeType;
+            }
 
             $sessionData[] = [
-                'id'            => $sessionId,
-                'venue'         => [
+                'id'                  => $sessionId,
+                'session_type_id'     => $sessionTypeId,
+                'description'         => (string) $session->Comment,
+                'union_session'       => (string) $session->IsUnionSession === "true" ? 1 : 0,
+                'analog_session'      => (string) $session->IsAnalogSession === "true" ? 1 : 0,
+                'venue_room'          => (string) $session->VenueRoom,
+                'started_at'          => Carbon::parse((string) $session->StartDateTime)->toDateTimeString(),
+                'ended_at'            => Carbon::parse((string) $session->EndDateTime)->toDateTimeString(),
+                'bit_depth'           => (string) $session->BitDepth,
+                'sample_rate'         => (string) $session->SampleRate,
+                'timecode_type'       => $timecodeType,
+                'timecode_frame_rate' => $timecodeFrameRate,
+                'drop_frame'          => $timecodeDropFrame == "true" ? 1 : 0,
+
+                // Relational data
+                'recordings' => $session->SessionSoundRecordingReference,
+                'credits'    => $session->ContributorReference,
+                'venue'      => [
                     'name'      => (string) $session->VenueName,
                     'address'   => (string) $session->VenueAddress,
                     'territory' => (string) $session->TerritoryCode,
                 ],
-                'description'    => (string) $session->Comment,
-                'union_session'  => (string) $session->IsUnionSession === "true" ? 1 : 0,
-                'analog_session' => (string) $session->IsAnalogSession === "true" ? 1 : 0,
-                'venue_room'     => (string) $session->VenueRoom,
-                'recordings'     => $session->SessionSoundRecordingReference,
-
-                // Relational credits
-                'credits'       => $session->ContributorReference,
             ];
         }
 
@@ -611,6 +663,7 @@ class Importer
             $songType = SongType::select('song_types.id', 'song_types.ddex_key')->where('song_types.ddex_key', (string) $song->MusicalWorkType)->first();
 
             if (!$songType) {
+                Log::debug(sprintf('Missing song type %s', (string) $song->MusicalWorkType));
                 $songType = SongType::select('song_types.id', 'song_types.ddex_key')->where('song_types.ddex_key', 'UserDefined')->first();
                 $songTypeUserValue = (string) $song->MusicalWorkType;
             }
@@ -647,7 +700,7 @@ class Importer
                 'subtitle_alt'                 => $subtitleAlt,
                 'lyrics'                       => (string) $song->Lyrics,
                 'notes'                        => (string) $song->Comments,
-                'created_on'                   => (string) $song->CreationDate,
+                'created_on'                   => Carbon::parse((string) $song->CreationDate)->toDateString(),
 
                 // Related credits
                 'credits'                      => $song->ContributorReference,
