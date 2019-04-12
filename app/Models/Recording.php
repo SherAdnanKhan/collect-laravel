@@ -42,9 +42,9 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
      * @var array
      */
     protected $fillable = [
-        'project_id', 'party_id', 'song_id', 'name', 'recording_type_id', 'description',
-        'isrc', 'subtitle', 'version', 'recorded_on', 'mixed_on', 'duration',
-        'language', 'key_signature', 'time_signature', 'tempo', 'recording_type_user_defined_value'
+        'project_id', 'party_id', 'party_role_id', 'song_id', 'name', 'recording_type_id', 'description',
+        'isrc', 'subtitle', 'version_type_id', 'version_type_user_defined_value', 'recorded_on', 'mixed_on', 'duration',
+        'language', 'key_signature', 'time_signature', 'tempo', 'recording_type_user_defined_value', 'party_role_user_defined_value',
     ];
 
     protected $casts = [

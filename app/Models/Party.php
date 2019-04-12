@@ -7,6 +7,8 @@ use App\Models\Collaborators;
 use App\Models\Credit;
 use App\Models\PartyAddress;
 use App\Models\PartyContact;
+use App\Models\Project;
+use App\Models\Recording;
 use App\Models\User;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\ProjectAccess;
@@ -51,6 +53,44 @@ class Party extends Model implements UserAccessible
     }
 
     /**
+     * Get the name indexed by the last name
+     *
+     * @return string
+     */
+    public function getIndexedNameAttribute(): string
+    {
+        if (empty($this->attributes['last_name'])) {
+            return $this->getNonKeyNamesAttribute();
+        }
+
+        return trim(sprintf('%s, %s %s', $this->attributes['last_name'], $this->attributes['first_name'], $this->attributes['middle_name']));
+    }
+
+    /**
+     * Get non key names.
+     *
+     * @return string
+     */
+    public function getNonKeyNamesAttribute(): string
+    {
+        return trim(sprintf('%s %s', $this->attributes['first_name'], $this->attributes['middle_name']));
+    }
+
+    /**
+     * Get the name initials.
+     *
+     * @return string
+     */
+    public function getInitialsAttribute(): string
+    {
+        return strtoupper(trim(join('', [
+            substr($this->attributes['first_name'], 0, 1),
+            substr($this->attributes['middle_name'], 0, 1),
+            substr($this->attributes['last_name'], 0, 1),
+        ])));
+    }
+
+    /**
      * The user owner for this project.
      *
      * @return User
@@ -88,6 +128,36 @@ class Party extends Model implements UserAccessible
     public function contacts(): HasMany
     {
         return $this->hasMany(PartyContact::class);
+    }
+
+    /**
+     * Get all recordings where this party appears as the artist on it.
+     *
+     * @return HasMany
+     */
+    public function recordings(): HasMany
+    {
+        return $this->hasMany(Recording::class, 'party_id');
+    }
+
+    /**
+     * Get all projects where this party is the label.
+     *
+     * @return HasMany
+     */
+    public function projectLabel(): HasMany
+    {
+        return $this->hasMany(Project::class, 'label_id');
+    }
+
+    /**
+     * Get all projects where this party is the main artist.
+     *
+     * @return HasMany
+     */
+    public function projectArtist(): HasMany
+    {
+        return $this->hasMany(Project::class, 'main_artist_id');
     }
 
     /**
@@ -143,5 +213,32 @@ class Party extends Model implements UserAccessible
     {
         $user = $this->getUser($data);
         return $query->where('user_id', $user->getKey());
+    }
+
+    /**
+     * Get absolutely every party which is referenced on a project or
+     * any of it's sub resources.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeRelatedToProject(Builder $query, $data = []): Builder
+    {
+        $project = array_get($data, 'project', null);
+
+        if (!$project) {
+            throw new \Exception('Project must be specified when querying related to a project');
+        }
+
+        return $query->whereHas('credits', function($q) use ($project) {
+            return $q->whereHas('projects', function($q) use ($project) {
+                return $q->where('projects.id', $project->getKey());
+            });
+        })->orWhereHas('projectLabel', function($q) use ($project) {
+            return $q->where('projects.id', $project->getKey());
+        })->orWhereHas('projectArtist', function($q) use ($project) {
+            return $q->where('projects.id', $project->getKey());
+        })->groupBy('parties.id');
     }
 }
