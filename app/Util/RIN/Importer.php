@@ -131,7 +131,7 @@ class Importer
 
         $projectModel = null;
         if ($override) {
-            $projectModel = Project::where('id', $projectId)->userUpdatable(['user' => $this->projectOwner])->first();
+            $projectModel = Project::where('id', $projectId)->first();
         }
 
         if (!$projectModel) {
@@ -153,13 +153,17 @@ class Importer
         $creditReferenceKey = $model->getContributorReferenceKey();
 
         foreach($credits as $credit) {
-            // TODO: Party requires user access.
             $contributionId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $credit->{$creditReferenceKey});
             $contributionRole = (string) $credit->Role;
 
             if (array_key_exists($contributionId, $allParties)) {
                 $contributionModel = array_get($allParties, $contributionId);
                 $contributionId = $contributionModel->getKey();
+            }
+
+            // If the project owner doesn't have access to the party, don't make the credit.
+            if (!Party::where('id', $contributionId)->userViewable(['user' => $this->projectOwner])->exists()) {
+                continue;
             }
 
             $creditRoleTypes = $model->getContributorRoleTypes();
@@ -206,25 +210,27 @@ class Importer
                 }
             }
 
-            $creditModel = Credit::where('contribution_type', $model->getType())->where('contribution_id', $model->getKey())->where('party_id', $contributionId)->first();
+            $creditModel = Credit::where('contribution_type', $model->getType())
+                ->where('contribution_id', $model->getKey())
+                ->where('party_id', $contributionId)
+                ->first();
 
             if (!$creditModel) {
-                $creditModel = Credit::updateOrCreate([
-                    'party_id'                       => $contributionId,
-                    'contribution_type'              => $model->getType(),
-                    'contribution_id'                => $model->getKey(),
-                    'credit_role_id'                 => $creditRoleId,
-                ], [
-                    'party_id'                       => $contributionId,
-                    'contribution_type'              => $model->getType(),
-                    'contribution_id'                => $model->getKey(),
-                    'credit_role_id'                 => $creditRoleId,
-                    'split'                          => $split,
-                    'credit_role_user_defined_value' => $userDefinedValue,
-                    'instrument_id'                  => $instrumentId,
-                    'instrument_user_defined_value'  => $instrumentUserDefinedValue,
-                ]);
+                $creditModel = new Credit();
             }
+
+            $creditModel->fill([
+                'party_id'                       => $contributionId,
+                'contribution_type'              => $model->getType(),
+                'contribution_id'                => $model->getKey(),
+                'credit_role_id'                 => $creditRoleId,
+                'split'                          => $split,
+                'credit_role_user_defined_value' => $userDefinedValue,
+                'instrument_id'                  => $instrumentId,
+                'instrument_user_defined_value'  => $instrumentUserDefinedValue,
+            ]);
+
+            $creditModel->save();
 
             $creditIds[] = $creditModel;
         }
@@ -250,26 +256,35 @@ class Importer
             $projectNumber = (string) $project->ProjectId->ProprietaryId;
         }
 
-        $labelId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->Label);
-        if (!Party::find($labelId)) {
+        $labelId = (int) str_replace(
+            self::PARTY_ID_PREFIX,
+            '',
+            $this->rinVersion == '10' ? (string) $project->Label : (string) $project->ProjectLabelReference
+        );
+
+        if (!Party::where('id', $labelId)->userViewable(['user' => $this->projectOwner])->exists()) {
             $labelId = null;
         }
 
-        $mainArtistId = (int) str_replace(self::PARTY_ID_PREFIX, '', (string) $project->MainArtist);
-        if (!Party::find($mainArtistId)) {
+        $mainArtistId = (int) str_replace(
+            self::PARTY_ID_PREFIX,
+            '',
+            $this->rinVersion == '10' ? (string) $project->MainArtist : (string) $project->DisplayArtist->PartyReference
+        );
+
+        if (!Party::where('id', $mainArtistId)->userViewable(['user' => $this->projectOwner])->exists()) {
             $mainArtistId = null;
         }
 
         return [
             'id'             => $projectId,
-            'name'           => (string) $project->Title,
-            'description'    => (string) $project->Comment,
+            'name'           => $this->rinVersion == '10' ? (string) $project->Title : (string) $project->ProjectName,
             'number'         => $projectNumber,
             'label_id'       => $labelId,
             'main_artist_id' => $mainArtistId,
 
             // Project credits.
-            'credits'        => $project->Contributor,
+            'credits'        => $this->rinVersion == '10' ? $project->ContributorReference : $project->Contributor,
         ];
     }
 
@@ -286,12 +301,24 @@ class Importer
 
         foreach ($parties as $party) {
             $partyId = array_get($party, 'id', false);
+            $partyISNI = array_get($party, 'isni', false);
             $party = array_except($party, ['id']);
 
             $partyModel = null;
 
+            // TODO: Chat over this logic with chris,
+            // worry is that people can import parties and override other peoples.
+            // Maybe we should only allow override on your own stuff (project owners.)
             if ($override) {
-                $partyModel = Party::where('id', $partyId)->userViewable(['user' => $this->projectOwner])->first();
+                $partyModelQuery = Party::where('id', $partyId);
+
+                if ($partyISNI) {
+                    $partyModelQuery = $partyModelQuery->orWhere('isni', $partyISNI)->scopeUserUpdatable(['user' => $this->projectOwner]);
+                } else {
+                    $partyModelQuery =  $partyModelQuery->userViewable(['user' => $this->projectOwner]);
+                }
+
+                $partyModel = $partyModelQuery->first();
             }
 
             if (!$partyModel) {
@@ -621,7 +648,7 @@ class Importer
 
                 // Relational data
                 'recordings' => $session->SessionSoundRecordingReference,
-                'credits'    => $session->Contributor,
+                'credits'    => $this->rinVersion == '10' ? $session->ContributorReference : $session->Contributor,
                 'venue'      => [
                     'name'      => (string) $session->VenueName,
                     'address'   => (string) $session->VenueAddress,
@@ -728,7 +755,7 @@ class Importer
                 'created_on'                   => Carbon::parse((string) $song->CreationDate)->toDateString(),
 
                 // Related credits
-                'credits'                      => $song->Contributor,
+                'credits'                      => $this->rinVersion == '10' ? $song->ContributorReference : $song->Contributor,
             ];
         }
 
