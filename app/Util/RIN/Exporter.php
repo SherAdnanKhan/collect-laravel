@@ -349,9 +349,11 @@ class Exporter
                     if ((bool) $recordingModel->partyRole->user_defined) {
                         $artisticRole->setAttribute('UserDefinedValue', $recordingModel->party_role_user_defined_value);
                     }
-
-                    $soundRecording->appendChild($artisticRole);
+                } else {
+                    $artisticRole = $document->createElement('ArtisticRole', 'Unknown');
                 }
+
+                $displayArtist->appendChild($artisticRole);
                 $soundRecording->appendChild($displayArtist);
             }
 
