@@ -209,11 +209,12 @@ class Exporter
         $project = $document->createElement('Project');
 
         $projectId = $document->createElement('ProjectId');
-        $project->appendChild($projectId);
 
         $proprietaryId = $document->createElement('ProprietaryId', $this->project->number);
         $proprietaryId->setAttribute('Namespace', 'Project Number');
         $projectId->appendChild($proprietaryId);
+
+        $project->appendChild($projectId);
         $project->appendChild($document->createElement('ProjectReference', self::PROJECT_ID_PREFIX . $this->project->getKey()));
 
         if ($this->project->artist) {
