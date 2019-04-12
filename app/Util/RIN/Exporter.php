@@ -365,9 +365,6 @@ class Exporter
 
             $soundRecording->appendChild($document->createElement('ResourceReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
 
-            $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
-            $soundRecording->appendChild($document->createElement('SoundRecordingMusicalWorkReference', self::SONG_ID_PREFIX . $recordingModel->song->getKey()));
-
             $title = $document->createElement('Title');
             $title->appendChild($document->createElement('TitleText', $recordingModel->name));
             $title->appendChild($document->createElement('SubTitle', $recordingModel->subtitle));
@@ -389,6 +386,17 @@ class Exporter
             $soundRecording->appendChild($document->createElement('Tempo', $recordingModel->tempo));
 
             $soundRecording->appendChild($document->createElement('Duration', Utilities::formatDuration($recordingModel->duration)));
+
+            $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
+            $soundRecording->appendChild($document->createElement('SoundRecordingMusicalWorkReference', self::SONG_ID_PREFIX . $recordingModel->song->getKey()));
+
+            $soundRecording = $this->creditList($document, $soundRecording, $recordingModel);
+
+            if (!is_null($recordingModel->created_at)) {
+                $dt = Carbon::parse($recordingModel->created_at);
+                $soundRecording->appendChild($document->createElement('CreationDate', $dt->toDateString()));
+            }
+
             if (!is_null($recordingModel->mixed_on)) {
                 $dt = Carbon::parse($recordingModel->mixed_on);
                 $soundRecording->appendChild($document->createElement('MasteredDate', $dt->toDateString()));
@@ -396,15 +404,8 @@ class Exporter
 
             if (!is_null($recordingModel->recorded_on)) {
                 $dt = Carbon::parse($recordingModel->recorded_on);
-                $soundRecording->appendChild($document->createElement('EventDate', $dt->toDateString()));
+                $soundRecording->appendChild($document->createElement('FirstPublicationDate', $dt->toDateString()));
             }
-
-            if (!is_null($recordingModel->created_at)) {
-                $dt = Carbon::parse($recordingModel->created_at);
-                $soundRecording->appendChild($document->createElement('CreationDate', $dt->toDateString()));
-            }
-
-            $soundRecording = $this->creditList($document, $soundRecording, $recordingModel);
 
             $recordingList->appendChild($soundRecording);
         }
