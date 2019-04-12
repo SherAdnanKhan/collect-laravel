@@ -53,16 +53,18 @@ class Exporter
         $rin = $this->boilerplateXML($document);
 
         $fileHeader = $this->fileHeader($document);
+        $partyList = $this->partyList($document);
+        $songList = $this->songList($document);
+        $recordingList = $this->recordingList($document);
         $projectList = $this->projectList($document);
         $sessionList = $this->sessionList($document);
-        $recordingList = $this->recordingList($document);
-        $songList = $this->songList($document);
 
         $rin->appendChild($fileHeader);
+        $rin->appendChild($partyList);
         $rin->appendChild($songList);
         $rin->appendChild($recordingList);
-        $rin->appendChild($sessionList);
         $rin->appendChild($projectList);
+        $rin->appendChild($sessionList);
 
         $document->appendChild($rin);
 
@@ -115,6 +117,88 @@ class Exporter
         $fileHeader->appendChild($this->signature($document));
 
         return $fileHeader;
+    }
+
+    private function partyList(DOMDocument $document): DOMElement
+    {
+        $partyList = $document->createElement('PartyList');
+
+        $partyModels = Party::relatedToProject(['project' => $this->project])->get();
+
+        foreach ($partyModels as $partyModel) {
+            $party = $document->createElement('Party');
+
+            $partyId = $document->createElement('PartyId');
+            if (!is_null($partyModel->isni)) {
+                $partyId->appendChild($document->createElement('ISNI', $partyModel->isni));
+            }
+            $party->appendChild($partyId);
+
+            $party->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $partyModel->getKey()));
+
+            $partyName = $document->createElement('PartyName');
+            $partyName->appendChild($document->createElement('FullName', $partyModel->name));
+            $partyName->appendChild($document->createElement('FullNameIndexed', $partyModel->indexed_name));
+            $partyName->appendChild($document->createElement('NamesBeforeKeyName', $partyModel->non_key_names));
+            $partyName->appendChild($document->createElement('KeyName', $partyModel->last_name));
+            $partyName->appendChild($document->createElement('AbbreviatedName', $partyModel->initials));
+            $party->appendChild($partyName);
+
+            $party->appendChild($document->createElement('IsOrganization', $partyModel->type != 'person' ? 'true' : 'false'));
+
+            $addressModels = $partyModel->addresses;
+            foreach ($addressModels as $i => $addressModel) {
+                $postalAddress = $document->createElement('PostalAddress');
+                $postalAddress->setAttribute('SequenceNumber', $i);
+
+                $addressLine1 = $document->createElement('PostalAddressLine', $addressModel->line_1);
+                $addressLine1->setAttribute('SequenceNumber', 1);
+                $postalAddress->appendChild($addressLine1);
+                $addressLine2 = $document->createElement('PostalAddressLine', $addressModel->line_2);
+                $addressLine2->setAttribute('SequenceNumber', 2);
+                $postalAddress->appendChild($addressLine2);
+                $addressLine3 = $document->createElement('PostalAddressLine', $addressModel->line_3);
+                $addressLine3->setAttribute('SequenceNumber', 3);
+                $postalAddress->appendChild($addressLine3);
+
+                $postalAddress->appendChild($document->createElement('CityName', $addressModel->city));
+                $postalAddress->appendChild($document->createElement('DistrictName', $addressModel->district));
+                $postalAddress->appendChild($document->createElement('PostCode', $addressModel->postal_code));
+                $postalAddress->appendChild($document->createElement('TerritoryCode', $addressModel->territory_code));
+
+                $party->appendChild($postalAddress);
+            }
+
+            $contactModels = $partyModel->contacts()->orderBy('type')->get();
+            foreach ($contactModels as $i => $contactModel) {
+                $elementType = 'EmailAddress';
+                if ($contactModel->type == 'phone') {
+                    $elementType = 'PhoneNumber';
+                }
+
+                $contactElement = $document->createElement($elementType, $contactModel->value);
+                $contactElement->setAttribute('SequenceNumber', $i);
+                $party->appendChild($contactElement);
+            }
+
+            if (!is_null($partyModel->birth_date)) {
+                $party->appendChild($document->createElement(
+                    'DateAndPlaceOfBirth',
+                    Carbon::parse($partyModel->birth_date)->toDateString()
+                ));
+            }
+
+            if (!is_null($partyModel->death_date)) {
+                $party->appendChild($document->createElement(
+                    'DateAndPlaceOfDeath',
+                    Carbon::parse($partyModel->death_date)->toDateString()
+                ));
+            }
+
+            $partyList->appendChild($party);
+        }
+
+        return $partyList;
     }
 
     private function projectList(DOMDocument $document): DOMElement
