@@ -247,17 +247,22 @@ class Exporter
             $session->appendChild($document->createElement('SessionReference', self::SESSION_ID_PREFIX . $sessionModel->getKey()));
 
             $session->appendChild($document->createElement('SessionType', $sessionModel->type->ddex_key));
-            $session->appendChild($document->createElement('VenueName', $sessionModel->venue->name));
-            $session->appendChild($document->createElement('VenueAddress', $sessionModel->venue->address));
 
-            $countryCode = 'US';
-            if (!is_null($sessionModel->venue->country)) {
-                $countryCode = $sessionModel->venue->country->iso_code;
+            if (!is_null($sessionModel->venue)) {
+                $venue = $document->createElement('Venue');
+                $venue->appendChild($document->createElement('VenueName', $sessionModel->venue->name));
+                $venue->appendChild($document->createElement('VenueAddress', $sessionModel->venue->address));
+
+                $countryCode = 'US';
+                if (!is_null($sessionModel->venue->country)) {
+                    $countryCode = $sessionModel->venue->country->iso_code;
+                }
+
+                $venue->appendChild($document->createElement('TerritoryCode', $countryCode));
+                $venue->appendChild($document->createElement('VenueRoom', $sessionModel->venue_room));
+                $session->appendChild($venue);
             }
 
-            $session->appendChild($document->createElement('TerritoryCode', $countryCode));
-
-            $session->appendChild($document->createElement('VenueRoom', $sessionModel->venue_room));
             $session->appendChild($document->createElement('IsUnionSession', $sessionModel->union_session ? 'true' : 'false'));
             $session->appendChild($document->createElement('IsAnalogSession', $sessionModel->analog_session ? 'true' : 'false'));
             $session->appendChild($document->createElement('Comment', $sessionModel->description));
