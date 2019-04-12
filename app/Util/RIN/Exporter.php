@@ -3,6 +3,7 @@
 namespace App\Util\RIN;
 
 use App\Contracts\Creditable;
+use App\Models\Party;
 use App\Models\Project;
 use App\Models\User;
 use Carbon\Carbon;
