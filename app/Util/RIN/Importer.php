@@ -39,6 +39,8 @@ class Importer
     private $projectOwner;
     private $masterProject;
 
+    private $rinVersion = '10';
+
     /**
      * Import a RIN from an XML document object.
      *
@@ -47,6 +49,18 @@ class Importer
      */
     public function fromXML(SimpleXMLElement $xml): Importer
     {
+        $rinNamespace = array_get($xml->getNamespaces(), 'rin', null);
+
+        if (is_null($rinNamespace)) {
+            throw new \Exception('Missing RIN namespace on XML document.');
+        }
+
+        $this->rinVersion = $this->extractVersion($rinNamespace);
+
+        if (!in_array($this->rinVersion, ['10', '11'])) {
+            throw new \Exception('We only support importing RIN versions 1.0 and 1.1');
+        }
+
         $this->fileId = $xml->FileHeader->FileId;
 
         $this->parties = $this->mapParties($xml->PartyList->children());
@@ -57,6 +71,13 @@ class Importer
         $this->songs = $this->mapSongs($xml->MusicalWorkList->children());
 
         return $this;
+    }
+
+    private function extractVersion(string $rinNamespace): string
+    {
+        $matches = [];
+        preg_match('!\d+!', $rinNamespace, $matches);
+        return current($matches);
     }
 
     /**
