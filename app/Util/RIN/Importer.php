@@ -359,12 +359,80 @@ class Importer
                 $lastName = (string) $party->PartyName->KeyName;
             }
 
+            $isni = null;
+            if (!is_null($party->PartyId->ISNI)) {
+                $isni = (string) $party->PartyId->ISNI;
+            }
+
+            $addresses = [];
+            foreach ($party->PostalAddress as $postalAddress) {
+                $addressLines = [];
+                foreach ($postalAddress->PostalAddressLine as $i => $addressLine) {
+                    $index = array_get($addressLine->attributes, 'SequenceNumber', $i);
+                    $addressLines[] = [
+                        'line'     => (string) $addressLine,
+                        'sequence' => $index,
+                    ];
+                }
+
+                $addressLines = array_map(function($value) {
+                    return $value['line'];
+                }, array_sort($addressLines, function($value) {
+                    return $value['sequence'];
+                }));
+
+                $addresses[] = [
+                    'line_1'         => isset($addressLine[0]) ? $addressLine[0] : null,
+                    'line_2'         => isset($addressLine[1]) ? $addressLine[1] : null,
+                    'line_3'         => isset($addressLine[2]) ? $addressLine[2] : null,
+                    'city'           => (string) $postalAddress->CityName,
+                    'district'       => (string) $postalAddress->DistrictName,
+                    'postal_code'    => (string) $postalAddress->PostCode,
+                    'territory_code' => (string) $postalAddress->TerritoryCode,
+                ];
+            }
+
+            $phoneContacts = [];
+            foreach ($party->PhoneNumber as $i => $phoneNumber) {
+                $index = array_get($phoneNumber->attributes, 'SequenceNumber', $i);
+                $phoneContacts[] = [
+                    'sequence' => $index,
+                    'type'     => 'phone',
+                    'value'    => (string) $phoneNumber,
+                ];
+            }
+            $phoneContacts = array_sort($phoneContacts, function($value) {
+                return $value['sequence'];
+            });
+
+            $emailContacts = [];
+            foreach ($party->EmailAddress as $i => $emailAddress) {
+                $index = array_get($emailAddress->attributes, 'SequenceNumber', $i);
+                $emailContacts[] = [
+                    'sequence' => $index,
+                    'type'     => 'email',
+                    'value'    => (string) $emailAddress,
+                ];
+            }
+            $emailContacts = array_sort($emailContacts, function($value) {
+                return $value['sequence'];
+            });
+
+            $contacts = array_merge($phoneContacts, $emailContacts);
+
             $partyData[] = [
                 'id'          => $partyId,
+                'isni'        => $isni,
                 'type'        => $isOrganization ? 'organisation' : 'person',
                 'first_name'  => $firstName,
                 'middle_name' => $middleName,
                 'last_name'   => $lastName,
+                'birth_date'  => (string) $party->DateAndPlaceOfBirth,
+                'death_date'  => (string) $party->DateAndPlaceOfDeath,
+
+                // Relations
+                'addresses'   => $addresses,
+                'contacts'    => $contacts,
             ];
         }
 
