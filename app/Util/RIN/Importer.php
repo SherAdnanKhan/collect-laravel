@@ -39,6 +39,7 @@ class Importer
     private $sessions;
     private $songs;
     private $creditsToImport = [];
+    private $sessionRecordings = [];
 
     private $projectOwner;
     private $masterProject;
@@ -97,11 +98,30 @@ class Importer
             $project = $this->importProject($this->project, $parties, $override);
             $songs = $this->importSongs($this->songs, $parties, $override);
             $sessions = $this->importSessions($this->sessions, $project, $parties, $override);
-            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
-            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
+            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $override);
 
             foreach ($this->creditsToImport as $creditImport) {
                 $this->importCredits($creditImport['model'], $creditImport['credits'], $parties);
+            }
+
+            foreach ($this->sessionRecordings as $sessionId => $recordingIds) {
+                if (!isset($sessions[$sessionId])) {
+                    continue;
+                }
+
+                $session = $sessions[$sessionId];
+
+                $recordingIds = array_filter(array_map(function($recordingId) use ($recordings) {
+                    if (!isset($recordings[$recordingId])) {
+                        return null;
+                    }
+
+                    $recording = $recordings[$recordingId];
+
+                    return $recording->getKey();
+                }, $recordingIds));
+
+                $session->recordings()->sync($recordingIds);
             }
 
             DB::commit();
@@ -476,7 +496,6 @@ class Importer
         Project $project,
         array $songs,
         array $parties,
-        array $sessions,
         bool $override = false
     ): array
     {
@@ -518,28 +537,22 @@ class Importer
                 'credits' => $recording['credits'],
             ];
 
-            $this->importRecordingSessions($recordingModel, $recording['sessions'], $sessions);
+            foreach ($recording['sessions'] as $session) {
+                $sessionId = (int) str_replace(self::SESSION_ID_PREFIX, '', (string) $session);
+
+                if (!isset($this->sessionRecordings[$sessionId])) {
+                    $this->sessionRecordings[$sessionId] = [];
+                }
+
+                if (!in_array($recordingId, $this->sessionRecordings[$sessionId])) {
+                    $this->sessionRecordings[$sessionId][] = $recordingId;
+                }
+            }
 
             $recordingModels[$recordingId] = $recordingModel;
         }
 
         return $recordingModels;
-    }
-
-
-    private function importRecordingSessions(Recording $recordingModel, SimpleXMLElement $recordingSessions, array $allSessions)
-    {
-        $sessionIds = [];
-
-        foreach ($recordingSessions as $session) {
-            $sessionId = str_replace(self::SESSION_ID_PREFIX, '', $session);
-            if (array_key_exists($sessionId, $allSessions)) {
-                $sessionModel = array_get($allSessions, $sessionId);
-                $sessionIds[] = $sessionModel->getKey();
-            }
-        }
-
-        $recordingModel->sessions()->sync($sessionIds);
     }
 
     /**
@@ -715,13 +728,25 @@ class Importer
                 $sessionModel = new Session();
             }
 
-            $sessionModel->fill(array_except($session, ['credits']));
+            $sessionModel->fill(array_except($session, ['credits', 'recordings']));
             $sessionModel->save();
 
             $this->creditsToImport[] = [
                 'model'   => $sessionModel,
                 'credits' => $session['credits'],
             ];
+
+            foreach ($session['recordings'] as $recording) {
+                $recordingId = (int) str_replace(self::RECORDING_ID_PREFIX, '', (string) $recording);
+
+                if (!isset($this->sessionRecordings[$sessionId])) {
+                    $this->sessionRecordings[$sessionId] = [];
+                }
+
+                if (!in_array($recording, $this->sessionRecordings[$sessionId])) {
+                    $this->sessionRecordings[$sessionId][] = $recordingId;
+                }
+            }
 
             $sessionModels[$sessionId] = $sessionModel;
         }
@@ -777,7 +802,7 @@ class Importer
                 'timecode_type'       => $timecodeType,
                 'timecode_frame_rate' => $timecodeFrameRate,
                 'drop_frame'          => $timecodeDropFrame == "true" ? 1 : 0,
-                'name'                => (string) $session->VenueName . ', ' . Carbon::parse((string) $session->StartDateTime)->toDateTimeString(),
+                'name'                => Carbon::parse((string) $session->StartDateTime)->toDateTimeString(),
 
                 // Relational data
                 'recordings' => $session->SessionSoundRecordingReference,
