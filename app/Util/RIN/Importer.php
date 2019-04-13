@@ -868,7 +868,7 @@ class Importer
                 'title_alt'                    => $titleAlt,
                 'subtitle_alt'                 => $subTitleAlt,
                 'lyrics'                       => (string) $song->Lyrics,
-                'notes'                        => (string) $song->Comments,
+                'notes'                        => (string) $song->Comment,
                 'created_on'                   => Carbon::parse((string) $song->CreationDate)->toDateString(),
 
                 // Related credits
