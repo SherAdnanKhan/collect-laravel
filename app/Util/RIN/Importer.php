@@ -38,6 +38,7 @@ class Importer
     private $recordings;
     private $sessions;
     private $songs;
+    private $creditsToImport = [];
 
     private $projectOwner;
     private $masterProject;
@@ -97,6 +98,11 @@ class Importer
             $songs = $this->importSongs($this->songs, $parties, $override);
             $sessions = $this->importSessions($this->sessions, $project, $parties, $override);
             $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
+            $recordings = $this->importRecordings($this->recordings, $project, $songs, $parties, $sessions, $override);
+
+            foreach ($this->creditsToImport as $creditImport) {
+                $this->importCredits($creditImport['model'], $creditImport['credits'], $parties);
+            }
 
             DB::commit();
         } catch (\Exception $e) {
@@ -144,7 +150,10 @@ class Importer
         $projectModel->fill(array_except($project, ['credits']));
         $projectModel->save();
 
-        $this->importCredits($projectModel, $project['credits'], $parties);
+        $this->creditsToImport[] = [
+            'model'   => $projectModel,
+            'credits' => $project['credits'],
+        ];
 
         return $projectModel;
     }
@@ -504,7 +513,11 @@ class Importer
             $recordingModel->fill(array_except($recording, ['sessions', 'credits']));
             $recordingModel->save();
 
-            $this->importCredits($recordingModel, $recording['credits'], $parties);
+            $this->creditsToImport[] = [
+                'model'   => $recordingModel,
+                'credits' => $recording['credits'],
+            ];
+
             $this->importRecordingSessions($recordingModel, $recording['sessions'], $sessions);
 
             $recordingModels[$recordingId] = $recordingModel;
@@ -705,7 +718,10 @@ class Importer
             $sessionModel->fill(array_except($session, ['credits']));
             $sessionModel->save();
 
-            $this->importCredits($sessionModel, $session['credits'], $parties);
+            $this->creditsToImport[] = [
+                'model'   => $sessionModel,
+                'credits' => $session['credits'],
+            ];
 
             $sessionModels[$sessionId] = $sessionModel;
         }
@@ -806,7 +822,10 @@ class Importer
             $songModel->fill(array_except($song, ['credits']));
             $songModel->save();
 
-            $this->importCredits($songModel, $song['credits'], $parties);
+            $this->creditsToImport[] = [
+                'model'   => $songModel,
+                'credits' => $song['credits'],
+            ];
 
             $songModels[$songId] = $songModel;
         }
