@@ -6,6 +6,8 @@ use App\Contracts\Creditable;
 use App\Models\Credit;
 use App\Models\CreditRole;
 use App\Models\Party;
+use App\Models\PartyAddress;
+use App\Models\PartyContact;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\RecordingType;
@@ -326,8 +328,21 @@ class Importer
                 $partyModel = new Party();
             }
 
-            $partyModel->fill($party);
+            $partyModel->fill(array_except($party, ['addresses', 'contacts']));
+
+            $contactModels = array_map(function($contact) {
+                return new PartyContact($contact);
+            }, $party['contacts']);
+
+            $addressModels = array_map(function($address) {
+                return new PartyAddress($address);
+            }, $party['addresses']);
+
             $partyModel->save();
+
+            $partyModel->contacts()->saveMany($contactModels);
+            $partyModel->addresses()->saveMany($addressModels);
+
             $partyModels[$partyId] = $partyModel;
         }
 
