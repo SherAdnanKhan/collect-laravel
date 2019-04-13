@@ -344,7 +344,6 @@ class Exporter
                 $displayArtist->appendChild($titleDisplayInformation);
 
                 if (!is_null($recordingModel->partyRole)) {
-                    // TODO: store a role for the party and a user_defined_value field.
                     $artisticRole = $document->createElement('ArtisticRole', $recordingModel->partyRole->ddex_key);
 
                     if ((bool) $recordingModel->partyRole->user_defined) {

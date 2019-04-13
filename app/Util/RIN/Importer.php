@@ -543,13 +543,14 @@ class Importer
             $recordingId = (int) str_replace(self::RECORDING_ID_PREFIX, '', $recording->ResourceReference);
 
             $recordingTypeId = null;
+            $recordingTypeDDEX = $this->rinVersion == '10' ? (string) $recording->SoundRecordingType : (string) $recording->Type;
             $recordingTypeUserValue = null;
-            $recordingType = RecordingType::select('recording_types.id', 'recording_types.ddex_key')->where('recording_types.ddex_key', (string) $recording->SoundRecordingType)->first();
+            $recordingType = RecordingType::select('recording_types.id', 'recording_types.ddex_key')->where('recording_types.ddex_key', $recordingTypeDDEX)->first();
 
             if (!$recordingType) {
-                Log::debug(sprintf('Missing recording type %s', (string) $recording->SoundRecordingType));
+                Log::debug(sprintf('Missing recording type %s', $recordingTypeDDEX));
                 $recordingType = RecordingType::select('recording_types.id', 'recording_types.ddex_key')->where('recording_types.ddex_key', 'UserDefined')->first();
-                $recordingTypeUserValue = (string) $recording->SoundRecordingType;
+                $recordingTypeUserValue = $recordingTypeDDEX;
             }
 
             $recordingTypeId = $recordingType->getKey();
@@ -560,8 +561,35 @@ class Importer
             }
 
             $artistId = null;
-            if (isset($recording->MainArtist)) {
-                $artistId = (int) str_replace(self::PARTY_ID_PREFIX, '', $recording->MainArtist);
+            $artistRoleKey = null;
+            $artistRoleId = null;
+            $artistRoleUserDefined = null;
+            if ($this->rinVersion == '10') {
+                if (isset($recording->MainArtist)) {
+                    $artistId = (int) str_replace(self::PARTY_ID_PREFIX, '', $recording->MainArtist);
+                }
+            } else {
+                if (isset($recording->DisplayArtist->PartyReference)) {
+                    $artistId = (int) str_replace(self::PARTY_ID_PREFIX, '', $recording->DisplayArtist->PartyReference);
+                }
+                if (isset($recording->DisplayArtist->ArtisticRole)) {
+                    $artistRoleKey = (string) $recording->DisplayArtist->ArtisticRole;
+                    $artistRoleUserDefined = array_get($recording->DisplayArtist->ArtisticRole->attributes(), 'UserDefined', null);
+                }
+            }
+
+            if (!is_null($artistRoleKey)) {
+                $role = CreditRole::where('ddex_key', $artistRoleKey)->first();
+
+                if (!$role) {
+                    $role = CreditRole::where('ddex_key', 'UserDefined')->first();
+                }
+
+                $artistRoleId = $role->getKey();
+
+                if ((bool) $role->user_defined) {
+                    $artistRoleUserDefined = $artistRoleKey;
+                }
             }
 
             $songId = null;
@@ -588,17 +616,23 @@ class Importer
                 $versionTypeUserDefined = $versionTypeDDEX;
             }
 
+            $createdAt = $this->version == '10' ? Carbon::parse((string) $recording->CreationDate)->toDateTimeString() : Carbon::parse((string) $recording->CreationDate)->toDateString();
+            $recordedOn = $this->version == '10' ? Carbon::parse((string) $recording->EventDate)->toDateTimeString() : Carbon::parse((string) $recording->FirstPublicationDate)->toDateString();
+            $mixedOn = $this->version == '10' ? Carbon::parse((string) $recording->MasteredDate)->toDateTimeString() : Carbon::parse((string) $recording->MasteredDate)->toDateString();
+
             $recordingData[] = [
                 'id'                                => $recordingId,
                 'isrc'                              => $isrc,
                 'recording_type_id'                 => $recordingTypeId,
                 'recording_type_user_defined_value' => $recordingTypeUserValue,
+                'party_id'                          => $artistId,
+                'party_role_id'                     => $artistRoleId,
+                'party_role_user_defined_value'     => $artistRoleUserDefined,
                 'name'                              => $title,
                 'subtitle'                          => $subTitle,
-                'created_at'                        => Carbon::parse((string) $recording->CreationDate)->toDateTimeString(),
-                'recorded_on'                       => Carbon::parse((string) $recording->EventDate)->toDateString(),
-                'mixed_on'                          => Carbon::parse((string) $recording->MasteredDate)->toDateString(),
-                'party_id'                          => $artistId,
+                'created_at'                        => $createdAt,
+                'recorded_on'                       => $recordedOn,
+                'mixed_on'                          => $mixedOn,
                 'song_id'                           => $songId,
                 'description'                       => (string) $recording->Comment,
                 'language'                          => (string) $recording->LanguageOfPerformance,
