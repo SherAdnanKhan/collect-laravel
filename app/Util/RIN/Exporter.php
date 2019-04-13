@@ -249,6 +249,16 @@ class Exporter
 
             $session->appendChild($document->createElement('SessionType', $sessionModel->type->ddex_key));
 
+            if (!is_null($sessionModel->started_at)) {
+                $dt = Carbon::parse($sessionModel->started_at);
+                $session->appendChild($document->createElement('StartDateTime', $dt->toIso8601String()));
+            }
+
+            if (!is_null($sessionModel->ended_at)) {
+                $dt = Carbon::parse($sessionModel->ended_at);
+                $session->appendChild($document->createElement('EndDateTime', $dt->toIso8601String()));
+            }
+
             if (!is_null($sessionModel->venue)) {
                 $venue = $document->createElement('Venue');
                 $venue->appendChild($document->createElement('VenueName', $sessionModel->venue->name));
@@ -268,15 +278,6 @@ class Exporter
             $session->appendChild($document->createElement('IsAnalogSession', $sessionModel->analog_session ? 'true' : 'false'));
             $session->appendChild($document->createElement('Comment', $sessionModel->description));
 
-            if (!is_null($sessionModel->started_at)) {
-                $dt = Carbon::parse($sessionModel->started_at);
-                $session->appendChild($document->createElement('StartDateTime', $dt->toIso8601String()));
-            }
-
-            if (!is_null($sessionModel->ended_at)) {
-                $dt = Carbon::parse($sessionModel->ended_at);
-                $session->appendChild($document->createElement('EndDateTime', $dt->toIso8601String()));
-            }
 
             if (!is_null($sessionModel->bit_depth)) {
                 $session->appendChild($document->createElement('BitDepth', $sessionModel->bit_depth));
