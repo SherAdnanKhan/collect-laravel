@@ -616,9 +616,9 @@ class Importer
                 $versionTypeUserDefined = $versionTypeDDEX;
             }
 
-            $createdAt = $this->version == '10' ? Carbon::parse((string) $recording->CreationDate)->toDateTimeString() : Carbon::parse((string) $recording->CreationDate)->toDateString();
-            $recordedOn = $this->version == '10' ? Carbon::parse((string) $recording->EventDate)->toDateTimeString() : Carbon::parse((string) $recording->FirstPublicationDate)->toDateString();
-            $mixedOn = $this->version == '10' ? Carbon::parse((string) $recording->MasteredDate)->toDateTimeString() : Carbon::parse((string) $recording->MasteredDate)->toDateString();
+            $createdAt = $this->rinVersion == '10' ? Carbon::parse((string) $recording->CreationDate)->toDateTimeString() : Carbon::parse((string) $recording->CreationDate)->toDateString();
+            $recordedOn = $this->rinVersion == '10' ? Carbon::parse((string) $recording->EventDate)->toDateTimeString() : Carbon::parse((string) $recording->FirstPublicationDate)->toDateString();
+            $mixedOn = $this->rinVersion == '10' ? Carbon::parse((string) $recording->MasteredDate)->toDateTimeString() : Carbon::parse((string) $recording->MasteredDate)->toDateString();
 
             $recordingData[] = [
                 'id'                                => $recordingId,
