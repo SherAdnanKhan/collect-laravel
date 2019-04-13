@@ -834,9 +834,12 @@ class Importer
             $songId = array_get($song, 'id', false);
             $song = array_except($song, ['id']);
 
+            // TODO: Chat with chris about this again, I think we need to
+            // filter it to songs which are owned by the project owner and public but not
+            // assigned to anything. Or on the project but not public.
             $songModel = null;
             if ($override) {
-                $songModel = Song::where('id', $songId)->userViewable(['user' => $this->projectOwner])->first();
+                $songModel = Song::where('id', $songId)->userUpdatable(['user' => $this->projectOwner])->first();
             }
 
             if (!$songModel) {
