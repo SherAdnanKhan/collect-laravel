@@ -8,6 +8,7 @@ use App\Util\RIN\Exporter;
 use App\Util\RIN\Importer;
 use DOMDocument;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use SimpleXMLElement;
 use \Illuminate\Http\Request;
@@ -58,6 +59,14 @@ class RINController extends Controller
                 return;
             }
 
+            try {
+                // Save the imported file in s3.
+                $exportPath = 'rin/imports/%s/%s.xml';
+                Storage::disk('s3')->put(sprintf($exportPath, $project->getKey(), time()), $xmlContents);
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
+
             // For now just load in a RIN file.
             $importer->fromXML(simplexml_import_dom($xml));
 
@@ -95,8 +104,18 @@ class RINController extends Controller
         $exporter = new Exporter($project, config('app.version', 1));
         $exporter->setUser($user);
 
+        $xmlContents = $exporter->toXML();
+
+        try {
+            // Save the exported rin as a file in s3.
+            $exportPath = 'rin/exports/%s/%s.xml';
+            Storage::disk('s3')->put(sprintf($exportPath, $project->getKey(), time()), $xmlContents);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
         ob_start();
-        echo $exporter->toXML();
+        echo $xmlContents;
 
         header('Content-Type: application/xml');
         die(ob_get_clean());
