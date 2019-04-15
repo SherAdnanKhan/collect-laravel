@@ -48,6 +48,7 @@ class RINController extends Controller
         try {
             $importer = new Importer();
             $importer->setProject($project);
+            $importer->setUser($user);
 
             $uploadedRIN = $request->file('rin');
 

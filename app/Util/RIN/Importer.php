@@ -41,6 +41,7 @@ class Importer
     private $creditsToImport = [];
     private $sessionRecordings = [];
 
+    private $currentUser;
     private $projectOwner;
     private $masterProject;
 
@@ -130,6 +131,12 @@ class Importer
 
             throw $e;
         }
+    }
+
+    public function setUser(User $user): Importer
+    {
+        $this->currentUser = $user;
+        return $this;
     }
 
     /**
@@ -337,19 +344,16 @@ class Importer
 
             $partyModel = null;
 
-            // TODO: Chat over this logic with chris,
-            // worry is that people can import parties and override other peoples.
-            // Maybe we should only allow override on your own stuff (project owners.)
             if ($override) {
-                $partyModelQuery = Party::where('id', $partyId);
-
                 if ($partyISNI) {
-                    $partyModelQuery = $partyModelQuery->orWhere('isni', $partyISNI)->scopeUserUpdatable(['user' => $this->projectOwner]);
+                    $partyModel = Party::where('isni', $partyISNI)->first();
                 } else {
-                    $partyModelQuery =  $partyModelQuery->userViewable(['user' => $this->projectOwner]);
+                    $partyModel = Party::where('id', $partyId)->first();
                 }
 
-                $partyModel = $partyModelQuery->first();
+                if ($partyModel && $partyModel->user_id != $this->currentUser->getKey()) {
+                    continue;
+                }
             }
 
             if (!$partyModel) {
@@ -839,7 +843,13 @@ class Importer
             // assigned to anything. Or on the project but not public.
             $songModel = null;
             if ($override) {
-                $songModel = Song::where('id', $songId)->userUpdatable(['user' => $this->projectOwner])->first();
+                $songModel = Song::where('id', $songId)->first();
+
+                if ($songModel) {
+                    if ($songModel->user_id != $this->currentUser->getKey()) {
+                        continue;
+                    }
+                }
             }
 
             if (!$songModel) {
