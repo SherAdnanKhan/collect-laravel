@@ -61,6 +61,7 @@ class RINController extends Controller
 
             try {
                 // Save the imported file in s3.
+                $xmlContents = $xml->saveXML();
                 $exportPath = 'rin/imports/%s/%s.xml';
                 Storage::disk('s3')->put(sprintf($exportPath, $project->getKey(), time()), $xmlContents);
             } catch (\Exception $e) {
