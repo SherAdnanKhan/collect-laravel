@@ -9,6 +9,7 @@ use App\Models\Collaborators;
 use App\Models\Comment;
 use App\Models\EventLog;
 use App\Models\File;
+use App\Models\Folder;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\Session;
@@ -179,7 +180,17 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function files(): HasMany
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class)->whereIsNull('project_id');
+    }
+
+    /**
+     * Get the files belonging to this user.
+     *
+     * @return HasMany
+     */
+    public function folders(): HasMany
+    {
+        return $this->hasMany(Folder::class)->whereIsNull('project_id');
     }
 
     /**
