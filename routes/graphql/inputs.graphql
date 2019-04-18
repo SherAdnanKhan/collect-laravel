@@ -1,5 +1,5 @@
 input CreateFolderInput {
-    projectId: ID!
+    projectId: ID
     folderId: ID
     name: String!
 }

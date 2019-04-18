@@ -59,8 +59,8 @@ type File implements Favoured & Commentable & EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
-	projectId: ID! @rename(attribute: "project_id")
-	project: Project! @belongsTo
+	projectId: ID @rename(attribute: "project_id")
+	project: Project @belongsTo
 	folder: Folder @belongsTo
 	folderId: ID @rename(attribute: "folder_id")
 	type: String
@@ -80,8 +80,8 @@ type Folder implements Favoured & Commentable & EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	user: User! @belongsTo
-	projectId: ID! @rename(attribute: "project_id")
-	project: Project! @belongsTo
+	projectId: ID @rename(attribute: "project_id")
+	project: Project @belongsTo
 	parentId: ID @rename(attribute: "folder_id")
 	parent: Folder @belongsTo
 	files: [File] @hasMany

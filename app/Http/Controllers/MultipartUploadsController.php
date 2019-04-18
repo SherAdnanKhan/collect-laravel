@@ -12,29 +12,55 @@ class MultipartUploadsController extends Controller
     public function create(Request $request)
     {
         $meta = $request->get('meta');
-        $project = Project::where('id', $meta['projectId'])
-            ->with('user', 'user.subscriptions')
-            ->userViewable()
-            ->first();
 
-        if (!$project) {
-            abort(403, 'Unauthorized action.');
-        }
+        // Get the current user
+        $user = auth()->user();
 
-        if ($project->user->hasStorageSpaceAvailable() === false) {
-            return response()->json([
-                'upgradeRequired' => true
-            ]);
+        if ($meta['projectId']) {
+            $project = Project::where('id', $meta['projectId'])
+                ->with('user', 'user.subscriptions')
+                ->userViewable()
+                ->first();
+
+            if (!$project) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            if ($project->user->hasStorageSpaceAvailable() === false) {
+                return response()->json([
+                    'upgradeRequired' => true
+                ]);
+            }
+
+            $path = [
+                'uploads',
+                'projects',
+                $project->getUploadFolderPath()
+            ];
+        } else {
+            if ($user->hasStorageSpaceAvailable() === false) {
+                return response()->json([
+                    'upgradeRequired' => true
+                ]);
+            }
+
+            $path = [
+                'uploads',
+                'users',
+                $user->getUploadFolderPath()
+            ];
         }
 
         // Get the current folder
         $folder = null;
-        $path = [
-            'uploads',
-            $project->getUploadFolderPath()
-        ];
         if (isset($meta['folderId'])) {
-            $folder = Folder::where('id', $meta['folderId'])->where('project_id', $project->id)->first();
+            $query = Folder::where('id', $meta['folderId']);
+            if ($project) {
+                $query = $query->where('project_id', $project->id);
+            } else {
+                $query = $query->whereIsNull('project_id');
+            }
+            $folder = $query->first();
             if (!$folder) {
                 abort(403, 'Unauthorized action.');
             }
@@ -47,9 +73,6 @@ class MultipartUploadsController extends Controller
             $folder_path[] = $folder->name;
             $path = $path + $folder_path;
         }
-
-        // Get the current user
-        $user = auth()->user();
 
         // Sleep for between 0 and 1 seconds to try to prevent issues
         // with folder name and filename collisions
@@ -73,21 +96,27 @@ class MultipartUploadsController extends Controller
 
             $depth = $depth + 1;
 
-            $folder = Folder::where('project_id', $project->id)->where('name', $name);
+            $query = Folder::where('name', 'like', $name);
+            if ($project) {
+                $query = $query->where('project_id', $project->id);
+            } else {
+                $query = $query->whereIsNull('project_id')->where('user_id', $user->id);
+            }
+
             if ($currentFolder) {
-                $folder = $folder->where('folder_id', $currentFolder->id);
+                $query = $query->where('folder_id', $currentFolder->id);
             }
 
             $path[] = $name;
 
-            if ($folder->count() > 0) {
-                $currentFolder = $folder->first();
+            if ($query->count() > 0) {
+                $currentFolder = $query->first();
                 continue;
             }
 
             $currentFolder = Folder::create([
                 'user_id' => $user->id,
-                'project_id' => $project->id,
+                'project_id' => ($project ? $project->id : null),
                 'folder_id' => ($currentFolder ? $currentFolder->id : null),
                 'name' => $name,
                 'depth' => $depth
@@ -97,7 +126,11 @@ class MultipartUploadsController extends Controller
         // Check the filename for duplicates
         $original_filename = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $pathinfo['filename']);
         $extension = $pathinfo['extension'];
-        $existing_file_query_base = File::where('project_id', $project->id);
+        $existing_file_query_base = ($project ?
+            File::where('project_id', $project->id)
+            :
+            File::whereIsNull('project_id')->where('user_id', $user->id)
+        );
         if ($currentFolder) {
             $existing_file_query_base->where('folder_id', $currentFolder->id);
         }
@@ -114,7 +147,7 @@ class MultipartUploadsController extends Controller
 
         $file = File::create([
             'user_id' => $user->id,
-            'project_id' => $project->id,
+            'project_id' => ($project ? $project->id : null),
             'folder_id' => ($currentFolder ? $currentFolder->id : null),
             'path' => $key,
             'name' => $filename . '.' . $extension,
@@ -133,7 +166,7 @@ class MultipartUploadsController extends Controller
 
         return response()->json([
             'id'        => $file->id,
-            'projectId' => $project->id,
+            'projectId' => ($project ? $project->id : null),
             'folderId'  => ($currentFolder ? $currentFolder->id : null),
             'name'      => $filename . '.' . $extension,
             'uploadId'  => $uploadId,

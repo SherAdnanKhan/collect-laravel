@@ -219,7 +219,7 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
      */
     public function getUploadFolderPath()
     {
-        return md5($this->attributes['id']);
+        return md5($this->attributes['id'] . $this->attributes['created_at']);
     }
 
     /**

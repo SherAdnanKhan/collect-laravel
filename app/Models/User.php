@@ -317,4 +317,14 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     {
         SendWelcomeEmail::dispatch($this);
     }
+
+    /**
+     * Get the path to this users root files
+     *
+     * @return string
+     */
+    public function getUploadFolderPath()
+    {
+        return md5($this->attributes['id'] . $this->attributes['created_at']);
+    }
 }
