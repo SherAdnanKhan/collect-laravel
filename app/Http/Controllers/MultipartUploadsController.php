@@ -16,6 +16,8 @@ class MultipartUploadsController extends Controller
         // Get the current user
         $user = auth()->user();
 
+        $project = false;
+
         if ($meta['projectId']) {
             $project = Project::where('id', $meta['projectId'])
                 ->with('user', 'user.subscriptions')
@@ -58,7 +60,7 @@ class MultipartUploadsController extends Controller
             if ($project) {
                 $query = $query->where('project_id', $project->id);
             } else {
-                $query = $query->whereIsNull('project_id');
+                $query = $query->whereNull('project_id');
             }
             $folder = $query->first();
             if (!$folder) {
@@ -100,7 +102,7 @@ class MultipartUploadsController extends Controller
             if ($project) {
                 $query = $query->where('project_id', $project->id);
             } else {
-                $query = $query->whereIsNull('project_id')->where('user_id', $user->id);
+                $query = $query->whereNull('project_id')->where('user_id', $user->id);
             }
 
             if ($currentFolder) {
@@ -129,7 +131,7 @@ class MultipartUploadsController extends Controller
         $existing_file_query_base = ($project ?
             File::where('project_id', $project->id)
             :
-            File::whereIsNull('project_id')->where('user_id', $user->id)
+            File::whereNull('project_id')->where('user_id', $user->id)
         );
         if ($currentFolder) {
             $existing_file_query_base->where('folder_id', $currentFolder->id);

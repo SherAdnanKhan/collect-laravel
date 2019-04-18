@@ -29,26 +29,45 @@ class CreateFolder
         ResolveInfo $resolveInfo
     ): array
     {
-        $project = Project::where('id', $args['input']['projectId'])->userViewable()->first();
-        if (!$project) {
-            throw new AuthorizationException('Unable to find project to associate session to');
-        }
-
         $user = auth()->user();
-        if (!$user->can('create', [Folder::class, $project])) {
-            throw new AuthorizationException('User does not have permission to create a folder on this project');
+
+        $project = false;
+        if ($args['input']['projectId']) {
+            $project = Project::where('id', $args['input']['projectId'])->userViewable()->first();
+            if (!$project) {
+                throw new AuthorizationException('Unable to find project to associate session to');
+            }
+
+            if (!$user->can('create', [Folder::class, $project])) {
+                throw new AuthorizationException('User does not have permission to create a folder on this project');
+            }
         }
 
         $parent_folder = false;
         if (isset($args['input']['folderId'])) {
-            $parent_folder = Folder::where('project_id', $project->id)->where('id', $args['input']['folderId'])->userViewable()->first();
+            $query = Folder::where('id', $args['input']['folderId']);
+
+            if ($project) {
+                $query = $query->where('project_id', $project->id)->userViewable();
+            } else {
+                $query = $query->whereNull('project_id')->where('user_id', $user->id);
+            }
+
+            $parent_folder = $query->first();
             if (!$parent_folder) {
                 throw new AuthorizationException;
             }
         }
 
         $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $args['input']['name']);
-        $duplicate_folder_query = Folder::where('project_id', $project->id)->userViewable()->where('name', 'like', $name);
+        $duplicate_folder_query = Folder::where('name', 'like', $name);
+
+        if ($project) {
+            $duplicate_folder_query = $duplicate_folder_query->where('project_id', $project->id)->userViewable();
+        } else {
+            $duplicate_folder_query = $duplicate_folder_query->whereNull('project_id')->where('user_id', $user->id);
+        }
+
         if ($parent_folder) {
             $duplicate_folder_query->where('folder_id', $parent_folder->id);
         } else {
@@ -60,7 +79,7 @@ class CreateFolder
         }
 
         $folder = Folder::create([
-            'project_id' => $project->id,
+            'project_id' => ($project ? $project->id : null),
             'folder_id' => ($parent_folder ? $parent_folder->id : null),
             'user_id' => $user->id,
             'name' => $name,

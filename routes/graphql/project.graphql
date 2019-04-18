@@ -101,8 +101,8 @@ type FolderPath {
 type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
-	project: Project! @belongsTo
-	projectId: ID! @rename(attribute: "project_id")
+	project: Project @belongsTo
+	projectId: ID @rename(attribute: "project_id")
 	party: Party! @belongsTo
 	song: Song! @belongsTo
 	name: String!
@@ -135,8 +135,8 @@ type RecordingType {
 type Session implements Favoured & Creditable & Commentable & EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
-	project: Project! @belongsTo
-	projectId: ID!  @rename(attribute: "project_id")
+	project: Project @belongsTo
+	projectId: ID  @rename(attribute: "project_id")
 	type: SessionType @belongsTo
 	sessionType: SessionType @belongsTo
 	venue: Venue @belongsTo

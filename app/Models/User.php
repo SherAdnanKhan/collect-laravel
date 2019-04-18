@@ -180,7 +180,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function files(): HasMany
     {
-        return $this->hasMany(File::class)->whereIsNull('project_id');
+        return $this->hasMany(File::class)->whereNull('project_id');
     }
 
     /**
@@ -190,7 +190,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function folders(): HasMany
     {
-        return $this->hasMany(Folder::class)->whereIsNull('project_id');
+        return $this->hasMany(Folder::class)->whereNull('project_id');
     }
 
     /**
