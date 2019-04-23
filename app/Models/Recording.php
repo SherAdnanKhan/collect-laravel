@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
+use App\ElasticSearch\RecordingsIndexConfigurator;
 use App\Models\Collaborators;
 use App\Models\Credit;
 use App\Models\CreditRole;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ScoutElastic\Searchable;
 
 class Recording extends Model implements UserAccessible, EventLoggable, Creditable
 {
@@ -35,6 +37,7 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     use OrderScopes;
     use EventLogged;
     use SoftDeletes;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -59,6 +62,63 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
      * @var array
      */
     protected $touches = ['sessions', 'project'];
+
+    protected $indexConfigurator = RecordingsIndexConfigurator::class;
+
+    protected $searchRules = [
+        // NameSearchRule::class
+    ];
+
+    // Here you can specify a mapping for a model fields.
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer',
+            ],
+            'project_id' => [
+                'type' => 'integer',
+            ],
+            'name' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
+            ],
+            'subtitle' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
+            ],
+            'description' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
+            ]
+        ]
+    ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'id' => $this->attributes['id'],
+    //         'project_id' => $this->attributes['project_id'],
+    //         'user_id' => $this->attributes['user_id'],
+    //         'name' => $this->attributes['name'] . $this->attributes['project_id']
+    //     ];
+    // }
 
     /**
      * Get the type that this recording is associated to.

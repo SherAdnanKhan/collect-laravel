@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
+use App\ElasticSearch\SessionsIndexConfigurator;
 use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Recording;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ScoutElastic\Searchable;
 
 class Session extends Model implements UserAccessible, EventLoggable, Creditable
 {
@@ -27,6 +29,7 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     use OrderScopes;
     use EventLogged;
     use SoftDeletes;
+    use Searchable;
 
     protected $fillable = [
         'project_id', 'session_type_id', 'venue_id', 'name', 'description', 'started_at',
@@ -46,6 +49,47 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
      * @var array
      */
     protected $touches = ['project'];
+
+    protected $indexConfigurator = SessionsIndexConfigurator::class;
+
+    protected $searchRules = [
+        // NameSearchRule::class
+    ];
+
+    // Here you can specify a mapping for a model fields.
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer',
+            ],
+            'project_id' => [
+                'type' => 'integer',
+            ],
+            'name' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
+            ]
+        ]
+    ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'id' => $this->attributes['id'],
+    //         'project_id' => $this->attributes['project_id'],
+    //         'user_id' => $this->attributes['user_id'],
+    //         'name' => $this->attributes['name'] . $this->attributes['project_id']
+    //     ];
+    // }
 
     /**
      * The project who owns this song.

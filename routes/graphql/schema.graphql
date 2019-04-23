@@ -126,6 +126,20 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Get unread activity count
 	getUnreadActivity(projectId: ID!): UnreadActivityPayload! @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
+
+	# Search Queries
+	searchUserFiles(
+		term: String!
+	): [File] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\UserFiles@resolve")
+	searchProjectFiles(
+		term: String!
+	): [File] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\ProjectFiles@resolve")
+	searchRecordings(
+		term: String!
+	): [Recording] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Recordings@resolve")
+	searchSessions(
+		term: String!
+	): [Session] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Sessions@resolve")
 }
 
 type Mutation {

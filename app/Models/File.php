@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Contracts\UserAccessible;
+use App\ElasticSearch\FilesIndexConfigurator;
+use App\ElasticSearch\NameSearchRule;
 use App\Models\Folder;
 use App\Models\Project;
 use App\Models\User;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ScoutElastic\Searchable;
 
 /**
  * Represent a file that has been uploaded by a user into the system.
@@ -23,6 +26,7 @@ class File extends Model implements UserAccessible
     use UserAccesses;
     use SoftDeletes;
     use OrderScopes;
+    use Searchable;
 
     const STATUS_PENDING = 'pending';
     const STATUS_PROCESSING = 'processing';
@@ -44,6 +48,50 @@ class File extends Model implements UserAccessible
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    protected $indexConfigurator = FilesIndexConfigurator::class;
+
+    protected $searchRules = [
+        // NameSearchRule::class
+    ];
+
+    // Here you can specify a mapping for a model fields.
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer',
+            ],
+            'project_id' => [
+                'type' => 'integer',
+            ],
+            'user_id' => [
+                'type' => 'integer',
+            ],
+            'name' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
+            ]
+        ]
+    ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'id' => $this->attributes['id'],
+    //         'project_id' => $this->attributes['project_id'],
+    //         'user_id' => $this->attributes['user_id'],
+    //         'name' => $this->attributes['name'] . $this->attributes['project_id']
+    //     ];
+    // }
 
     /**
      * Get whether this file is previable
