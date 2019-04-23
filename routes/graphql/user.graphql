@@ -20,6 +20,7 @@
 	subscriptions: [UserSubscription] @hasMany
 	projects: [Project] @hasMany(type: "paginator")
 	parties: [Party] @hasMany(type: "paginator")
+	recentFiles: [File] @hasMany
 	files(folder_id: ID @eq): [File] @hasMany
 	folders(folder_id: ID @eq): [Folder] @hasMany
 	songs: [Song] @hasMany(type: "paginator")

@@ -46,6 +46,10 @@ extend type Query @group(middleware: ["auth:api"]) {
 		userId: Int @eq(key: "user_id")
 		ordering: OrderingInput
 	): [Song] @all(scopes: ["userViewable", "orderByField"])
+	getSongsPaginated(
+		userId: Int @eq(key: "user_id")
+		ordering: OrderingInput
+	): [Song] @paginate(model: "App\\Models\\Song", scopes: ["userViewable", "orderByField"], defaultCount: 5)
 	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
 	getSongTypes: [SongType] @all
 
