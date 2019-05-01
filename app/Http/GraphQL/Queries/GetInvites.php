@@ -21,11 +21,9 @@ class GetInvites
     {
         $user = auth()->user();
 
-        return CollaboratorInvite::where(function($query) use ($user) {
-            $query->whereNull('user_id')
-                  ->orWhere('user_id', $user->id);
-        })->whereHas('collaborator', function($query) use ($user) {
-            return $query->where('email', 'like', $user->email);
+        return CollaboratorInvite::whereHas('collaborator', function($query) use ($user) {
+            return $query->where('email', 'like', $user->email)
+                         ->where('accepted', 0);
         })->get();
     }
 }
