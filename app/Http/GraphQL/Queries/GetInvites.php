@@ -25,7 +25,7 @@ class GetInvites
             $query->whereNull('user_id')
                   ->orWhere('user_id', $user->id);
         })->whereHas('collaborator', function($query) use ($user) {
-            return $query->where('email', $user->email);
+            return $query->where('email', 'like', $user->email);
         })->get();
     }
 }
