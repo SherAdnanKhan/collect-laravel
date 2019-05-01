@@ -386,7 +386,7 @@ class Exporter
             $soundRecording->appendChild($document->createElement('TimeSignature', $recordingModel->time_signature));
             $soundRecording->appendChild($document->createElement('Tempo', $recordingModel->tempo));
 
-            $soundRecording->appendChild($document->createElement('Duration', Utilities::formatDuration($recordingModel->duration)));
+            $soundRecording->appendChild($document->createElement('Duration', Utilities::formatDuration((int)$recordingModel->duration)));
 
             $soundRecording->appendChild($document->createElement('Comment', $recordingModel->description));
             $soundRecording->appendChild($document->createElement('SoundRecordingMusicalWorkReference', self::SONG_ID_PREFIX . $recordingModel->song->getKey()));
