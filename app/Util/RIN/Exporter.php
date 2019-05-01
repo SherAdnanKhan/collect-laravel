@@ -25,11 +25,13 @@ class Exporter
     private $currentUser;
     private $version;
     private $project;
+    private $filename;
 
     public function __construct(Project $project, $version = 1)
     {
         $this->project = $project;
         $this->version = $version;
+        $this->filename = $this->generateFilename();
     }
 
     /**
@@ -72,7 +74,12 @@ class Exporter
         return $document->saveXML();
     }
 
-    private function filename()
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    private function generateFilename()
     {
         $identifier = time();
 
@@ -101,7 +108,7 @@ class Exporter
         $fileHeader = $document->createElement('FileHeader');
 
         $fileHeader->appendChild($document->createElement('FileId', self::FILE_ID_PREFIX . $this->project->id));
-        $fileHeader->appendChild($document->createElement('FileName', $this->filename()));
+        $fileHeader->appendChild($document->createElement('FileName', $this->filename));
         $fileHeader->appendChild($document->createElement('FileCreatedDateTime', Carbon::now()->toIso8601String()));
         $fileHeader->appendChild($document->createElement('FileControlType', App::environment('production') ? 'LiveMessage' : 'TestMessage'));
         $fileHeader->appendChild($document->createElement('SystemType', config('app.name', '')));
