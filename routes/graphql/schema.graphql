@@ -6,6 +6,7 @@ type Query {
 extend type Query @group(middleware: ["auth:api"]) {
 	getUsers: [User] @paginate
 	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
+	getUserInvites: [CollaboratorInvite] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetInvites@resolve")
 
 	# Query to return recently created/updated resources
 	getRecents(
