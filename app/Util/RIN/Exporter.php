@@ -326,9 +326,9 @@ class Exporter
                 $recordingTypeKey = $recordingModel->type->ddex_key;
             }
 
-            $recordingType = $document->createElement('Type', $recordingModel->type->ddex_key);
+            $recordingType = $document->createElement('Type', $recordingTypeKey);
 
-            if ((bool) $recordingModel->type->user_defined) {
+            if (!is_null($recordingModel->type) && (bool) $recordingModel->type->user_defined) {
                 $recordingType->setAttribute('UserDefinedValue', $recordingModel->recording_type_user_defined_value);
             }
 
