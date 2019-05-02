@@ -173,6 +173,7 @@ type CreditRole {
 type SongType {
 	id: ID!
 	name: String!
+	userDefined: Boolean! @rename(attribute: "user_defined")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
