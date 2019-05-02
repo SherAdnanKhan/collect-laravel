@@ -8,7 +8,6 @@ use App\Nova\Resources\Project;
 use App\Nova\Resources\Recording;
 use App\Nova\Resources\Session;
 use App\Nova\Resources\Song;
-use Dompdf\FrameDecorator\Text;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
