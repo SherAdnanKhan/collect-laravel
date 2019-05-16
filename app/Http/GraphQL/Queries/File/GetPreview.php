@@ -41,7 +41,7 @@ class GetPreview
             'Key'    => $file->transcoded_path
         ]);
 
-        $request = $s3->createPresignedRequest($cmd, '+1 minute');
+        $request = $s3->createPresignedRequest($cmd, '+15 minutes');
 
         return [
             'name' => $file->name,
