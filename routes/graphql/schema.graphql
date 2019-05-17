@@ -30,7 +30,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
 	# Party Queries
 	getParty(id: ID! @eq): Party @find(scopes: ["userViewable"])
-	getParties: [Party] @all(scopes: ["userViewable"])
+	getParties(type: String @eq): [Party] @all(scopes: ["userViewable"])
 	getPartyAddress(id: ID! @eq): PartyAddress @find(scopes: ["userViewable"])
 	getPartyContact(id: ID! @eq): PartyContact @find(scopes: ["userViewable"])
 
