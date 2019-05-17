@@ -83,7 +83,6 @@ input CreateRecordingInput {
     name: String! @rules(apply: ["required"])
     isrc: String
     subtitle: String
-    version: String
     recorded_on: String
     mixed_on: String
     duration: String
@@ -104,7 +103,6 @@ input UpdateRecordingInput {
     name: String! @rules(apply: ["required"])
     isrc: String
     subtitle: String
-    version: String
     recorded_on: String
     mixed_on: String
     duration: String
