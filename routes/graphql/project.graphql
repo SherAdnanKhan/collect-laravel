@@ -108,7 +108,8 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	name: String!
 	subtitle: String
 	isrc: String
-	version: String
+	version: VersionType @belongsTo
+	versionUserDefinedValue: String @rename(attribute: "version_type_user_defined_value")
 	recordedOn: String @rename(attribute: "recorded_on")
 	mixedOn: String @rename(attribute: "mixed_on")
 	duration: String
@@ -125,6 +126,14 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 }
 
 type RecordingType {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	name: String!
+	ddexKey: String! @rename(attribute: "ddex_key")
+	userDefined: Boolean! @rename(attribute: "user_defined")
+}
+
+type VersionType {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	name: String!

@@ -80,6 +80,8 @@ input CreateRecordingInput {
     song_id: ID! @rules(apply: ["required"])
     recording_type_id: ID! @rules(apply: ["required"])
     recording_type_user_defined_value: String
+    version_type_id: ID
+    version_type_user_defined_value: String
     name: String! @rules(apply: ["required"])
     isrc: String
     subtitle: String
@@ -100,6 +102,8 @@ input UpdateRecordingInput {
     song_id: ID! @rules(apply: ["required"])
     recording_type_id: ID! @rules(apply: ["required"])
     recording_type_user_defined_value: String
+    version_type_id: ID
+    version_type_user_defined_value: String
     name: String! @rules(apply: ["required"])
     isrc: String
     subtitle: String
