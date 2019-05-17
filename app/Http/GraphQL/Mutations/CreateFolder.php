@@ -59,7 +59,11 @@ class CreateFolder
             }
         }
 
-        $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $args['input']['name']);
+        $name = $args['input']['name'];
+        if (empty($name) || str_replace('.', '', $name) == '') {
+            throw new ValidationException('Folder with that name already exists.');
+        }
+        # $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $args['input']['name']);
         $duplicate_folder_query = Folder::where('name', 'like', $name);
 
         if ($project) {

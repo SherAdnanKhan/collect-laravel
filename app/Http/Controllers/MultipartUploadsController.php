@@ -91,7 +91,7 @@ class MultipartUploadsController extends Controller
 
         $pathinfo = pathinfo($data['fullPath']);
         foreach (explode('/', $pathinfo['dirname']) as $name) {
-            $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $name);
+            # $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $name);
             if (empty($name) || str_replace('.', '', $name) == '') {
                 continue;
             }
@@ -126,7 +126,8 @@ class MultipartUploadsController extends Controller
         }
 
         // Check the filename for duplicates
-        $original_filename = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $pathinfo['filename']);
+        // $original_filename = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $pathinfo['filename']);
+        $original_filename = $pathinfo['filename'];
         $extension = $pathinfo['extension'];
         $existing_file_query_base = ($project ?
             File::where('project_id', $project->id)
