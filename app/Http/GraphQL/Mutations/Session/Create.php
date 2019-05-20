@@ -38,6 +38,10 @@ class Create
 
         $started_at = Carbon::parse($input['started_at']);
         $ended_at = Carbon::parse($input['ended_at']);
+        if ($started_at->isFuture()) {
+            throw new ValidationException('Session Started At must be in the past');
+        }
+
         if ($started_at->isAfter($ended_at)) {
             throw new ValidationException('Session Started At must be before Ended At');
         }
