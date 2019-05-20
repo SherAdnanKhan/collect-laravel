@@ -397,3 +397,7 @@ input TwoFactorInput {
 input TwoFactorResendInput {
     token: String!
 }
+
+input ResendVerificationEmailInput {
+    email: String!
+}

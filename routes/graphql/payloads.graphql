@@ -41,6 +41,10 @@ type RegisterPayload {
   success: Boolean!
 }
 
+type ResendVerificationEmailPayload {
+  success: Boolean!
+}
+
 type UnreadActivityPayload {
   count: Int!
   projectId: ID! @rename(attribute: "project_id")
