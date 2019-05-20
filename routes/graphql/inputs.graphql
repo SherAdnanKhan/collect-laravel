@@ -301,7 +301,7 @@ input CreateCreditInput {
     instrument_id: ID
     instrument_user_defined_value: String
     performing: Boolean
-    split: Int @rules(apply: ["integer|min:0"])
+    split: Int @rules(apply: ["min:0"])
 }
 
 input UpdateCreditInput {
@@ -314,7 +314,7 @@ input UpdateCreditInput {
     instrument_id: ID
     instrument_user_defined_value: String
     performing: Boolean
-    split: Int @rules(apply: ["integer|min:0"])
+    split: Int @rules(apply: ["min:0"])
 }
 
 input DeleteCreditInput {
