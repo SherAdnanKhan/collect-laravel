@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Session;
 
+use App\Http\GraphQL\Exceptions\ValidationException;
 use App\Models\Project;
 use App\Models\Session;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -33,6 +34,12 @@ class Create
 
         if (!$user->can('create', [Session::class, $project])) {
             throw new AuthorizationException('User does not have permission to create a session on this project');
+        }
+
+        $started_at = Carbon::parse($input['started_at']);
+        $ended_at = Carbon::parse($input['ended_at']);
+        if ($started_at->isAfter($ended_at)) {
+            throw new ValidationException('Session Started At must be before Ended At');
         }
 
         return $project->sessions()->create($input);
