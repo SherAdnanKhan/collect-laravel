@@ -45,7 +45,7 @@ input UpdateProjectInput {
     image: String
     label_id: ID
     main_artist_id: ID
-    number: String @rules(apply: ["min:1", "max:255", "unique:projects,number"])
+    number: String @rules(apply: ["min:1", "max:255"])
     description: String
 }
 
