@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Session;
 
 use App\Models\Session;
+use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -27,6 +28,16 @@ class Update
 
         if (!$session) {
             throw new AuthorizationException('Unable to find session to update');
+        }
+
+        $started_at = Carbon::parse($input['started_at']);
+        $ended_at = Carbon::parse($input['ended_at']);
+        if ($started_at->isFuture()) {
+            throw new ValidationException('Session Started At must be in the past');
+        }
+
+        if ($started_at->isAfter($ended_at)) {
+            throw new ValidationException('Session Started At must be before Ended At');
         }
 
         $saved = $session->fill($input)->save();

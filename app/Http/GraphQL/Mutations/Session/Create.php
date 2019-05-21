@@ -5,6 +5,7 @@ namespace App\Http\GraphQL\Mutations\Session;
 use App\Http\GraphQL\Exceptions\ValidationException;
 use App\Models\Project;
 use App\Models\Session;
+use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
