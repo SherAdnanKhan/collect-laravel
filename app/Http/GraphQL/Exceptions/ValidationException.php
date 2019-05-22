@@ -3,8 +3,9 @@
 namespace App\Http\GraphQL\Exceptions;
 
 use GraphQL\Error\ClientAware;
+use GraphQL\Error\Error;
 
-class ValidationException extends \Exception implements ClientAware
+class ValidationException extends Error
 {
     /**
      * Returns true when exception message is safe to be displayed to a client.
