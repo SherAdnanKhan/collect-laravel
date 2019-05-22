@@ -91,7 +91,7 @@ input CreateRecordingInput {
     language: String
     key_signature: String
     time_signature: String
-    tempo: String @rules(apply: ["numeric","gt:0"])
+    tempo: String @rules(apply: ["nullable","numeric","gt:0"])
     description: String
 }
 
@@ -113,7 +113,7 @@ input UpdateRecordingInput {
     language: String
     key_signature: String
     time_signature: String
-    tempo: String @rules(apply: ["numeric","gt:0"])
+    tempo: String @rules(apply: ["nullable","numeric","gt:0"])
     description: String
 }
 
@@ -301,7 +301,7 @@ input CreateCreditInput {
     instrument_id: ID
     instrument_user_defined_value: String
     performing: Boolean
-    split: Int @rules(apply: ["numeric","gt:0"])
+    split: Int @rules(apply: ["nullable","numeric","gt:0"])
 }
 
 input UpdateCreditInput {
@@ -314,7 +314,7 @@ input UpdateCreditInput {
     instrument_id: ID
     instrument_user_defined_value: String
     performing: Boolean
-    split: Int @rules(apply: ["numeric","gt:0"])
+    split: Int @rules(apply: ["nullable","numeric","gt:0"])
 }
 
 input DeleteCreditInput {
