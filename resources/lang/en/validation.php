@@ -118,6 +118,10 @@ return [
 
     'attributes' => [],
 
-    'phone' => 'This number must be in an international format eg. +447712345678 or +16195551234'
+    'phone' => 'This number must be in an international format eg. +447712345678 or +16195551234',
+
+    'gt' => [
+        'numeric' => 'The :attribute must be greater than :value.',
+    ],
 
 ];
