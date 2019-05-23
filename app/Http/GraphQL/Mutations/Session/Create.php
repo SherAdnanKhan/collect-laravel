@@ -47,7 +47,7 @@ class Create
             ]);
         }
 
-        if ($started_at->isAfter($ended_at)) {
+        if ($started_at > $ended_at) {
             throw new ValidationException('Session Started At must be before Ended At.', null, null, null, null, null, [
                 'validation' => [
                     'ended_at' => ['Session Started At must be before Ended At.']
