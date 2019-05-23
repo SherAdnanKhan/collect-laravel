@@ -44,7 +44,7 @@ class Update
         if ($started_at > $ended_at) {
             throw new ValidationException('Session Started At must be before Ended At.', null, null, null, null, null, [
                 'validation' => [
-                    'ended_at' => ['Session Started At must be before Ended At.']
+                    'ended_at' => ['Session Ended At must be after Started At.']
                 ]
             ]);
         }
