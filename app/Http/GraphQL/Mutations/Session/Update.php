@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Session;
 
+use App\Http\GraphQL\Exceptions\ValidationException;
 use App\Models\Session;
 use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
