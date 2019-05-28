@@ -27,7 +27,7 @@ class Create
             throw new AuthorizationException('The user does not have the ability to create a project');
         }
 
-        if (Project::where('number', 'like', $project->number)->count() > 0) {
+        if (Project::where('number', 'like', $input['number'])->count() > 0) {
             throw new ValidationException('Project Number must be unique.', null, null, null, null, null, [
                 'validation' => [
                     'number' => ['Project Number must be unique.']
