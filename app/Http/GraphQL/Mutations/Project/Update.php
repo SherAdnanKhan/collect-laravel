@@ -30,15 +30,15 @@ class Update
             throw new AuthorizationException('Unable to find project to update');
         }
 
-        if ($input['number'] != $project->number) {
-            if (Project::where('number', 'like', $input['number'])->count() > 0) {
-                throw new ValidationException('Project Number must be unique.', null, null, null, null, null, [
-                    'validation' => [
-                        'number' => ['Project Number must be unique.']
-                    ]
-                ]);
-            }
-        }
+        // if ($input['number'] != $project->number) {
+        //     if (Project::where('number', 'like', $input['number'])->count() > 0) {
+        //         throw new ValidationException('Project Number must be unique.', null, null, null, null, null, [
+        //             'validation' => [
+        //                 'number' => ['Project Number must be unique.']
+        //             ]
+        //         ]);
+        //     }
+        // }
 
         $saved = $project->fill($input)->save();
 
