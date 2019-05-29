@@ -37,6 +37,10 @@ class ByProject
             $creditsQuery = $creditsQuery->where('contribution_type', array_get($args, 'contributionType'));
         }
 
+        if (array_key_exists('count', $args)) {
+            $creditsQuery->take($args['count'])->orderBy('created_at', 'DESC');
+        }
+
         return $creditsQuery->get();
     }
 }
