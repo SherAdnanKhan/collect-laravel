@@ -19,4 +19,16 @@ class FolderPolicy
     {
         return $project->userPolicy($user, ['file'], ['create']);
     }
+
+    /**
+     * Define a update policy on a session.
+     *
+     * @param  User $user
+     * @param  Project $project
+     * @return bool
+     */
+    public function update(User $user, Project $project)
+    {
+        return $project->userPolicy($user, ['file'], ['update']);
+    }
 }
