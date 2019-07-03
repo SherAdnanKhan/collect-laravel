@@ -69,7 +69,7 @@ class RenameFolder
             $duplicate_folder_query = $duplicate_folder_query->whereNull('project_id')->where('user_id', $user->id);
         }
 
-        $duplicate_folder_query->where('folder_id', $folder->id);
+        $duplicate_folder_query->where('folder_id', $folder->folder_id)->where('id', '!=', $folder->id);
 
         if ($duplicate_folder_query->count() > 0) {
             throw new ValidationException('Folder with that name already exists.');
