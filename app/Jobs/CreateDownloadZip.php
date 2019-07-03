@@ -52,7 +52,7 @@ class CreateDownloadZip implements ShouldQueue
                 'user_id' => $this->user_id,
                 'files' => $this->files_to_download,
             ]),
-            'QueueUrl' => $config['prefix'] . '/' . env('SQS_QUEUE_DOWNLOAD_JOBS')
+            'QueueUrl' => $config['prefix'] . '/' . $config['jobs']['downloads']
         ];
 
         try {
