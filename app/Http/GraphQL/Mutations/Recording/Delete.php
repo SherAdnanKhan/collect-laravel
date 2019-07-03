@@ -30,6 +30,8 @@ class Delete
 
         $recording->delete();
 
+        Folder::find($recording->folder_id)->delete();
+
         return $recording;
     }
 }

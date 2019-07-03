@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Recording;
 
+use App\Models\Folder;
 use App\Models\Project;
 use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -34,6 +35,18 @@ class Create
             throw new AuthorizationException('User does not have permission to create a recording on this project');
         }
 
-        return $project->recordings()->create(array_get($args, 'input'));
+        $recording = $project->recordings()->create(array_get($args, 'input'));
+
+        $folder = Folder::create([
+            'project_id' => $recording->project_id,
+            'user_id'    => $user->id,
+            'name'       => sprintf('Recording: %s', $recording->name),
+            'readonly'   => true
+        ]);
+
+        $recording->folder_id = $folder->id;
+        $recording->save();
+
+        return $recording;
     }
 }

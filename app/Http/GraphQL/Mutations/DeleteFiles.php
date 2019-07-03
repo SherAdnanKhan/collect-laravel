@@ -32,7 +32,7 @@ class DeleteFiles
         foreach ($args['files'] as $file) {
             if ($file['type'] === 'folder') {
                 $folder = Folder::where('id', $file['id'])->userDeletable()->first();
-                if (!$folder) {
+                if (!$folder || $folder->readonly) {
                     continue;
                 }
 

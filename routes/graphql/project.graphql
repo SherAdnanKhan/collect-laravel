@@ -103,6 +103,7 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	id: ID!
 	project: Project @belongsTo
 	projectId: ID @rename(attribute: "project_id")
+	folderId: ID @rename(attribute: "folder_id")
 	party: Party! @belongsTo
 	song: Song! @belongsTo
 	name: String!

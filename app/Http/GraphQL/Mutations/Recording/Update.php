@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Recording;
 
+use App\Models\Folder;
 use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
@@ -34,6 +35,10 @@ class Update
         if (!$saved) {
             throw new GenericException('Error saving recording');
         }
+
+        Folder::find($recording->folder_id)->update([
+            'name' => sprintf('Recording: %s', $recording->name)
+        ]);
 
         return $recording;
     }
