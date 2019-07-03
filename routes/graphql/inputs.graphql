@@ -4,6 +4,12 @@ input CreateFolderInput {
     name: String!
 }
 
+input RenameFolderInput {
+    projectId: ID
+    folderId: ID!
+    name: String!
+}
+
 input DeleteFilesInput {
     id: ID!
     type: String!
