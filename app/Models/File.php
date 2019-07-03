@@ -101,7 +101,7 @@ class File extends Model implements UserAccessible
      */
     public function getIsPreviewableAttribute()
     {
-        return !empty($this->attributes['transcoded_path']);
+        return !empty($this->attributes['transcoded_path']) || $this->attributes['type'] == 'png' || $this->attributes['type'] == 'jpg' || $this->attributes['type'] == 'jepg';
     }
 
     /**

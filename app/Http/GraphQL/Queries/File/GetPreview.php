@@ -23,8 +23,17 @@ class GetPreview
 
         $file = File::where('id', $id)->userViewable()->first();
 
-        if (!$file || !$file->transcoded_path) {
+        if (!$file) {
             throw new AuthorizationException('Unable to find to file');
+        }
+
+        if (!$file->is_previewable) {
+            throw new AuthorizationException('Unable to preview file');
+        }
+
+        $preview_file = $file->path;
+        if ($file->transcoded_path) {
+            $preview_file = $file->transcoded_path;
         }
 
         $s3 = new \Aws\S3\S3Client([
@@ -38,13 +47,14 @@ class GetPreview
 
         $cmd = $s3->getCommand('GetObject', [
             'Bucket' => config('filesystems.disks.s3.bucket'),
-            'Key'    => $file->transcoded_path
+            'Key'    => $preview_file
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+15 minutes');
 
         return [
             'name' => $file->name,
+            'type' => $file->type,
             'url' => (string)$request->getUri()
         ];
     }
