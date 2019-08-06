@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Recording;
 use App\Util\RIN\Exporter;
 use App\Util\RIN\Importer;
 use DOMDocument;
@@ -94,17 +95,33 @@ class RINController extends Controller
     public function export(Request $request)
     {
         $user = auth()->user();
-        $projectId = $request->get('project');
 
-        $project = Project::where('id', $projectId)->userViewable(['user' => $user])->first();
+        if ($request->has('recording')) {
+            $recordingId = $request->get('recording');
 
-        if (!$project) {
-            abort(404, 'Unable to find the project to export.');
-            return;
+            $recording = Recording::where('id', $recordingId)->userViewable(['user' => $user])->first();
+
+            if (!$recording) {
+                abort(404, 'Unable to find the recording to export.');
+                return;
+            }
+
+            $project = $recording->project;
+        } else {
+            $projectId = $request->get('project');
+
+            $project = Project::where('id', $projectId)->userViewable(['user' => $user])->first();
+
+            if (!$project) {
+                abort(404, 'Unable to find the project to export.');
+                return;
+            }
         }
 
         $exporter = new Exporter($project, config('app.version', 1));
+
         $exporter->setUser($user);
+        $exporter->setRecording($recording);
 
         $xmlContents = $exporter->toXML();
 

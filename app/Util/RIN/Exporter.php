@@ -6,6 +6,7 @@ use App\Contracts\Creditable;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Recording;
 use Carbon\Carbon;
 use DOMDocument;
 use DOMElement;
@@ -26,6 +27,7 @@ class Exporter
     private $version;
     private $project;
     private $filename;
+    private $recording;
 
     public function __construct(Project $project, $version = 1)
     {
@@ -42,6 +44,16 @@ class Exporter
     public function setUser(User $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * Set the recording context to filter by a specific recording.
+     *
+     * @param Recording $recording
+     */
+    public function setRecording(Recording $recording)
+    {
+        $this->recording = $recording;
     }
 
     /**
@@ -249,7 +261,8 @@ class Exporter
     {
         $sessionList = $document->createElement('SessionList');
 
-        $sessionModels = $this->project->sessions;
+        $sessionModels = $this->recording ? $this->recording->sessions : $this->project->sessions;
+
         foreach ($sessionModels as $sessionModel) {
             $session = $document->createElement('Session');
             $session->appendChild($document->createElement('SessionReference', self::SESSION_ID_PREFIX . $sessionModel->getKey()));
@@ -320,7 +333,7 @@ class Exporter
     {
         $recordingList = $document->createElement('ResourceList');
 
-        $recordingModels = $this->project->recordings;
+        $recordingModels = $this->recording ? [$this->recording] : $this->project->recordings;
         foreach ($recordingModels as $recordingModel) {
             if (!$recordingModel->song) {
                 continue;
@@ -425,8 +438,12 @@ class Exporter
     {
         $songList = $document->createElement('MusicalWorkList');
 
-        $this->project->load('recordings.song');
-        $songModels = $this->project->recordings->pluck('song')->unique();
+        if ($this->recording) {
+            $songModels = [$this->recording->song];
+        } else {
+            $this->project->load('recordings.song');
+            $songModels = $this->project->recordings->pluck('song')->unique();
+        }
 
         foreach ($songModels as $songModel) {
             $musicalWork = $document->createElement('MusicalWork');
