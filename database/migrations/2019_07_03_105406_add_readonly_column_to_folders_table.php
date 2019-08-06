@@ -14,7 +14,7 @@ class AddReadonlyColumnToFoldersTable extends Migration
     public function up()
     {
         Schema::table('folders', function (Blueprint $table) {
-            $table->boolean('readyonly')->default(false)->after('depth');
+            $table->boolean('readonly')->default(false)->after('depth');
         });
     }
 
@@ -26,7 +26,7 @@ class AddReadonlyColumnToFoldersTable extends Migration
     public function down()
     {
         Schema::table('folders', function (Blueprint $table) {
-            $table->dropColumn('readyonly');
+            $table->dropColumn('readonly');
         });
     }
 }
