@@ -96,6 +96,8 @@ class RINController extends Controller
     {
         $user = auth()->user();
 
+        $recording = null;
+
         if ($request->has('recording')) {
             $recordingId = $request->get('recording');
 

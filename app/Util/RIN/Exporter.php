@@ -49,9 +49,9 @@ class Exporter
     /**
      * Set the recording context to filter by a specific recording.
      *
-     * @param Recording $recording
+     * @param Recording|null $recording
      */
-    public function setRecording(Recording $recording)
+    public function setRecording($recording)
     {
         $this->recording = $recording;
     }
