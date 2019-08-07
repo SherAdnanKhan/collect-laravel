@@ -49,6 +49,22 @@ class ProjectAccess
         $types = $this->types;
         $permissions = $this->permissions;
 
+        // ->where(function($q) use ($baseQuery) {
+        //     return $q->whereExists(function($q) use ($baseQuery) {
+        //         return $baseQuery->whereHas('recordings', function($q) {
+        //             return $q->where('recordings.id', 'collaborators.recording_id');
+        //         });
+        //     })->orWhere('collaborators.recording_id', null);
+        // })
+
+        // TODO:
+        // If a user is a collaborator on a specific Recording we need
+        // to make sure the resource we're querying filters by relation
+        // to that recording.
+
+        // If this doesn't work, try pulling the resource table and id from the
+        // query and filter based on that. As opposed to cloning the query.
+
         return $this->query->whereHas($this->relation, function($q) use ($user, $types, $permissions) {
             return (new CollaboratorPermission($q, $user, $types, $permissions))
                 ->getQuery()
