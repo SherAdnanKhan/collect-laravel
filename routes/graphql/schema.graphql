@@ -123,6 +123,9 @@ extend type Query @group(middleware: ["auth:api"]) {
 	# Instrument Queries
 	getInstruments: [Instrument] @all
 
+	# Language Queries
+	getLanguages: [Language] @all
+
 	# Venue Queries
 	getVenues: [Venue] @all(scopes: ["userViewable"])
 	getCountries: [Country] @all
