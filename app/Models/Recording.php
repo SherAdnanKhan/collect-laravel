@@ -210,6 +210,16 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
         return $this->belongsTo(VersionType::class, 'version_type_id');
     }
 
+    /**
+     * The language for the recording.
+     *
+     * @return BelongsTo
+     */
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
+
     public function getContributorRoleTypes($version = '1.1'): array
     {
         return ['NewStudioRole', 'CreativeContributorRole'];
