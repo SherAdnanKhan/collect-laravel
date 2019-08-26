@@ -177,3 +177,9 @@ type SongType {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
+
+type Language {
+	id: ID!
+	name: String!
+	code: String!
+}
