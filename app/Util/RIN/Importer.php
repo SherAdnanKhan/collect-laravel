@@ -5,6 +5,7 @@ namespace App\Util\RIN;
 use App\Contracts\Creditable;
 use App\Models\Credit;
 use App\Models\CreditRole;
+use App\Models\Language;
 use App\Models\Party;
 use App\Models\PartyAddress;
 use App\Models\PartyContact;
@@ -533,7 +534,7 @@ class Importer
                 $recordingModel = new Recording();
             }
 
-            $recordingModel->fill(array_except($recording, ['sessions', 'credits']));
+            $recordingModel->fill(array_except($recording, ['language', 'sessions', 'credits']));
             $recordingModel->save();
 
             $this->creditsToImport[] = [
@@ -550,6 +551,14 @@ class Importer
 
                 if (!in_array($recordingId, $this->sessionRecordings[$sessionId])) {
                     $this->sessionRecordings[$sessionId][] = $recordingId;
+                }
+            }
+
+            if ($languageCode = array_get($recording, 'language', false)) {
+                $language = Language::where('code', $languageCode)->first();
+
+                if ($language) {
+                    $recordingModel->language()->associate($language);
                 }
             }
 
@@ -665,7 +674,6 @@ class Importer
                 'mixed_on'                          => $mixedOn,
                 'song_id'                           => $songId,
                 'description'                       => (string) $recording->Comment,
-                'language'                          => (string) $recording->LanguageOfPerformance,
                 'key_signature'                     => (string) $recording->KeySignature,
                 'time_signature'                    => (string) $recording->TimeSignature,
                 'tempo'                             => (string) $recording->Tempo,
@@ -674,6 +682,7 @@ class Importer
                 'duration'                          => Utilities::parseDuration((string) $recording->Duration),
 
                 // Relations
+                'language'    => (string) $recording->LanguageOfPerformance,
                 'credits'     => $recording->Contributor,
                 'sessions'    => $recording->SoundRecordingSessionReference,
             ];
