@@ -14,13 +14,8 @@ class ConvertLanguageToLanugageIdOnRecordings extends Migration
     public function up()
     {
         Schema::table('recordings', function (Blueprint $table) {
-            $table->renameColumn('language', 'language_id');
-        });
-
-        DB::statement('UPDATE recordings r INNER JOIN languages l on l.name = r.language_id SET r.language_id = l.id');
-
-        Schema::table('recordings', function (Blueprint $table) {
-            $table->unsignedInteger('language_id')->nullable()->default(null)->change();
+            $table->dropColumn('language');
+            $table->unsignedInteger('language_id')->after('duration')->nullable()->default(null);
             $table->foreign('language_id')->references('id')->on('languages')
                 ->onDelete('set null');
         });
@@ -35,13 +30,8 @@ class ConvertLanguageToLanugageIdOnRecordings extends Migration
     {
         Schema::table('recordings', function (Blueprint $table) {
             $table->dropForeign(['language_id']);
-        });
-
-        DB::statement('UPDATE recordings r INNER JOIN languages l on l.id = r.language_id SET r.language_id = l.name');
-
-        Schema::table('recordings', function (Blueprint $table) {
-            $table->renameColumn('language_id', 'language');
-            $table->string('language', 20)->nullable()->change();
+            $table->dropColumn('language_id');
+            $table->string('language', 20)->nullable()->after('duration');
         });
     }
 }
