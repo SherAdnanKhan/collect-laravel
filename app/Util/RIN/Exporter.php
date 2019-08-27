@@ -401,7 +401,7 @@ class Exporter
                 $soundRecording->appendChild($versionType);
             }
 
-            $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language));
+            $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language ? $recordingModel->language->code : 'en'));
             $soundRecording->appendChild($document->createElement('KeySignature', $recordingModel->key_signature));
             $soundRecording->appendChild($document->createElement('TimeSignature', $recordingModel->time_signature));
             $soundRecording->appendChild($document->createElement('Tempo', $recordingModel->tempo));
