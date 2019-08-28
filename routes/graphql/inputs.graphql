@@ -260,7 +260,7 @@ input CreatePartyAddressInput {
     city: String! @rules(apply: ["required"])
     district: String! @rules(apply: ["required"])
     postal_code: String! @rules(apply: ["required"])
-    territory_code: String! @rules(apply: ["required"])
+    country_id: ID! @rules(apply: ["required"])
 }
 
 input UpdatePartyAddressInput {
@@ -271,7 +271,7 @@ input UpdatePartyAddressInput {
     city: String! @rules(apply: ["required"])
     district: String! @rules(apply: ["required"])
     postal_code: String! @rules(apply: ["required"])
-    territory_code: String! @rules(apply: ["required"])
+    country_id: ID! @rules(apply: ["required"])
 }
 
 input DeletePartyAddressInput {

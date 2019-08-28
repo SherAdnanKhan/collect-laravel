@@ -102,14 +102,13 @@ type PartyContact {
 type PartyAddress {
 	id: ID!
 	party: Party @belongsTo
+	country: Country @belongsTo
 	line1: String! @rename(attribute: "line_1")
 	line2: String @rename(attribute: "line_2")
 	line3: String @rename(attribute: "line_3")
 	city: String!
 	district: String!
 	postalCode: String! @rename(attribute: "postal_code")
-	territoryCode: String @rename(attribute: "territory_code")
-	territoryCodeType: String @rename(attribute: "territory_code_type")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
