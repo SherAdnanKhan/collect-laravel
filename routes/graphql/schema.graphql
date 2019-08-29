@@ -80,7 +80,6 @@ extend type Query @group(middleware: ["auth:api"]) {
 		ordering: OrderingInput
 	): [Recording] @paginate(scopes: ["userViewable", "orderByField"], defaultCount: 1000)
 	getRecordingTypes: [RecordingType] @all
-	getVersionTypes: [VersionType] @all
 
 	# Session Queries
 	getSession(id: ID! @eq): Session @find(scopes: ["userViewable"])

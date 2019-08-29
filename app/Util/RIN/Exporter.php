@@ -391,6 +391,10 @@ class Exporter
             $title->appendChild($document->createElement('SubTitle', $recordingModel->subtitle));
             $soundRecording->appendChild($title);
 
+
+            // TODO:
+            // Make the version just a string field, don't need to reference
+            // the version types
             if (!is_null($recordingModel->version)) {
                 $versionType = $document->createElement('VersionType', $recordingModel->version->ddex_key);
 
