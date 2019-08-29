@@ -46,8 +46,8 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
      */
     protected $fillable = [
         'project_id', 'party_id', 'party_role_id', 'song_id', 'name', 'recording_type_id', 'description',
-        'isrc', 'subtitle', 'version_type_id', 'version_type_user_defined_value', 'recorded_on', 'mixed_on', 'duration',
-        'language', 'key_signature', 'time_signature', 'tempo', 'recording_type_user_defined_value', 'party_role_user_defined_value'
+        'isrc', 'subtitle', 'version', 'recorded_on', 'mixed_on', 'duration',
+        'language_id', 'key_signature', 'time_signature', 'tempo', 'recording_type_user_defined_value', 'party_role_user_defined_value'
     ];
 
     protected $casts = [
@@ -198,16 +198,6 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     public function credits(): MorphMany
     {
         return $this->morphMany(Credit::class, 'contribution');
-    }
-
-    /**
-     * What version type is this?
-     *
-     * @return BelongsTo
-     */
-    public function version(): BelongsTo
-    {
-        return $this->belongsTo(VersionType::class, 'version_type_id');
     }
 
     /**
