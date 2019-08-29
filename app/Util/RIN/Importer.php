@@ -18,7 +18,6 @@ use App\Models\Song;
 use App\Models\SongType;
 use App\Models\User;
 use App\Models\Venue;
-use App\Models\VersionType;
 use App\Util\RIN\Utilities;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -643,18 +642,6 @@ class Importer
                 $subTitle = (string) $recording->Title->Subtitle;
             }
 
-            $versionTypeDDEX = $this->rinVersion == '10' ? (string) $recording->Version : (string) $recording->VersionType;
-            $versionType = VersionType::where('ddex_key',  $versionTypeDDEX)->first();
-
-            if (is_null($versionType)) {
-                $versionType = VersionType::where('ddex_key', 'UserDefined')->first();
-            }
-
-            $versionTypeUserDefined = null;
-            if ((bool) $versionType->user_defined) {
-                $versionTypeUserDefined = $versionTypeDDEX;
-            }
-
             $createdAt = $this->rinVersion == '10' ? Carbon::parse((string) $recording->CreationDate)->toDateTimeString() : Carbon::parse((string) $recording->CreationDate)->toDateString();
             $recordedOn = $this->rinVersion == '10' ? Carbon::parse((string) $recording->EventDate)->toDateTimeString() : Carbon::parse((string) $recording->FirstPublicationDate)->toDateString();
             $mixedOn = $this->rinVersion == '10' ? Carbon::parse((string) $recording->MasteredDate)->toDateTimeString() : Carbon::parse((string) $recording->MasteredDate)->toDateString();
@@ -677,8 +664,7 @@ class Importer
                 'key_signature'                     => (string) $recording->KeySignature,
                 'time_signature'                    => (string) $recording->TimeSignature,
                 'tempo'                             => (string) $recording->Tempo,
-                'version_type_id'                   => $versionType->getKey(),
-                'version_type_user_defined_value'   => $versionTypeUserDefined,
+                'version'                           => $this->rinVersion == '10' ? (string) $recording->Version : (string) $recording->VersionType,
                 'duration'                          => Utilities::parseDuration((string) $recording->Duration),
 
                 // Relations
