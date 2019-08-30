@@ -45,9 +45,7 @@ class CollaboratorPermission
         $types = $this->types;
         $permissions = $this->permissions;
 
-        $baseQuery = clone $this->query;
-
-        return $this->query->whereHas('collaborators', function($q) use ($user, $types, $permissions, $baseQuery) {
+        return $this->query->whereHas('collaborators', function($q) use ($user, $types, $permissions) {
             return $q->select(['collaborators.user_id', 'collaborators.accepted', 'collaborators.recording_id'])
                 ->where('collaborators.accepted', true)
                 ->where('collaborators.recording_id', null)

@@ -6,9 +6,9 @@ use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
 use App\ElasticSearch\RecordingsIndexConfigurator;
-use App\Models\Collaborators;
 use App\Models\Credit;
 use App\Models\CreditRole;
+use App\Models\Collaborator;
 use App\Models\Party;
 use App\Models\Project;
 use App\Models\RecordingType;
@@ -20,6 +20,7 @@ use App\Models\VersionType;
 use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -120,6 +121,17 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     //     ];
     // }
 
+
+    /**
+     * Get the collaborator users for this project.
+     *
+     * @return Collection
+     */
+    public function collaborators(): HasMany
+    {
+        return $this->hasMany(Collaborator::class);
+    }
+
     /**
      * Get the type that this recording is associated to.
      *
@@ -208,6 +220,30 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);
+    }
+
+    /**
+     * Specify the scope for how a user is able to see a recording.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        // $query = $query->where(function($q) {
+        //     return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
+        // })->orWhere(function($q) {
+        //     return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+        // });
+
+        return $this->wrapUserRelationCheck(
+            $user,
+           (new CollaboratorRecordingAccess($query, $user))->getQuery()
+        );
+        // return $this->wrapUserRelationCheck($user, $query);
     }
 
     public function getContributorRoleTypes($version = '1.1'): array
