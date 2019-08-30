@@ -5,6 +5,7 @@ namespace App\Util\RIN;
 use App\Contracts\Creditable;
 use App\Models\Credit;
 use App\Models\CreditRole;
+use App\Models\Language;
 use App\Models\Party;
 use App\Models\PartyAddress;
 use App\Models\PartyContact;
@@ -17,7 +18,6 @@ use App\Models\Song;
 use App\Models\SongType;
 use App\Models\User;
 use App\Models\Venue;
-use App\Models\VersionType;
 use App\Util\RIN\Utilities;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -533,7 +533,7 @@ class Importer
                 $recordingModel = new Recording();
             }
 
-            $recordingModel->fill(array_except($recording, ['sessions', 'credits']));
+            $recordingModel->fill(array_except($recording, ['language', 'sessions', 'credits']));
             $recordingModel->save();
 
             $this->creditsToImport[] = [
@@ -550,6 +550,14 @@ class Importer
 
                 if (!in_array($recordingId, $this->sessionRecordings[$sessionId])) {
                     $this->sessionRecordings[$sessionId][] = $recordingId;
+                }
+            }
+
+            if ($languageCode = array_get($recording, 'language', false)) {
+                $language = Language::where('code', $languageCode)->first();
+
+                if ($language) {
+                    $recordingModel->language()->associate($language);
                 }
             }
 
@@ -634,18 +642,6 @@ class Importer
                 $subTitle = (string) $recording->Title->Subtitle;
             }
 
-            $versionTypeDDEX = $this->rinVersion == '10' ? (string) $recording->Version : (string) $recording->VersionType;
-            $versionType = VersionType::where('ddex_key',  $versionTypeDDEX)->first();
-
-            if (is_null($versionType)) {
-                $versionType = VersionType::where('ddex_key', 'UserDefined')->first();
-            }
-
-            $versionTypeUserDefined = null;
-            if ((bool) $versionType->user_defined) {
-                $versionTypeUserDefined = $versionTypeDDEX;
-            }
-
             $createdAt = $this->rinVersion == '10' ? Carbon::parse((string) $recording->CreationDate)->toDateTimeString() : Carbon::parse((string) $recording->CreationDate)->toDateString();
             $recordedOn = $this->rinVersion == '10' ? Carbon::parse((string) $recording->EventDate)->toDateTimeString() : Carbon::parse((string) $recording->FirstPublicationDate)->toDateString();
             $mixedOn = $this->rinVersion == '10' ? Carbon::parse((string) $recording->MasteredDate)->toDateTimeString() : Carbon::parse((string) $recording->MasteredDate)->toDateString();
@@ -665,15 +661,14 @@ class Importer
                 'mixed_on'                          => $mixedOn,
                 'song_id'                           => $songId,
                 'description'                       => (string) $recording->Comment,
-                'language'                          => (string) $recording->LanguageOfPerformance,
                 'key_signature'                     => (string) $recording->KeySignature,
                 'time_signature'                    => (string) $recording->TimeSignature,
                 'tempo'                             => (string) $recording->Tempo,
-                'version_type_id'                   => $versionType->getKey(),
-                'version_type_user_defined_value'   => $versionTypeUserDefined,
+                'version'                           => $this->rinVersion == '10' ? (string) $recording->Version : (string) $recording->VersionType,
                 'duration'                          => Utilities::parseDuration((string) $recording->Duration),
 
                 // Relations
+                'language'    => (string) $recording->LanguageOfPerformance,
                 'credits'     => $recording->Contributor,
                 'sessions'    => $recording->SoundRecordingSessionReference,
             ];

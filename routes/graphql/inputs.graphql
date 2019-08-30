@@ -86,15 +86,14 @@ input CreateRecordingInput {
     song_id: ID! @rules(apply: ["required"])
     recording_type_id: ID! @rules(apply: ["required"])
     recording_type_user_defined_value: String
-    version_type_id: ID
-    version_type_user_defined_value: String
+    version: String
     name: String! @rules(apply: ["required"])
     isrc: String
     subtitle: String
     recorded_on: String
     mixed_on: String
     duration: String
-    language: String
+    languageId: ID
     key_signature: String
     time_signature: String
     tempo: String @rules(apply: ["nullable","numeric","gt:0"])
@@ -108,15 +107,14 @@ input UpdateRecordingInput {
     song_id: ID! @rules(apply: ["required"])
     recording_type_id: ID! @rules(apply: ["required"])
     recording_type_user_defined_value: String
-    version_type_id: ID
-    version_type_user_defined_value: String
+    version: String
     name: String! @rules(apply: ["required"])
     isrc: String
     subtitle: String
     recorded_on: String
     mixed_on: String
     duration: String
-    language: String
+    languageId: ID
     key_signature: String
     time_signature: String
     tempo: String @rules(apply: ["nullable","numeric","gt:0"])
@@ -260,7 +258,7 @@ input CreatePartyAddressInput {
     city: String! @rules(apply: ["required"])
     district: String! @rules(apply: ["required"])
     postal_code: String! @rules(apply: ["required"])
-    territory_code: String! @rules(apply: ["required"])
+    country_id: ID! @rules(apply: ["required"])
 }
 
 input UpdatePartyAddressInput {
@@ -271,7 +269,7 @@ input UpdatePartyAddressInput {
     city: String! @rules(apply: ["required"])
     district: String! @rules(apply: ["required"])
     postal_code: String! @rules(apply: ["required"])
-    territory_code: String! @rules(apply: ["required"])
+    country_id: ID! @rules(apply: ["required"])
 }
 
 input DeletePartyAddressInput {

@@ -31,7 +31,8 @@ class ByProject
             throw new AuthorizationException('The user does not have access to view this projects credits');
         }
 
-        $creditsQuery = $project->credits();
+        // We need a party on the credit.
+        $creditsQuery = $project->credits()->whereHas('party');
 
         if (array_key_exists('contributionType', $args) && in_array(array_get($args, 'contributionType'), Credit::TYPES)) {
             $creditsQuery = $creditsQuery->where('contribution_type', array_get($args, 'contributionType'));

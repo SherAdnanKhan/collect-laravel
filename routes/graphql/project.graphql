@@ -109,12 +109,12 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	name: String!
 	subtitle: String
 	isrc: String
-	version: VersionType @belongsTo
-	versionUserDefinedValue: String @rename(attribute: "version_type_user_defined_value")
+	version: String
 	recordedOn: String @rename(attribute: "recorded_on")
 	mixedOn: String @rename(attribute: "mixed_on")
 	duration: String
-	language: String
+	languageId: ID @rename(attribute: "language_id")
+	language: Language @belongsTo
 	keySignature: String @rename(attribute: "key_signature")
 	timeSignature: String @rename(attribute: "time_signature")
 	tempo: Int

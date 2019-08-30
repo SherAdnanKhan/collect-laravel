@@ -46,8 +46,8 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
      */
     protected $fillable = [
         'project_id', 'party_id', 'party_role_id', 'song_id', 'name', 'recording_type_id', 'description',
-        'isrc', 'subtitle', 'version_type_id', 'version_type_user_defined_value', 'recorded_on', 'mixed_on', 'duration',
-        'language', 'key_signature', 'time_signature', 'tempo', 'recording_type_user_defined_value', 'party_role_user_defined_value'
+        'isrc', 'subtitle', 'version', 'recorded_on', 'mixed_on', 'duration',
+        'language_id', 'key_signature', 'time_signature', 'tempo', 'recording_type_user_defined_value', 'party_role_user_defined_value'
     ];
 
     protected $casts = [
@@ -201,13 +201,13 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     }
 
     /**
-     * What version type is this?
+     * The language for the recording.
      *
      * @return BelongsTo
      */
-    public function version(): BelongsTo
+    public function language(): BelongsTo
     {
-        return $this->belongsTo(VersionType::class, 'version_type_id');
+        return $this->belongsTo(Language::class);
     }
 
     public function getContributorRoleTypes($version = '1.1'): array

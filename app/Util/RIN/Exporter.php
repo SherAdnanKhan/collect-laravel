@@ -392,16 +392,12 @@ class Exporter
             $soundRecording->appendChild($title);
 
             if (!is_null($recordingModel->version)) {
-                $versionType = $document->createElement('VersionType', $recordingModel->version->ddex_key);
-
-                if ((bool) $recordingModel->version->user_defined) {
-                    $versionType->setAttribute('UserDefinedValue', $recordingModel->version_type_user_defined_value);
-                }
-
+                $versionType = $document->createElement('VersionType', 'UserDefined');
+                $versionType->setAttribute('UserDefinedValue', $recordingModel->version);
                 $soundRecording->appendChild($versionType);
             }
 
-            $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language));
+            $soundRecording->appendChild($document->createElement('LanguageOfPerformance', $recordingModel->language ? $recordingModel->language->code : 'en'));
             $soundRecording->appendChild($document->createElement('KeySignature', $recordingModel->key_signature));
             $soundRecording->appendChild($document->createElement('TimeSignature', $recordingModel->time_signature));
             $soundRecording->appendChild($document->createElement('Tempo', $recordingModel->tempo));

@@ -37,7 +37,7 @@ class Delete
         }
 
         $credits_count = Credit::where('party_id', $party->id)->count();
-        if ($recordings_count > 0) {
+        if ($credits_count > 0) {
             throw new AuthorizationException('Unable to delete party');
         }
 

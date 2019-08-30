@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\Models\Party;
+use App\Models\Country;
 use App\Traits\UserAccesses;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,8 +20,7 @@ class PartyAddress extends Model implements UserAccessible
 
     protected $fillable = [
         'party_id', 'line_1', 'line_2', 'line_3',
-        'city', 'district', 'postal_code', 'territory_code',
-        'territory_code_type',
+        'city', 'district', 'postal_code', 'territory_code_id',
     ];
 
     /**
@@ -31,6 +31,16 @@ class PartyAddress extends Model implements UserAccessible
     public function party(): BelongsTo
     {
         return $this->belongsTo(Party::class);
+    }
+
+    /**
+     * The country for this address.
+     *
+     * @return BelongsTo
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
     }
 
     /**
