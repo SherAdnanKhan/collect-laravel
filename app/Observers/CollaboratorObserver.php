@@ -19,13 +19,21 @@ class CollaboratorObserver
      */
     public function created(Collaborator $collaborator)
     {
+        // The default permissions
+        $permissions = collect(CollaboratorPermission::TYPES)->map(function($type) {
+            return new CollaboratorPermission(['type' => $type, 'level' => 'read']);
+        })->all();
+
+        // The default permissions if we've got a recording collaborator.
+        if (!is_null($collaborator->recording_id)) {
+            $permissions = [
+                new CollaboratorPermission(['type' => 'recording', 'level' => 'read']),
+                new CollaboratorPermission(['type' => 'project', 'level' => 'read']),
+            ];
+        }
+
         // Setup the default permissions.
-        $collaborator->permissions()
-            ->saveMany(
-                collect(CollaboratorPermission::TYPES)->map(function($type) {
-                    return new CollaboratorPermission(['type' => $type, 'level' => 'read']);
-                })->all()
-            );
+        $collaborator->permissions()->saveMany($permissions);
 
         $collaborator->createAndSendInvite();
 

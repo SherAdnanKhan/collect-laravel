@@ -35,13 +35,20 @@ class Create
 
         $project = Project::find($projectId);
 
+        if (!$project) {
+            throw new AuthorizationException('Project does not exist');
+        }
+
         $recordingId = array_get($input, 'recording_id', false);
 
         if ($recordingId) {
             $recording = Recording::where('id', $recordingId)->where('project_id', $projectId)->first();
+            if (!$recording) {
+                throw new AuthorizationException('Recording does not exist');
+            }
         }
 
-        $cannotCreate = !$project || !$recording || !$user->can('create', [
+        $cannotCreate = !$user->can('create', [
             Collaborator::class, $project, null
         ]);
 
