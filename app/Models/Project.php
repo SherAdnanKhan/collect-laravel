@@ -21,6 +21,7 @@ use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
 use App\Util\BuilderQueries\CollaboratorPermission;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -236,9 +237,14 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
 
         // Add to the query a check to see if the user
         // has read permission on the project, or owns it.
-        return (new CollaboratorPermission($query, $user, ['project'], ['read']))
-            ->getQuery()
-            ->orWhere('user_id', $user->getAuthIdentifier());
+        return $query->where(function($q) use ($user) {
+            return (new CollaboratorPermission($q, $user, ['project'], ['read']))->getQuery();
+        })
+        ->orWhere(function($q) use ($user) {
+            return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+        })
+        ->orWhere('user_id', $user->getAuthIdentifier());
+
     }
 
     /**
