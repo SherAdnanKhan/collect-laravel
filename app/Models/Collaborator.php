@@ -7,6 +7,7 @@ use App\Contracts\UserAccessible;
 use App\Models\CollaboratorInvite;
 use App\Models\CollaboratorPermission;
 use App\Models\Project;
+use App\Models\Recording;
 use App\Models\User;
 use App\Traits\EventLogged;
 use App\Traits\UserAccesses;
@@ -29,7 +30,7 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
      * @var array
      */
     protected $fillable = [
-        'user_id', 'project_id', 'email', 'name'
+        'user_id', 'project_id', 'recording_id', 'email', 'name'
     ];
 
     /**
@@ -50,6 +51,16 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * The recording this collaborator belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function recording(): BelongsTo
+    {
+        return $this->belongsTo(Recording::class);
     }
 
     /**
@@ -96,9 +107,10 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
         $user = auth()->user();
 
         $invite = new CollaboratorInvite([
-            'token'      => str_random(60),
-            'project_id' => $this->project->id,
-            'user_id'    => ($user ? $user->id : null)
+            'token'        => str_random(60),
+            'project_id'   => $this->project_id,
+            'recording_id' => $this->recording_id,
+            'user_id'      => ($user ? $user->id : null)
         ]);
 
         $saved = $this->invite()->save($invite);

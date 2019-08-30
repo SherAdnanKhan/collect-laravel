@@ -278,6 +278,7 @@ input DeletePartyAddressInput {
 
 input CreateCollaboratorInput {
     project_id: ID! @rules(apply: ["required"])
+    recording_id: ID
     email: String! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
 }

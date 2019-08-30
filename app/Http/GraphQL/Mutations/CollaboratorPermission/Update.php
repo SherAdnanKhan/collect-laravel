@@ -58,6 +58,7 @@ class Update
     {
         $levels = CollaboratorPermission::LEVELS;
         $processed = [];
+        $requiresAllRead = true;
 
         foreach ($permissions as $permission) {
             $permissionLevel = array_get($permission, 'level');
@@ -65,6 +66,15 @@ class Update
 
             if (!in_array($type, CollaboratorPermission::TYPES)) {
                 continue;
+            }
+
+            // Handle permissions when we're adding a
+            // collaborator who's restricted to a
+            // specific recording.
+            if ($permissionLevel == 'recording-lockdown') {
+                $requiresAllRead = false;
+                $processed[] = new CollaboratorPermission(['type' => 'recording', 'level' => 'read']);
+                $processed[] = new CollaboratorPermission(['type' => 'project', 'level' => 'read']);
             }
 
             // If we are provided with 'full', we'll give them
@@ -96,19 +106,21 @@ class Update
             $processed[] = new CollaboratorPermission($permission);
         }
 
-        // Make sure we have a 'read' level for each type.
-        foreach (CollaboratorPermission::TYPES as $type) {
-            $hasRead = false;
+        if ($requiresAllRead) {
+            // Make sure we have a 'read' level for each type.
+            foreach (CollaboratorPermission::TYPES as $type) {
+                $hasRead = false;
 
-            foreach ($processed as $processedPermission) {
-                if ($processedPermission->type == $type && $processedPermission->level == 'read') {
-                    $hasRead = true;
-                    break;
+                foreach ($processed as $processedPermission) {
+                    if ($processedPermission->type == $type && $processedPermission->level == 'read') {
+                        $hasRead = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!$hasRead) {
-                $processed[] = new CollaboratorPermission(['type' => $type, 'level' => 'read']);
+                if (!$hasRead) {
+                    $processed[] = new CollaboratorPermission(['type' => $type, 'level' => 'read']);
+                }
             }
         }
 

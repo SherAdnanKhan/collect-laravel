@@ -4,6 +4,7 @@ namespace App\Http\GraphQL\Mutations\Collaborator;
 
 use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
+use App\Models\Recording;
 use App\Models\Project;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -34,7 +35,13 @@ class Create
 
         $project = Project::find($projectId);
 
-        $cannotCreate = !$project || !$user->can('create', [
+        $recordingId = array_get($input, 'recording_id', false);
+
+        if ($recordingId) {
+            $recording = Recording::where('id', $recordingId)->where('project_id', $projectId)->first();
+        }
+
+        $cannotCreate = !$project || !$recording || !$user->can('create', [
             Collaborator::class, $project, null
         ]);
 
