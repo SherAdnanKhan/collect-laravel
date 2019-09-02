@@ -153,7 +153,7 @@ type Credit {
 	instrumentUserDefinedValue: String @rename(attribute: "instrument_user_defined_value")
 	instrument: Instrument @belongsTo
 	performing: Boolean
-	split: Int
+	split: Float
 	contributionId: Int! @rename(attribute: "contribution_id")
 	contributionType: String! @rename(attribute: "contribution_type")
 	contribution: Creditable!
