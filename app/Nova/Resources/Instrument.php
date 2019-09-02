@@ -38,7 +38,7 @@ class Instrument extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'category',
+        'id', 'name',
     ];
 
     /**
