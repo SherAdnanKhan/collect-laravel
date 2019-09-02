@@ -11,14 +11,18 @@
 
         <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
-<br />
+          <br />
           Welcome to VEVA Collect!<br />
-<br />
-          You have been invited to collaborate with {{ $senderName }} on {{ $projectName }}.<br />
-<br />
+          <br />
+          @if ($recordingName != null)
+            You have been invited to collaborate with {{ $senderName }} on the recording {{ $recordingName }} on {{ $projectName }}.<br />
+          @else
+            You have been invited to collaborate with {{ $senderName }} on {{ $projectName }}.<br />
+          @endif
+          <br />
           To accept the invitation, click the button below.
         </mj-text>
-        <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#0000000" color="white" border-radius="4px" href="{{ $inviteUrl }}">
+        <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#000000" color="white" border-radius="4px" href="{{ $inviteUrl }}">
           Accept
          </mj-button>
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">

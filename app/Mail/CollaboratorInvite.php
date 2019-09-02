@@ -38,10 +38,11 @@ class CollaboratorInvite extends Mailable
         return $this->view('emails.collaborators.invite')
             ->subject('VEVA Collect invitation from ' . $this->invite->user->name)
             ->with([
-                'name'        => $this->invite->collaborator->name,
-                'projectName' => $this->invite->project->name,
-                'senderName'  => $this->invite->user->name,
-                'inviteUrl'   => $inviteUrl
+                'name'          => $this->invite->collaborator->name,
+                'projectName'   => $this->invite->project->name,
+                'recordingName' => $this->invite->recording ? $this->invite->recording->name : null,
+                'senderName'    => $this->invite->user->name,
+                'inviteUrl'     => $inviteUrl
             ]);
     }
 }
