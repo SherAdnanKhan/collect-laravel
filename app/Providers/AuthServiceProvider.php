@@ -30,7 +30,9 @@ class AuthServiceProvider extends ServiceProvider
         Comment::class      => CommentPolicy::class,
         Session::class      => SessionPolicy::class,
         Collaborator::class => CollaboratorPolicy::class,
-        Folder::class       => FolderPolicy::class
+        Folder::class       => FolderPolicy::class,
+        Song::class         => SongPolicy::class,
+        Party::class        => PartyPolicy::class,
     ];
 
     /**
