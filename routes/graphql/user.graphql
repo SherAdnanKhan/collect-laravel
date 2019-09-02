@@ -92,6 +92,7 @@ type Party implements Favoured {
 type PartyContact {
 	id: ID!
 	party: Party @belongsTo
+	name: String
 	type: String!
 	value: String!
 	primary: Boolean

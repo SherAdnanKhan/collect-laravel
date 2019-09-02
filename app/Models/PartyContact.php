@@ -19,7 +19,7 @@ class PartyContact extends Model implements UserAccessible
     use UserAccesses;
 
     protected $fillable = [
-        'party_id', 'type', 'value', 'primary'
+        'party_id', 'name', 'type', 'value', 'primary'
     ];
 
     /**

@@ -234,6 +234,7 @@ input DeletePartyInput {
 
 input CreatePartyContactInput {
     party_id: ID!
+    name: String
     type: String! @rules(apply: ["required", "in:email,phone"])
     value: String! @rules(apply: ["required"])
     primary: Boolean @rules(apply: ["boolean"])
@@ -241,6 +242,7 @@ input CreatePartyContactInput {
 
 input UpdatePartyContactInput {
     id: ID!
+    name: String
     type: String! @rules(apply: ["required", "in:email,phone"])
     value: String! @rules(apply: ["required"])
     primary: Boolean @rules(apply: ["boolean"])
