@@ -83,6 +83,9 @@ class Exporter
 
         $document->appendChild($rin);
 
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
         return $document->saveXML();
     }
 
