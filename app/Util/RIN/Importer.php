@@ -33,11 +33,12 @@ class Importer
     const RECORDING_ID_PREFIX = 'A-';
 
     private $fileId;
+    private $fileName;
     private $project;
-    private $parties;
-    private $recordings;
-    private $sessions;
-    private $songs;
+    private $parties = [];
+    private $recordings = [];
+    private $sessions = [];
+    private $songs = [];
     private $creditsToImport = [];
     private $sessionRecordings = [];
 
@@ -57,24 +58,37 @@ class Importer
     {
         $rinNamespace = array_get($xml->getNamespaces(), 'rin', null);
 
-        if (is_null($rinNamespace)) {
-            throw new \Exception('Missing RIN namespace on XML document.');
+        $this->rinVersion = '10';
+        if (!is_null($rinNamespace)) {
+            $this->rinVersion = $this->extractVersion($rinNamespace);
         }
-
-        $this->rinVersion = $this->extractVersion($rinNamespace);
 
         if (!in_array($this->rinVersion, ['10', '11'])) {
             throw new \Exception('We only support importing RIN versions 1.0 and 1.1');
         }
 
         $this->fileId = $xml->FileHeader->FileId;
+        $this->fileName = $xml->FileHeader->FileName;
 
-        $this->parties = $this->mapParties($xml->PartyList->children());
-        $this->project = $this->mapProject($xml->ProjectList->Project);
+        if (current($xml->PartyList)) {
+            $this->parties = $this->mapParties($xml->PartyList->children());
+        }
 
-        $this->recordings = $this->mapRecordings($xml->ResourceList->children());
-        $this->sessions = $this->mapSessions($xml->SessionList->children());
-        $this->songs = $this->mapSongs($xml->MusicalWorkList->children());
+        if (current($xml->ProjectList)) {
+            $this->project = $this->mapProject($xml->ProjectList->Project);
+        }
+
+        if (current($xml->ResourceList)) {
+            $this->recordings = $this->mapRecordings($xml->ResourceList->children());
+        }
+
+        if (current($xml->SessionList)) {
+            $this->sessions = $this->mapSessions($xml->SessionList->children());
+        }
+
+        if (current($xml->MusicalWorkList)) {
+            $this->songs = $this->mapSongs($xml->MusicalWorkList->children());
+        }
 
         return $this;
     }
@@ -159,7 +173,7 @@ class Importer
      * @param  bool|boolean $override
      * @return Project
      */
-    private function importProject(array $project, array $parties,  bool $override = false): Project
+    private function importProject(array $project, array $parties, bool $override = false): Project
     {
         $projectId = array_get($project, 'id', false);
         $project = array_except($project, ['id']);
@@ -172,6 +186,10 @@ class Importer
         if (!$projectModel) {
             $project['user_id'] = $this->projectOwner->getKey();
             $projectModel = new Project();
+        }
+
+        if (empty($project['name'])) {
+            $project['name'] = $this->fileName;
         }
 
         $projectModel->fill(array_except($project, ['credits']));
@@ -589,9 +607,10 @@ class Importer
                 Log::debug(sprintf('Missing recording type %s', $recordingTypeDDEX));
                 $recordingType = RecordingType::select('recording_types.id', 'recording_types.ddex_key')->where('recording_types.ddex_key', 'UserDefined')->first();
                 $recordingTypeUserValue = $recordingTypeDDEX;
+            } else {
+                $recordingTypeId = $recordingType->getKey();
             }
 
-            $recordingTypeId = $recordingType->getKey();
 
             $isrc = null;
             if (isset($recording->SoundRecordingId->ISRC)) {

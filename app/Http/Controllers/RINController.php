@@ -32,7 +32,7 @@ class RINController extends Controller
             abort(400, 'Uploaded file does not have correct Mime type.');
         }
 
-        if (!$request->file('rin')->isValid()) {
+        if (is_null($request->file('rin')) || !$request->file('rin')->isValid()) {
             abort(400, 'Uploaded file is not valid.');
         }
 
