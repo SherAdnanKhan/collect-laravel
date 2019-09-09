@@ -34,10 +34,13 @@ class UserStorageLimitReached extends Mailable
      */
     public function build()
     {
+        $url = config('app.frontend_url') . '/subscription';
+
         return $this->view('emails.users.storage-limit-reached')
             ->subject('VEVA Collect Storage Limit Alert')
             ->with([
                 'name' => $this->user->first_name,
+                'link' => $url,
             ]);
     }
 }

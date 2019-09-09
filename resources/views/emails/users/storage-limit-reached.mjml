@@ -16,7 +16,7 @@
           <br />
           You can either remove some of your files (make sure you have your own backup), or upgrade to one of our higher storage limit plans.  Our Pro Plan includes unlimited storage amongst other great benefits!<br />
           <br />
-          To view our other plan options <a href="" style="color: #000000">click here</a>.<br />
+          To view our other plan options <a href="{{ $link }}" style="color: #000000">click here</a>.<br />
           <br />
           Many thanks<br />
           VEVA Collect
