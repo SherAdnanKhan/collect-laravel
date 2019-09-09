@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return 'Nothing to see here';
 });
+
+// How to test an email.
+// Route::get('mailable', function () {
+//     $user = \App\Models\User::find(39);
+//     return new \App\Mail\SubscriptionPaymentSuccessful($user, $user->subscriptions()->first(), 0, '');
+// });
