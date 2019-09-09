@@ -5,7 +5,7 @@
   <mj-body>
     <mj-section>
       <mj-column>
-        <mj-image width="100px" src="{{ asset('images/email-logo.jpg') }}"></mj-image>
+        <mj-image width="100px" src="{{ asset('images/email-logo.png') }}"></mj-image>
 
         <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
 
