@@ -235,11 +235,9 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
 
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
+        })->orWhere(function($q) use ($user) {
+            return (new CollaboratorRecordingAccess($q, $user))->getQuery();
         });
-
-        // ->orWhere(function($q) use ($user) {
-        //     return (new CollaboratorRecordingAccess($q, $user))->getQuery();
-        // });
 
         return $this->wrapUserRelationCheck($user, $query);
     }
