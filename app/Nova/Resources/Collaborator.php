@@ -59,6 +59,8 @@ class Collaborator extends Resource
             BelongsTo::make('Project'),
 
             HasMany::make('Permissions', 'permissions', CollaboratorPermission::class),
+
+            BelongsToMany::make('Recordings', 'recordings'),
         ];
     }
 

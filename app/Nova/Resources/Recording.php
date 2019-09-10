@@ -113,6 +113,8 @@ class Recording extends Resource
                 ->rules('max:255'),
 
             BelongsToMany::make('Sessions'),
+
+            BelongsToMany::make('Collaborators', 'collaborators'),
         ];
     }
 
