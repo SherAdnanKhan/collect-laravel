@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -30,7 +31,7 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
      * @var array
      */
     protected $fillable = [
-        'user_id', 'project_id', 'recording_id', 'email', 'name'
+        'user_id', 'project_id', 'email', 'name'
     ];
 
     /**
@@ -54,13 +55,13 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
     }
 
     /**
-     * The recording this collaborator belongs to.
+     * The recordings this collaborator has access to.
      *
-     * @return BelongsTo
+     * @return BelongsToMany
      */
-    public function recording(): BelongsTo
+    public function recordings(): BelongsToMany
     {
-        return $this->belongsTo(Recording::class);
+        return $this->belongsToMany(Recording::class, 'collaborators_to_recordings');
     }
 
     /**

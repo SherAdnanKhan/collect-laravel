@@ -125,11 +125,11 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     /**
      * Get the collaborator users for this project.
      *
-     * @return Collection
+     * @return BelongsToMany
      */
-    public function collaborators(): HasMany
+    public function collaborators(): BelongsToMany
     {
-        return $this->hasMany(Collaborator::class);
+        return $this->belongsToMany(Collaborator::class, 'collaborators_to_recordings');
     }
 
     /**

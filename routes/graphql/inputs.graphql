@@ -280,7 +280,7 @@ input DeletePartyAddressInput {
 
 input CreateCollaboratorInput {
     project_id: ID! @rules(apply: ["required"])
-    recording_id: ID
+    recordings: [CollaboratorRecordingInput]
     email: String! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
 }
@@ -297,6 +297,10 @@ input UpdateCollaboratorPermissionsInput {
 input CollaboratorPermissionInput {
     type: String!
     level: String!
+}
+
+input CollaboratorRecordingInput {
+    id: ID!
 }
 
 input CreateCreditInput {

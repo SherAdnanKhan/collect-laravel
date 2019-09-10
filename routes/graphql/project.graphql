@@ -32,10 +32,9 @@ type Collaborator implements EventLoggable {
 	name: String!
 	email: String!
 	project: Project! @belongsTo
-	recording: Recording @belongsTo
+	recordings: [Recording] @belongsToMany
 	accepted: Boolean
 	projectId: ID! @rename(attribute: "project_id")
-	recordingId: ID @rename(attribute: "recording_id")
 	permissions: [CollaboratorPermission] @hasMany
 }
 
