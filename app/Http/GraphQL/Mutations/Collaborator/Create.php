@@ -39,13 +39,9 @@ class Create
             throw new AuthorizationException('Project does not exist');
         }
 
-        $recordingId = array_get($input, 'recording_id', false);
-
-        if ($recordingId) {
-            $recording = Recording::where('id', $recordingId)->where('project_id', $projectId)->first();
-            if (!$recording) {
-                throw new AuthorizationException('Recording does not exist');
-            }
+        $recordingIds = [];
+        if (array_has($input, 'recordings')) {
+            $recordingIds = collect(array_get($input, 'recordings', []))->pluck('id')->toArray();
         }
 
         $cannotCreate = !$user->can('create', [
@@ -56,6 +52,12 @@ class Create
             throw new AuthorizationException('User does not have permission to create a collaborator on this project');
         }
 
-        return $project->collaborators()->create($input);
+        $collaborator = $project->collaborators()->create(array_except($input, ['recordings']));
+
+        if (!empty($recordingIds)) {
+            $collaborator->recordings()->attach($recordingIds);
+        }
+
+        return $collaborator;
     }
 }
