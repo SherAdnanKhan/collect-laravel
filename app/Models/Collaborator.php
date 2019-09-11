@@ -25,13 +25,16 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
     use UserAccesses;
     use EventLogged;
 
+    const TYPE_NORMAL = 'normal';
+    const TYPE_RECORDING = 'recording';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id', 'project_id', 'email', 'name'
+        'type', 'user_id', 'project_id', 'email', 'name'
     ];
 
     /**

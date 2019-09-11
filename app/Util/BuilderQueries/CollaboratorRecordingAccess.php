@@ -2,6 +2,7 @@
 
 namespace App\Util\BuilderQueries;
 
+use App\Models\Collaborator;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -37,8 +38,9 @@ class CollaboratorRecordingAccess
         $user = $this->user;
 
         return $this->query->whereHas('collaborators', function($q) use ($user) {
-            return $q->select(['collaborators.user_id', 'collaborators.accepted'])
+            return $q->select(['collaborators.user_id', 'collaborators.accepted', 'collaborators.type'])
                 ->where('collaborators.accepted', true)
+                ->where('collaborators.type', Collaborator::TYPE_RECORDING)
                 ->where('collaborators.user_id', $user->getAuthIdentifier())
                 ->whereHas('permissions', function($q) {
                     return $q->select(['collaborator_permissions.level', 'collaborator_permissions.type'])

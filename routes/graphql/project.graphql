@@ -28,6 +28,7 @@ type Project implements Favoured & Creditable & Commentable & EventLoggable {
 type Collaborator implements EventLoggable {
 	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
+	type: String!
 	user: User @belongsTo
 	name: String!
 	email: String!
