@@ -19,7 +19,7 @@ class ProjectObserver
         // the ID of the row.
 
         if (is_null($project->number) || empty($project->number)) {
-            $project->number = Uuid::uuid3('55989db3-1e36-486b-a5db-c11b673e6f75', 'VEVA');
+            $project->number = Uuid::uuid4();
         }
     }
 }
