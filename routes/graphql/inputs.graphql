@@ -60,7 +60,7 @@ input CreateProjectInput {
     image: String
     label_id: ID
     main_artist_id: ID
-    number: String @rules(apply: ["max:255"])
+    number: String @rules(apply: ["max:255", "unique:projects,number"])
     description: String
 }
 

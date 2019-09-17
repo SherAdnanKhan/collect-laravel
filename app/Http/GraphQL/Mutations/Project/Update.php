@@ -31,7 +31,7 @@ class Update
         }
 
         if ($input['number'] != $project->number) {
-            if (Project::where('number', 'like', $input['number'])->count() > 0) {
+            if (Project::where('number', '=', $input['number'])->count() > 0) {
                 throw new ValidationException('Project Number must be unique.', null, null, null, null, null, [
                     'validation' => [
                         'number' => ['Project Number must be unique.']
