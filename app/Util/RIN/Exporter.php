@@ -246,10 +246,10 @@ class Exporter
         $project->appendChild($document->createElement('ProjectReference', self::PROJECT_ID_PREFIX . $this->project->getKey()));
 
         if ($this->project->artist) {
-            $project->appendChild($document->createElement('DisplayArtistName', $this->project->artist->name));
             $displayArtist = $document->createElement('DisplayArtist');
             $displayArtist->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $this->project->artist->getKey()));
             $project->appendChild($displayArtist);
+            $project->appendChild($document->createElement('ProjectArtist', $this->project->artist->name));
         }
 
         $project->appendChild($document->createElement('ProjectName', $this->project->name));
