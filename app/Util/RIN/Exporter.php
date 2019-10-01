@@ -305,8 +305,6 @@ class Exporter
 
             $session->appendChild($document->createElement('IsUnionSession', $sessionModel->union_session ? 'true' : 'false'));
             $session->appendChild($document->createElement('IsAnalogSession', $sessionModel->analog_session ? 'true' : 'false'));
-            $session->appendChild($document->createElement('Comment', $sessionModel->description));
-
 
             if (!is_null($sessionModel->bit_depth)) {
                 $session->appendChild($document->createElement('BitDepth', $sessionModel->bit_depth));
@@ -324,6 +322,8 @@ class Exporter
 
                 $session->appendChild($timecode);
             }
+
+            $session->appendChild($document->createElement('Comment', $sessionModel->description));
 
             $recordingModels = $sessionModel->recordings;
             foreach ($recordingModels as $recordingModel) {
