@@ -175,13 +175,10 @@ class Exporter
                 $postalAddress->setAttribute('SequenceNumber', $i);
 
                 $addressLine1 = $document->createElement('PostalAddressLine', $addressModel->line_1);
-                $addressLine1->setAttribute('SequenceNumber', 1);
                 $postalAddress->appendChild($addressLine1);
                 $addressLine2 = $document->createElement('PostalAddressLine', $addressModel->line_2);
-                $addressLine2->setAttribute('SequenceNumber', 2);
                 $postalAddress->appendChild($addressLine2);
                 $addressLine3 = $document->createElement('PostalAddressLine', $addressModel->line_3);
-                $addressLine3->setAttribute('SequenceNumber', 3);
                 $postalAddress->appendChild($addressLine3);
 
                 $postalAddress->appendChild($document->createElement('CityName', $addressModel->city));
