@@ -250,7 +250,7 @@ class Exporter
             $displayArtist->appendChild($document->createElement('PartyReference', self::PARTY_ID_PREFIX . $this->project->artist->getKey()));
 
             // Hardcode the role to be the MainArtist
-            $displayArtisticRole = $document->createElement('ArtisticRole', 'MainArtist');
+            $displayArtisticRole = $document->createElement('ArtisticRole', 'Artist');
 
             $displayArtist->appendChild($displayArtisticRole);
             $project->appendChild($displayArtist);
