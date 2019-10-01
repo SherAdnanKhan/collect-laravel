@@ -15,6 +15,7 @@ use SimpleXMLElement;
 
 class Exporter
 {
+    const VEVA_DPID = 'PADPIDA2015110204V';
     const FILE_ID_PREFIX = 'VeVa-Project-';
 
     const PROJECT_ID_PREFIX = 'J-';
@@ -130,7 +131,10 @@ class Exporter
         $fileHeader->appendChild($document->createElement('Version', config('app.version', '')));
 
         $fileCreator = $document->createElement('FileCreator');
-        $fileCreator->appendChild($document->createElement('PartyId'));
+        $partyId = $document->createElement('PartyId');
+        $partyId->appendChild($document->createElement('DPID', self::VEVA_DPID));
+        $fileCreator->appendChild($partyId);
+
         $fileHeader->appendChild($fileCreator);
 
         $createdOnBehalfOf = $document->createElement('CreatedOnBehalfOf');
