@@ -15,19 +15,19 @@ class SessionTypesTableSeeder extends Seeder
         $types = [
             'ArtistVocals' => 'Artist Vocals',
             'DigitalEditing' => 'Digital Editing',
+            'Demo' => 'Demo', //
             'Editing' => 'Editing',
-            'LivePerformance' => 'Live Performance',
             'LivePerformance' => 'Live Performance',
             'Mastering' => 'Mastering',
             'Mixing' => 'Mixing',
             'Overdub' => 'Overdub',
             'PreProduction' => 'Pre-Production',
             'Production' => 'Production',
+            'Preservation' => 'Preservation', //
             'Project' => 'Project',
             'Remix' => 'Remix',
             'Tracking' => 'Tracking',
             'Transfer' => 'Transfer',
-            'TransfersAndSafeties' => 'Transfers & Safeties',
             'TransfersAndSafeties' => 'Transfers and Safeties',
             'Vocal' => 'Vocal',
         ];
