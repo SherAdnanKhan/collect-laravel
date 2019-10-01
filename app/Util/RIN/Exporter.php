@@ -500,16 +500,16 @@ class Exporter
             $contributorReference = $document->createElement('Contributor');
             $contributorReference->appendChild($document->createElement($model->getContributorReferenceKey(), self::PARTY_ID_PREFIX . $credit->party_id));
 
-            if (!is_null($credit->split)) {
-                $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
-            }
-
             if (!is_null($credit->role)) {
                 $contributorRole = $document->createElement('Role', $credit->role->ddex_key);
                 if ((bool) $credit->role->user_defined) {
                     $contributorRole->setAttribute('UserDefinedValue', $credit->credit_role_user_defined_value);
                 }
                 $contributorReference->appendChild($contributorRole);
+            }
+
+            if (!is_null($credit->split)) {
+                $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
             }
 
             if (!is_null($credit->instrument)) {
