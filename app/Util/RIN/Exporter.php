@@ -182,9 +182,18 @@ class Exporter
                 $postalAddress->appendChild($addressLine3);
 
                 $postalAddress->appendChild($document->createElement('CityName', $addressModel->city));
-                $postalAddress->appendChild($document->createElement('DistrictName', $addressModel->district));
-                $postalAddress->appendChild($document->createElement('PostCode', $addressModel->postal_code));
-                $postalAddress->appendChild($document->createElement('TerritoryCode', $addressModel->territory_code));
+
+                if (!empty($addressModel->district)) {
+                    $postalAddress->appendChild($document->createElement('DistrictName', $addressModel->district));
+                }
+
+                if (!empty($addressModel->postal_code)) {
+                    $postalAddress->appendChild($document->createElement('PostCode', $addressModel->postal_code));
+                }
+
+                if (!empty($addressModel->territory_code)) {
+                    $postalAddress->appendChild($document->createElement('TerritoryCode', $addressModel->territory_code));
+                }
 
                 $party->appendChild($postalAddress);
             }
@@ -495,9 +504,12 @@ class Exporter
                 $contributorReference->appendChild($document->createElement('RightSharePercentage', $credit->split));
             }
 
-            $contributorRole = $document->createElement('Role', $credit->role->ddex_key);
-            if ((bool) $credit->role->user_defined) {
-                $contributorRole->setAttribute('UserDefinedValue', $credit->credit_role_user_defined_value);
+            if (!is_null($credit->role)) {
+                $contributorRole = $document->createElement('Role', $credit->role->ddex_key);
+                if ((bool) $credit->role->user_defined) {
+                    $contributorRole->setAttribute('UserDefinedValue', $credit->credit_role_user_defined_value);
+                }
+                $contributorReference->appendChild($contributorRole);
             }
 
             if (!is_null($credit->instrument)) {
@@ -508,7 +520,6 @@ class Exporter
                 $contributorReference->appendChild($contributorInstrumentType);
             }
 
-            $contributorReference->appendChild($contributorRole);
             $parent->appendChild($contributorReference);
         }
 
