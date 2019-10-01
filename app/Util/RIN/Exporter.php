@@ -508,6 +508,7 @@ class Exporter
                 if ((bool) $credit->instrument->user_defined) {
                     $contributorInstrumentType->setAttribute('UserDefinedValue', $credit->instrument_user_defined_value);
                 }
+                $contributorReference->appendChild($contributorInstrumentType);
             }
 
             $contributorReference->appendChild($contributorRole);
