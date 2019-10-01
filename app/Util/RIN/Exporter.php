@@ -317,7 +317,7 @@ class Exporter
             }
 
             if (!is_null($sessionModel->timecode_type)) {
-                $timecode = $document->createElement('TimeCode');
+                $timecode = $document->createElement('Timecode');
                 $timecode->appendChild($document->createElement('TimecodeType', $sessionModel->timecode_type));
                 $timecode->appendChild($document->createElement('FrameRate', $sessionModel->timecode_frame_rate));
                 $timecode->appendChild($document->createElement('IsDropFrame', $sessionModel->drop_frame ? 'true' : 'false'));
