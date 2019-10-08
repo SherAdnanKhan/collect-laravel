@@ -93,7 +93,7 @@ input CreateRecordingInput {
     recorded_on: String
     mixed_on: String
     duration: String
-    languageId: ID
+    language_id: ID
     key_signature: String
     time_signature: String
     tempo: String @rules(apply: ["nullable","numeric","gt:0"])
@@ -114,7 +114,7 @@ input UpdateRecordingInput {
     recorded_on: String
     mixed_on: String
     duration: String
-    languageId: ID
+    language_id: ID
     key_signature: String
     time_signature: String
     tempo: String @rules(apply: ["nullable","numeric","gt:0"])
