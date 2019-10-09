@@ -193,7 +193,8 @@ class Party extends Model implements UserAccessible
             return $q->whereHas('credits', function($q) use ($user) {
                 return (new ProjectAccess($q, $user, ['project'], ['read'], 'projects'))->getQuery();
             });
-        })->orWhere('user_id', $user->getKey())->orWhereNotNull('isni');
+        })->orWhere('user_id', $user->getKey());
+        // ->orWhereNotNull('isni')
     }
 
     /**
