@@ -16,7 +16,7 @@ use SimpleXMLElement;
 class Exporter
 {
     const VEVA_DPID = 'PADPIDA2015110204V';
-    const FILE_ID_PREFIX = 'VeVa-Project-';
+    const FILE_ID_PREFIX = 'Veva-Project-';
 
     const PROJECT_ID_PREFIX = 'J-';
     const PARTY_ID_PREFIX = 'P-';
