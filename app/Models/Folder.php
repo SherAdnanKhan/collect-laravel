@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Traits\EventLogged;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -90,6 +91,16 @@ class Folder extends Model implements UserAccessible, EventLoggable
     }
 
     /**
+     * Get the recording this folder belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function recording(): BelongsTo
+    {
+        return $this->belongsTo(Recording::class);
+    }
+
+    /**
      * Get all the files in this folder.
      *
      * @return HasMany
@@ -118,5 +129,29 @@ class Folder extends Model implements UserAccessible, EventLoggable
     public function getTypeName(): string
     {
         return 'file';
+    }
+
+    /**
+     * Provide a default user viewable scope which will by default
+     * filter out models where the user doesn't have read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        $query = $query->where(function($q) use ($user) {
+            return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
+        })->orWhere(function($q) use ($user) {
+            return $this->query->whereHas('recording', function($q) use ($user) {
+                return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+            });
+        });
+
+        return $this->wrapUserRelationCheck($user, $query);
     }
 }
