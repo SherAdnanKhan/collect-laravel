@@ -16,7 +16,7 @@ use SimpleXMLElement;
 class Exporter
 {
     const VEVA_DPID = 'PADPIDA2015110204V';
-    const FILE_ID_PREFIX = 'VeVa-Project-';
+    const FILE_ID_PREFIX = 'Veva-Project-';
 
     const PROJECT_ID_PREFIX = 'J-';
     const PARTY_ID_PREFIX = 'P-';
@@ -150,7 +150,7 @@ class Exporter
     {
         $partyList = $document->createElement('PartyList');
 
-        $partyModels = Party::relatedToProject(['project' => $this->project])->get();
+        $partyModels = Party::relatedToProject(['project' => $this->project])->with('addresses')->get();
 
         foreach ($partyModels as $partyModel) {
             $party = $document->createElement('Party');
@@ -195,8 +195,8 @@ class Exporter
                     $postalAddress->appendChild($document->createElement('PostCode', $addressModel->postal_code));
                 }
 
-                if (!empty($addressModel->territory_code)) {
-                    $postalAddress->appendChild($document->createElement('TerritoryCode', $addressModel->territory_code));
+                if (!empty($addressModel->country_id)) {
+                    $postalAddress->appendChild($document->createElement('TerritoryCode', $addressModel->country->iso_code));
                 }
 
                 $party->appendChild($postalAddress);
