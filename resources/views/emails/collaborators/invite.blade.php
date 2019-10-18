@@ -56,9 +56,9 @@
         </style>
         <![endif]-->
   <!--[if !mso]><!-->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900" rel="stylesheet" type="text/css">
   <style type="text/css">
-    @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900);
+    @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900);
   </style>
   <!--<![endif]-->
   <style type="text/css">
@@ -113,7 +113,7 @@
                         <tbody>
                           <tr>
                             <td style="width:100px;">
-                              <img height="auto" src="{{ asset('images/email-logo.png') }}" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="100" />
+                              <img height="auto" src="{{ asset('images/email-logo.png') }}" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="150" />
                             </td>
                           </tr>
                         </tbody>
@@ -139,9 +139,20 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#000000;">Hey {{ $name }},<br />
+                      <div style="font-family:Poppins, Helvetica, Arial;font-size:16px;line-height:24px;text-align:left;color:#000000;">Hey {{ $name }},<br />
                         <br /> Welcome to VEVA Collect!<br />
-                        <br /> @if ($recordingName != null) You have been invited to collaborate with {{ $senderName }} on the recording {{ $recordingName }} on {{ $projectName }}.<br /> @else You have been invited to collaborate with {{ $senderName }} on {{ $projectName }}.<br /> @endif <br /> To accept the invitation, click the button below.</div>
+                        <br /> @if ($recordingName != null) You have been invited to collaborate with {{ $senderName }} on the recording {{ $recordingName }} on {{ $projectName }}.<br /> @else You have been invited to collaborate with {{ $senderName }} on {{ $projectArtistName }} {{ $projectName }}.<br /> @endif
+                        <br /> You have been assigned with permissions to:
+                        @foreach ($permissions as $permission_type => $permission_values)
+                        <p>{{ ucfirst($permission_type) }}s</p>
+                        <ul>
+                            @foreach ($permission_values as $permission_level)
+                            <li>{{ ucfirst($permission_level) }}</li>
+                            @endforeach
+                        </ul>
+                        @endforeach
+                        <br /> To accept the invitation, click the button below.
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -149,7 +160,7 @@
                       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                         <tr>
                           <td align="center" bgcolor="#000000" role="presentation" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#000000;" valign="middle">
-                            <a href="{{ $inviteUrl }}" style="display:inline-block;background:#000000;color:white;font-family:Source Sans Pro;font-size:14px;font-weight:700;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;" target="_blank"> Accept </a>
+                            <a href="{{ $inviteUrl }}" style="display:inline-block;background:#000000;color:white;font-family:Poppins;font-size:14px;font-weight:700;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;" target="_blank"> Accept </a>
                           </td>
                         </tr>
                       </table>
@@ -157,7 +168,7 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#212141;">Many thanks<br /> VEVA Collect</div>
+                      <div style="font-family:Poppins, Helvetica, Arial;font-size:16px;line-height:24px;text-align:left;color:#212141;">Collect while you Create,<br /> VEVA Collect</div>
                     </td>
                   </tr>
                 </table>
