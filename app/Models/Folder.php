@@ -147,7 +147,7 @@ class Folder extends Model implements UserAccessible, EventLoggable
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
         })->orWhere(function($q) use ($user) {
-            return $this->query->whereHas('recording', function($q) use ($user) {
+            return $q->whereHas('recording', function($q) use ($user) {
                 return (new CollaboratorRecordingAccess($q, $user))->getQuery();
             });
         });
