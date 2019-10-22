@@ -95,7 +95,7 @@ class Folder extends Model implements UserAccessible, EventLoggable
      *
      * @return BelongsTo
      */
-    public function recording(): BelongsTo
+    public function recording(): HasOne
     {
         return $this->hasOne(Recording::class);
     }
