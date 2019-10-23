@@ -75,11 +75,11 @@ class PartyAddress extends Resource
             Text::make('Postal Code')
                 ->rules('required', 'max:255'),
 
-            Text::make('Territory', 'territory_code')
-                ->rules('required', 'max:255'),
+            // Text::make('Territory', 'territory_code')
+            //     ->rules('required', 'max:255'),
 
-            Text::make('Territory Code Type', 'territory_code_type')
-                ->rules('required', 'max:255'),
+            // Text::make('Territory Code Type', 'territory_code_type')
+            //     ->rules('required', 'max:255'),
         ];
     }
 

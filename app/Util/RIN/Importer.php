@@ -454,7 +454,7 @@ class Importer
                     'city'           => (string) $postalAddress->CityName,
                     'district'       => (string) $postalAddress->DistrictName,
                     'postal_code'    => (string) $postalAddress->PostCode,
-                    'territory_code' => (string) $postalAddress->TerritoryCode,
+                    // 'territory_code' => (string) $postalAddress->TerritoryCode,
                 ];
             }
 
