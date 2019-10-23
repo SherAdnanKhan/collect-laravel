@@ -40,7 +40,17 @@ class Project extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'number', 'artist', 'label'
+        'id', 'name', 'number'
+    ];
+
+    /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static $searchRelations = [
+        'label' => ['first_name', 'last_name'],
+        'artist' => ['first_name', 'last_name'],
     ];
 
     /**
