@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use Ramsey\Uuid\Uuid;
 use App\Models\Project;
 
 class ProjectObserver
@@ -19,7 +18,12 @@ class ProjectObserver
         // the ID of the row.
 
         if (is_null($project->number) || empty($project->number)) {
-            $project->number = Uuid::uuid4();
+            $number = '';
+            for($i = 0; $i < 14; $i++) {
+                $number .= mt_rand(0, 9);
+            }
+
+            $project->number = 'VEVA' . $number;
         }
     }
 }
