@@ -58,7 +58,7 @@ class Recording extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Type', 'recording_type_id', RecordingType::class),
+            BelongsTo::make('Type', 'type', RecordingType::class),
             Text::make('User Defined Type Value', 'recording_type_user_defined_value'),
 
             BelongsTo::make('Project'),
