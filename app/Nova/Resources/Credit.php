@@ -48,7 +48,7 @@ class Credit extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'role',
+        'id',
     ];
 
     /**
@@ -57,7 +57,8 @@ class Credit extends Resource
      * @var array
      */
     public static $searchRelations = [
-        'party' => ['name'],
+        'party' => ['first_name', 'last_name'],
+        'role' => ['name'],
     ];
 
     /**

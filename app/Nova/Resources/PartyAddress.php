@@ -41,7 +41,7 @@ class PartyAddress extends Resource
      */
     public static $search = [
         'id', 'line_1', 'line_2', 'line_3',
-        'city', 'district', 'postal_code', 'territory_code',
+        'city', 'district', 'postal_code'
     ];
 
     /**
