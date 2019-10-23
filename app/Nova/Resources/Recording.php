@@ -4,6 +4,7 @@ namespace App\Nova\Resources;
 
 use App\Nova\Resource;
 use App\Nova\Resources\Party;
+use App\Nova\Resources\RecordingType;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -57,7 +58,7 @@ class Recording extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Type'),
+            BelongsTo::make('Type', 'recording_type_id', RecordingType::class),
             Text::make('User Defined Type Value', 'recording_type_user_defined_value'),
 
             BelongsTo::make('Project'),
