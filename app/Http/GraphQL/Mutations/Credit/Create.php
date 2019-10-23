@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Credit;
 
+use App\Http\GraphQL\Exceptions\ValidationException;
 use App\Models\Credit;
 use App\Models\Party;
 use App\Models\Project;
@@ -45,6 +46,15 @@ class Create
 
         if (!$party) {
             throw new AuthorizationException('Unable to find party to save credit for');
+        }
+
+        $currentSplit = $party->credits->sum('split');
+        if ($currentSplit + $input['split'] > 100) {
+            throw new ValidationException('Total Split cannot be over 100.', null, null, null, null, null, [
+                'validation' => [
+                    'split' => ['Total split cannot be over 100.']
+                ]
+            ]);
         }
 
         return $party->credits()->firstOrCreate(array_only($input, [
