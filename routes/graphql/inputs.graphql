@@ -10,6 +10,13 @@ input RenameFolderInput {
     name: String!
 }
 
+input RenameFileInput {
+    projectId: ID
+    folderId: ID
+    fileId: ID!
+    name: String!
+}
+
 input DeleteFilesInput {
     id: ID!
     type: String!

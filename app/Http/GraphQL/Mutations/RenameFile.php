@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations;
 
 use App\Http\GraphQL\Exceptions\ValidationException;
+use App\Models\File;
 use App\Models\Folder;
 use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -12,7 +13,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 /**
  * Handle the deletion of files.
  */
-class RenameFolder
+class RenameFile
 {
     /**
      * @param $rootValue
@@ -38,12 +39,12 @@ class RenameFolder
                 throw new AuthorizationException('Unable to find project to associate session to');
             }
 
-            if (!$user->can('update', [Folder::class, $project])) {
-                throw new AuthorizationException('User does not have permission to rename a folder on this project');
+            if (!$user->can('update', [File::class, $project])) {
+                throw new AuthorizationException('User does not have permission to rename a file on this project');
             }
         }
 
-        $query = Folder::where('id', $args['input']['folderId']);
+        $query = File::where('id', $args['input']['fileId']);
 
         if ($project) {
             $query = $query->where('project_id', $project->id)->userViewable();
@@ -51,39 +52,41 @@ class RenameFolder
             $query = $query->whereNull('project_id')->where('user_id', $user->id);
         }
 
-        $folder = $query->first();
-        if (!$folder) {
-            throw new AuthorizationException;
+        if ($args['input']['folderId']) {
+            $query = $query->where('folder_id', $input['input']['folderId']);
         }
 
-        if (Recording::where([
-            'folder_id', $folder->id
-        ])->count() > 0) {
-            throw new ValidationException('Cannot rename Recording Folder.');
+        $file = $query->first();
+        if (!$file) {
+            throw new AuthorizationException;
         }
 
         $name = $args['input']['name'];
         if (empty($name) || str_replace('.', '', $name) == '') {
-            throw new ValidationException('Folder with that name already exists.');
+            throw new ValidationException('File with that name already exists.');
         }
         # $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $args['input']['name']);
-        $duplicate_folder_query = Folder::where('name', 'like', $name);
+        $duplicate_file_query = File::where('name', 'like', $name);
 
         if ($project) {
-            $duplicate_folder_query = $duplicate_folder_query->where('project_id', $project->id)->userViewable();
+            $duplicate_file_query = $duplicate_file_query->where('project_id', $project->id)->userViewable();
         } else {
-            $duplicate_folder_query = $duplicate_folder_query->whereNull('project_id')->where('user_id', $user->id);
+            $duplicate_file_query = $duplicate_file_query->whereNull('project_id')->where('user_id', $user->id);
         }
 
-        $duplicate_folder_query->where('folder_id', $folder->folder_id)->where('id', '!=', $folder->id);
-
-        if ($duplicate_folder_query->count() > 0) {
-            throw new ValidationException('Folder with that name already exists.');
+        if ($args['input']['folderId']) {
+            $duplicate_file_query = $duplicate_file_query->where('folder_id', $input['input']['folderId']);
         }
 
-        $folder->name = $name;
-        $folder->save();
+        $duplicate_file_query->where('id', '!=', $file->id);
 
-        return $folder->toArray();
+        if ($duplicate_file_query->count() > 0) {
+            throw new ValidationException('File with that name already exists.');
+        }
+
+        $file->name = $name;
+        $file->save();
+
+        return $file->toArray();
     }
 }
