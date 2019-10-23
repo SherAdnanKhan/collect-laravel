@@ -180,10 +180,14 @@ class Exporter
 
                 $addressLine1 = $document->createElement('PostalAddressLine', $addressModel->line_1);
                 $postalAddress->appendChild($addressLine1);
-                $addressLine2 = $document->createElement('PostalAddressLine', $addressModel->line_2);
-                $postalAddress->appendChild($addressLine2);
-                $addressLine3 = $document->createElement('PostalAddressLine', $addressModel->line_3);
-                $postalAddress->appendChild($addressLine3);
+                if ($addressModel->line_2) {
+                    $addressLine2 = $document->createElement('PostalAddressLine', $addressModel->line_2);
+                    $postalAddress->appendChild($addressLine2);
+                }
+                if ($addressModel->line_3) {
+                    $addressLine3 = $document->createElement('PostalAddressLine', $addressModel->line_3);
+                    $postalAddress->appendChild($addressLine3);
+                }
 
                 $postalAddress->appendChild($document->createElement('CityName', $addressModel->city));
 
