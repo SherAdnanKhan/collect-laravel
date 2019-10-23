@@ -29,6 +29,7 @@
         "s-ichikawa/laravel-sendgrid-driver": "^2.0",
         "symfony/console": "4.*",
         "themsaid/nova-cashier-manager": "^0.2.1",
+        "titasgailius/search-relations": "^1.0",
         "tymon/jwt-auth": "1.0.0-rc.3"
     },
     "require-dev": {

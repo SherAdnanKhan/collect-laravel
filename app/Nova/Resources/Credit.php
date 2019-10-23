@@ -48,7 +48,16 @@ class Credit extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'party.name', 'role',
+        'id', 'role',
+    ];
+
+    /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static $searchRelations = [
+        'party' => ['name'],
     ];
 
     /**

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e57087f3cad7119d0d39c65835c3e21",
+    "content-hash": "b715fd7ae5a1d34f364a79e131b443e0",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -228,8 +228,8 @@
             "authors": [
                 {
                     "name": "Babenko Ivan",
-                    "role": "Developer",
-                    "email": "babenko.i.a@gmail.com"
+                    "email": "babenko.i.a@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "The Elasticsearch Driver for Laravel Scout",
@@ -4251,9 +4251,9 @@
             "authors": [
                 {
                     "name": "Freek Van der Herten",
-                    "role": "Developer",
                     "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be"
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
                 }
             ],
             "description": "A magic memoization function",
@@ -5900,6 +5900,42 @@
             "time": "2017-11-27T11:13:29+00:00"
         },
         {
+            "name": "titasgailius/search-relations",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TitasGailius/nova-search-relations.git",
+                "reference": "dc043261b954fca72b85ae208d52b27276385c30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TitasGailius/nova-search-relations/zipball/dc043261b954fca72b85ae208d52b27276385c30",
+                "reference": "dc043261b954fca72b85ae208d52b27276385c30",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Titasgailius\\SearchRelations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova tool.",
+            "keywords": [
+                "laravel",
+                "nova",
+                "relations",
+                "search"
+            ],
+            "time": "2019-03-15T08:17:44+00:00"
+        },
+        {
             "name": "tymon/jwt-auth",
             "version": "1.0.0-rc.3",
             "source": {
@@ -5958,9 +5994,9 @@
             "authors": [
                 {
                     "name": "Sean Tymon",
-                    "role": "Developer",
                     "email": "tymon148@gmail.com",
-                    "homepage": "https://tymon.xyz"
+                    "homepage": "https://tymon.xyz",
+                    "role": "Developer"
                 }
             ],
             "description": "JSON Web Token Authentication for Laravel and Lumen",
@@ -6246,8 +6282,8 @@
             "authors": [
                 {
                     "name": "Filipe Dobreira",
-                    "role": "Developer",
-                    "homepage": "https://github.com/filp"
+                    "homepage": "https://github.com/filp",
+                    "role": "Developer"
                 }
             ],
             "description": "php error handling for cool kids",
@@ -7110,8 +7146,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "The PHP Unit Testing framework.",
