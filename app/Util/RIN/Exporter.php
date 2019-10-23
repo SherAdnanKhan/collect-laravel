@@ -393,7 +393,7 @@ class Exporter
                         $artisticRole->setAttribute('UserDefinedValue', $recordingModel->party_role_user_defined_value);
                     }
                 } else {
-                    $artisticRole = $document->createElement('ArtisticRole', 'Unknown');
+                    $artisticRole = $document->createElement('ArtisticRole', 'Artist');
                 }
 
                 $displayArtist->appendChild($artisticRole);
