@@ -48,13 +48,16 @@ class Create
             throw new AuthorizationException('Unable to find party to save credit for');
         }
 
-        $currentSplit = $party->credits->sum('split');
-        if ($currentSplit + $input['split'] > 100) {
-            throw new ValidationException('Total Split cannot be over 100.', null, null, null, null, null, [
-                'validation' => [
-                    'split' => ['Total split cannot be over 100.']
-                ]
-            ]);
+        if ($input['contribution_type'] == 'song') {
+            $song = Song::find($input['contribution_id']);
+            $currentSplit = $song->credits->sum('split');
+            if ($currentSplit + $input['split'] > 100) {
+                throw new ValidationException('Total Split cannot be over 100.', null, null, null, null, null, [
+                    'validation' => [
+                        'split' => ['Total split cannot be over 100.']
+                    ]
+                ]);
+            }
         }
 
         return $party->credits()->firstOrCreate(array_only($input, [
