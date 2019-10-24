@@ -61,11 +61,21 @@ class File extends Model implements UserAccessible
             'id' => [
                 'type' => 'integer',
             ],
-            'project_id' => [
-                'type' => 'integer',
+            'project' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
             ],
-            'user_id' => [
-                'type' => 'integer',
+            'artist' => [
+                'type' => 'text',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
             ],
             'name' => [
                 'type' => 'text',
@@ -74,7 +84,7 @@ class File extends Model implements UserAccessible
                 //         'type' => 'keyword',
                 //     ]
                 // ]
-            ]
+            ],
         ]
     ];
 
@@ -83,15 +93,15 @@ class File extends Model implements UserAccessible
      *
      * @return array
      */
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'id' => $this->attributes['id'],
-    //         'project_id' => $this->attributes['project_id'],
-    //         'user_id' => $this->attributes['user_id'],
-    //         'name' => $this->attributes['name'] . $this->attributes['project_id']
-    //     ];
-    // }
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->attributes['id'],
+            'project' => $this->project->name,
+            'artist' => $this->project->artist->name,
+            'name' => $this->attributes['name']
+        ];
+    }
 
     /**
      * Get whether this file is previable
