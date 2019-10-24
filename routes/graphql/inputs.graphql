@@ -54,7 +54,7 @@ input DeleteProjectInput {
 
 input UpdateProjectInput {
     id: ID!
-    name: String @rules(apply: ["min:4", "max:255"])
+    name: String @rules(apply: ["min:2", "max:255"])
     image: String
     label_id: ID
     main_artist_id: ID
@@ -63,7 +63,7 @@ input UpdateProjectInput {
 }
 
 input CreateProjectInput {
-    name: String! @rules(apply: ["required", "min:4", "max:255"])
+    name: String! @rules(apply: ["required", "min:2", "max:255"])
     image: String
     label_id: ID
     main_artist_id: ID
