@@ -97,8 +97,8 @@ class File extends Model implements UserAccessible
     {
         return [
             'id' => $this->attributes['id'],
-            'project' => $this->project->name,
-            'artist' => $this->project->artist->name,
+            'project' => $this->project ? $this->project->name : '',
+            'artist' => $this->project && $this->project->artist ? $this->project->artist->name : '',
             'name' => $this->attributes['name']
         ];
     }
