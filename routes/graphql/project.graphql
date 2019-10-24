@@ -88,6 +88,7 @@ type Folder implements Favoured & Commentable & EventLoggable {
 	parent: Folder @belongsTo
 	files: [File] @hasMany
 	folders: [Folder] @hasMany
+	recording: [Recording] @hasOne
 	name: String!
 	depth: Int!
 	path: [FolderPath]
