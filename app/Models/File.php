@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Contracts\UserAccessible;
 use App\ElasticSearch\FilesIndexConfigurator;
-use App\ElasticSearch\NameSearchRule;
 use App\Models\Folder;
 use App\Models\Project;
 use App\Models\User;
@@ -17,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
+use App\ElasticSearch\NameSearchRule;
 
 /**
  * Represent a file that has been uploaded by a user into the system.
@@ -52,7 +52,7 @@ class File extends Model implements UserAccessible
     protected $indexConfigurator = FilesIndexConfigurator::class;
 
     protected $searchRules = [
-        // NameSearchRule::class
+        NameSearchRule::class
     ];
 
     // Here you can specify a mapping for a model fields.
@@ -61,8 +61,16 @@ class File extends Model implements UserAccessible
             'id' => [
                 'type' => 'integer',
             ],
-            'project' => [
-                'type' => 'text',
+            'project_id' => [
+                'type' => 'integer',
+                // 'fields' => [
+                //     'raw' => [
+                //         'type' => 'keyword',
+                //     ]
+                // ]
+            ],
+            'user_id' => [
+                'type' => 'integer',
                 // 'fields' => [
                 //     'raw' => [
                 //         'type' => 'keyword',
@@ -87,21 +95,6 @@ class File extends Model implements UserAccessible
             ],
         ]
     ];
-
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        return [
-            'id' => $this->attributes['id'],
-            'project' => $this->project ? $this->project->name : '',
-            'artist' => $this->project && $this->project->artist ? $this->project->artist->name : '',
-            'name' => $this->attributes['name']
-        ];
-    }
 
     /**
      * Get whether this file is previable

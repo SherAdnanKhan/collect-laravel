@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
+use App\ElasticSearch\TitleSearchRule;
 
 class Recording extends Model implements UserAccessible, EventLoggable, Creditable
 {
@@ -67,7 +68,7 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     protected $indexConfigurator = RecordingsIndexConfigurator::class;
 
     protected $searchRules = [
-        // NameSearchRule::class
+        TitleSearchRule::class
     ];
 
     // Here you can specify a mapping for a model fields.
@@ -111,16 +112,16 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
      *
      * @return array
      */
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'id' => $this->attributes['id'],
-    //         'project_id' => $this->attributes['project_id'],
-    //         'user_id' => $this->attributes['user_id'],
-    //         'name' => $this->attributes['name'] . $this->attributes['project_id']
-    //     ];
-    // }
+    public function toSearchableArray()
+    {
+        $arr = array_only($this->toArray(), ['id', 'name', 'subtitle', 'isrc', 'project_id']);
+        $arr['artist'] = $this->party ?
+            array_only($this->party->toArray(), ['first_name', 'middle_name', 'last_name']) :
+            ['first_name' => '', 'middle_name' => '', 'last_name' => ''];
+        $arr['collaborators'] =  join(", ", $this->collaborators->pluck('name')->toArray());
 
+        return $arr;
+    }
 
     /**
      * Get the collaborator users for this project.
@@ -233,9 +234,9 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     {
         $user = $this->getUser($data);
 
-        $query = $query->where(function($q) use ($user) {
+        $query = $query->where(function ($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
-        })->orWhere(function($q) use ($user) {
+        })->orWhere(function ($q) use ($user) {
             return (new CollaboratorRecordingAccess($q, $user))->getQuery();
         });
 
