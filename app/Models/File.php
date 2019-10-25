@@ -49,6 +49,8 @@ class File extends Model implements UserAccessible
      */
     protected $dates = ['deleted_at'];
 
+    protected $touches = ['project'];
+
     protected $indexConfigurator = FilesIndexConfigurator::class;
 
     protected $searchRules = [

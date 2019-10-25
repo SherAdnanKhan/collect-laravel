@@ -27,6 +27,8 @@ class Party extends Model implements UserAccessible
 
     protected $table = 'parties';
 
+    protected $touches = ['projectArtist', 'projectLabel'];
+
     /**
      * The attributes that are mass assignable.
      *

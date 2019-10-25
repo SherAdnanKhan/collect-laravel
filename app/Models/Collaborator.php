@@ -37,6 +37,8 @@ class Collaborator extends Model implements UserAccessible, EventLoggable
         'type', 'user_id', 'project_id', 'email', 'name'
     ];
 
+    protected $touches = ['project', 'recordings'];
+
     /**
      * The user who this collaborator represents
      *

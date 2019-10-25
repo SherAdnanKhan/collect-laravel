@@ -22,12 +22,16 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use ScoutElastic\Searchable;
+use App\ElasticSearch\SongsIndexConfigurator;
+use App\ElasticSearch\NameSearchRule;
 
 class Song extends Model implements UserAccessible, Creditable
 {
     use UserAccesses;
     use OrderScopes;
     use SoftDeletes;
+    use Searchable;
 
     protected $fillable = [
         'user_id', 'song_type_id', 'song_type_user_defined_value', 'iswc', 'title',
@@ -37,6 +41,32 @@ class Song extends Model implements UserAccessible, Creditable
 
     protected $casts = [
         'created_on' => 'date'
+    ];
+
+    protected $indexConfigurator = SongsIndexConfigurator::class;
+
+    protected $searchRules = [
+        NameSearchRule::class
+    ];
+
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer'
+            ],
+            'user_id' => [
+                'type' => 'integer'
+            ],
+            'iscw' => [
+                'type' => 'text'
+            ],
+            'title' => [
+                'type' => 'text'
+            ],
+            'subtitle' => [
+                'type' => 'text'
+            ]
+        ]
     ];
 
     /**
