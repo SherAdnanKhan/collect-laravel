@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
+use App\ElasticSearch\NameSearchRule;
+use Illuminate\Support\Facades\Log;
 
 class Session extends Model implements UserAccessible, EventLoggable, Creditable
 {
@@ -53,7 +55,7 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     protected $indexConfigurator = SessionsIndexConfigurator::class;
 
     protected $searchRules = [
-        // NameSearchRule::class
+        NameSearchRule::class
     ];
 
     // Here you can specify a mapping for a model fields.
@@ -72,7 +74,19 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
                 //         'type' => 'keyword',
                 //     ]
                 // ]
-            ]
+            ],
+            'started_at' => [
+                'type' => 'text',
+            ],
+            'ended_at' => [
+                'type' => 'text',
+            ],
+            'session_type' => [
+                'type' => 'text',
+            ],
+            'venue' => [
+                'type' => 'text',
+            ],
         ]
     ];
 
@@ -81,15 +95,13 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
      *
      * @return array
      */
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'id' => $this->attributes['id'],
-    //         'project_id' => $this->attributes['project_id'],
-    //         'user_id' => $this->attributes['user_id'],
-    //         'name' => $this->attributes['name'] . $this->attributes['project_id']
-    //     ];
-    // }
+    public function toSearchableArray()
+    {
+        $arr = array_only($this->toArray(), ['id', 'name', 'started_at', 'ended_at', 'project_id']);
+        $arr['session_type'] = $this->sessionType->name;
+        $arr['venue'] = $this->venue->name;
+        return $arr;
+    }
 
     /**
      * The project who owns this song.

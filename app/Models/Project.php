@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\Creditable;
 use App\Contracts\EventLoggable;
 use App\Contracts\UserAccessible;
+use App\ElasticSearch\NameSearchRule;
 use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
 use App\Models\Comment;
@@ -33,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ScoutElastic\Searchable;
+use App\ElasticSearch\ProjectsIndexConfigurator;
 
 class Project extends Model implements UserAccessible, EventLoggable, Creditable
 {
@@ -41,6 +44,7 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     use OrderScopes;
     use SoftDeletes;
     use SoftCascadeTrait;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +66,62 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
         'folders', 'files', 'recordings',
         'sessions', 'credits'
     ];
+
+    protected $indexConfigurator = ProjectsIndexConfigurator::class;
+
+    protected $searchRules = [
+        NameSearchRule::class
+    ];
+
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer',
+            ],
+            'name' => [
+                'type' => 'text',
+            ],
+            'user_id' => [
+                'type' => 'integer'
+            ],
+            'main_artist_id' => [
+                'type' => 'integer'
+            ],
+            'files' => [
+                'type' => 'keyword'
+            ]
+        ]
+    ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $arr = $this->toArray();
+
+        $arr['artist'] = $this->artist ?
+            array_only($this->artist->toArray(), ['first_name', 'middle_name', 'last_name']) : ['first_name' => '', 'middle_name' => '', 'last_name' => ''];
+
+        $arr['label'] =  $this->label ?
+            array_only($this->label->toArray(), ['first_name']) : ['first_name' => ''];
+
+        $arr['collaborators'] = $this->collaborators ? $this->collaborators->pluck('name')->toArray() : [];
+
+        $arr['credits'] = $this->credits ? $this->credits->map(function ($data) {
+            return array_only($data->toArray(), ['first_name', 'middle_name', 'last_name']);
+        })->toArray() : [];
+
+        $arr['recordings'] = $this->recordings ? $this->recordings->map(function ($data) {
+            return array_only($data->toArray(), ['name', 'subtitle']);
+        })->toArray() : [];
+
+        $arr['files'] = $this->files ? $this->files->pluck('name')->toArray() : [];
+
+        return $arr;
+    }
 
     /**
      * The user owner for this project.
@@ -237,14 +297,13 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
 
         // Add to the query a check to see if the user
         // has read permission on the project, or owns it.
-        return $query->where(function($q) use ($user) {
+        return $query->where(function ($q) use ($user) {
             return (new CollaboratorPermission($q, $user, ['project'], ['read']))->getQuery();
         })
-        ->orWhere(function($q) use ($user) {
-            return (new CollaboratorRecordingAccess($q, $user))->getQuery();
-        })
-        ->orWhere('user_id', $user->getAuthIdentifier());
-
+            ->orWhere(function ($q) use ($user) {
+                return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+            })
+            ->orWhere('user_id', $user->getAuthIdentifier());
     }
 
     /**
@@ -329,7 +388,7 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     {
         $query = $this->newQuery()->select('projects.id')
             ->where('projects.id', $this->getKey())
-            ->where(function($q) use ($user, $types, $permissions) {
+            ->where(function ($q) use ($user, $types, $permissions) {
                 return (new CollaboratorPermission($q, $user, $types, $permissions))
                     ->getQuery()
                     ->orWhere('projects.user_id', $user->getKey());

@@ -4,7 +4,7 @@ namespace App\ElasticSearch;
 
 use ScoutElastic\SearchRule;
 
-class NameSearchRule extends SearchRule
+class TitleSearchRule extends SearchRule
 {
     /**
      * @inheritdoc
