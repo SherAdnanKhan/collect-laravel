@@ -41,7 +41,7 @@ class FolderPolicy
     public function update(User $user, Project $project, Folder $folder)
     {
         $updatePermission = $project->userPolicy($user, ['file'], ['update']);
-        $rootFolder = $folder->rootFolder;
+        $rootFolder = ($folder->root_folder_id ? $folder->rootFolder : $folder);
         if (!$rootFolder || $rootFolder->recording()->count() < 1) {
             return $updatePermission;
         }

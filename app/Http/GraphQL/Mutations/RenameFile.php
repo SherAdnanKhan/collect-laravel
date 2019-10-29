@@ -43,13 +43,13 @@ class RenameFile
         $query = File::where('id', $args['input']['fileId']);
 
         if ($project) {
-            $query = $query->where('project_id', $project->id)->userViewable();
+            $query = $query->where('project_id', $project->id);
         } else {
             $query = $query->whereNull('project_id')->where('user_id', $user->id);
         }
 
         if ($args['input']['folderId']) {
-            $query = $query->where('folder_id', $input['input']['folderId']);
+            $query = $query->where('folder_id', $args['input']['folderId']);
         }
 
         $file = $query->first();
@@ -58,7 +58,7 @@ class RenameFile
         }
 
         if ($project && !$user->can('update', [Folder::class, $project, $file->folder])) {
-            throw new AuthorizationException('User does not have permission to update this folder');
+            throw new AuthorizationException('User does not have permission to update this file');
         }
 
         $name = $args['input']['name'];
@@ -75,7 +75,7 @@ class RenameFile
         }
 
         if ($args['input']['folderId']) {
-            $duplicate_file_query = $duplicate_file_query->where('folder_id', $input['input']['folderId']);
+            $duplicate_file_query = $duplicate_file_query->where('folder_id', $args['input']['folderId']);
         }
 
         $duplicate_file_query->where('id', '!=', $file->id);
