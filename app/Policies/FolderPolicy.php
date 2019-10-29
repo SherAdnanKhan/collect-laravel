@@ -22,7 +22,7 @@ class FolderPolicy
     public function create(User $user, Project $project, ?Folder $rootFolder)
     {
         $createPermission = $project->userPolicy($user, ['file'], ['create']);
-        if (!$rootFolder || $rootFolder->recording()->count() < 1) {
+        if ($createPermission || !$rootFolder || $rootFolder->recording()->count() < 1) {
             return $createPermission;
         }
 
@@ -42,7 +42,7 @@ class FolderPolicy
     {
         $updatePermission = $project->userPolicy($user, ['file'], ['update']);
         $rootFolder = ($folder->root_folder_id ? $folder->rootFolder : $folder);
-        if (!$rootFolder || $rootFolder->recording()->count() < 1) {
+        if ($updatePermission || !$rootFolder || $rootFolder->recording()->count() < 1) {
             return $updatePermission;
         }
 
