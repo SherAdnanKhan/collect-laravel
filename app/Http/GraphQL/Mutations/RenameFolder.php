@@ -5,6 +5,7 @@ namespace App\Http\GraphQL\Mutations;
 use App\Http\GraphQL\Exceptions\ValidationException;
 use App\Models\Folder;
 use App\Models\Project;
+use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -31,24 +32,20 @@ class RenameFolder
     {
         $user = auth()->user();
 
+        $query = Folder::where('id', $args['input']['folderId']);
+
         $project = false;
         if ($args['input']['projectId']) {
             $project = Project::where('id', $args['input']['projectId'])->userViewable()->first();
             if (!$project) {
                 throw new AuthorizationException('Unable to find project to associate session to');
             }
-
-            if (!$user->can('update', [Folder::class, $project])) {
-                throw new AuthorizationException('User does not have permission to rename a folder on this project');
-            }
         }
 
-        $query = Folder::where('id', $args['input']['folderId']);
-
         if ($project) {
-            $query = $query->where('project_id', $project->id)->userViewable();
+            $query->where('project_id', $project->id);
         } else {
-            $query = $query->whereNull('project_id')->where('user_id', $user->id);
+            $query->whereNull('project_id')->where('user_id', $user->id);
         }
 
         $folder = $query->first();
@@ -57,9 +54,13 @@ class RenameFolder
         }
 
         if (Recording::where([
-            'folder_id', $folder->id
+            'folder_id' => $folder->id
         ])->count() > 0) {
             throw new ValidationException('Cannot rename Recording Folder.');
+        }
+
+        if ($project && !$user->can('update', [Folder::class, $project, $folder])) {
+            throw new AuthorizationException('User does not have permission to update this folder');
         }
 
         $name = $args['input']['name'];

@@ -37,13 +37,9 @@ class CreateFolder
             if (!$project) {
                 throw new AuthorizationException('Unable to find project to associate session to');
             }
-
-            if (!$user->can('create', [Folder::class, $project])) {
-                throw new AuthorizationException('User does not have permission to create a folder on this project');
-            }
         }
 
-        $parent_folder = false;
+        $parent_folder = null;
         if (isset($args['input']['folderId'])) {
             $query = Folder::where('id', $args['input']['folderId']);
 
@@ -57,6 +53,10 @@ class CreateFolder
             if (!$parent_folder) {
                 throw new AuthorizationException;
             }
+        }
+
+        if ($project && !$user->can('create', [Folder::class, $project, $parent_folder])) {
+            throw new AuthorizationException('User does not have permission to create a folder on this project');
         }
 
         $name = $args['input']['name'];
@@ -85,6 +85,7 @@ class CreateFolder
         $folder = Folder::create([
             'project_id' => ($project ? $project->id : null),
             'folder_id' => ($parent_folder ? $parent_folder->id : null),
+            'root_folder_id' => ($parent_folder ? ($parent_folder->root_folder_id ? $parent_folder->root_folder_id : $parent_folder->id) : null),
             'user_id' => $user->id,
             'name' => $name,
             'depth' => ($parent_folder ? $parent_folder->depth + 1 : 0)

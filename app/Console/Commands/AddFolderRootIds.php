@@ -39,7 +39,7 @@ class AddFolderRootIds extends Command
      */
     public function handle()
     {
-        $folders = Folder::where('folder_id', 0)->get();
+        $folders = Folder::whereNull('folder_id')->get();
         foreach ($folders as $folder) {
             $this->updateFolders($folder, true);
         }
