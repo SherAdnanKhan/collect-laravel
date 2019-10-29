@@ -48,7 +48,7 @@ class RenameFile
             $query = $query->whereNull('project_id')->where('user_id', $user->id);
         }
 
-        if ($args['input']['folderId']) {
+        if (isset($args['input']['folderId'])) {
             $query = $query->where('folder_id', $args['input']['folderId']);
         }
 
@@ -74,7 +74,7 @@ class RenameFile
             $duplicate_file_query = $duplicate_file_query->whereNull('project_id')->where('user_id', $user->id);
         }
 
-        if ($args['input']['folderId']) {
+        if (isset($args['input']['folderId'])) {
             $duplicate_file_query = $duplicate_file_query->where('folder_id', $args['input']['folderId']);
         }
 
