@@ -32,16 +32,15 @@ class RenameFolder
     {
         $user = auth()->user();
 
-        $query = Folder::where('id', $args['input']['folderId']);
-
         $project = false;
         if ($args['input']['projectId']) {
             $project = Project::where('id', $args['input']['projectId'])->userViewable()->first();
             if (!$project) {
-                throw new AuthorizationException('Unable to find project to associate session to');
+                throw new AuthorizationException('Unable to find project');
             }
         }
 
+        $query = Folder::where('id', $args['input']['folderId']);
         if ($project) {
             $query->where('project_id', $project->id);
         } else {

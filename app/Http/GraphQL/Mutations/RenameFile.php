@@ -36,11 +36,7 @@ class RenameFile
         if ($args['input']['projectId']) {
             $project = Project::where('id', $args['input']['projectId'])->userViewable()->first();
             if (!$project) {
-                throw new AuthorizationException('Unable to find project to associate session to');
-            }
-
-            if (!$user->can('update', [File::class, $project])) {
-                throw new AuthorizationException('User does not have permission to rename a file on this project');
+                throw new AuthorizationException('Unable to find project');
             }
         }
 
@@ -59,6 +55,10 @@ class RenameFile
         $file = $query->first();
         if (!$file) {
             throw new AuthorizationException;
+        }
+
+        if ($project && !$user->can('update', [Folder::class, $project, $file->folder])) {
+            throw new AuthorizationException('User does not have permission to update this folder');
         }
 
         $name = $args['input']['name'];
