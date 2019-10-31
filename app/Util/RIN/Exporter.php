@@ -5,11 +5,12 @@ namespace App\Util\RIN;
 use App\Contracts\Creditable;
 use App\Models\Party;
 use App\Models\Project;
-use App\Models\User;
 use App\Models\Recording;
+use App\Models\User;
 use Carbon\Carbon;
 use DOMDocument;
 use DOMElement;
+use Hashids\Hashids;
 use Illuminate\Support\Facades\App;
 use SimpleXMLElement;
 
@@ -355,6 +356,8 @@ class Exporter
     {
         $recordingList = $document->createElement('ResourceList');
 
+        $hashids = new Hashids(config('app.key'), 14);
+
         $recordingModels = $this->recording ? [$this->recording] : $this->project->recordings;
         foreach ($recordingModels as $recordingModel) {
             if (!$recordingModel->song) {
@@ -400,11 +403,18 @@ class Exporter
                 $soundRecording->appendChild($displayArtist);
             }
 
+            $soundRecordingId = $document->createElement('SoundRecordingId');
+
             if (!is_null($recordingModel->isrc)) {
-                $soundRecordingId = $document->createElement('SoundRecordingId');
                 $soundRecordingId->appendChild($document->createElement('ISRC', $recordingModel->isrc));
                 $soundRecording->appendChild($soundRecordingId);
             }
+
+            $proprietaryId = $document->createElement('ProprietaryId', 'VEVA-' . $hashids->encode($recordingModel->id));
+            $proprietaryId->setAttribute('Namespace', 'SoundRecordingId');
+
+            $soundRecordingId->appendChild($proprietaryId);
+            $soundRecording->appendChild($soundRecordingId);
 
             $soundRecording->appendChild($document->createElement('ResourceReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
 
