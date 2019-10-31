@@ -243,6 +243,26 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
         return $this->wrapUserRelationCheck($user, $query);
     }
 
+    /**
+     * Specify the scope for how a user is able to see a recording.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        $query = $query->where(function ($q) use ($user) {
+            return (new ProjectAccess($q, $user, [$this->getTypeName()], ['update']))->getQuery();
+        })->orWhere(function ($q) use ($user) {
+            return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+        });
+
+        return $this->wrapUserRelationCheck($user, $query);
+    }
+
     public function getContributorRoleTypes($version = '1.1'): array
     {
         return ['NewStudioRole', 'CreativeContributorRole'];
