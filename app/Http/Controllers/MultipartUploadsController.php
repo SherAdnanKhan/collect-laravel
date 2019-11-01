@@ -120,6 +120,7 @@ class MultipartUploadsController extends Controller
                 'user_id' => $user->id,
                 'project_id' => ($project ? $project->id : null),
                 'folder_id' => ($currentFolder ? $currentFolder->id : null),
+                'root_folder_id' => ($currentFolder ? ($currentFolder->root_folder_id ? $currentFolder->root_folder_id : $currentFolder->id) : null),
                 'name' => $name,
                 'depth' => $depth
             ]);
@@ -187,7 +188,7 @@ class MultipartUploadsController extends Controller
             'PartNumber'    => $request->get('number'),
         ]);
 
-        $request = $s3->createPresignedRequest($cmd, '+5 minutes');
+        $request = $s3->createPresignedRequest($cmd, '+1 hour');
 
         return response()->json([
             'url' => (string)$request->getUri()
