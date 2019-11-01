@@ -190,7 +190,7 @@ class Folder extends Model implements UserAccessible, EventLoggable
         })->orWhere(function($q) use ($user) {
             return $q->whereHas('recording', function($q) use ($user) {
                 return (new CollaboratorRecordingAccess($q, $user))->getQuery();
-            })->orWhere(function($q) {
+            })->orWhere(function($q) use ($user) {
                 return $q->whereHas('rootFolder', function ($q) use ($user) {
                     return $q->whereHas('recording', function($q) use ($user) {
                         return (new CollaboratorRecordingAccess($q, $user))->getQuery();
@@ -220,7 +220,7 @@ class Folder extends Model implements UserAccessible, EventLoggable
         })->orWhere(function($q) use ($user) {
             return $q->whereHas('recording', function($q) use ($user) {
                 return (new CollaboratorRecordingAccess($q, $user))->getQuery();
-            })->orWhere(function($q) {
+            })->orWhere(function($q) use ($user) {
                 return $q->whereHas('rootFolder', function ($q) use ($user) {
                     return $q->whereHas('recording', function($q) use ($user) {
                         return (new CollaboratorRecordingAccess($q, $user))->getQuery();
