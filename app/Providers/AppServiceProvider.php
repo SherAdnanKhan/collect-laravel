@@ -6,6 +6,7 @@ use App\Http\GraphQL\Directives\RenameInputDirective;
 use App\Models\Collaborator;
 use App\Models\Comment;
 use App\Models\Credit;
+use App\Models\CreditRole;
 use App\Models\EventLog;
 use App\Models\File;
 use App\Models\Folder;
@@ -18,11 +19,13 @@ use App\Models\User;
 use App\Observers\CollaboratorObserver;
 use App\Observers\CommentObserver;
 use App\Observers\CreditObserver;
+use App\Observers\CreditableObserver;
 use App\Observers\EventLogObserver;
 use App\Observers\EventLoggableObserver;
 use App\Observers\FavouredObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
+use App\Observers\SongObserver;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -59,6 +62,13 @@ class AppServiceProvider extends ServiceProvider
         Folder::observe(FolderObserver::class);
         Project::observe(ProjectObserver::class);
         User::observe(UserObserver::class);
+
+        CreditRole::observe(CreditableObserver::class);
+        Party::observe(CreditableObserver::class);
+        Project::observe(CreditableObserver::class);
+        Recording::observe(CreditableObserver::class);
+        Session::observe(CreditableObserver::class);
+        Song::observe(CreditableObserver::class);
 
         Collaborator::observe(EventLoggableObserver::class);
         Comment::observe(EventLoggableObserver::class);
