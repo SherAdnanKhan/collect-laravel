@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\Recording;
 
@@ -53,12 +54,15 @@ class PDFExporter
     {
         $snappy = resolve('snappy.pdf.wrapper');
 
-        return $snappy->loadView('pdfs.export', $this->getViewData());
+        return $snappy->setPaper('a4')
+            ->setOption('margin-bottom', 0)
+            ->loadView('pdfs.export', $this->getViewData());
     }
 
     private function getViewData(): array
     {
         $data = [
+            'datestamp' => Carbon::now()->toDateString(),
             'test' => 'Hello World',
         ];
 
