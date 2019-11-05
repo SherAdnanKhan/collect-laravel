@@ -17,7 +17,7 @@ class UpdateAllCredits extends Command
      *
      * @var string
      */
-    protected $signature = 'creidts:update';
+    protected $signature = 'credits:update';
 
     /**
      * The console command description.

@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Contracts\Creditable;
 use Illuminate\Support\Facades\Log;
 
 class CreditableObserver
@@ -13,7 +12,7 @@ class CreditableObserver
      * @param  \App\Contracts\Creditable  $resource
      * @return void
      */
-    public function saved(Creditable $resource)
+    public function saved($resource)
     {
         foreach ($resource->credits as $credit) {
             $credit->save();
