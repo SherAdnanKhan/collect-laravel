@@ -15,106 +15,116 @@
         <div class="block">
             <p>
                 <!-- Main Artist Name -->
-                <span>Craig Childs</span>
+                @if($project->artist)
+                    <span>{{ $project->artist->name }}</span>
+                @endif
                 <!-- Project Name -->
-                <span>"Example Project Name"</span>
+                <span>"{{ $project->name }}"</span>
             </p>
             <p>
                 <!-- Label Name -->
-                <span>Capitol Records</span>
+                @if($project->label)
+                    <span>{{ $project->label->name }}</span>
+                @endif
                 <!-- Project Number -->
-                <span>#VEVA7812387123</span>
+                <span>#{{ $project->number }}</span>
             </p>
             <p>
                 <!-- Total # of Recordings -->
                 <span>TOTAL RECORDINGS:</span>
-                <span>12</span>
+                <span>{{ $project->recordings()->count() }}</span>
             </p>
             <p>
                 <!-- Total # of Files -->
                 <span>TOTAL FILES:</span>
-                <span>2,794</span>
+                <span>{{ $project->files()->count() }}</span>
             </p>
             <p>
                 <!-- Project Notes -->
                 <span>PROJECT NOTES:</span>
-                <span>Lorem ipsum dolor sit amet, con carne avec mi danke gracias, mucho, gusto amor.</span>
+                <span>{{ !empty($project->description) ? $project->description : 'none' }}</span>
             </p>
         </div>
 
         <!-- Recording fields -->
-        @foreach(range(1, 2) as $i)
+        @foreach($recordings as $recording)
             <div class="block">
                 <p>
                     <!-- Song Title -->
-                    <span><strong>"Prove You Wrong"</strong></span>
+                    <span><strong>"{{ $recording->song->title }}"</strong></span>
                 </p>
+                @if(!empty($recording->version))
                 <p>
                     <!-- Version -->
-                    <span>Version 2</span>
+                    <span>{{ $recording->version }}</span>
                 </p>
+                @endif
+                @if(!empty($recording->subtitle))
                 <p>
                     <!-- Subtitle -->
-                    <span>Lorem Ipsum</span>
+                    <span>{{ $recording->subtitle }}</span>
                 </p>
+                @endif
                 <p>
                     <!-- ISRC -->
                     <span>ISRC: </span>
-                    <span>US-VE-12-12451</span>
+                    <span>{{ $recording->isrc }}</span>
                 </p>
                 <p>
                     <!-- Duration -->
                     <span>Duration: </span>
-                    <span>0h 5m 23s</span>
+                    <span>{{ sprintf('%02d:%02d:%02d', ($recording->duration/3600),($recording->duration/60%60), $recording->duration%60) }}</span>
                 </p>
                 <p>
                     <!-- Tempo -->
                     <span>Tempo: </span>
-                    <span>72bpm</span>
+                    <span>{{ $recording->tempo }}</span>
                 </p>
                 <p>
                     <!-- Key Signature -->
                     <span>Key Signature: </span>
-                    <span>A#</span>
+                    <span>{{ $recording->key_signature }}</span>
+                </p>
+                <p>
+                    <!-- Time Signature -->
+                    <span>Time Signature: </span>
+                    <span>{{ $recording->time_signature }}</span>
                 </p>
                 <p>
                     <!-- Recorded date -->
                     <span>Recorded On: </span>
-                    <span>2019-03-29</span>
+                    <span>{{ $recording->recorded_on->toDateString() }}</span>
                 </p>
                 <p>
                     <!-- Mixed date -->
                     <span>Mixed On: </span>
-                    <span>2019-04-05</span>
+                    <span>{{ $recording->mixed_on->toDateString() }}</span>
+                </p>
+            </div>
+
+            <!-- Recording Parties -->
+            <div class="block">
+                <!-- Roles -->
+                @foreach($recording->credits->mapToGroups(function ($item, $key) {
+                    return [$item->role->name => $item];
+                }) as $roleGroupName => $roleGroup)
+                    <p>
+                        <span>{{ $roleGroupName }}: </span>
+                        <span>{{ collect($roleGroup)->implode('party.name', ', ') }}</span>
+                    </p>
+                @endforeach
+                <!-- Musicians, by instrument -->
+                <p>
+                    <span>Bass: </span>
+                    <span>Chris Neal</span>
+                </p>
+                <p>
+                    <span>Electric Guitar: </span>
+                    <span>Joel Currie, Craig Childs</span>
                 </p>
             </div>
         @endforeach
 
-        <!-- Recording Parties -->
-        <div class="block">
-            <!-- Roles -->
-            <p>
-                <span>Producer: </span>
-                <span>Chris Neal, Craig Childs, Deborah Fairchild</span>
-            </p>
-            <p>
-                <span>Tracking Engineer: </span>
-                <span>Kieran Osgood, Wes Bos</span>
-            </p>
-            <p>
-                <span>Vocal Engineer: </span>
-                <span>Chris Neal, Craig Childs</span>
-            </p>
-            <!-- Musicians, by instrument -->
-            <p>
-                <span>Bass: </span>
-                <span>Chris Neal</span>
-            </p>
-            <p>
-                <span>Electric Guitar: </span>
-                <span>Joel Currie, Craig Childs</span>
-            </p>
-        </div>
 
         <!-- Session Credits -->
         {{-- Sessions Listed in this order: Tracking always first, Mixing and Mastering always the last two - any
