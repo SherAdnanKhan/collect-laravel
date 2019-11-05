@@ -54,9 +54,10 @@ class PDFExporter
     {
         $snappy = resolve('snappy.pdf.wrapper');
 
-        return $snappy->setPaper('a4')
+        return $snappy->loadView('pdfs.export', $this->getViewData())
+            ->setPaper('a4')
             ->setOption('margin-bottom', 0)
-            ->loadView('pdfs.export', $this->getViewData());
+            ->setOption('footer-right', 'Page [page] of [toPage]');
     }
 
     private function getViewData(): array
