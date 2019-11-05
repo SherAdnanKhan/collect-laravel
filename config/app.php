@@ -182,9 +182,10 @@ return [
          * Package Service Providers...
          */
         \Nuwave\Lighthouse\Subscriptions\SubscriptionServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        \Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Nuwave\Lighthouse\LighthouseServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
+        \Intervention\Image\ImageServiceProvider::class,
+        \Barryvdh\Snappy\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -250,6 +251,8 @@ return [
 
         'GraphQL' => \Nuwave\Lighthouse\Support\Facades\GraphQLFacade::class,
         'Image' => Intervention\Image\Facades\Image::class
+
+
 
     ],
 

@@ -28,8 +28,13 @@ Route::post('project-thumbnail-upload', '\App\Http\Controllers\ProjectThumbnailU
 
 // The RIN import/export routes.
 Route::prefix('rin')->middleware('auth:api')->group(function () {
-    Route::any('/import', '\App\Http\Controllers\RINController@import');
+    // Route::any('/import', '\App\Http\Controllers\RINController@import');
     Route::get('/export', '\App\Http\Controllers\RINController@export');
+});
+
+// The PDF
+Route::prefix('pdf')->middleware('auth:api')->group(function () {
+    Route::get('/export', '\App\Http\Controllers\PDFController@export');
 });
 
 // Any routes defined in this group adhere to basic token authentication
