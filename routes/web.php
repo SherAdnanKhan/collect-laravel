@@ -16,12 +16,12 @@ Route::get('/', function () {
 });
 
 // Example rendering of PDF as a html view
-Route::get('pdf-example', function() {
-    return view('pdfs.export', [
-        'datestamp' => \Carbon\Carbon::now()->toDateString(),
-        'test' => 'Hello World',
-    ]);
-});
+// Route::get('pdf-example', function() {
+//     return view('pdfs.export', [
+//         'datestamp' => \Carbon\Carbon::now()->toDateString(),
+//         'test' => 'Hello World',
+//     ]);
+// });
 
 // How to test an email.
 // Route::get('mailable', function () {
