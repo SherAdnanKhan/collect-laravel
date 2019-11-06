@@ -104,60 +104,127 @@
 
             <!-- Recording Parties -->
             <div class="block">
+                @php
+                    // Filter only musicians and map them
+                    // by their instruments.
+                    $musicians = $recording->credits->filter(function($item) {
+                        return $item->role->ddex_key === 'Musician';
+                    })->mapToGroups(function($item) {
+                        return [$item->instrument->name => $item];
+                    });
+
+                    // Filter out non-musician credits
+                    // and then map them by their roles.
+                    $nonMusicians = $recording->credits->filter(function($item) {
+                        return $item->role->ddex_key !== 'Musician';
+                    })->mapToGroups(function ($item, $key) {
+                        return [$item->role->name => $item];
+                    });
+                @endphp
+
                 <!-- Roles -->
-                @foreach($recording->credits->mapToGroups(function ($item, $key) {
-                    return [$item->role->name => $item];
-                }) as $roleGroupName => $roleGroup)
+                @foreach($nonMusicians as $roleGroupName => $roleGroup)
                     <p>
                         <span>{{ $roleGroupName }}: </span>
                         <span>{{ collect($roleGroup)->implode('party.name', ', ') }}</span>
                     </p>
                 @endforeach
                 <!-- Musicians, by instrument -->
-                <p>
-                    <span>Bass: </span>
-                    <span>Chris Neal</span>
-                </p>
-                <p>
-                    <span>Electric Guitar: </span>
-                    <span>Joel Currie, Craig Childs</span>
-                </p>
+                @foreach($musicians as $instrumentName => $musicianGroup)
+                    <p>
+                        <span>{{ $instrumentName }}: </span>
+                        <span>{{ collect($musicianGroup)->implode('party.name', ', ') }}</span>
+                    </p>
+                @endforeach
             </div>
         @endforeach
 
 
         <!-- Session Credits -->
-        {{-- Sessions Listed in this order: Tracking always first, Mixing and Mastering always the last two - any
-session inbetween, doesn’t matter the order it’s displayed. --}}
+        {{-- Sessions Listed in this order: Tracking always first, Mixing and Mastering always the last two - any session inbetween, doesn’t matter the order it’s displayed. --}}
         <div class="block">
-            <p>
-                <span>Tracking: </span>
-                <span>Sonic Element Studio</span>,
-                <span>Los Angeles, CA</span> -
-                <span>24 bit, 48KHz, WAV</span>,
-                <span>Lorem ipsum dolor sit amet</span>
-            </p>
-            <p>
-                <span>Overdub: </span>
-                <span>Sonic Element Studio</span>,
-                <span>Los Angeles, CA</span> -
-                <span>24 bit, 48KHz, WAV</span>,
-                <span>Lorem ipsum dolor sit amet</span>
-            </p>
-            <p>
-                <span>Mixing: </span>
-                <span>Sonic Element Studio</span>,
-                <span>Los Angeles, CA</span> -
-                <span>24 bit, 48KHz, WAV</span>,
-                <span>Lorem ipsum dolor sit amet</span>
-            </p>
-            <p>
-                <span>Mastering: </span>
-                <span>Sonic Element Studio</span>,
-                <span>Los Angeles, CA</span> -
-                <span>24 bit, 48KHz, WAV</span>,
-                <span>Lorem ipsum dolor sit amet</span>
-            </p>
+            @php
+                // Only the tracking session.
+                $trackingSession = $project->sessions->filter(function($session) {
+                    return $session->type->ddex_key === 'Tracking';
+                })->first();
+
+                // Only the mixing and mastering sessions
+                $lastSessions = $project->sessions->filter(function($session) {
+                    return in_array($session->type->ddex_key, ['Mixing', 'Mastering']);
+                });
+
+                // All other sessions.
+                $sessions = $project->sessions->filter(function($session) {
+                    return !in_array($session->type->ddex_key, ['Tracking', 'Mixing', 'Mastering']);
+                });
+            @endphp
+
+            @if($trackingSession)
+                <p>
+                    <span>Tracking: </span>
+                    <span>{{ $trackingSession->venue->name }}</span>,
+                    <span>{{ $trackingSession->venue_room }}</span>,
+                    <span>{{ $trackingSession->venue->address }}</span> -
+
+                    @if($trackingSession->bitdepth)
+                        <span>{{ $trackingSession->bitdepth }} bit</span>,
+                    @endif
+                    @if($trackingSession->samplerate)
+                        <span>{{ $trackingSession->samplerate / 1000 }}kHz</span>,
+                    @endif
+                    <span>{{ $trackingSession->union_session ? 'Union, ' : '' }}</span>
+                    <span>{{ $trackingSession->analog_session ? 'Analog, ' : '' }}</span>
+                    <span>{{ $trackingSession->timecode_type }}</span>,
+                    <span>{{ $trackingSession->timecode_frame_rate }}</span>,
+                    <span>{{ $trackingSession->drop_frame ? 'Drop Frame, ' : '' }}</span>
+                    <span>{{ $trackingSession->description ? $trackingSession->description : 'none' }}</span>
+                </p>
+            @endif
+
+            @foreach($sessions as $session)
+                <p>
+                    <span>{{ $session->type->name }}: </span>
+                    <span>{{ $session->venue->name }}</span>,
+                    <span>{{ $session->venue_room }}</span>,
+                    <span>{{ $session->venue->address }}</span> -
+
+                    @if($session->bitdepth)
+                        <span>{{ $session->bitdepth }} bit</span>,
+                    @endif
+                    @if($session->samplerate)
+                        <span>{{ $session->samplerate / 1000 }}kHz</span>,
+                    @endif
+                    <span>{{ $session->union_session ? 'Union, ' : '' }}</span>
+                    <span>{{ $session->analog_session ? 'Analog, ' : '' }}</span>
+                    <span>{{ $session->timecode_type }}</span>,
+                    <span>{{ $session->timecode_frame_rate }}</span>,
+                    <span>{{ $session->drop_frame ? 'Drop Frame, ' : '' }}</span>
+                    <span>{{ $session->description ? $session->description : 'none' }}</span>
+                </p>
+            @endforeach
+
+            @foreach($lastSessions as $session)
+                <p>
+                    <span>{{ $session->type->name }}: </span>
+                    <span>{{ $session->venue->name }}</span>,
+                    <span>{{ $session->venue_room }}</span>,
+                    <span>{{ $session->venue->address }}</span> -
+
+                    @if($session->bitdepth)
+                        <span>{{ $session->bitdepth }} bit</span>,
+                    @endif
+                    @if($session->samplerate)
+                        <span>{{ $session->samplerate / 1000 }}kHz</span>,
+                    @endif
+                    <span>{{ $session->union_session ? 'Union, ' : '' }}</span>
+                    <span>{{ $session->analog_session ? 'Analog, ' : '' }}</span>
+                    <span>{{ $session->timecode_type }}</span>,
+                    <span>{{ $session->timecode_frame_rate }}</span>,
+                    <span>{{ $session->drop_frame ? 'Drop Frame, ' : '' }}</span>
+                    <span>{{ $session->description ? $session->description : 'none' }}</span>
+                </p>
+            @endforeach
         </div>
     </body>
 </html>
