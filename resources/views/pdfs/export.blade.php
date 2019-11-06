@@ -145,17 +145,17 @@
         <div class="block">
             @php
                 // Only the tracking session.
-                $trackingSession = $project->sessions->filter(function($session) {
+                $trackingSession = $sessions->filter(function($session) {
                     return $session->type->ddex_key === 'Tracking';
                 })->first();
 
                 // Only the mixing and mastering sessions
-                $lastSessions = $project->sessions->filter(function($session) {
+                $lastSessions = $sessions->filter(function($session) {
                     return in_array($session->type->ddex_key, ['Mixing', 'Mastering']);
                 });
 
                 // All other sessions.
-                $sessions = $project->sessions->filter(function($session) {
+                $sessions = $sessions->filter(function($session) {
                     return !in_array($session->type->ddex_key, ['Tracking', 'Mixing', 'Mastering']);
                 });
             @endphp

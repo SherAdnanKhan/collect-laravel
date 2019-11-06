@@ -62,15 +62,22 @@ class PDFExporter
 
     private function getViewData(): array
     {
-        // TODO
-        //
-        // Key-value data to be passed into the
-        // export view.
+
+        $recordings = collect([$this->recording]);
+        if (!$this->recording) {
+            $recordings = $this->project->recordings;
+        }
+
+        $sessions = $this->project->sessions;
+        if ($this->recording) {
+            $sessions = $this->recording->sessions;
+        }
 
         return [
-            'datestamp' => Carbon::now()->toDateString(),
-            'project'   => $this->project,
-            'recordings' => $this->project->recordings,
+            'datestamp'  => Carbon::now()->toDateString(),
+            'project'    => $this->project,
+            'recordings' => $recordings,
+            'sessions'   => $sessions,
         ];
     }
 }
