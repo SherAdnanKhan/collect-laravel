@@ -165,7 +165,7 @@
                 // Only the mixing and mastering sessions
                 $lastSessions = $sessions->filter(function($session) {
                     return in_array($session->type->ddex_key, ['Mixing', 'Mastering']);
-                })->sortBy('type.ddex_key');
+                })->sortByDesc('type.ddex_key');
 
                 // All other sessions.
                 $sessions = $sessions->filter(function($session) {
