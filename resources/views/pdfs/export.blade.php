@@ -90,16 +90,20 @@
                     <span>Time Signature: </span>
                     <span>{{ $recording->time_signature }}</span>
                 </p>
-                <p>
-                    <!-- Recorded date -->
-                    <span>Recorded On: </span>
-                    <span>{{ $recording->recorded_on->toDateString() }}</span>
-                </p>
-                <p>
-                    <!-- Mixed date -->
-                    <span>Mixed On: </span>
-                    <span>{{ $recording->mixed_on->toDateString() }}</span>
-                </p>
+                @if($recording->recorded_on)
+                    <p>
+                        <!-- Recorded date -->
+                        <span>Recorded On: </span>
+                        <span>{{ $recording->recorded_on->toDateString() }}</span>
+                    </p>
+                @endif
+                @if($recording->mixed_on)
+                    <p>
+                        <!-- Mixed date -->
+                        <span>Mixed On: </span>
+                        <span>{{ $recording->mixed_on->toDateString() }}</span>
+                    </p>
+                @endif
             </div>
 
             <!-- Recording Parties -->
