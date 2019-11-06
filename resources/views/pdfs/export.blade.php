@@ -112,33 +112,42 @@
                     // Filter only musicians and map them
                     // by their instruments.
                     $musicians = $recording->credits->filter(function($item) {
-                        return $item->role->ddex_key === 'Musician';
+                        return strpos($item->role->ddex_key, 'Musician') !== FALSE;
                     })->mapToGroups(function($item) {
                         return [$item->instrument->name => $item];
                     });
 
+                    $producers = $recording->credits->filter(function($item) {
+                        return strpos($item->role->ddex_key, 'Producer') !== FALSE;
+                    })->sortBy('role.ddex_key')->mapToGroups(function ($item, $key) {
+                        return [$item->role->name => $item];
+                    });
+
+                    $engineers = $recording->credits->filter(function($item) {
+                        return strpos($item->role->ddex_key, 'Engineer') !== FALSE;
+                    })->sortBy('role.ddex_key')->mapToGroups(function ($item, $key) {
+                        return [$item->role->name => $item];
+                    });
+
                     // Filter out non-musician credits
                     // and then map them by their roles.
-                    $nonMusicians = $recording->credits->filter(function($item) {
-                        return $item->role->ddex_key !== 'Musician';
+                    $otherCredits = $recording->credits->filter(function($item) {
+                        return strpos($item->role->ddex_key, 'Producer') === FALSE &&
+                            strpos($item->role->ddex_key, 'Engineer') === FALSE &&
+                            strpos($item->role->ddex_key, 'Musician') === FALSE;
                     })->mapToGroups(function ($item, $key) {
                         return [$item->role->name => $item];
                     });
                 @endphp
 
                 <!-- Roles -->
-                @foreach($nonMusicians as $roleGroupName => $roleGroup)
-                    <p>
-                        <span>{{ $roleGroupName }}: </span>
-                        <span>{{ collect($roleGroup)->implode('party.name', ', ') }}</span>
-                    </p>
-                @endforeach
-                <!-- Musicians, by instrument -->
-                @foreach($musicians as $instrumentName => $musicianGroup)
-                    <p>
-                        <span>{{ $instrumentName }}: </span>
-                        <span>{{ collect($musicianGroup)->implode('party.name', ', ') }}</span>
-                    </p>
+                @foreach([$producers, $engineers, $otherCredits, $musicians] as $credits)
+                    @foreach($credits as $groupkey => $group)
+                        <p>
+                            <span>{{ $groupkey }}: </span>
+                            <span>{{ collect($group)->implode('party.name', ', ') }}</span>
+                        </p>
+                    @endforeach
                 @endforeach
             </div>
         @endforeach
@@ -156,12 +165,12 @@
                 // Only the mixing and mastering sessions
                 $lastSessions = $sessions->filter(function($session) {
                     return in_array($session->type->ddex_key, ['Mixing', 'Mastering']);
-                });
+                })->sortBy('type.ddex_key');
 
                 // All other sessions.
                 $sessions = $sessions->filter(function($session) {
                     return !in_array($session->type->ddex_key, ['Tracking', 'Mixing', 'Mastering']);
-                });
+                })->sortBy('type.ddex_key');
             @endphp
 
             @if($trackingSession)
