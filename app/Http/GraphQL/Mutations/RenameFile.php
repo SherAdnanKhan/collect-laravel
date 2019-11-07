@@ -57,7 +57,7 @@ class RenameFile
             throw new AuthorizationException;
         }
 
-        if ($project && !$user->can('update', [Folder::class, $project, $file->folder])) {
+        if ($project && $file->folder && !$user->can('update', [Folder::class, $project, $file->folder])) {
             throw new AuthorizationException('User does not have permission to update this file');
         }
 
