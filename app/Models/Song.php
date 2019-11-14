@@ -65,9 +65,30 @@ class Song extends Model implements UserAccessible, Creditable
             ],
             'subtitle' => [
                 'type' => 'text'
+            ],
+            'credits' => [
+                'type' => 'object'
             ]
         ]
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $arr = array_only($this->toArray(), ['id', 'user_id', 'iscw', 'title', 'subtitle']);
+
+        $arr['credits'] = $this->credits ? $this->credits->map(function ($data) {
+            return $data->party ?
+                array_only($data->party->toArray(), ['first_name', 'middle_name', 'last_name']) :
+                [];
+        })->toArray() : [];
+
+        return $arr;
+    }
 
     /**
      * The user who owns this song.

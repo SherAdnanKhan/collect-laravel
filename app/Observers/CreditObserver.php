@@ -34,10 +34,18 @@ class CreditObserver
 
         $credit->projects()->attach($projects);
         $credit->projects->searchable();
+
+        if($credit->contribution_type == "song") {
+            Song::find($credit->contribution_id)->searchable();
+        }
     }
 
     public function deleted(Credit $credit)
     {
         $credit->projects->searchable();
+
+        if($credit->contribution_type == "song") {
+            Song::find($credit->contribution_id)->searchable();
+        }
     }
 }
