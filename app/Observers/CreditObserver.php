@@ -33,5 +33,11 @@ class CreditObserver
         }
 
         $credit->projects()->attach($projects);
+        $credit->projects->searchable();
+    }
+
+    public function deleted(Credit $credit)
+    {
+        $credit->projects->searchable();
     }
 }

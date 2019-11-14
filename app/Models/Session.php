@@ -22,8 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
-use App\ElasticSearch\NameSearchRule;
-use Illuminate\Support\Facades\Log;
+use App\ElasticSearch\SessionSearchRule;
 
 class Session extends Model implements UserAccessible, EventLoggable, Creditable
 {
@@ -55,7 +54,7 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     protected $indexConfigurator = SessionsIndexConfigurator::class;
 
     protected $searchRules = [
-        NameSearchRule::class
+        SessionSearchRule::class
     ];
 
     // Here you can specify a mapping for a model fields.
@@ -76,10 +75,10 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
                 // ]
             ],
             'started_at' => [
-                'type' => 'text',
+                'type' => 'date',
             ],
             'ended_at' => [
-                'type' => 'text',
+                'type' => 'date',
             ],
             'session_type' => [
                 'type' => 'text',
@@ -97,7 +96,9 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
      */
     public function toSearchableArray()
     {
-        $arr = array_only($this->toArray(), ['id', 'name', 'started_at', 'ended_at', 'project_id']);
+        $arr = array_only($this->toArray(), ['id', 'name', 'project_id']);
+        $arr['started_at'] = $this->started_at->toIso8601String();
+        $arr['ended_at'] = $this->ended_at->toIso8601String();
         $arr['session_type'] = $this->sessionType->name;
         $arr['venue'] = $this->venue->name;
         return $arr;

@@ -25,8 +25,8 @@ class Sessions
         $project_ids = $user->projects()->userViewable()->pluck('id')->toArray();
 
         return Session::search($term)
+            ->get()
             ->whereIn('project_id', $project_ids)
-            ->take(10)
-            ->get();
+            ->take(10);
     }
 }
