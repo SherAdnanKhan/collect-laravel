@@ -66,7 +66,7 @@ class Project extends Resource
 
             BelongsTo::make('User'),
 
-            Text::make('Name')
+            Text::make('Title', 'name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
