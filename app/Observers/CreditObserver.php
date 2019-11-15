@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Credit;
 use App\Models\Project;
+use App\Models\Recording;
 use App\Models\Song;
 use Illuminate\Support\Facades\Log;
 
@@ -33,10 +34,17 @@ class CreditObserver
         }
 
         $credit->projects()->attach($projects);
-        $credit->projects->searchable();
 
-        if($credit->contribution_type == "song") {
-            Song::find($credit->contribution_id)->searchable();
+        switch($credit->contribution_type) {
+            case "project":
+                $credit->projects->searchable();
+            break;
+            case "song":
+                Song::find($credit->contribution_id)->searchable();
+            break;
+            case "recording":
+                Recording::find($credit->contribution_id)->searchable();
+            break;
         }
     }
 

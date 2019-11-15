@@ -103,6 +103,9 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
                 //         'type' => 'keyword',
                 //     ]
                 // ]
+                ],
+            'credits' => [
+                'type' => 'object'
             ]
         ]
     ];
@@ -119,6 +122,11 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
             array_only($this->party->toArray(), ['first_name', 'middle_name', 'last_name']) :
             ['first_name' => '', 'middle_name' => '', 'last_name' => ''];
         $arr['collaborators'] =  join(", ", $this->collaborators->pluck('name')->toArray());
+        $arr['credits'] = $this->credits ? $this->credits->map(function ($data) {
+            return $data->party ?
+                array_only($data->party->toArray(), ['first_name', 'middle_name', 'last_name']) :
+                [];
+        })->toArray() : [];
 
         return $arr;
     }
