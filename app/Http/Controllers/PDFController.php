@@ -23,12 +23,6 @@ class PDFController extends Controller
      */
     public function export(Request $request)
     {
-        // TODO:
-        //
-        // Can export at either a project or recording level.
-        // If a recording is provided, filter down like we do
-        // for RIN exports.
-
         $user = auth()->user();
         $recording = null;
 
@@ -58,6 +52,12 @@ class PDFController extends Controller
 
         $pdf = $generator->generate();
 
-        return $pdf->download();
+        $filename = sprintf('%s_Credits.pdf', time());
+
+        if ($project->artist) {
+            $filename = sprintf("%s_Credits.pdf", str_replace(' ', '_', $project->artist->non_key_names));
+        }
+
+        return $pdf->download($filename);
     }
 }
