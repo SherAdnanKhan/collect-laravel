@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Models\Credit;
+use App\Traits\OrderScopes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CreditRole extends Model
 {
+    use OrderScopes;
+
     const TYPES_WITH_LABELS = [
         'ResourceContributorRole' => 'Resource Contributor Role',
         'CreativeContributorRole' => 'Creative Contributor Role',

@@ -117,7 +117,10 @@ extend type Query @group(middleware: ["auth:api"]) {
 		contributionType: String
 		count: Int
 	): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
-	getCreditRoles(type: String @eq(key: "type")): [CreditRole] @all
+	getCreditRoles(
+		type: String @eq(key: "type")
+		ordering: OrderingInput
+	): [CreditRole] @all(scopes: ["orderByField"])
 
 	# Instrument Queries
 	getInstruments: [Instrument] @all
