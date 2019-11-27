@@ -55,7 +55,7 @@ class PDFController extends Controller
         $filename = sprintf('%s_Credits.pdf', time());
 
         if ($project->artist) {
-            $filename = sprintf("%s_Credits.pdf", str_replace(' ', '_', $project->artist->non_key_names));
+            $filename = sprintf("%s_%s_Credits.pdf", $project->artist->first_name, $project->artist->last_name);
         }
 
         return $pdf->download($filename);
