@@ -171,36 +171,25 @@
                 $sessions = $sessions->filter(function($session) {
                     return !in_array($session->type->ddex_key, ['Tracking', 'Mixing', 'Mastering']);
                 })->sortBy('type.ddex_key');
+
+                $allSessions = collect([$trackingSession])
+                    ->merge($sessions)
+                    ->merge($lastSessions)
+                    ->filter()->all();
             @endphp
 
-            @if($trackingSession)
-                <p>
-                    <span>Tracking: </span>
-                    <span>{{ $trackingSession->venue->name }}</span>,
-                    <span>{{ $trackingSession->venue_room }}</span>,
-                    <span>{{ $trackingSession->venue->address }}</span> -
-
-                    @if($trackingSession->bitdepth)
-                        <span>{{ $trackingSession->bitdepth }} bit</span>,
-                    @endif
-                    @if($trackingSession->samplerate)
-                        <span>{{ $trackingSession->samplerate / 1000 }}kHz</span>,
-                    @endif
-                    <span>{{ $trackingSession->union_session ? 'Union, ' : '' }}</span>
-                    <span>{{ $trackingSession->analog_session ? 'Analog, ' : '' }}</span>
-                    <span>{{ $trackingSession->timecode_type }}</span>,
-                    <span>{{ $trackingSession->timecode_frame_rate }}</span>,
-                    <span>{{ $trackingSession->drop_frame ? 'Drop Frame, ' : '' }}</span>
-                    <span>{{ $trackingSession->description ? $trackingSession->description : 'none' }}</span>
-                </p>
-            @endif
-
-            @foreach($sessions as $session)
+            @foreach($allSessions as $session)
                 <p>
                     <span>{{ $session->type->name }}: </span>
-                    <span>{{ $session->venue->name }}</span>,
-                    <span>{{ $session->venue_room }}</span>,
-                    <span>{{ $session->venue->address }}</span> -
+                    @if ($session->venue->name)
+                        <span>{{ $session->venue->name }}</span>,
+                    @endif
+                    @if ($session->venue->name)
+                        <span>{{ $session->venue_room }}</span>,
+                    @endif
+                    @if ($session->venue->name)
+                        <span>{{ $session->venue->address }}</span> -
+                    @endif
 
                     @if($session->bitdepth)
                         <span>{{ $session->bitdepth }} bit</span>,
@@ -210,30 +199,12 @@
                     @endif
                     <span>{{ $session->union_session ? 'Union, ' : '' }}</span>
                     <span>{{ $session->analog_session ? 'Analog, ' : '' }}</span>
-                    <span>{{ $session->timecode_type }}</span>,
-                    <span>{{ $session->timecode_frame_rate }}</span>,
-                    <span>{{ $session->drop_frame ? 'Drop Frame, ' : '' }}</span>
-                    <span>{{ $session->description ? $session->description : 'none' }}</span>
-                </p>
-            @endforeach
-
-            @foreach($lastSessions as $session)
-                <p>
-                    <span>{{ $session->type->name }}: </span>
-                    <span>{{ $session->venue->name }}</span>,
-                    <span>{{ $session->venue_room }}</span>,
-                    <span>{{ $session->venue->address }}</span> -
-
-                    @if($session->bitdepth)
-                        <span>{{ $session->bitdepth }} bit</span>,
+                    @if ($session->timecode_type)
+                        <span>{{ $session->timecode_type }},</span>
                     @endif
-                    @if($session->samplerate)
-                        <span>{{ $session->samplerate / 1000 }}kHz</span>,
+                    @if ($session->timecode_frame_rate)
+                        <span>{{ $session->timecode_frame_rate }}</span>,
                     @endif
-                    <span>{{ $session->union_session ? 'Union, ' : '' }}</span>
-                    <span>{{ $session->analog_session ? 'Analog, ' : '' }}</span>
-                    <span>{{ $session->timecode_type }}</span>,
-                    <span>{{ $session->timecode_frame_rate }}</span>,
                     <span>{{ $session->drop_frame ? 'Drop Frame, ' : '' }}</span>
                     <span>{{ $session->description ? $session->description : 'none' }}</span>
                 </p>
