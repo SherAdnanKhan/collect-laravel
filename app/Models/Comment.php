@@ -61,6 +61,23 @@ class Comment extends Model implements UserAccessible, EventLoggable
     }
 
     /**
+     * We're filtering update by read access to the project.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        return $this->wrapUserRelationCheck(
+            $user,
+            (new ProjectAccess($query, $user, [$this->getTypeName()], ['read']))->getQuery()
+        );
+    }
+
+    /**
      * Determine how we filter out comments which can be
      * deleted by the currently auth'd user.
      *
@@ -78,5 +95,16 @@ class Comment extends Model implements UserAccessible, EventLoggable
     public function getIdentifier(): string
     {
         return $this->message;
+    }
+
+    /**
+     * The type we're identifying as when we're checking
+     * for user access to this resource.
+     */
+    public function getTypeName(): string
+    {
+        // We treat it as a project because it doesn't
+        // have it's own permissions.
+        return 'project';
     }
 }
