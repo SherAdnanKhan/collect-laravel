@@ -34,14 +34,25 @@ class Update
         $id = (int) array_get($input, 'id');
         $type = array_get($input, 'type', 'normal');
 
-        if ($type !== 'recording') {
-            throw new GenericException('You cannot update this collaborator');
-        }
-
         $collaborator = Collaborator::find($id);
 
         if (!$collaborator) {
             throw new AuthorizationException('Collaborator could not be found');
+        }
+
+        // Check to see if the updated type is a normal.
+        if ($type === 'normal') {
+            // If we were a recording collab, remove
+            // the associations to the recordings.
+            if ($collaborator->type !== 'normal') {
+                $collaborator->recordings()->sync([]);
+            }
+
+            // Update our type
+            $collaborator->type = $type;
+            $collaborator->save();
+
+            return $collaborator;
         }
 
         $recordingIds = [];
