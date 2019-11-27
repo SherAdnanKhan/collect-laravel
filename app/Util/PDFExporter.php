@@ -65,7 +65,7 @@ class PDFExporter
 
         $recordings = collect([$this->recording]);
         if (!$this->recording) {
-            $recordings = $this->project->recordings;
+            $recordings = $this->project->recordings->sortBy('song.title');
         }
 
         $sessions = $this->project->sessions;
