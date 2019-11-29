@@ -2,10 +2,11 @@
 
 namespace App\Http\GraphQL\Mutations\CollaboratorInvite;
 
+use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class Resend
 {
@@ -22,9 +23,13 @@ class Resend
         $input = array_get($args, 'input');
         $user = auth()->user();
 
-        $invite = CollaboratorInvite::where('id', array_get($input, 'collaboratorId'))
-            ->where('user_id', null)
-            ->first();
+        $collaborator = Collaborator::find(array_get($input, 'collaboratorId'));
+
+        if (!$collaborator) {
+            throw new AuthorizationException('No collaborator found');
+        }
+
+        $invite = $collaborator->invite;
 
         if (!$invite) {
             throw new AuthorizationException('No collaborator invite found');
