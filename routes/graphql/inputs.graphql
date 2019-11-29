@@ -426,3 +426,7 @@ input TwoFactorResendInput {
 input ResendVerificationEmailInput {
     email: String!
 }
+
+input ResendCollaboratorInviteInput {
+  colllaboratorId: Int!
+}

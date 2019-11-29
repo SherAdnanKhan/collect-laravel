@@ -56,3 +56,7 @@ type UnreadActivityPayload {
 type TwoFactorResendPayload {
   resent: Boolean!
 }
+
+type ResendCollaboratorInvitePayload {
+  success: Boolean!
+}
