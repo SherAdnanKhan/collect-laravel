@@ -24,7 +24,6 @@ class Resend
 
         $invite = CollaboratorInvite::where('id', array_get($input, 'collaboratorId'))
             ->where('user_id', null)
-            ->where('accepted', 0)
             ->first();
 
         if (!$invite) {
