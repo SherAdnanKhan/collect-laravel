@@ -428,5 +428,5 @@ input ResendVerificationEmailInput {
 }
 
 input ResendCollaboratorInviteInput {
-  colllaboratorId: Int!
+  collaboratorId: Int!
 }
