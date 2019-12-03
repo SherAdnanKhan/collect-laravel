@@ -201,6 +201,7 @@ type EventLog {
 	id: ID!
 	user: User! @belongsTo
 	project: Project! @belongsTo
+	projectId: Int @rename(attribute: "project_id")
 	resourceId: Int @rename(attribute: "resource_id")
 	resourceType: String @rename(attribute: "resource_type")
 	resource: EventLoggable
