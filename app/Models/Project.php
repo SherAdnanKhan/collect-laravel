@@ -2,43 +2,46 @@
 
 namespace App\Models;
 
-use App\Contracts\Creditable;
-use App\Contracts\EventLoggable;
-use App\Contracts\UserAccessible;
-use App\ElasticSearch\NameSearchRule;
-use App\Models\Collaborator;
-use App\Models\CollaboratorInvite;
-use App\Models\Comment;
+use App\Models\Song;
+use App\Models\User;
+use App\Models\Party;
 use App\Models\Credit;
 use App\Models\Folder;
-use App\Models\Party;
+use App\Models\Comment;
 use App\Models\Session;
-use App\Models\Song;
-use App\Models\SongRecording;
-use App\Models\User;
-use App\Models\UserFavourite;
-use App\Models\CollaboratorPermission as CollaboratorPermissionModel;
 use App\Traits\EventLogged;
+use App\Traits\HasComments;
 use App\Traits\OrderScopes;
+use App\Models\Collaborator;
 use App\Traits\UserAccesses;
-use App\Util\BuilderQueries\CollaboratorPermission;
-use App\Util\BuilderQueries\CollaboratorRecordingAccess;
-use Askedio\SoftCascade\Traits\SoftCascadeTrait;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
+use App\Contracts\Creditable;
+use App\Models\SongRecording;
+use App\Models\UserFavourite;
+use App\Contracts\Commentable;
+use App\Contracts\EventLoggable;
+use App\Contracts\UserAccessible;
+use App\Models\CollaboratorInvite;
+use App\ElasticSearch\NameSearchRule;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\Authenticatable;
 use App\ElasticSearch\ProjectsIndexConfigurator;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Util\BuilderQueries\CollaboratorPermission;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use App\Models\CollaboratorPermission as CollaboratorPermissionModel;
 
-class Project extends Model implements UserAccessible, EventLoggable, Creditable
+class Project extends Model implements UserAccessible, EventLoggable, Creditable, Commentable
 {
+    use HasComments;
     use EventLogged;
     use UserAccesses;
     use OrderScopes;

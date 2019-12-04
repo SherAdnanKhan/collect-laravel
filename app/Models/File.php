@@ -2,27 +2,30 @@
 
 namespace App\Models;
 
-use App\Contracts\UserAccessible;
-use App\ElasticSearch\FilesIndexConfigurator;
+use App\Models\User;
 use App\Models\Folder;
 use App\Models\Project;
-use App\Models\User;
+use App\Traits\HasComments;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
-use App\Util\BuilderQueries\ProjectAccess;
-use Illuminate\Database\Eloquent\Builder;
+use ScoutElastic\Searchable;
+use App\Contracts\Commentable;
+use App\Contracts\UserAccessible;
+use App\ElasticSearch\NameSearchRule;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App\Util\BuilderQueries\ProjectAccess;
+use App\ElasticSearch\FilesIndexConfigurator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use ScoutElastic\Searchable;
-use App\ElasticSearch\NameSearchRule;
 
 /**
  * Represent a file that has been uploaded by a user into the system.
  */
-class File extends Model implements UserAccessible
+class File extends Model implements UserAccessible, Commentable
 {
+    use HasComments;
     use UserAccesses;
     use SoftDeletes;
     use OrderScopes;

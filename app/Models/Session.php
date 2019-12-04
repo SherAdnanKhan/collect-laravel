@@ -2,30 +2,33 @@
 
 namespace App\Models;
 
-use App\Contracts\Creditable;
-use App\Contracts\EventLoggable;
-use App\Contracts\UserAccessible;
-use App\ElasticSearch\SessionsIndexConfigurator;
+use App\Models\Venue;
 use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Recording;
 use App\Models\SessionType;
-use App\Models\Venue;
 use App\Traits\EventLogged;
+use App\Traits\HasComments;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
-use App\Util\BuilderQueries\ProjectAccess;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
+use App\Contracts\Creditable;
+use App\Contracts\Commentable;
+use App\Contracts\EventLoggable;
+use App\Contracts\UserAccessible;
+use Illuminate\Database\Eloquent\Model;
 use App\ElasticSearch\SessionSearchRule;
+use Illuminate\Database\Eloquent\Builder;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\ElasticSearch\SessionsIndexConfigurator;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Session extends Model implements UserAccessible, EventLoggable, Creditable
+class Session extends Model implements UserAccessible, EventLoggable, Creditable, Commentable
 {
+    use HasComments;
     use UserAccesses;
     use OrderScopes;
     use EventLogged;

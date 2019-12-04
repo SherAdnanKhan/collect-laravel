@@ -2,39 +2,42 @@
 
 namespace App\Models;
 
-use App\Contracts\Creditable;
-use App\Contracts\EventLoggable;
-use App\Contracts\UserAccessible;
-use App\ElasticSearch\RecordingsIndexConfigurator;
-use App\Models\Credit;
-use App\Models\CreditRole;
-use App\Models\Collaborator;
-use App\Models\Party;
-use App\Models\Project;
-use App\Models\RecordingType;
-use App\Models\Session;
 use App\Models\Song;
-use App\Models\SongRecording;
 use App\Models\User;
+use App\Models\Party;
+use App\Models\Credit;
+use App\Models\Project;
+use App\Models\Session;
+use App\Models\CreditRole;
 use App\Models\VersionType;
 use App\Traits\EventLogged;
+use App\Traits\HasComments;
 use App\Traits\OrderScopes;
+use App\Models\Collaborator;
 use App\Traits\UserAccesses;
-use App\Util\BuilderQueries\CollaboratorRecordingAccess;
-use App\Util\BuilderQueries\ProjectAccess;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use ScoutElastic\Searchable;
+use App\Contracts\Creditable;
+use App\Models\RecordingType;
+use App\Models\SongRecording;
+use App\Contracts\Commentable;
+use App\Contracts\EventLoggable;
+use App\Contracts\UserAccessible;
 use App\ElasticSearch\TitleSearchRule;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App\Util\BuilderQueries\ProjectAccess;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\ElasticSearch\RecordingsIndexConfigurator;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class Recording extends Model implements UserAccessible, EventLoggable, Creditable
+class Recording extends Model implements UserAccessible, EventLoggable, Creditable, Commentable
 {
+    use HasComments;
     use UserAccesses;
     use OrderScopes;
     use EventLogged;
