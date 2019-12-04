@@ -249,7 +249,7 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
      *
      * @return HasMany
      */
-    public function comments(): HasMany
+    public function projectComments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }

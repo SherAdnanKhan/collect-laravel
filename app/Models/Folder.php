@@ -2,27 +2,30 @@
 
 namespace App\Models;
 
-use App\Contracts\EventLoggable;
-use App\Contracts\UserAccessible;
 use App\Models\File;
 use App\Models\User;
 use App\Traits\EventLogged;
+use App\Traits\HasComments;
 use App\Traits\OrderScopes;
 use App\Traits\UserAccesses;
-use App\Util\BuilderQueries\CollaboratorRecordingAccess;
-use App\Util\BuilderQueries\ProjectAccess;
-use Illuminate\Database\Eloquent\Builder;
+use App\Contracts\Commentable;
+use App\Contracts\EventLoggable;
+use App\Contracts\UserAccessible;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
+use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
 
 /**
  * Folders contain files and folders.
  */
-class Folder extends Model implements UserAccessible, EventLoggable
+class Folder extends Model implements UserAccessible, EventLoggable, Commentable
 {
+    use HasComments;
     use EventLogged;
     use UserAccesses;
     use SoftDeletes;
