@@ -23,6 +23,7 @@ type Project implements Favoured & Creditable & Commentable & EventLoggable {
 	recordingCount: Int!
 	comments: [Comment] @hasMany
 	songs: [Song] @hasMany
+	commentCount: Int
 }
 
 type Collaborator implements EventLoggable {
@@ -76,6 +77,7 @@ type File implements Favoured & Commentable & EventLoggable {
 	isPreviewable: Boolean
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+	commentCount: Int
 }
 
 type Folder implements Favoured & Commentable & EventLoggable {
@@ -94,6 +96,7 @@ type Folder implements Favoured & Commentable & EventLoggable {
 	path: [FolderPath]
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+	commentCount: Int
 }
 
 type FolderPath {
@@ -127,6 +130,7 @@ type Recording implements Favoured & Creditable & Commentable & EventLoggable {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	sessions: [Session] @belongsToMany
+	commentCount: Int
 }
 
 type RecordingType {
@@ -168,6 +172,7 @@ type Session implements Favoured & Creditable & Commentable & EventLoggable {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording]
+	commentCount: Int
 }
 
 type SessionType {
