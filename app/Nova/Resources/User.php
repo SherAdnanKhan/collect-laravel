@@ -19,6 +19,8 @@ use Themsaid\CashierTool\CashierResourceTool;
 
 class User extends Resource
 {
+    public static $group = 'User Data';
+
     /**
      * The model the resource corresponds to.
      *

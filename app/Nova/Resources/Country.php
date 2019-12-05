@@ -23,6 +23,9 @@ use Laravel\Nova\Fields\Textarea;
 
 class Country extends Resource
 {
+
+    public static $group = 'Metadata';
+
     /**
      * The model the resource corresponds to.
      *

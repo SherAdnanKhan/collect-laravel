@@ -20,6 +20,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class Venue extends Resource
 {
+    public static $group = 'User Data';
+
     /**
      * The model the resource corresponds to.
      *

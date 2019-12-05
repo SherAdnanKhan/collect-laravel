@@ -18,6 +18,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class Instrument extends Resource
 {
+    public static $group = 'Metadata';
+
     /**
      * The model the resource corresponds to.
      *

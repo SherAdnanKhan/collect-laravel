@@ -23,6 +23,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class Comment extends Resource
 {
+    public static $group = 'User Data';
+
     /**
      * The model the resource corresponds to.
      *

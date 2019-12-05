@@ -19,6 +19,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class File extends Resource
 {
+    public static $group = 'User Data';
+
     /**
      * The model the resource corresponds to.
      *

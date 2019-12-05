@@ -20,6 +20,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class SongType extends Resource
 {
+    public static $group = 'Metadata';
+
     /**
      * The model the resource corresponds to.
      *

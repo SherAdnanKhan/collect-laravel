@@ -21,6 +21,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class Session extends Resource
 {
+    public static $group = 'User Data';
+
     /**
      * The model the resource corresponds to.
      *

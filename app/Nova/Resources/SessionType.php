@@ -19,6 +19,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class SessionType extends Resource
 {
+    public static $group = 'Metadata';
+
     /**
      * The model the resource corresponds to.
      *

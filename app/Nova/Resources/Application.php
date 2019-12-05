@@ -13,6 +13,9 @@ use Laravel\Nova\Fields\Text;
 
 class Application extends Resource
 {
+
+    public static $group = 'Admin';
+
     /**
      * The model the resource corresponds to.
      *

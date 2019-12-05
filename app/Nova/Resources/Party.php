@@ -21,6 +21,8 @@ use Laravel\Nova\Fields\Textarea;
 
 class Party extends Resource
 {
+    public static $group = 'User Data';
+
     /**
      * The model the resource corresponds to.
      *
