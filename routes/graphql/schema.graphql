@@ -1,276 +1,399 @@
 type Query {
-    # User Queries
-    getMe: User @auth
+  # User Queries
+  getMe: User @auth
+
+  # Get the platform images
+  getPlatformImages: [PlatformImage] @all
 }
 
 extend type Query @group(middleware: ["auth:api"]) {
-	getUsers: [User] @paginate
-	getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
-	getUserInvites: [CollaboratorInvite] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetInvites@resolve")
+  getUsers: [User] @paginate
+  getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
+  getUserInvites: [CollaboratorInvite]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\GetInvites@resolve")
 
-	# Query to return recently created/updated resources
-	getRecents(
-		count: Int
-		resourceType: String
-	): [EventLog] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetRecents@resolve")
+  # Query to return recently created/updated resources
+  getRecents(count: Int, resourceType: String): [EventLog]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\GetRecents@resolve")
 
-	getEventLogsByProject(
-		projectId: ID! @eq(key: "project_id")
-		ordering: OrderingInput
-	): [EventLog!]! @paginate(model: "App\\Models\\EventLog", scopes: ["userViewable", "orderByField"], defaultCount: 10)
+  getEventLogsByProject(
+    projectId: ID! @eq(key: "project_id")
+    ordering: OrderingInput
+  ): [EventLog!]!
+    @paginate(
+      model: "App\\Models\\EventLog"
+      scopes: ["userViewable", "orderByField"]
+      defaultCount: 10
+    )
 
-	# User Favourite Queries
-	getUserFavourites(
-		resourceType: String @eq(key: "resource_type")
-		ordering: OrderingInput
-	): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
+  # User Favourite Queries
+  getUserFavourites(
+    resourceType: String @eq(key: "resource_type")
+    ordering: OrderingInput
+  ): [UserFavourite] @paginate(scopes: ["userViewable", "orderByField"])
 
-	# User Subscription Queries
-	getSubscriptions: [UserSubscription] @all(scopes: ["userViewable"])
+  # User Subscription Queries
+  getSubscriptions: [UserSubscription] @all(scopes: ["userViewable"])
 
-	# Party Queries
-	getParty(id: ID! @eq): Party @find(scopes: ["userViewable"])
-	getParties(type: String @eq): [Party] @all(scopes: ["userViewable"])
-	getPartyAddress(id: ID! @eq): PartyAddress @find(scopes: ["userViewable"])
-	getPartyContact(id: ID! @eq): PartyContact @find(scopes: ["userViewable"])
+  # Party Queries
+  getParty(id: ID! @eq): Party @find(scopes: ["userViewable"])
+  getParties(type: String @eq): [Party] @all(scopes: ["userViewable"])
+  getPartyAddress(id: ID! @eq): PartyAddress @find(scopes: ["userViewable"])
+  getPartyContact(id: ID! @eq): PartyContact @find(scopes: ["userViewable"])
 
-	# Project Queries
-	getProject(id: ID! @eq): Project @find(scopes: ["userViewable"])
-	getProjects(
-		userId: Int @eq(key: "user_id")
-		ordering: OrderingInput
-	): [Project] @all(scopes: ["userViewable", "orderByField"])
+  # Project Queries
+  getProject(id: ID! @eq): Project @find(scopes: ["userViewable"])
+  getProjects(
+    userId: Int @eq(key: "user_id")
+    ordering: OrderingInput
+  ): [Project] @all(scopes: ["userViewable", "orderByField"])
 
-	# Song Queries
-	getSong(id: ID! @eq): Song @find(scopes: ["userViewable"])
-	getSongs(
-		userId: Int @eq(key: "user_id")
-		ordering: OrderingInput
-	): [Song] @all(scopes: ["userViewable", "orderByField"])
-	getSongsPaginated(
-		userId: Int @eq(key: "user_id")
-		ordering: OrderingInput
-	): [Song] @paginate(model: "App\\Models\\Song", scopes: ["userViewable", "orderByField"], defaultCount: 5)
-	getSongsByProject(projectId: Int!): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
-	getSongTypes: [SongType] @all
+  # Song Queries
+  getSong(id: ID! @eq): Song @find(scopes: ["userViewable"])
+  getSongs(userId: Int @eq(key: "user_id"), ordering: OrderingInput): [Song]
+    @all(scopes: ["userViewable", "orderByField"])
+  getSongsPaginated(
+    userId: Int @eq(key: "user_id")
+    ordering: OrderingInput
+  ): [Song]
+    @paginate(
+      model: "App\\Models\\Song"
+      scopes: ["userViewable", "orderByField"]
+      defaultCount: 5
+    )
+  getSongsByProject(projectId: Int!): [Song]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Song\\ByProject@resolve")
+  getSongTypes: [SongType] @all
 
-	# File Queries
-	getFile(id: Int! @eq): File @find(scopes: ["userViewable"])
-	getFiles(
-		userId: Int @eq(key: "user_id")
-		folderId: Int @eq(key: "folder_id")
-		projectId: Int @eq(key: "project_id")
-		ordering: OrderingInput
-	): [File] @paginate(model: "App\\Models\\File", scopes: ["userViewable", "orderByField"], defaultCount: 1000)
-	getFilePreview(id: Int!): GetFilePreviewPayload @field(resolver: "App\\Http\\GraphQL\\Queries\\File\\GetPreview@resolve")
+  # File Queries
+  getFile(id: Int! @eq): File @find(scopes: ["userViewable"])
+  getFiles(
+    userId: Int @eq(key: "user_id")
+    folderId: Int @eq(key: "folder_id")
+    projectId: Int @eq(key: "project_id")
+    ordering: OrderingInput
+  ): [File]
+    @paginate(
+      model: "App\\Models\\File"
+      scopes: ["userViewable", "orderByField"]
+      defaultCount: 1000
+    )
+  getFilePreview(id: Int!): GetFilePreviewPayload
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\File\\GetPreview@resolve")
 
-	# Folder Queries
-	getFolder(id: Int! @eq): Folder @find(scopes: ["userViewable"])
-	getFolders(
-		userId: Int @eq(key: "user_id")
-		folderId: Int @eq(key: "folder_id")
-		projectId: Int @eq(key: "project_id")
-		ordering: OrderingInput
-	): [Folder] @all(scopes: ["userViewable", "orderByField"])
+  # Folder Queries
+  getFolder(id: Int! @eq): Folder @find(scopes: ["userViewable"])
+  getFolders(
+    userId: Int @eq(key: "user_id")
+    folderId: Int @eq(key: "folder_id")
+    projectId: Int @eq(key: "project_id")
+    ordering: OrderingInput
+  ): [Folder] @all(scopes: ["userViewable", "orderByField"])
 
-	# Recording Queries
-	getRecording(id: ID! @eq): Recording @find(scopes: ["userViewable"])
-	getRecordings(
-		projectId: Int @eq(key: "project_id")
-		ordering: OrderingInput
-	): [Recording] @paginate(scopes: ["userViewable", "orderByField"], defaultCount: 1000)
-	getRecordingTypes: [RecordingType] @all
+  # Recording Queries
+  getRecording(id: ID! @eq): Recording @find(scopes: ["userViewable"])
+  getRecordings(
+    projectId: Int @eq(key: "project_id")
+    ordering: OrderingInput
+  ): [Recording]
+    @paginate(scopes: ["userViewable", "orderByField"], defaultCount: 1000)
+  getRecordingTypes: [RecordingType] @all
 
-	# Session Queries
-	getSession(id: ID! @eq): Session @find(scopes: ["userViewable"])
-	getSessions(
-		projectId: Int! @eq(key: "project_id")
-		ordering: OrderingInput
-	): [Session] @paginate(scopes: ["userViewable", "orderByField"], model: "App\\Models\\Session", defaultCount: 1000)
-	getSessionTypes: [SessionType] @all
+  # Session Queries
+  getSession(id: ID! @eq): Session @find(scopes: ["userViewable"])
+  getSessions(
+    projectId: Int! @eq(key: "project_id")
+    ordering: OrderingInput
+  ): [Session]
+    @paginate(
+      scopes: ["userViewable", "orderByField"]
+      model: "App\\Models\\Session"
+      defaultCount: 1000
+    )
+  getSessionTypes: [SessionType] @all
 
-	# Comment Queries
-	getComment(id: Int! @eq): Comment @find(scopes: ["userViewable"])
-	getComments(
-		userId: Int @eq(key: "user_id")
-		projectId: Int @eq(key: "project_id")
-		resourceType: String @eq(key: "resource_type")
-		resourceId: Int @eq(key: "resource_id")
-		ordering: OrderingInput
-	): [Comment] @all(scopes: ["userViewable", "orderByField"])
+  # Comment Queries
+  getComment(id: Int! @eq): Comment @find(scopes: ["userViewable"])
+  getComments(
+    userId: Int @eq(key: "user_id")
+    projectId: Int @eq(key: "project_id")
+    resourceType: String @eq(key: "resource_type")
+    resourceId: Int @eq(key: "resource_id")
+    ordering: OrderingInput
+  ): [Comment] @all(scopes: ["userViewable", "orderByField"])
 
-	# Collaborator Queries
-	getCollaborator(id: ID! @eq): Collaborator @find(scopes: ["userViewable"])
-	getCollaborators(
-		userId: ID @eq(key: "user_id")
-		projectId: ID! @eq(key: "project_id")
-	): [Collaborator] @all(scopes: ["userViewable"])
+  # Collaborator Queries
+  getCollaborator(id: ID! @eq): Collaborator @find(scopes: ["userViewable"])
+  getCollaborators(
+    userId: ID @eq(key: "user_id")
+    projectId: ID! @eq(key: "project_id")
+  ): [Collaborator] @all(scopes: ["userViewable"])
 
-	# Credit Queries
-	getCredit(id: ID! @eq): Credit @find(scopes: ["userViewable"])
-	getCredits(
-		partyId: Int @eq(key: "party_id")
-		contributionType: String @eq(key: "contribution_type")
-	): [Credit] @all(scopes: ["userViewable"])
-	getCreditsByProject(
-		projectId: ID!
-		contributionType: String
-		count: Int
-	): [Credit] @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
-	getCreditRoles(
-		type: String @eq(key: "type")
-		ordering: OrderingInput
-	): [CreditRole] @all(scopes: ["orderByField"])
+  # Credit Queries
+  getCredit(id: ID! @eq): Credit @find(scopes: ["userViewable"])
+  getCredits(
+    partyId: Int @eq(key: "party_id")
+    contributionType: String @eq(key: "contribution_type")
+  ): [Credit] @all(scopes: ["userViewable"])
+  getCreditsByProject(
+    projectId: ID!
+    contributionType: String
+    count: Int
+  ): [Credit]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
+  getCreditRoles(
+    type: String @eq(key: "type")
+    ordering: OrderingInput
+  ): [CreditRole] @all(scopes: ["orderByField"])
 
-	# Instrument Queries
-	getInstruments: [Instrument] @all
+  # Instrument Queries
+  getInstruments: [Instrument] @all
 
-	# Language Queries
-	getLanguages: [Language] @all
+  # Language Queries
+  getLanguages: [Language] @all
 
-	# Venue Queries
-	getVenues: [Venue] @all(scopes: ["userViewable"])
-	getCountries: [Country] @all
+  # Venue Queries
+  getVenues: [Venue] @all(scopes: ["userViewable"])
+  getCountries: [Country] @all
 
-	# Get unread activity count
-	getUnreadActivity(projectId: ID!): UnreadActivityPayload! @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
+  # Get unread activity count
+  getUnreadActivity(projectId: ID!): UnreadActivityPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
 
-	# Get the platform images
-	getPlatformImages: [PlatformImage] @all
-
-	# Search Queries
-	searchUserFiles(
-		term: String!
-	): [File] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\UserFiles@resolve")
-	searchProjectFiles(
-		term: String!
-	): [File] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\ProjectFiles@resolve")
-	searchProjects(
-		term: String!
-	): [Project] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Projects@resolve")
-	searchSongs(
-		term: String!
-	): [Song] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Songs@resolve")
-	searchRecordings(
-		term: String!
-	): [Recording] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Recordings@resolve")
-	searchSessions(
-		term: String!
-	): [Session] @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Sessions@resolve")
+  # Search Queries
+  searchUserFiles(term: String!): [File]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\UserFiles@resolve")
+  searchProjectFiles(term: String!): [File]
+    @field(
+      resolver: "App\\Http\\GraphQL\\Queries\\Search\\ProjectFiles@resolve"
+    )
+  searchProjects(term: String!): [Project]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Projects@resolve")
+  searchSongs(term: String!): [Song]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Songs@resolve")
+  searchRecordings(term: String!): [Recording]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Recordings@resolve")
+  searchSessions(term: String!): [Session]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Search\\Sessions@resolve")
 }
 
 type Mutation {
-	# The user registration mutation
-    doRegister(input: RegisterInput!): RegisterPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Register@resolve")
-    doResendVerificationEmail(input: ResendVerificationEmailInput!): ResendVerificationEmailPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\User\\ResendVerificationEmail@resolve")
-    doVerification(input: VerificationInput!): AuthTokenPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\Verification@resolve")
+  # The user registration mutation
+  doRegister(input: RegisterInput!): RegisterPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Register@resolve")
+  doResendVerificationEmail(
+    input: ResendVerificationEmailInput!
+  ): ResendVerificationEmailPayload!
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\User\\ResendVerificationEmail@resolve"
+    )
+  doVerification(input: VerificationInput!): AuthTokenPayload
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Verification@resolve")
 
-    # Auth mutations
-	doLogin(input: LoginInput): AuthTokenPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
-	doRefresh: AuthTokenPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@refresh")
-	doTwoFactor(input: TwoFactorInput!): AuthTokenPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\TwoFactor@resolve")
-	doTwoFactorResend(input: TwoFactorResendInput!): TwoFactorResendPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\TwoFactor@resend")
-	doLogout: LogoutPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\Logout@resolve")
+  # Auth mutations
+  doLogin(input: LoginInput): AuthTokenPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@resolve")
+  doRefresh: AuthTokenPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Login@refresh")
+  doTwoFactor(input: TwoFactorInput!): AuthTokenPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\TwoFactor@resolve")
+  doTwoFactorResend(input: TwoFactorResendInput!): TwoFactorResendPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\TwoFactor@resend")
+  doLogout: LogoutPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Logout@resolve")
 
- 	# Forgot password flow.
-	doForgotPassword(input: ForgotPasswordInput): ForgotPasswordPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\ForgotPassword@resolve")
-	doResetPassword(input: ResetPasswordInput): ResetPasswordPayload! @field(resolver: "App\\Http\\GraphQL\\Mutations\\ResetPassword@resolve")
+  # Forgot password flow.
+  doForgotPassword(input: ForgotPasswordInput): ForgotPasswordPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\ForgotPassword@resolve")
+  doResetPassword(input: ResetPasswordInput): ResetPasswordPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\ResetPassword@resolve")
 }
 
 extend type Mutation @group(middleware: ["auth:api"]) {
-	# User Mutations
-	updateUser(input: UpdateUserInput!): User @field(resolver: "App\\Http\\GraphQL\\Mutations\\User\\Update@resolve")
-	updateUserProfile(input: UpdateUserProfileInput!): UserProfile @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserProfile\\Update@resolve")
+  # User Mutations
+  updateUser(input: UpdateUserInput!): User
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\User\\Update@resolve")
+  updateUserProfile(input: UpdateUserProfileInput!): UserProfile
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\UserProfile\\Update@resolve"
+    )
 
-	# User Favourite Mutations
-	createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Create@resolve")
-	deleteUserFavourite(input: DeleteUserFavouriteInput!): UserFavourite @field(resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Delete@resolve")
+  # User Favourite Mutations
+  createUserFavourite(input: CreateUserFavouriteInput!): UserFavourite
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Create@resolve"
+    )
+  deleteUserFavourite(input: DeleteUserFavouriteInput!): UserFavourite
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\UserFavourite\\Delete@resolve"
+    )
 
-	# Project Mutations
-	createProject(input: CreateProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Create@resolve")
-	updateProject(input: UpdateProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Update@resolve")
-	deleteProject(input: DeleteProjectInput!): Project @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Delete@resolve")
+  # Project Mutations
+  createProject(input: CreateProjectInput!): Project
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Create@resolve")
+  updateProject(input: UpdateProjectInput!): Project
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Update@resolve")
+  deleteProject(input: DeleteProjectInput!): Project
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Project\\Delete@resolve")
 
-	# Comment Mutations
-	createComment(input: CreateCommentInput!): Comment @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Create@resolve")
-	deleteComment(input: DeleteCommentInput!): Comment @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Delete@resolve")
+  # Comment Mutations
+  createComment(input: CreateCommentInput!): Comment
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Create@resolve")
+  deleteComment(input: DeleteCommentInput!): Comment
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Comment\\Delete@resolve")
 
-	# Recording Mutations
-	createRecording(input: CreateRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Create@resolve")
-	updateRecording(input: UpdateRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Update@resolve")
-	deleteRecording(input: DeleteRecordingInput!): Recording @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Delete@resolve")
+  # Recording Mutations
+  createRecording(input: CreateRecordingInput!): Recording
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Create@resolve")
+  updateRecording(input: UpdateRecordingInput!): Recording
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Update@resolve")
+  deleteRecording(input: DeleteRecordingInput!): Recording
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Recording\\Delete@resolve")
 
-	# Recording Mutations
-	createSession(input: CreateSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Create@resolve")
-	updateSession(input: UpdateSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Update@resolve")
-	deleteSession(input: DeleteSessionInput!): Session @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Delete@resolve")
-	createSessionRecording(input: SessionRecordingInput!): SessionRecording @field(resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Create@resolve")
-	deleteSessionRecording(input: SessionRecordingInput!): SessionRecording @field(resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Delete@resolve")
+  # Recording Mutations
+  createSession(input: CreateSessionInput!): Session
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Create@resolve")
+  updateSession(input: UpdateSessionInput!): Session
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Update@resolve")
+  deleteSession(input: DeleteSessionInput!): Session
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Session\\Delete@resolve")
+  createSessionRecording(input: SessionRecordingInput!): SessionRecording
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Create@resolve"
+    )
+  deleteSessionRecording(input: SessionRecordingInput!): SessionRecording
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Delete@resolve"
+    )
 
-	# Song Mutations
-	createSong(input: CreateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Create@resolve")
-	updateSong(input: UpdateSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Update@resolve")
-	deleteSong(input: DeleteSongInput!): Song @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Delete@resolve")
+  # Song Mutations
+  createSong(input: CreateSongInput!): Song
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Create@resolve")
+  updateSong(input: UpdateSongInput!): Song
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Update@resolve")
+  deleteSong(input: DeleteSongInput!): Song
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Song\\Delete@resolve")
 
-	# Party Mutations
-	createParty(input: CreatePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Create@resolve")
-	updateParty(input: UpdatePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Update@resolve")
-	deleteParty(input: DeletePartyInput!): Party @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Delete@resolve")
-	createPartyAddress(input: CreatePartyAddressInput!): PartyAddress @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Create@resolve")
-	updatePartyAddress(input: UpdatePartyAddressInput!): PartyAddress @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Update@resolve")
-	deletePartyAddress(input: DeletePartyAddressInput!): PartyAddress @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Delete@resolve")
-	createPartyContact(input: CreatePartyContactInput!): PartyContact @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Create@resolve")
-	updatePartyContact(input: UpdatePartyContactInput!): PartyContact @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Update@resolve")
-	deletePartyContact(input: DeletePartyContactInput!): PartyContact @field(resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Delete@resolve")
+  # Party Mutations
+  createParty(input: CreatePartyInput!): Party
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Create@resolve")
+  updateParty(input: UpdatePartyInput!): Party
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Update@resolve")
+  deleteParty(input: DeletePartyInput!): Party
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Party\\Delete@resolve")
+  createPartyAddress(input: CreatePartyAddressInput!): PartyAddress
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Create@resolve"
+    )
+  updatePartyAddress(input: UpdatePartyAddressInput!): PartyAddress
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Update@resolve"
+    )
+  deletePartyAddress(input: DeletePartyAddressInput!): PartyAddress
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Delete@resolve"
+    )
+  createPartyContact(input: CreatePartyContactInput!): PartyContact
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Create@resolve"
+    )
+  updatePartyContact(input: UpdatePartyContactInput!): PartyContact
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Update@resolve"
+    )
+  deletePartyContact(input: DeletePartyContactInput!): PartyContact
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\PartyContact\\Delete@resolve"
+    )
 
-	# Collaborator Mutations
-	createCollaborator(input: CreateCollaboratorInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Create@resolve")
-	deleteCollaborator(input: DeleteCollaboratorInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Delete@resolve")
-	updateCollaborator(input: UpdateCollaboratorInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Update@resolve")
-	updateCollaboratorPermissions(input: UpdateCollaboratorPermissionsInput!): CollaboratorPermissionPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorPermission\\Update@resolve")
+  # Collaborator Mutations
+  createCollaborator(input: CreateCollaboratorInput!): Collaborator
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Create@resolve"
+    )
+  deleteCollaborator(input: DeleteCollaboratorInput!): Collaborator
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Delete@resolve"
+    )
+  updateCollaborator(input: UpdateCollaboratorInput!): Collaborator
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\Collaborator\\Update@resolve"
+    )
+  updateCollaboratorPermissions(
+    input: UpdateCollaboratorPermissionsInput!
+  ): CollaboratorPermissionPayload
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorPermission\\Update@resolve"
+    )
 
-	# Collaborator Invite Mutations
-	acceptCollaboratorInvite(input: AcceptCollaboratorInviteInput!): Collaborator @field(resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorInvite\\Accept@resolve")
-	doResendCollaboratorInvite(input: ResendCollaboratorInviteInput!): ResendCollaboratorInvitePayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorInvite\\Resend@resolve")
+  # Collaborator Invite Mutations
+  acceptCollaboratorInvite(input: AcceptCollaboratorInviteInput!): Collaborator
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorInvite\\Accept@resolve"
+    )
+  doResendCollaboratorInvite(
+    input: ResendCollaboratorInviteInput!
+  ): ResendCollaboratorInvitePayload
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\CollaboratorInvite\\Resend@resolve"
+    )
 
-	# Credit Mutations
-	createCredit(input: CreateCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Create@resolve")
-	updateCredit(input: UpdateCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Update@resolve")
-	deleteCredit(input: DeleteCreditInput!): Credit @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Delete@resolve")
+  # Credit Mutations
+  createCredit(input: CreateCreditInput!): Credit
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Create@resolve")
+  updateCredit(input: UpdateCreditInput!): Credit
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Update@resolve")
+  deleteCredit(input: DeleteCreditInput!): Credit
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Credit\\Delete@resolve")
 
-	# Venue Mutations
-	createVenue(input: CreateVenueInput!): Venue @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Create@resolve")
+  # Venue Mutations
+  createVenue(input: CreateVenueInput!): Venue
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Create@resolve")
 
-	# File & Folder Mutations
-	downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
-	deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
-	renameFile(input: RenameFileInput!): File @field(resolver: "App\\Http\\GraphQL\\Mutations\\RenameFile@resolve")
-	createFolder(input: CreateFolderInput!): Folder @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
-	renameFolder(input: RenameFolderInput!): Folder @field(resolver: "App\\Http\\GraphQL\\Mutations\\RenameFolder@resolve")
+  # File & Folder Mutations
+  downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\DownloadFiles@resolve")
+  deleteFiles(files: [DeleteFilesInput!]!): DeleteFilesPayload
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\DeleteFiles@resolve")
+  renameFile(input: RenameFileInput!): File
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\RenameFile@resolve")
+  createFolder(input: CreateFolderInput!): Folder
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
+  renameFolder(input: RenameFolderInput!): Folder
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\RenameFolder@resolve")
 
-	# Subscription Mutations
-	doSubscriptionUpdate(input: SubscriptionUpdateInput!): UserSubscription @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\Update@resolve")
-	doSubscriptionBillingUpdate(input: SubscriptionBillingUpdateInput!): User @field(resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\UpdateBilling@resolve")
+  # Subscription Mutations
+  doSubscriptionUpdate(input: SubscriptionUpdateInput!): UserSubscription
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\Update@resolve"
+    )
+  doSubscriptionBillingUpdate(input: SubscriptionBillingUpdateInput!): User
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\Subscription\\UpdateBilling@resolve"
+    )
 
-	# Mutation to mark unread activity as read for a project.
-	doResetUnreadActivity(input: ResetUnreadActivityInput!): UnreadActivityPayload @field(resolver: "App\\Http\\GraphQL\\Mutations\\ResetUnreadActivity@resolve")
+  # Mutation to mark unread activity as read for a project.
+  doResetUnreadActivity(
+    input: ResetUnreadActivityInput!
+  ): UnreadActivityPayload
+    @field(
+      resolver: "App\\Http\\GraphQL\\Mutations\\ResetUnreadActivity@resolve"
+    )
 }
 
 ## Subscriptions
 type Subscription {
-	eventLogCreated(
-		projectId: ID!
-	): EventLog
-	userStorageUpdated: User
-	userSubscriptionUpdated: UserSubscription
-	commentCreated(
-		projectId: ID!
-		resourceType: String!
-		resourceId: ID!
-	): Comment
-	collaboratorCreated: Collaborator
-	collaboratorRemoved: Collaborator
-	userUnreadActivities(projectId: ID!): UnreadActivityPayload
+  eventLogCreated(projectId: ID!): EventLog
+  userStorageUpdated: User
+  userSubscriptionUpdated: UserSubscription
+  commentCreated(
+    projectId: ID!
+    resourceType: String!
+    resourceId: ID!
+  ): Comment
+  collaboratorCreated: Collaborator
+  collaboratorRemoved: Collaborator
+  userUnreadActivities(projectId: ID!): UnreadActivityPayload
 }
 
 #import inputs.graphql
