@@ -57,6 +57,10 @@ class PlatformImage extends Resource
 
             Select::make('Location')->options([
                 'login' => 'Login Page',
+                'forgot-password' => 'Forgot Password',
+                'reset-password' => 'Reset Password',
+                'verification' => 'Verification',
+                'registration' => 'Registration'
             ])->displayUsingLabels()->rules('required'),
 
             Image::make('Image', 'path')
