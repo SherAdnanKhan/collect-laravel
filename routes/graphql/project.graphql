@@ -243,3 +243,15 @@ type Country {
 	name: String!
 	isoCode: String! @rename(attribute: "iso_code")
 }
+
+type PlatformImage {
+	_id: ID! @globalId @rename(attribute: "id")
+	id: ID!
+	location: String!
+	path: String!
+	caption: String
+	fullPath: String! @rename(attribute: "full_path")
+	altText: String! @rename(attribute: "alt_text")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}

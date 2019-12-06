@@ -135,6 +135,9 @@ extend type Query @group(middleware: ["auth:api"]) {
 	# Get unread activity count
 	getUnreadActivity(projectId: ID!): UnreadActivityPayload! @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
 
+	# Get the platform images
+	getPlatformImages: [PlatformImage] @all
+
 	# Search Queries
 	searchUserFiles(
 		term: String!
