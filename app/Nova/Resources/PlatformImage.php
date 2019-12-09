@@ -64,7 +64,8 @@ class PlatformImage extends Resource
             ])->displayUsingLabels()->rules('required'),
 
             Image::make('Image', 'path')
-                ->rules('required')
+                ->deletable(false)
+                ->creationRules('required')
                 ->disk('public'),
 
             Text::make('Caption')
