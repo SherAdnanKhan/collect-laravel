@@ -33,7 +33,7 @@ class GetRecents
 
         return $query->where('event_logs.resource_type', '<>', 'comment')
             ->where('event_logs.action', '<>', 'delete')
-            ->orderBy('event_logs.updated_at', 'asc')
+            ->orderBy('event_logs.created_at', 'desc')
             ->groupBy('event_logs.resource_id', 'event_logs.resource_type')
             ->take($count)
             ->get();
