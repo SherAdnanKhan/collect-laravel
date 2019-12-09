@@ -92,3 +92,6 @@ class EventLog extends Model implements UserAccessible
         );
     }
 }
+
+
+// TODO: staging.ERROR: Argument 2 passed to App\Util\BuilderQueries\ProjectAccess::__construct() must be an instance of Illuminate\Foundation\Auth\User, null given, called in /home/forge/veva-studio-collect.analogrepublic.com/app/Models/EventLog.php on line 91 {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Argument 2 passed to App\\Util\\BuilderQueries\\ProjectAccess::__construct() must be an instance of Illuminate\\Foundation\\Auth\\User, null given, called in /home/forge/veva-studio-collect.analogrepublic.com/app/Models/EventLog.php on line 91 at /home/forge/veva-studio-collect.analogrepublic.com/app/Util/BuilderQueries/ProjectAccess.php:32)

@@ -34,11 +34,11 @@ class UserUnreadActivities extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
+        $args = $subscriber->args;
         if (!array_key_exists('projectId', $args)) {
             return false;
         }
 
-        $args = $subscriber->args;
         return $subscriber->context->user->id != $root->user_id && $root->project_id == array_get($args, 'projectId', 0);
     }
 
