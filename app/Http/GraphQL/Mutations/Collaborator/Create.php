@@ -8,6 +8,7 @@ use App\Models\Recording;
 use App\Models\Project;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
+use App\Http\GraphQL\Exceptions\ValidationException;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -44,6 +45,12 @@ class Create
             $recordingIds = collect(array_get($input, 'recordings', []))->pluck('id')->toArray();
         }
 
+        $collaboratorExists = $this->collaboratorExists($project, $input['email']);
+
+        if ($collaboratorExists) {
+            throw new ValidationException('The user is already a collaborator on this project');
+        }
+
         $cannotCreate = !$user->can('create', [
             Collaborator::class, $project, null
         ]);
@@ -52,6 +59,7 @@ class Create
             throw new AuthorizationException('User does not have permission to create a collaborator on this project');
         }
 
+
         $collaborator = $project->collaborators()->create(array_except($input, ['recordings']));
 
         if (!empty($recordingIds)) {
@@ -59,5 +67,14 @@ class Create
         }
 
         return $collaborator;
+    }
+
+    private function collaboratorExists(Project $project, $email)
+    {
+        $query = $project->newQuery()->whereDoesntHave('collaborators', function($q) use ($email) {
+            return $q->where('email', $email);
+        });
+
+        return $query->exists();
     }
 }
