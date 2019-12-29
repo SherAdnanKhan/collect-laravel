@@ -303,8 +303,8 @@ input UpdateCollaboratorPermissionsInput {
 }
 
 input UpdateCollaboratorInput {
-    id: ID!
-    type: String!
+    id: ID! @rules(apply: ["required"])
+    type: String! @rules(apply: ["required"])
     recordings: [CollaboratorRecordingInput]
 }
 

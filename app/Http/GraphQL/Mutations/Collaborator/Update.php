@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Collaborator;
 
+use Log;
 use App\Models\Collaborator;
 use App\Models\CollaboratorInvite;
 use App\Models\Recording;
@@ -40,6 +41,8 @@ class Update
             throw new AuthorizationException('Collaborator could not be found');
         }
 
+        Log::info(sprintf('UPDATE_COLLAB: user %s being updated to %s from %s', $collaborator->email, $type, $collaborator->type));
+
         // Check to see if the updated type is a normal.
         if ($type === 'normal') {
             // If we were a recording collab, remove
@@ -54,6 +57,9 @@ class Update
 
             return $collaborator;
         }
+
+        $collaborator->type = $type;
+        $collaborator->save();
 
         $recordingIds = [];
         if (array_has($input, 'recordings')) {
