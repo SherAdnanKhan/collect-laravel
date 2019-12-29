@@ -41,8 +41,6 @@ class Update
             throw new AuthorizationException('Collaborator could not be found');
         }
 
-        Log::info(sprintf('UPDATE_COLLAB: user %s being updated to %s from %s', $collaborator->email, $type, $collaborator->type));
-
         // Check to see if the updated type is a normal.
         if ($type === 'normal') {
             // If we were a recording collab, remove
