@@ -19,6 +19,7 @@ use App\ElasticSearch\FilesIndexConfigurator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
 
 /**
  * Represent a file that has been uploaded by a user into the system.
@@ -151,5 +152,57 @@ class File extends Model implements UserAccessible, Commentable
     public function favourites(): MorphMany
     {
         return $this->morphMany(UserFavourite::class, 'favoured');
+    }
+
+    /**
+     * Provide a default user viewable scope which will by default
+     * filter out models where the user doesn't have read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        $query = $query->where(function($q) use ($user) {
+            return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
+        })->orWhere(function($q) use ($user) {
+            return $q->whereHas('folder', function ($q) use ($user) {
+                return $q->whereHas('recording', function($q) use ($user) {
+                    return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+                });
+            });
+        });
+
+        return $this->wrapUserRelationCheck($user, $query);
+    }
+
+    /**
+     * Provide a default user viewable scope which will by default
+     * filter out models where the user doesn't have read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        $query = $query->where(function($q) use ($user) {
+            return (new ProjectAccess($q, $user, [$this->getTypeName()], ['update']))->getQuery();
+        })->orWhere(function($q) use ($user) {
+            return $q->whereHas('folder', function ($q) use ($user) {
+                return $q->whereHas('recording', function($q) use ($user) {
+                    return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+                });
+            });
+        });
+
+        return $this->wrapUserRelationCheck($user, $query);
     }
 }

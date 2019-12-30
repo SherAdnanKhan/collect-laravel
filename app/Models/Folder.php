@@ -121,7 +121,7 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
      */
     public function files(): HasMany
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class)->userViewable();
     }
 
     /**
@@ -131,7 +131,7 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
      */
     public function folders(): HasMany
     {
-        return $this->hasMany(Folder::class);
+        return $this->hasMany(Folder::class)->userViewable();
     }
 
     /**

@@ -87,12 +87,6 @@ class CollaboratorObserver
             new CollaboratorPermission(['type' => 'session', 'level' => 'read']),
             new CollaboratorPermission(['type' => 'session', 'level' => 'create']),
             new CollaboratorPermission(['type' => 'session', 'level' => 'update']),
-            new CollaboratorPermission(['type' => 'file', 'level' => 'read']),
-            new CollaboratorPermission(['type' => 'file', 'level' => 'create']),
-            new CollaboratorPermission(['type' => 'file', 'level' => 'update']),
-            new CollaboratorPermission(['type' => 'folder', 'level' => 'read']),
-            new CollaboratorPermission(['type' => 'folder', 'level' => 'create']),
-            new CollaboratorPermission(['type' => 'folder', 'level' => 'update']),
         ];
     }
 }
