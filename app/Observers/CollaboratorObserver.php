@@ -25,7 +25,7 @@ class CollaboratorObserver
         })->all();
 
         // The default permissions if we've got a recording collaborator.
-        if (!is_null($collaborator->recording_id)) {
+        if ($collaborator->type === 'recording') {
             $permissions = [
                 new CollaboratorPermission(['type' => 'recording', 'level' => 'read']),
                 new CollaboratorPermission(['type' => 'project', 'level' => 'read']),
@@ -38,6 +38,39 @@ class CollaboratorObserver
         $collaborator->createAndSendInvite();
 
         Subscription::broadcast('collaboratorCreated', $collaborator);
+    }
+
+    /**
+     * Handle the folder "updated" event.
+     *
+     * @param  \App\Models\Collaborator  $collaborator
+     * @return void
+     */
+    public function updated(Collaborator $collaborator)
+    {
+        // If we've updated the type, we need to make sure we're resetting the
+        // default permissions for that type.
+        if ($collaborator->isDirty('type')) {
+            $collaborator->permissions()->each(function($permission) {
+                $permission->delete();
+            });
+
+            // The default permissions
+            $permissions = collect(CollaboratorPermission::TYPES)->map(function($type) {
+                return new CollaboratorPermission(['type' => $type, 'level' => 'read']);
+            })->all();
+
+            // The default permissions if we've got a recording collaborator.
+            if ($collaborator->type === 'recording') {
+                $permissions = [
+                    new CollaboratorPermission(['type' => 'recording', 'level' => 'read']),
+                    new CollaboratorPermission(['type' => 'project', 'level' => 'read']),
+                ];
+            }
+
+            // Setup the default permissions.
+            $collaborator->permissions()->saveMany($permissions);
+        }
     }
 
     /**

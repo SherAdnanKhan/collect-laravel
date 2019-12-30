@@ -47,7 +47,6 @@ class Update
             // the associations to the recordings.
             if ($collaborator->type !== 'normal') {
                 $collaborator->recordings()->sync([]);
-                $collaborator->permissions->detach();
             }
 
             // Update our type
@@ -55,10 +54,6 @@ class Update
             $collaborator->save();
 
             return $collaborator;
-        }
-
-        if ($collaborator->type !== 'recording') {
-            $collaborator->permissions->detach();
         }
 
         $collaborator->type = $type;
