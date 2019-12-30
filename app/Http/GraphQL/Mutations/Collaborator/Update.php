@@ -51,12 +51,14 @@ class Update
 
             // Update our type
             $collaborator->type = $type;
+            $collaborator->permissions->detach();
             $collaborator->save();
 
             return $collaborator;
         }
 
         $collaborator->type = $type;
+        $collaborator->permissions->detach();
         $collaborator->save();
 
         $recordingIds = [];
