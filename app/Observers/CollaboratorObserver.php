@@ -26,10 +26,7 @@ class CollaboratorObserver
 
         // The default permissions if we've got a recording collaborator.
         if ($collaborator->type === 'recording') {
-            $permissions = [
-                new CollaboratorPermission(['type' => 'recording', 'level' => 'read']),
-                new CollaboratorPermission(['type' => 'project', 'level' => 'read']),
-            ];
+            $permissions = self::defaultRecordingPermissions();
         }
 
         // Setup the default permissions.
@@ -62,10 +59,7 @@ class CollaboratorObserver
 
             // The default permissions if we've got a recording collaborator.
             if ($collaborator->type === 'recording') {
-                $permissions = [
-                    new CollaboratorPermission(['type' => 'recording', 'level' => 'read']),
-                    new CollaboratorPermission(['type' => 'project', 'level' => 'read']),
-                ];
+                $permissions = self::defaultRecordingPermissions();
             }
 
             // Setup the default permissions.
@@ -82,5 +76,23 @@ class CollaboratorObserver
     public function deleted(Collaborator $collaborator)
     {
         Subscription::broadcast('collaboratorRemoved', $collaborator);
+    }
+
+    private static function defaultRecordingPermissions()
+    {
+        return [
+            new CollaboratorPermission(['type' => 'recording', 'level' => 'read']),
+            new CollaboratorPermission(['type' => 'recording', 'level' => 'update']),
+            new CollaboratorPermission(['type' => 'project', 'level' => 'read']),
+            new CollaboratorPermission(['type' => 'session', 'level' => 'read']),
+            new CollaboratorPermission(['type' => 'session', 'level' => 'create']),
+            new CollaboratorPermission(['type' => 'session', 'level' => 'update']),
+            new CollaboratorPermission(['type' => 'file', 'level' => 'read']),
+            new CollaboratorPermission(['type' => 'file', 'level' => 'create']),
+            new CollaboratorPermission(['type' => 'file', 'level' => 'update']),
+            new CollaboratorPermission(['type' => 'folder', 'level' => 'read']),
+            new CollaboratorPermission(['type' => 'folder', 'level' => 'create']),
+            new CollaboratorPermission(['type' => 'folder', 'level' => 'update']),
+        ];
     }
 }
