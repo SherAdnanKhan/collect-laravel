@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\ElasticSearch\SessionsIndexConfigurator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Util\BuilderQueries\CollaboratorRecordingAccess;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Session extends Model implements UserAccessible, EventLoggable, Creditable, Commentable
@@ -187,5 +188,57 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     public function getContributorReferenceKey($version = '1.1'): string
     {
         return 'SessionContributorReference';
+    }
+
+    /**
+     * Provide a default user viewable scope which will by default
+     * filter out models where the user doesn't have read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserViewable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        $query = $query->where(function($q) use ($user) {
+            return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
+        })->orWhere(function($q) use ($user) {
+            return $q->whereHas('project', function ($q) use ($user) {
+                return $q->whereHas('recordings', function($q) use ($user) {
+                    return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+                });
+            });
+        });
+
+        return $this->wrapUserRelationCheck($user, $query);
+    }
+
+    /**
+     * Provide a default user viewable scope which will by default
+     * filter out models where the user doesn't have read permissions on it's
+     * related project using the type of the resource.
+     *
+     * @param  Builder $query
+     * @param  array   $data
+     * @return Builder
+     */
+    public function scopeUserUpdatable(Builder $query, $data = []): Builder
+    {
+        $user = $this->getUser($data);
+
+        $query = $query->where(function($q) use ($user) {
+            return (new ProjectAccess($q, $user, [$this->getTypeName()], ['update']))->getQuery();
+        })->orWhere(function($q) use ($user) {
+            return $q->whereHas('project', function ($q) use ($user) {
+                return $q->whereHas('recordings', function($q) use ($user) {
+                    return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+                });
+            });
+        });
+
+        return $this->wrapUserRelationCheck($user, $query);
     }
 }

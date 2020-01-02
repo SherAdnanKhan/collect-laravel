@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Log;
 use App\Models\Song;
 use App\Models\User;
 use App\Models\Party;
@@ -397,12 +398,19 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
      */
     public function userPolicy(Authenticatable $user, $types = ['project'], $permissions = ['read'], $hook = null): bool
     {
+        Log::info(sprintf('checking userpolicy for %s on %s for permissions %s', $user->id, join(', ', $types), join(', ', $permissions)));
+
         $query = $this->newQuery()->select('projects.id')
             ->where('projects.id', $this->getKey())
-            ->where(function ($q) use ($user, $types, $permissions) {
-                return (new CollaboratorPermission($q, $user, $types, $permissions))
-                    ->getQuery()
-                    ->orWhere('projects.user_id', $user->getKey());
+            ->where(function($q) use ($user, $types, $permissions) {
+                return $q->where(function ($q) use ($user, $types, $permissions) {
+                    return (new CollaboratorPermission($q, $user, $types, $permissions))
+                        ->getQuery()
+                        ->orWhere('projects.user_id', $user->getKey());
+                })
+                ->orWhere(function ($q) use ($user) {
+                    return (new CollaboratorRecordingAccess($q, $user))->getQuery();
+                });
             });
 
         if (!is_null($hook) && is_callable($hook)) {
