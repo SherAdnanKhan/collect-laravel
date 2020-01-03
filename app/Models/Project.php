@@ -433,4 +433,9 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     {
         return 'ProjectContributorReference';
     }
+
+    public function hasCollaborator($value, $field = 'email')
+    {
+        return $this->collaborators()->where($field, $value)->exists();
+    }
 }

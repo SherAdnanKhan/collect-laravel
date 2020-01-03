@@ -71,12 +71,6 @@ class Create
 
     private function collaboratorExists(Project $project, $email)
     {
-        $query = $project->newQuery()
-            ->where('id', $project->id)
-            ->whereDoesntHave('collaborators', function($q) use ($email) {
-                return $q->where('email', $email);
-            });
-
-        return $query->exists();
+        return $project->hasCollaborator($email);
     }
 }
