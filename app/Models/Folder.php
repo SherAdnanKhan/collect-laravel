@@ -146,6 +146,17 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     }
 
     /**
+     * Is the folder visible?
+
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeVisible(Builder $query): Builder
+    {
+        return $query->where('hidden', 0);
+    }
+
+    /**
      * Provide a default user viewable scope which will by default
      * filter out models where the user doesn't have read permissions on it's
      * related project using the type of the resource.

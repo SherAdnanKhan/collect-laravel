@@ -155,6 +155,29 @@ class File extends Model implements UserAccessible, Commentable
     }
 
     /**
+     * Is the file an alias for a folder
+     * which we want to treat as a file?
+
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeFolderAliases(Builder $query): Builder
+    {
+        return $query->whereNotNull('alias_folder_id');
+    }
+
+    /**
+     * Is the folder visible?
+
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeVisible(Builder $query): Builder
+    {
+        return $query->where('hidden', 0);
+    }
+
+    /**
      * Provide a default user viewable scope which will by default
      * filter out models where the user doesn't have read permissions on it's
      * related project using the type of the resource.
