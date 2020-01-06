@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use App\Models\Folder;
 use App\Models\Project;
-use \Illuminate\Http\Request;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class MultipartUploadsController extends Controller
 {
-    public function create(Request $request)
+    /**
+     * Handle the request to create the uploaded files
+     * and folders in the system.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Response
+     */
+    public function create(Request $request): Response
     {
         $meta = $request->get('meta');
 
@@ -17,7 +25,11 @@ class MultipartUploadsController extends Controller
         $user = auth()->user();
 
         $project = false;
+        $projectId = null;
 
+        // if we're uploading to a project
+        // make sure we have access and create a path
+        // to the project folder
         if ($meta['projectId']) {
             $project = Project::where('id', $meta['projectId'])
                 ->with('user', 'user.subscriptions')
@@ -27,6 +39,8 @@ class MultipartUploadsController extends Controller
             if (!$project) {
                 abort(403, 'Unauthorized action.');
             }
+
+            $projectId = $project->id;
 
             if ($project->user->hasStorageSpaceAvailable() === false) {
                 return response()->json([
@@ -40,6 +54,8 @@ class MultipartUploadsController extends Controller
                 $project->getUploadFolderPath()
             ];
         } else {
+            // Otherwise we're uploading to the
+            // users space
             if ($user->hasStorageSpaceAvailable() === false) {
                 return response()->json([
                     'upgradeRequired' => true
@@ -53,33 +69,40 @@ class MultipartUploadsController extends Controller
             ];
         }
 
-        // Get the current folder
+        // Get the current folder we're uploading to.
         $folder = null;
         if (isset($meta['folderId'])) {
             $query = Folder::where('id', $meta['folderId']);
+
+            // If we're uploading to a project we need to filter it out
+            // Otherwise we only want folders which have no project
             if ($project) {
                 $query = $query->where('project_id', $project->id);
             } else {
                 $query = $query->whereNull('project_id');
             }
+
+            // Just need the first one
             $folder = $query->first();
+
             if (!$folder) {
                 abort(403, 'Unauthorized action.');
             }
 
             // Build the path to this folder
-            $folder_path = array_map(function ($item) {
+            $folderPath = array_map(function ($item) {
                 return $item['name'];
             }, $folder->path);
 
-            $folder_path[] = $folder->name;
-            $path = $path + $folder_path;
+            $folderPath[] = $folder->name;
+            $path = $path + $folderPath;
         }
 
         // Sleep for between 0 and 1 seconds to try to prevent issues
         // with folder name and filename collisions
         usleep(rand(0, 1000000));
 
+        // Start at the current folder and at it's depth
         $currentFolder = $folder;
         $depth = ($folder ? $folder->depth : 0);
 
@@ -91,74 +114,95 @@ class MultipartUploadsController extends Controller
 
         $pathinfo = pathinfo($data['fullPath']);
         foreach (explode('/', $pathinfo['dirname']) as $name) {
-            # $name = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $name);
+            // If the folder name is empty, skip it.
             if (empty($name) || str_replace('.', '', $name) == '') {
                 continue;
             }
 
+            // Increase the folder depth
             $depth = $depth + 1;
 
+            // Find the folder row which matches the one we're in (based on path)
             $query = Folder::where('name', 'like', $name);
+
+            // if we're at a project level then filter down by project
+            // otherwise we want folders which aren't project related AND
+            // are owned by the user
             if ($project) {
                 $query = $query->where('project_id', $project->id);
             } else {
                 $query = $query->whereNull('project_id')->where('user_id', $user->id);
             }
 
+            // If we've got a folder we're uploading into, make sure the folder
+            // we've just found is inside that.
             if ($currentFolder) {
                 $query = $query->where('folder_id', $currentFolder->id);
             }
 
+            // Push the folder name into the overall path
             $path[] = $name;
 
+            // If we got a result when querying the folder
+            // set our current folder to that one and
+            // continue going down.
             if ($query->count() > 0) {
                 $currentFolder = $query->first();
                 continue;
             }
 
+            // TODO: If we've got a folder which has an extension we need to create
+            // TODO: a file for it which is an alias to the folder, and mark all nested folders and files as hidden
+
+            // If we've got a current folder make the new folder a child of that
+            $folderId = ($currentFolder ? $currentFolder->id : null);
+
+            // by default the root folder is the current one (if we're at the top level)
+            $rootFolderId = $folderId;
+
+            // If the parent folder has a root however, we're going to use that.
+            if ($currentFolder && $currentFolder->root_folder_id) {
+                $rootFolderId = $currentFolder->root_folder_id;
+            }
+
+            // Otherwise, we'll create the folder because we didn't find one
+            // inside the path.
             $currentFolder = Folder::create([
                 'user_id' => $user->id,
-                'project_id' => ($project ? $project->id : null),
-                'folder_id' => ($currentFolder ? $currentFolder->id : null),
-                'root_folder_id' => ($currentFolder ? ($currentFolder->root_folder_id ? $currentFolder->root_folder_id : $currentFolder->id) : null),
+                'project_id' => $projectId,
+                'folder_id' => $folderId,
+                'root_folder_id' => $rootFolderId,
                 'name' => $name,
                 'depth' => $depth
             ]);
         }
 
+        $folderId = ($currentFolder ? $currentFolder->id : null);
+
         // Check the filename for duplicates
-        // $original_filename = preg_replace('/([^a-zA-Z0-9\!\-\_\.\*\,\(\)]+)/', '', $pathinfo['filename']);
-        $original_filename = $pathinfo['filename'];
+        $originalFilename = $pathinfo['filename'];
         $extension = $pathinfo['extension'];
-        $existing_file_query_base = ($project ?
-            File::where('project_id', $project->id)
-            :
-            File::whereNull('project_id')->where('user_id', $user->id)
-        );
-        if ($currentFolder) {
-            $existing_file_query_base->where('folder_id', $currentFolder->id);
-        }
-        $filename = $original_filename;
-        $existing_file = (clone $existing_file_query_base)->where('name', 'like', $filename . '.' . $extension)->first();
-        $count = 1;
-        while ($existing_file) {
-            $filename  = $original_filename . ' ('.$count.')';
-            $existing_file = (clone $existing_file_query_base)->where('name', 'like', $filename . '.' . $extension)->first();
-            $count++;
-        }
 
-        $key = implode('/', $path) . '/' . $filename . '.' . $extension;
+        // We'll calculate the filename, if we have duplicates we will add the
+        // count to the filename.
+        $filename = $this->calculateFilename($currentFolder, $originalFilename, $extensionl, $project, $user);
+        $fullFilename = $filename . '.' . $extension;
 
+        // Generate the S3 key
+        $key = implode('/', $path) . '/' . $fullFilename;
+
+        // Create the file
         $file = File::create([
             'user_id' => $user->id,
-            'project_id' => ($project ? $project->id : null),
-            'folder_id' => ($currentFolder ? $currentFolder->id : null),
+            'project_id' => $projectId,
+            'folder_id' => $folderId,
             'path' => $key,
-            'name' => $filename . '.' . $extension,
+            'name' => $fullFilename,
             'type' => $extension,
             'status' => File::STATUS_PENDING
         ]);
 
+        // uplaod the upload
         $s3 = $this->getS3Client();
         $result = $s3->createMultipartUpload([
             'Bucket' => config('filesystems.disks.s3.bucket'),
@@ -166,14 +210,12 @@ class MultipartUploadsController extends Controller
             'ACL'    => 'private'
         ]);
 
-        $uploadId = $result['UploadId'];
-
         return response()->json([
             'id'        => $file->id,
-            'projectId' => ($project ? $project->id : null),
-            'folderId'  => ($currentFolder ? $currentFolder->id : null),
-            'name'      => $filename . '.' . $extension,
-            'uploadId'  => $uploadId,
+            'projectId' => $projectId,
+            'folderId'  => $folderId,
+            'name'      => $fullFilename,
+            'uploadId'  => array_get($result, 'UploadId'),
             'key'       => $key,
         ]);
     }
@@ -184,8 +226,8 @@ class MultipartUploadsController extends Controller
         $cmd = $s3->getCommand('uploadPart', [
             'Bucket' => config('filesystems.disks.s3.bucket'),
             'UploadId' => $request->get('uploadId'),
-            'Key'    => $request->get('key'),
-            'PartNumber'    => $request->get('number'),
+            'Key' => $request->get('key'),
+            'PartNumber' => $request->get('number'),
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+1 hour');
@@ -199,7 +241,7 @@ class MultipartUploadsController extends Controller
     {
         $s3 = $this->getS3Client();
         $result = $s3->listParts([
-            'Bucket'   => config('filesystems.disks.s3.bucket'),
+            'Bucket' => config('filesystems.disks.s3.bucket'),
             'UploadId' => $request->get('uploadId'),
             'Key' => $request->get('key')
         ]);
@@ -209,8 +251,12 @@ class MultipartUploadsController extends Controller
 
     public function abort(Request $request)
     {
-        $file_query = File::where('id', $request->get('id'))->where('status', File::STATUS_PENDING)->where('project_id', $request->get('projectId'))->userViewable();
-        if ($request->has('folderId')) {
+        $file_query = File::where('id', $request->get('id'))
+            ->where('status', File::STATUS_PENDING)
+            ->where('project_id', $request->get('projectId'))
+            ->userViewable();
+
+            if ($request->has('folderId')) {
             $file_query->where('folder_id', $request->get('folderId'));
         } else {
             $file_query->whereNull('folder_id');
@@ -230,6 +276,7 @@ class MultipartUploadsController extends Controller
                 'Key'      => $file->path,
                 'UploadId' => $request->get('uploadId')
             ]);
+
             $file->forceDelete();
         } catch (\Exception $e) {
             //
@@ -246,10 +293,11 @@ class MultipartUploadsController extends Controller
         $parts = $request->get('parts');
         if (empty($parts)) {
             $result = $s3->listParts([
-                'Bucket'   => config('filesystems.disks.s3.bucket'),
+                'Bucket' => config('filesystems.disks.s3.bucket'),
                 'UploadId' => $request->get('uploadId'),
                 'Key' => $request->get('key')
             ]);
+
             $parts = (array)$result->get('Parts');
         }
 
@@ -282,5 +330,34 @@ class MultipartUploadsController extends Controller
                 'secret' => $config['secret'],
             ]
         ]);
+    }
+
+    private function calculateFilename($currentFolder, $originalFilename, $extension, $project, $user)
+    {
+        $existingFileQueryBase = ($project ?
+            File::where('project_id', $project->id)
+            :
+            File::whereNull('project_id')->where('user_id', $user->id)
+        );
+
+        if ($currentFolder) {
+            $existingFileQueryBase->where('folder_id', $currentFolder->id);
+        }
+
+        $filename = $originalFilename;
+        $existingFile = (clone $existingFileQueryBase)
+            ->where('name', 'like', $filename . '.' . $extension)
+            ->first();
+
+        $count = 1;
+        while ($existingFile) {
+            $filename  = $originalFilename . ' ('.$count.')';
+            $existingFile = (clone $existingFileQueryBase)
+                ->where('name', 'like', $filename . '.' . $extension)
+                ->first();
+            $count++;
+        }
+
+        return $filename;
     }
 }
