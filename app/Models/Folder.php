@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Traits\EventLogged;
 use App\Traits\HasComments;
 use App\Traits\OrderScopes;
+use App\Scopes\VisibleScope;
 use App\Traits\UserAccesses;
 use App\Contracts\Commentable;
 use App\Contracts\EventLoggable;
@@ -62,6 +63,18 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
         }
 
         return array_reverse($path);
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new VisibleScope);
     }
 
     /**
@@ -143,17 +156,6 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     public function getTypeName(): string
     {
         return 'file';
-    }
-
-    /**
-     * Is the folder visible?
-
-     * @param  Builder $query
-     * @return Builder
-     */
-    public function scopeVisible(Builder $query): Builder
-    {
-        return $query->where('hidden', 0);
     }
 
     /**

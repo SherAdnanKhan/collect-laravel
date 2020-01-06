@@ -7,6 +7,7 @@ use App\Models\Folder;
 use App\Models\Project;
 use App\Traits\HasComments;
 use App\Traits\OrderScopes;
+use App\Scopes\VisibleScope;
 use App\Traits\UserAccesses;
 use ScoutElastic\Searchable;
 use App\Contracts\Commentable;
@@ -103,6 +104,18 @@ class File extends Model implements UserAccessible, Commentable
     ];
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new VisibleScope);
+    }
+
+    /**
      * Get whether this file is previable
      *
      *
@@ -161,20 +174,9 @@ class File extends Model implements UserAccessible, Commentable
      * @param  Builder $query
      * @return Builder
      */
-    public function scopeFolderAliases(Builder $query): Builder
+    public function scopeIsFolderAlias(Builder $query): Builder
     {
         return $query->whereNotNull('alias_folder_id');
-    }
-
-    /**
-     * Is the folder visible?
-
-     * @param  Builder $query
-     * @return Builder
-     */
-    public function scopeVisible(Builder $query): Builder
-    {
-        return $query->where('hidden', 0);
     }
 
     /**
