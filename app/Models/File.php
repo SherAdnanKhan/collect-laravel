@@ -168,6 +168,16 @@ class File extends Model implements UserAccessible, Commentable
     }
 
     /**
+     * Get the folder of which this file is an alias
+     *
+     * @return BelongsTo
+     */
+    public function aliasFolder(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class, 'alias_folder_id');
+    }
+
+    /**
      * Is the file an alias for a folder
      * which we want to treat as a file?
 
