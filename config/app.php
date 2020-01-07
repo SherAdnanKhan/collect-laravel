@@ -251,9 +251,47 @@ return [
 
         'GraphQL' => \Nuwave\Lighthouse\Support\Facades\GraphQLFacade::class,
         'Image' => Intervention\Image\Facades\Image::class
-
-
-
     ],
 
+    'folder' => [
+        'extensions' => [
+            // Studio One
+            'song',
+            // Digital Performer
+            'dpdoc',
+            'dp3',
+            'addoc',
+            'vst',
+            // Bitwig
+            'bwproject',
+            // Reason
+            'rsn',
+            'rps',
+            'record',
+            'reason',
+            'rsndemo',
+            // Cakewalk
+            'cwp',
+            'cwb',
+            // Pro Tools
+            'ptx',
+            'ptf',
+            'pts',
+            // Cubase
+            'cpr',
+            // Nuendo
+            'npr',
+            // Logic
+            'logic',
+            'logicx',
+            // Ableton
+            'als',
+            // Reaper
+            'rpp',
+            // FL Studio
+            'flp',
+            // Ardour
+            'ardour',
+        ],
+    ],
 ];

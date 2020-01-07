@@ -72,7 +72,7 @@ class MultipartUploadsController extends Controller
         // Get the current folder we're uploading to.
         $folder = null;
         if (isset($meta['folderId'])) {
-            $query = Folder::where('id', $meta['folderId']);
+            $query = Folder::withoutGlobalScope('visible')->where('id', $meta['folderId']);
 
             // If we're uploading to a project we need to filter it out
             // Otherwise we only want folders which have no project
@@ -123,7 +123,7 @@ class MultipartUploadsController extends Controller
             $depth = $depth + 1;
 
             // Find the folder row which matches the one we're in (based on path)
-            $query = Folder::where('name', 'like', $name);
+            $query = Folder::withoutGlobalScope('visible')->where('name', 'like', $name);
 
             // if we're at a project level then filter down by project
             // otherwise we want folders which aren't project related AND
@@ -151,9 +151,6 @@ class MultipartUploadsController extends Controller
                 continue;
             }
 
-            // TODO: If we've got a folder which has an extension we need to create
-            // TODO: a file for it which is an alias to the folder, and mark all nested folders and files as hidden
-
             // If we've got a current folder make the new folder a child of that
             $folderId = ($currentFolder ? $currentFolder->id : null);
 
@@ -165,6 +162,8 @@ class MultipartUploadsController extends Controller
                 $rootFolderId = $currentFolder->root_folder_id;
             }
 
+            list($isAppFolder, $extension) = $this->folderNameIsApplicationFolder($name);
+
             // Otherwise, we'll create the folder because we didn't find one
             // inside the path.
             $currentFolder = Folder::create([
@@ -173,10 +172,28 @@ class MultipartUploadsController extends Controller
                 'folder_id' => $folderId,
                 'root_folder_id' => $rootFolderId,
                 'name' => $name,
-                'depth' => $depth
+                'depth' => $depth,
+                'hidden' => $isAppFolder,
             ]);
+
+            // If the folder is an application folder we need
+            // to create a file alias to it.
+            if ($isAppFolder) {
+                File::create([
+                    'user_id' => $user->id,
+                    'project_id' => $projectId,
+                    'folder_id' => $folderId,
+                    'alias_folder_id' => $currentFolder->id,
+                    'path' => implode('/', $path) . '/' . $name,
+                    'name' => $name,
+                    'type' => $extension,
+                    'status' => File::STATUS_COMPLETE,
+                    'hidden' => false,
+                ]);
+            }
         }
 
+        $hidden = ($currentFolder ? $currentFolder->hidden : false);
         $folderId = ($currentFolder ? $currentFolder->id : null);
 
         // Check the filename for duplicates
@@ -199,7 +216,8 @@ class MultipartUploadsController extends Controller
             'path' => $key,
             'name' => $fullFilename,
             'type' => $extension,
-            'status' => File::STATUS_PENDING
+            'status' => File::STATUS_PENDING,
+            'hidden' => $hidden,
         ]);
 
         // uplaod the upload
@@ -251,7 +269,8 @@ class MultipartUploadsController extends Controller
 
     public function abort(Request $request)
     {
-        $file_query = File::where('id', $request->get('id'))
+        $file_query = File::withoutGlobalScope('visible')
+            ->where('id', $request->get('id'))
             ->where('status', File::STATUS_PENDING)
             ->where('project_id', $request->get('projectId'))
             ->userViewable();
@@ -335,9 +354,9 @@ class MultipartUploadsController extends Controller
     private function calculateFilename($currentFolder, $originalFilename, $extension, $project, $user)
     {
         $existingFileQueryBase = ($project ?
-            File::where('project_id', $project->id)
+            File::where('project_id', $project->id)->withoutGlobalScope('visible')
             :
-            File::whereNull('project_id')->where('user_id', $user->id)
+            File::whereNull('project_id')->withoutGlobalScope('visible')->where('user_id', $user->id)
         );
 
         if ($currentFolder) {
@@ -359,5 +378,24 @@ class MultipartUploadsController extends Controller
         }
 
         return $filename;
+    }
+
+    private function folderNameIsApplicationFolder($folderName)
+    {
+        $extensions = config('app.folder.extensions', []);
+
+        if (empty($extensions)) {
+            return false;
+        }
+
+        $pattern = sprintf('/\w*\.(%s)/gi', join('|', $extensions));
+
+        $matches = [];
+        preg_match($pattern, $folderName, $matches);
+
+        return [
+            count($matches) > 0,
+            current($matches)
+        ];
     }
 }
