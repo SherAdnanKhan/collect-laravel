@@ -265,11 +265,11 @@ return [
             // Bitwig
             'bwproject',
             // Reason
+            'rsndemo',
             'rsn',
             'rps',
             'record',
             'reason',
-            'rsndemo',
             // Cakewalk
             'cwp',
             'cwb',
@@ -282,8 +282,8 @@ return [
             // Nuendo
             'npr',
             // Logic
-            'logic',
             'logicx',
+            'logic',
             // Ableton
             'als',
             // Reaper

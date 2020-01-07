@@ -33,7 +33,9 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     use OrderScopes;
 
     protected $fillable = [
-        'user_id', 'project_id', 'folder_id', 'root_folder_id', 'name', 'depth', 'readonly'
+        'user_id', 'project_id', 'folder_id', 'root_folder_id',
+        'name', 'depth', 'readonly',
+        'hidden',
     ];
 
     /**

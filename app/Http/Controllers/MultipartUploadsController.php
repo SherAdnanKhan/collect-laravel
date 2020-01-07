@@ -7,6 +7,7 @@ use App\Models\Folder;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class MultipartUploadsController extends Controller
 {
@@ -15,9 +16,9 @@ class MultipartUploadsController extends Controller
      * and folders in the system.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Illuminate\Http\Response
+     * @param \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request): Response
+    public function create(Request $request)
     {
         $meta = $request->get('meta');
 
@@ -164,6 +165,15 @@ class MultipartUploadsController extends Controller
 
             list($isAppFolder, $extension) = $this->folderNameIsApplicationFolder($name);
 
+            Log::info(
+                sprintf(
+                    'Creating folder %s, is application? %s with extenstion %s',
+                    $name,
+                    $isAppFolder ? 'yes' : 'no',
+                    $extension
+                )
+            );
+
             // Otherwise, we'll create the folder because we didn't find one
             // inside the path.
             $currentFolder = Folder::create([
@@ -179,11 +189,13 @@ class MultipartUploadsController extends Controller
             // If the folder is an application folder we need
             // to create a file alias to it.
             if ($isAppFolder) {
+                Log::info('Creating alias for application folder');
+
                 File::create([
                     'user_id' => $user->id,
                     'project_id' => $projectId,
                     'folder_id' => $folderId,
-                    'alias_folder_id' => $currentFolder->id,
+                    'aliased_folder_id' => $currentFolder->id,
                     'path' => implode('/', $path) . '/' . $name,
                     'name' => $name,
                     'type' => $extension,
@@ -197,12 +209,12 @@ class MultipartUploadsController extends Controller
         $folderId = ($currentFolder ? $currentFolder->id : null);
 
         // Check the filename for duplicates
-        $originalFilename = $pathinfo['filename'];
-        $extension = $pathinfo['extension'];
+        $originalFilename = array_get($pathinfo, 'filename', '');
+        $extension = array_get($pathinfo, 'extension', '');
 
         // We'll calculate the filename, if we have duplicates we will add the
         // count to the filename.
-        $filename = $this->calculateFilename($currentFolder, $originalFilename, $extensionl, $project, $user);
+        $filename = $this->calculateFilename($currentFolder, $originalFilename, $extension, $project, $user);
         $fullFilename = $filename . '.' . $extension;
 
         // Generate the S3 key
@@ -388,14 +400,14 @@ class MultipartUploadsController extends Controller
             return false;
         }
 
-        $pattern = sprintf('/\w*\.(%s)/gi', join('|', $extensions));
+        $pattern = sprintf('/\w*\.(?P<extension>%s)/i', join('|', $extensions));
 
         $matches = [];
         preg_match($pattern, $folderName, $matches);
 
         return [
             count($matches) > 0,
-            current($matches)
+            array_get($matches, 'extension', '')
         ];
     }
 }

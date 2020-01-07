@@ -45,6 +45,7 @@ class File extends Model implements UserAccessible, Commentable
     protected $fillable = [
         'user_id', 'project_id', 'folder_id', 'name', 'type', 'path', 'transcoded_path',
         'bitrate', 'bitdepth', 'size', 'samplerate', 'duration', 'numchans', 'status',
+        'hidden', 'aliased_folder_id',
     ];
 
     /**
@@ -174,7 +175,7 @@ class File extends Model implements UserAccessible, Commentable
      */
     public function aliasFolder(): BelongsTo
     {
-        return $this->belongsTo(Folder::class, 'alias_folder_id');
+        return $this->belongsTo(Folder::class, 'aliased_folder_id');
     }
 
     /**
@@ -186,7 +187,7 @@ class File extends Model implements UserAccessible, Commentable
      */
     public function scopeIsFolderAlias(Builder $query): Builder
     {
-        return $query->whereNotNull('alias_folder_id');
+        return $query->whereNotNull('aliased_folder_id');
     }
 
     /**
