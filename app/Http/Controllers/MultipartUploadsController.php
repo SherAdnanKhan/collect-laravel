@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use App\Models\Folder;
 use App\Models\Project;
+use App\Scopes\VisibleScope;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -73,7 +74,7 @@ class MultipartUploadsController extends Controller
         // Get the current folder we're uploading to.
         $folder = null;
         if (isset($meta['folderId'])) {
-            $query = Folder::withoutGlobalScope('visible')->where('id', $meta['folderId']);
+            $query = Folder::withoutGlobalScope(VisibleScope::class)->where('id', $meta['folderId']);
 
             // If we're uploading to a project we need to filter it out
             // Otherwise we only want folders which have no project
@@ -124,7 +125,7 @@ class MultipartUploadsController extends Controller
             $depth = $depth + 1;
 
             // Find the folder row which matches the one we're in (based on path)
-            $query = Folder::withoutGlobalScope('visible')->where('name', 'like', $name);
+            $query = Folder::withoutGlobalScope(VisibleScope::class)->where('name', 'like', $name);
 
             // if we're at a project level then filter down by project
             // otherwise we want folders which aren't project related AND
@@ -281,7 +282,7 @@ class MultipartUploadsController extends Controller
 
     public function abort(Request $request)
     {
-        $file_query = File::withoutGlobalScope('visible')
+        $file_query = File::withoutGlobalScope(VisibleScope::class)
             ->where('id', $request->get('id'))
             ->where('status', File::STATUS_PENDING)
             ->where('project_id', $request->get('projectId'))
@@ -366,9 +367,9 @@ class MultipartUploadsController extends Controller
     private function calculateFilename($currentFolder, $originalFilename, $extension, $project, $user)
     {
         $existingFileQueryBase = ($project ?
-            File::where('project_id', $project->id)->withoutGlobalScope('visible')
+            File::where('project_id', $project->id)->withoutGlobalScope(VisibleScope::class)
             :
-            File::whereNull('project_id')->withoutGlobalScope('visible')->where('user_id', $user->id)
+            File::whereNull('project_id')->withoutGlobalScope(VisibleScope::class)->where('user_id', $user->id)
         );
 
         if ($currentFolder) {

@@ -175,7 +175,18 @@ class File extends Model implements UserAccessible, Commentable
      */
     public function aliasFolder(): BelongsTo
     {
-        return $this->belongsTo(Folder::class, 'aliased_folder_id');
+        return $this->belongsTo(Folder::class, 'aliased_folder_id')
+            ->withoutGlobalScope(VisibleScope::class);
+    }
+
+    /**
+     * Is this file an alias of a folder?
+     *
+     * @return bool
+     */
+    public function isAlias(): bool
+    {
+        return !is_null($this->aliased_folder_id);
     }
 
     /**

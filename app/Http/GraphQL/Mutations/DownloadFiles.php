@@ -2,12 +2,14 @@
 
 namespace App\Http\GraphQL\Mutations;
 
-use App\Jobs\CreateDownloadZip;
 use App\Models\File;
 use App\Models\Folder;
+use App\Scopes\VisibleScope;
+use App\Jobs\CreateDownloadZip;
+use Illuminate\Support\Facades\Log;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 class DownloadFiles
 {
@@ -31,8 +33,8 @@ class DownloadFiles
             ];
         }
 
-        if (!isset($this->files_to_download[1]) && $this->files_to_download[0]['depth'] === 0) {
-            return $this->getFileURL($this->files_to_download[0]['id']);
+        if (!isset($this->files_to_download[1]) && $this->files_to_download[0]->depth === 0) {
+            return $this->getFileURL($this->files_to_download[0]);
         }
 
         CreateDownloadZip::dispatch(auth()->user()->id, $this->files_to_download);
@@ -42,10 +44,8 @@ class DownloadFiles
         ];
     }
 
-    private function getFileURL($id)
+    private function getFileURL($file)
     {
-        $file = File::find($id);
-
         $sharedConfig = [
             'region'  => config('filesystems.disks.s3.region'),
             'version' => 'latest',
@@ -82,31 +82,50 @@ class DownloadFiles
             }
 
             $file = File::where('id', $file['id'])->userViewable()->first();
+
             if (!$file || $file->status === File::STATUS_PENDING) {
                 continue;
             }
 
-            $this->addFile($file->id);
+            if ($file->isAlias()) {
+                $aliasFolder = $file->aliasFolder()->withoutGlobalScope(VisibleScope::class)->first();
+
+                if (is_null($aliasFolder)) {
+                    throw new \Exception('File is alias but cannot find folder with id: ' . $aliasFolder->aliased_folder_id);
+                }
+
+                $this->getFolderFiles($aliasFolder);
+                continue;
+            }
+
+            $this->addFile($file);
         }
     }
 
     private function getFolderFiles(Folder $folder, $depth = 0)
     {
         $files_to_download = [];
-        foreach ($folder->files as $file) {
-            $this->addFile($file->id, $depth);
+
+        $files = $folder->files()->withoutGlobalScope(VisibleScope::class)->get();
+        foreach ($files as $file) {
+            if ($file->isAlias()) {
+                $aliasFolder = $file->aliasFolder()->withoutGlobalScope(VisibleScope::class)->get();
+                $this->getFolderFiles($aliasFolder->first(), $depth + 1);
+                continue;
+            }
+
+            $this->addFile($file, $depth);
         }
 
-        foreach ($folder->folders as $folder) {
+        $folders = $folder->folders()->withoutGlobalScope(VisibleScope::class)->get();
+        foreach ($folders as $folder) {
             $this->getFolderFiles($folder, $depth + 1);
         }
     }
 
-    private function addFile($id, $depth = 0)
+    private function addFile($file, $depth = 0)
     {
-        $this->files_to_download[] = [
-            'id' => $id,
-            'depth' => $depth
-        ];
+        $file->depth = $depth;
+        $this->files_to_download[] = $file;
     }
 }
