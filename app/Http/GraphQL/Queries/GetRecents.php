@@ -26,10 +26,6 @@ class GetRecents
 
         $query = $user->eventLogs();
 
-        // TODO:
-        // Filter out the event logs so that we're only pulling ones for projects which the
-        // user owns or is a collaborator on.
-
         if (array_key_exists('resourceType', $args) && in_array(array_get($args, 'resourceType'), EventLog::TYPES)) {
             $query = $query->where('event_logs.resource_type', array_get($args, 'resourceType'));
         } else {
