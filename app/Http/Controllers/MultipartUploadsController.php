@@ -175,6 +175,10 @@ class MultipartUploadsController extends Controller
                 )
             );
 
+            if ($isAppFolder) {
+                $depth += 1;
+            }
+
             // Otherwise, we'll create the folder because we didn't find one
             // inside the path.
             $currentFolder = Folder::create([

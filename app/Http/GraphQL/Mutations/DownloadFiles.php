@@ -33,6 +33,8 @@ class DownloadFiles
             ];
         }
 
+        Log::info('files_to_download', $this->files_to_download);
+
         if (!isset($this->files_to_download[1]) && $this->files_to_download[0]->depth === 0) {
             return $this->getFileURL($this->files_to_download[0]);
         }
@@ -94,7 +96,7 @@ class DownloadFiles
                     throw new \Exception('File is alias but cannot find folder with id: ' . $aliasFolder->aliased_folder_id);
                 }
 
-                $this->getFolderFiles($aliasFolder);
+                $this->getFolderFiles($aliasFolder, 1);
                 continue;
             }
 
