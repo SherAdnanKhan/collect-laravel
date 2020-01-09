@@ -48,6 +48,10 @@ class File extends Model implements UserAccessible, Commentable
         'hidden', 'aliased_folder_id',
     ];
 
+    protected $casts = [
+        'hidden' => 'boolean'
+    ];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -100,7 +104,7 @@ class File extends Model implements UserAccessible, Commentable
                 //         'type' => 'keyword',
                 //     ]
                 // ]
-            ],
+            ]
         ]
     ];
 

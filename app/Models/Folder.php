@@ -38,6 +38,10 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
         'hidden',
     ];
 
+    protected $casts = [
+        'hidden' => 'boolean'
+    ];
+
     /**
      * The attributes that should be mutated to dates.
      *
