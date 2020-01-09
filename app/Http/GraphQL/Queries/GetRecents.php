@@ -51,6 +51,11 @@ class GetRecents
                         ->whereRaw('projects.user_id = event_logs.user_id');
                 });
             })
+            ->whereRaw('event_logs.id in (
+                SELECT MAX(id)
+                FROM event_logs
+                GROUP BY resource_id
+            )')
             ->orderBy('event_logs.created_at', 'desc')
             ->take($count)
             ->get();
