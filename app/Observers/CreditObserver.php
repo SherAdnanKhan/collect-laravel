@@ -35,16 +35,16 @@ class CreditObserver
 
         $credit->projects()->attach($projects);
 
-        switch($credit->contribution_type) {
+        switch ($credit->contribution_type) {
             case "project":
                 $credit->projects->searchable();
-            break;
+                break;
             case "song":
                 Song::find($credit->contribution_id)->searchable();
-            break;
+                break;
             case "recording":
                 Recording::find($credit->contribution_id)->searchable();
-            break;
+                break;
         }
     }
 
@@ -52,7 +52,7 @@ class CreditObserver
     {
         $credit->projects->searchable();
 
-        if($credit->contribution_type == "song") {
+        if ($credit->contribution_type == "song") {
             Song::find($credit->contribution_id)->searchable();
         }
     }
