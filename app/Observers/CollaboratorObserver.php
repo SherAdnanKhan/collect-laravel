@@ -87,9 +87,6 @@ class CollaboratorObserver
             new CollaboratorPermission(['type' => 'session', 'level' => 'read']),
             new CollaboratorPermission(['type' => 'session', 'level' => 'create']),
             new CollaboratorPermission(['type' => 'session', 'level' => 'update']),
-            new CollaboratorPermission(['type' => 'credit', 'level' => 'create']),
-            new CollaboratorPermission(['type' => 'credit', 'level' => 'update']),
-            new CollaboratorPermission(['type' => 'credit', 'level' => 'read']),
         ];
     }
 }
