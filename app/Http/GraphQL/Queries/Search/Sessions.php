@@ -22,7 +22,7 @@ class Sessions
         $term = array_get($args, 'term');
         $user = auth()->user();
 
-        $project_ids = $user->projects()->userViewable()->pluck('id')->toArray();
+        $project_ids = $user->projects()->userViewable(['user' => $user])->pluck('id')->toArray();
 
         return Session::search($term)
             ->get()
