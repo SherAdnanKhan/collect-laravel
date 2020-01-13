@@ -125,32 +125,69 @@ class MultipartUploadsController extends Controller
             $depth = $depth + 1;
 
             // Find the folder row which matches the one we're in (based on path)
-            $query = Folder::withoutGlobalScope(VisibleScope::class)->where('name', 'like', $name);
+            $originalQuery = Folder::withoutGlobalScope(VisibleScope::class);
 
             // if we're at a project level then filter down by project
             // otherwise we want folders which aren't project related AND
             // are owned by the user
             if ($project) {
-                $query = $query->where('project_id', $project->id);
+                $originalQuery = $originalQuery->where('project_id', $project->id);
             } else {
-                $query = $query->whereNull('project_id')->where('user_id', $user->id);
+                $originalQuery = $originalQuery->whereNull('project_id')->where('user_id', $user->id);
             }
 
             // If we've got a folder we're uploading into, make sure the folder
             // we've just found is inside that.
             if ($currentFolder) {
-                $query = $query->where('folder_id', $currentFolder->id);
+                $originalQuery = $originalQuery->where('folder_id', $currentFolder->id);
             }
 
-            // Push the folder name into the overall path
-            $path[] = $name;
+            list($isAppFolder, $extension) = $this->folderNameIsApplicationFolder($name);
 
-            // If we got a result when querying the folder
-            // set our current folder to that one and
-            // continue going down.
-            if ($query->count() > 0) {
-                $currentFolder = $query->first();
-                continue;
+            if ($isAppFolder) {
+                // If we got a result when querying the folder
+                // set our current folder to that one and
+                // continue going down.
+                $checking = true;
+                $count = 0;
+                list($originalName, $extension) = explode('.', $name);
+
+                while ($checking) {
+                    $searchingName = $name;
+                    if ($count > 0) {
+                        $searchingName = sprintf('%s(%d).%s', $originalName, $count, $extension);
+                    }
+
+                    $query = (clone $originalQuery)->where('name', 'like', $searchingName);
+                    if (!$query->exists()) {
+                        break;
+                    }
+
+                    $count++;
+                }
+            } else {
+                $count = $originalQuery->count();
+            }
+
+            if ($count > 0) {
+                // If the folder isn't an application folder
+                if (!$isAppFolder) {
+                    // Push the folder name into the overall path
+                    $path[] = $name;
+
+                    // use this folder
+                    $currentFolder = $originalQuery->first();
+                    continue;
+                }
+
+                // If it's an application folder we want to treat it as
+                // a new uploaded "extension folder" using the "(n)" pattern
+                // like we do with files.
+                list($originalName, $extension) = explode('.', $name);
+                $name = sprintf('%s(%d).%s', $originalName, $count, $extension);
+
+                // Push the folder name into the overall path
+                $path[] = $name;
             }
 
             // If we've got a current folder make the new folder a child of that
@@ -163,8 +200,6 @@ class MultipartUploadsController extends Controller
             if ($currentFolder && $currentFolder->root_folder_id) {
                 $rootFolderId = $currentFolder->root_folder_id;
             }
-
-            list($isAppFolder, $extension) = $this->folderNameIsApplicationFolder($name);
 
             Log::info(
                 sprintf(
