@@ -34,7 +34,8 @@ class CollaboratorObserver
 
         $collaborator->createAndSendInvite();
 
-        Subscription::broadcast('collaboratorCreated', $collaborator);
+        // Subscription::broadcast('collaboratorCreated', $collaborator);
+        Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
     }
 
     /**
@@ -64,6 +65,9 @@ class CollaboratorObserver
 
             // Setup the default permissions.
             $collaborator->permissions()->saveMany($permissions);
+
+            // Broadcast a GraphQL subscription for clients.
+            Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
         }
     }
 
@@ -75,7 +79,7 @@ class CollaboratorObserver
      */
     public function deleted(Collaborator $collaborator)
     {
-        Subscription::broadcast('collaboratorRemoved', $collaborator);
+        // Subscription::broadcast('collaboratorRemoved', $collaborator);
     }
 
     private static function defaultRecordingPermissions()

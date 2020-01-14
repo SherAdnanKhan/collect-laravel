@@ -386,13 +386,14 @@ type Subscription {
   eventLogCreated(projectId: ID!): EventLog
   userStorageUpdated: User
   userSubscriptionUpdated: UserSubscription
+  userPermissionsUpdated: User
   commentCreated(
     projectId: ID!
     resourceType: String!
     resourceId: ID!
   ): Comment
-  collaboratorCreated: Collaborator
-  collaboratorRemoved: Collaborator
+  # collaboratorCreated: Collaborator
+  # collaboratorRemoved: Collaborator
   userUnreadActivities(projectId: ID!): UnreadActivityPayload
 }
 

@@ -3,12 +3,13 @@
 namespace App\Http\GraphQL\Mutations\CollaboratorPermission;
 
 use App\Models\Collaborator;
+use Illuminate\Support\Facades\DB;
 use App\Models\CollaboratorPermission;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Support\Facades\DB;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
+use Nuwave\Lighthouse\Execution\Utils\Subscription;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class Update
 {
@@ -45,6 +46,9 @@ class Update
             $collaborator->permissions()->delete();
             $permissions = $collaborator->permissions()->saveMany($permissions);
             DB::commit();
+
+            // Broadcast a GraphQL subscription for clients.
+            Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
         } catch (\Exception $e) {
             DB::rollback();
         }
