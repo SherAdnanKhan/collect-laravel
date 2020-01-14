@@ -47,6 +47,8 @@ class Update
             $permissions = $collaborator->permissions()->saveMany($permissions);
             DB::commit();
 
+            $collaborator->user->touch();
+
             // Broadcast a GraphQL subscription for clients.
             Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
         } catch (\Exception $e) {
