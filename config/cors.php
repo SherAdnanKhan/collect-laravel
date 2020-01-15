@@ -13,7 +13,7 @@ return [
     */
 
     'supportsCredentials' => false,
-    'allowedOrigins' => ['http://veva.local:3000', 'http://localhost:3000'],
+    'allowedOrigins' => ['http://veva.local:3000', 'http://localhost:3000', 'https://veva-studio-collect.netlify.com'],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
