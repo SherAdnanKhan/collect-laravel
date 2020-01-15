@@ -128,7 +128,8 @@ return [
     |
     */
 
-    'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
+    // 'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
+    'debug' => true,
 
     /*
     |--------------------------------------------------------------------------
