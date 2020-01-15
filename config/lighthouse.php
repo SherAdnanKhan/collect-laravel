@@ -156,7 +156,7 @@ return [
 
     'extensions' => [
         // \Nuwave\Lighthouse\Schema\Extensions\DeferExtension::class,
-        \Nuwave\Lighthouse\Schema\Extensions\SubscriptionExtension::class,
+        // \Nuwave\Lighthouse\Schema\Extensions\SubscriptionExtension::class,
         // \Nuwave\Lighthouse\Schema\Extensions\TracingExtension::class,
     ],
 
