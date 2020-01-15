@@ -47,7 +47,7 @@ class UserPermissionsUpdated extends GraphQLSubscription
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @return \App\Models\User
      */
-    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Subscription
+    public function resolve($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): User
     {
         return $root;
     }
