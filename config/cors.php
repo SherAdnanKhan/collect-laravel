@@ -11,9 +11,9 @@ return [
     | to accept any value.
     |
     */
-   
+
     'supportsCredentials' => false,
-    'allowedOrigins' => ['*'],
+    'allowedOrigins' => ['http://veva.local:3000', 'http://localhost:3000'],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
