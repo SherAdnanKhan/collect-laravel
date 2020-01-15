@@ -129,7 +129,7 @@ return [
     */
 
     // 'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
-    'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::RETHROW_INTERNAL_EXCEPTIONS | Debug::INCLUDE_TRACE,
+    'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::RETHROW_UNSAFE_EXCEPTIONS | Debug::INCLUDE_TRACE,
 
     /*
     |--------------------------------------------------------------------------
