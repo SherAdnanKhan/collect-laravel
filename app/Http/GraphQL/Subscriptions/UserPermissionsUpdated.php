@@ -35,7 +35,7 @@ class UserPermissionsUpdated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        return $subscriber->context->user->id == $root->user_id;
+        return $subscriber->context->user->id == $root->id;
     }
 
     /**
