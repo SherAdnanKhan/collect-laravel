@@ -4,6 +4,7 @@ namespace App\Http\GraphQL\Mutations\CollaboratorPermission;
 
 use App\Models\Collaborator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\CollaboratorPermission;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -53,6 +54,7 @@ class Update
         $collaborator->user->touch();
 
         // Broadcast a GraphQL subscription for clients.
+        Log::debug('userPermissionsUpdated', [$collaborator->user]);
         Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
 
         return [
