@@ -9,6 +9,7 @@ use App\Scopes\VisibleScope;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class MultipartUploadsController extends Controller
 {
@@ -21,6 +22,13 @@ class MultipartUploadsController extends Controller
      */
     public function create(Request $request)
     {
+        // TODO:
+        // Use the unique token to batch folder creations for duplicates,
+        // so that we don't keep creating new folders for each file.
+
+        // Once we've worked out what folder we're using to save the files under we
+        // Don't need to check for more.
+
         $meta = $request->get('meta');
 
         // Get the current user
@@ -28,6 +36,8 @@ class MultipartUploadsController extends Controller
 
         $project = false;
         $projectId = null;
+
+        $batchId = array_get($meta, 'batchId', false);
 
         // if we're uploading to a project
         // make sure we have access and create a path
@@ -145,25 +155,40 @@ class MultipartUploadsController extends Controller
             list($isAppFolder, $extension) = $this->folderNameIsApplicationFolder($name);
 
             if ($isAppFolder) {
-                // If we got a result when querying the folder
-                // set our current folder to that one and
-                // continue going down.
-                $checking = true;
                 $count = 0;
-                list($originalName, $extension) = explode('.', $name);
+                $batchFolderName = false;
 
-                while ($checking) {
-                    $searchingName = $name;
-                    if ($count > 0) {
-                        $searchingName = sprintf('%s(%d).%s', $originalName, $count, $extension);
+                if ($batchId) {
+                    $batchFolderName = Cache::get('folders.' . $batchId, false);
+
+                    Log::debug('Folder for batch ' . $batchId, [$batchFolderName]);
+                }
+
+                if (!$batchFolderName) {
+                    // If we got a result when querying the folder
+                    // set our current folder to that one and
+                    // continue going down.
+                    $checking = true;
+                    $count = 0;
+                    list($originalName, $extension) = explode('.', $name);
+
+                    while ($checking) {
+                        $searchingName = $name;
+                        if ($count > 0) {
+                            $searchingName = sprintf('%s(%d).%s', $originalName, $count, $extension);
+                        }
+
+                        $query = (clone $originalQuery)->where('name', 'like', $searchingName);
+                        if (!$query->exists()) {
+                            break;
+                        }
+
+                        $count++;
                     }
-
-                    $query = (clone $originalQuery)->where('name', 'like', $searchingName);
-                    if (!$query->exists()) {
-                        break;
-                    }
-
-                    $count++;
+                } else {
+                    $name = $batchFolderName;
+                    $currentFolder = (clone $originalQuery)->where('name', 'like', $name)->first();
+                    continue;
                 }
             } else {
                 $count = $originalQuery->count();
@@ -212,6 +237,11 @@ class MultipartUploadsController extends Controller
 
             if ($isAppFolder) {
                 $depth += 1;
+
+                if ($batchId) {
+                    Cache::put('folders.' . $batchId, $name, 120);
+                    Log::debug('Saving folder for batch ' . $batchId, [$name]);
+                }
             }
 
             // Otherwise, we'll create the folder because we didn't find one
