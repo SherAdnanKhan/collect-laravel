@@ -194,6 +194,24 @@ class File extends Model implements UserAccessible, Commentable
     }
 
     /**
+     * Return a pretty version of the size
+     *
+     * @param  integer $precision
+     * @return string
+     */
+    public function getPrettySizeAttribute($precision = 2): string
+    {
+        if (empty($this->size)) {
+            return '';
+        }
+
+        $base = log($this->size, 1024);
+        $suffixes = ['', 'KB', 'MB', 'GB', 'TB'];
+
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
+    }
+
+    /**
      * Is the file an alias for a folder
      * which we want to treat as a file?
 

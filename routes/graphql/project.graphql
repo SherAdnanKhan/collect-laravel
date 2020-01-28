@@ -72,7 +72,8 @@ type File implements Favoured & Commentable & EventLoggable {
 	transcoded_path: String
 	bitrate: Int
 	bitdepth: Int
-	size: String
+	size: Int
+	prettySize: String
 	status: String!
 	isPreviewable: Boolean
 	createdAt: String! @rename(attribute: "created_at")
