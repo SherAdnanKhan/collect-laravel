@@ -56,9 +56,9 @@
         </style>
         <![endif]-->
   <!--[if !mso]><!-->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900" rel="stylesheet" type="text/css">
   <style type="text/css">
-    @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900);
+    @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900);
   </style>
   <!--<![endif]-->
   <style type="text/css">
@@ -139,7 +139,7 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#000000;">Hey {{ $name }},<br />
+                      <div style="font-family:Poppins, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#000000;">Hey {{ $name }},<br />
                         <br /> It looks like you’ve been working hard because you’ve reached your storage limit on VEVA Collect.<br />
                         <br /> You can either remove some of your files (make sure you have your own backup), or upgrade to one of our higher storage limit plans. Our Pro Plan includes unlimited storage amongst other great benefits!<br />
                         <br /> To view our other plan options <a href="{{ $link }}" style="color: #000000">click here</a>.<br />

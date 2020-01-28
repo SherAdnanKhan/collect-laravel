@@ -79,9 +79,9 @@
         </style>
         <![endif]-->
   <!--[if !mso]><!-->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900" rel="stylesheet" type="text/css">
   <style type="text/css">
-    @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900);
+    @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900);
   </style>
   <!--<![endif]-->
   <style type="text/css">
@@ -158,7 +158,7 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                      <div style="font-family:Source Sans Pro, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#000000;"> Hello,<br /> <br /> Your download is ready. Please click the button below to continue.<br /> <br /> <strong>Please Note: This link is only valid for 24 hours.</strong> </div>
+                      <div style="font-family:Poppins, Helvetica;font-size:16px;line-height:24px;text-align:left;color:#000000;"> Hello,<br /> <br /> Your download is ready. Please click the button below to continue.<br /> <br /> <strong>Please Note: This link is only valid for 24 hours.</strong> </div>
                     </td>
                   </tr>
                   <tr>
