@@ -51,11 +51,13 @@ class Update
             DB::rollback();
         }
 
-        $collaborator->user->touch();
+        if (!is_null($collaborator->user)) {
+            $collaborator->user->touch();
 
-        // Broadcast a GraphQL subscription for clients.
-        Log::debug('userPermissionsUpdated', [$collaborator->user]);
-        Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
+            // Broadcast a GraphQL subscription for clients.
+            Log::debug('userPermissionsUpdated', [$collaborator->user]);
+            Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
+        }
 
         return [
             'permissions' => $permissions,
