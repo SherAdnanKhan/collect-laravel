@@ -68,16 +68,16 @@ class PDFExporter
             $recordings = $this->project->recordings->sortBy('song.title');
         }
 
-        $sessions = $this->project->sessions;
-        if ($this->recording) {
-            $sessions = $this->recording->sessions;
-        }
+        // $sessions = $this->project->sessions;
+        // if ($this->recording) {
+        //     $sessions = $this->recording->sessions;
+        // }
 
         return [
             'datestamp'  => Carbon::now()->toDateString(),
             'project'    => $this->project,
             'recordings' => $recordings,
-            'sessions'   => $sessions,
+            // 'sessions'   => $sessions,
         ];
     }
 }

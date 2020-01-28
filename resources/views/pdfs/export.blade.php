@@ -150,65 +150,69 @@
                     @endforeach
                 @endforeach
             </div>
+
+
+            <!-- Session Credits -->
+            {{-- Sessions Listed in this order: Tracking always first, Mixing and Mastering always the last two - any session inbetween, doesn’t matter the order it’s displayed. --}}
+            <div class="block">
+                @php
+                    // Get all recording credits
+                    $sessions = $recording->sessions;
+
+                    // Only the tracking session.
+                    $trackingSession = $sessions->filter(function($session) {
+                        return $session->type->ddex_key === 'Tracking';
+                    })->first();
+
+                    // Only the mixing and mastering sessions
+                    $lastSessions = $sessions->filter(function($session) {
+                        return in_array($session->type->ddex_key, ['Mixing', 'Mastering']);
+                    })->sortByDesc('type.ddex_key');
+
+                    // All other sessions.
+                    $sessions = $sessions->filter(function($session) {
+                        return !in_array($session->type->ddex_key, ['Tracking', 'Mixing', 'Mastering']);
+                    })->sortBy('type.ddex_key');
+
+                    $allSessions = collect([$trackingSession])
+                        ->merge($sessions)
+                        ->merge($lastSessions)
+                        ->filter()->all();
+                @endphp
+
+                @foreach($allSessions as $session)
+                    <p>
+                        <span>{{ $session->type->name }}: </span>
+                        @if ($session->venue->name)
+                            <span>{{ $session->venue->name }}</span>,
+                        @endif
+                        @if ($session->venue->name)
+                            <span>{{ $session->venue_room }}</span>,
+                        @endif
+                        @if ($session->venue->name)
+                            <span>{{ $session->venue->address }}</span> -
+                        @endif
+
+                        @if($session->bitdepth)
+                            <span>{{ $session->bitdepth }} bit</span>,
+                        @endif
+                        @if($session->samplerate)
+                            <span>{{ $session->samplerate / 1000 }}kHz</span>,
+                        @endif
+                        <span>{{ $session->union_session ? 'Union, ' : '' }}</span>
+                        <span>{{ $session->analog_session ? 'Analog, ' : '' }}</span>
+                        @if ($session->timecode_type)
+                            <span>{{ $session->timecode_type }},</span>
+                        @endif
+                        @if ($session->timecode_frame_rate)
+                            <span>{{ $session->timecode_frame_rate }}</span>,
+                        @endif
+                        <span>{{ $session->drop_frame ? 'Drop Frame, ' : '' }}</span>
+                        <span>{{ $session->description ? $session->description : 'none' }}</span>
+                    </p>
+                @endforeach
+            </div>
+
         @endforeach
-
-
-        <!-- Session Credits -->
-        {{-- Sessions Listed in this order: Tracking always first, Mixing and Mastering always the last two - any session inbetween, doesn’t matter the order it’s displayed. --}}
-        <div class="block">
-            @php
-                // Only the tracking session.
-                $trackingSession = $sessions->filter(function($session) {
-                    return $session->type->ddex_key === 'Tracking';
-                })->first();
-
-                // Only the mixing and mastering sessions
-                $lastSessions = $sessions->filter(function($session) {
-                    return in_array($session->type->ddex_key, ['Mixing', 'Mastering']);
-                })->sortByDesc('type.ddex_key');
-
-                // All other sessions.
-                $sessions = $sessions->filter(function($session) {
-                    return !in_array($session->type->ddex_key, ['Tracking', 'Mixing', 'Mastering']);
-                })->sortBy('type.ddex_key');
-
-                $allSessions = collect([$trackingSession])
-                    ->merge($sessions)
-                    ->merge($lastSessions)
-                    ->filter()->all();
-            @endphp
-
-            @foreach($allSessions as $session)
-                <p>
-                    <span>{{ $session->type->name }}: </span>
-                    @if ($session->venue->name)
-                        <span>{{ $session->venue->name }}</span>,
-                    @endif
-                    @if ($session->venue->name)
-                        <span>{{ $session->venue_room }}</span>,
-                    @endif
-                    @if ($session->venue->name)
-                        <span>{{ $session->venue->address }}</span> -
-                    @endif
-
-                    @if($session->bitdepth)
-                        <span>{{ $session->bitdepth }} bit</span>,
-                    @endif
-                    @if($session->samplerate)
-                        <span>{{ $session->samplerate / 1000 }}kHz</span>,
-                    @endif
-                    <span>{{ $session->union_session ? 'Union, ' : '' }}</span>
-                    <span>{{ $session->analog_session ? 'Analog, ' : '' }}</span>
-                    @if ($session->timecode_type)
-                        <span>{{ $session->timecode_type }},</span>
-                    @endif
-                    @if ($session->timecode_frame_rate)
-                        <span>{{ $session->timecode_frame_rate }}</span>,
-                    @endif
-                    <span>{{ $session->drop_frame ? 'Drop Frame, ' : '' }}</span>
-                    <span>{{ $session->description ? $session->description : 'none' }}</span>
-                </p>
-            @endforeach
-        </div>
     </body>
 </html>

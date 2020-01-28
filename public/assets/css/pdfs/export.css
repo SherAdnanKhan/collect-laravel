@@ -29,7 +29,7 @@ html {
 body {
     position: relative;
     box-sizing: border-box;
-    padding: 30px;
+    padding: 60px;
 }
 
 h1, h2, h3, h4, h5 {
@@ -53,6 +53,7 @@ header img {
 
 header #date {
     float: right;
+    white-space: nowrap;
     width: auto;
 }
 
