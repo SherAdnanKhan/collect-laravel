@@ -372,8 +372,8 @@ class Exporter
             }
 
             $recordingType = $document->createElement('Type', $recordingTypeKey);
-
             if (!is_null($recordingModel->type) && (bool) $recordingModel->type->user_defined) {
+                $recordingType = $document->createElement('Type', 'UserDefined');
                 $recordingType->setAttribute('UserDefinedValue', $recordingModel->recording_type_user_defined_value);
             }
 
@@ -393,6 +393,7 @@ class Exporter
                     $artisticRole = $document->createElement('ArtisticRole', $recordingModel->partyRole->ddex_key);
 
                     if ((bool) $recordingModel->partyRole->user_defined) {
+                        $artisticRole = $document->createElement('ArtisticRole', 'UserDefined');
                         $artisticRole->setAttribute('UserDefinedValue', $recordingModel->party_role_user_defined_value);
                     }
                 } else {
@@ -526,6 +527,7 @@ class Exporter
             if (!is_null($credit->role)) {
                 $contributorRole = $document->createElement('Role', $credit->role->ddex_key);
                 if ((bool) $credit->role->user_defined) {
+                    $contributorRole = $document->createElement('Role', 'UserDefined');
                     $contributorRole->setAttribute('UserDefinedValue', $credit->credit_role_user_defined_value);
                 }
                 $contributorReference->appendChild($contributorRole);
@@ -538,6 +540,7 @@ class Exporter
             if (!is_null($credit->instrument)) {
                 $contributorInstrumentType = $document->createElement('InstrumentType', $credit->instrument->ddex_key);
                 if ((bool) $credit->instrument->user_defined) {
+                    $contributorInstrumentType = $document->createElement('InstrumentType', 'UserDefined');
                     $contributorInstrumentType->setAttribute('UserDefinedValue', $credit->instrument_user_defined_value);
                 }
                 $contributorReference->appendChild($contributorInstrumentType);
