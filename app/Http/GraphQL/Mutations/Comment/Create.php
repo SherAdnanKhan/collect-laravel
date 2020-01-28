@@ -35,6 +35,6 @@ class Create
             throw new AuthorizationException('User does not have permission to create a comment on this project');
         }
 
-        return $project->comments()->create($input);
+        return $user->comments()->create($input);
     }
 }
