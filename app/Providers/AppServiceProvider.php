@@ -39,9 +39,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \DB::listen(function($executed) {
-            info($executed->sql);
-        });
+        // \DB::listen(function($executed) {
+        //     info($executed->sql);
+        // });
 
         Relation::morphMap([
             'file'         => File::class,
