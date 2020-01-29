@@ -25,7 +25,8 @@ class DownloadFiles
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $this->getFilesToDownload($args['files']);
+        $user = auth()->user();
+        $this->getFilesToDownload($user, $args['files']);
 
         if (!isset($this->filesToDownload[0])) {
             return [
@@ -33,7 +34,7 @@ class DownloadFiles
             ];
         }
 
-        $userId = auth()->user()->id;
+        $userId = $user->id;
 
         Log::info('filesToDownload', [
             'user'  => $userId,
@@ -77,7 +78,7 @@ class DownloadFiles
         ];
     }
 
-    private function getFilesToDownload($files)
+    private function getFilesToDownload($user, $files)
     {
         $folders = [];
         $filesToDownload = [];
@@ -88,7 +89,7 @@ class DownloadFiles
                 continue;
             }
 
-            $file = File::where('id', $file['id'])->userViewable()->first();
+            $file = File::where('id', $file['id'])->userViewable(['user' => $user])->first();
 
             if (!$file || $file->status === File::STATUS_PENDING) {
                 continue;
