@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Jobs\Emails\SendZipCreatedEmail;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
-use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 /**
  * Handle lambda webhook requests.
