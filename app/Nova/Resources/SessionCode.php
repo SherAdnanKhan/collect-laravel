@@ -66,6 +66,8 @@ class SessionCode extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+            DateTime::make('Created At')->readonly(),
+            DateTime::make('Expires At')->readonly(),
         ];
     }
 
