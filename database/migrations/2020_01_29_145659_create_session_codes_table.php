@@ -18,6 +18,7 @@ class CreateSessionCodesTable extends Migration
             $table->unsignedInteger('session_id');
             $table->string('code')->index();
             $table->timestamps();
+            $table->timestamp('expires_at')->index();
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('CASCADE');
         });
     }
