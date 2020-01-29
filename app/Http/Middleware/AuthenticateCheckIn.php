@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AuthenticateCheckIn
 {
@@ -17,10 +18,9 @@ class AuthenticateCheckIn
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        // TODO: Validate the access token in the request headers.
-        $valid = true;
+        $token = $request->get('accessToken');
 
-        if (!$valid) {
+        if (!Cache::has($token)) {
             return abort(403, 'Invalid check-in access token');
         }
 
