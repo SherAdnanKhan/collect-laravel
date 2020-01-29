@@ -25,10 +25,21 @@ class ZipGeneratorController extends Controller
 
         $user = User::find($userId);
         if (!$user || $user->status !== 'active') {
+            Log::error('User could not be found or is not active', [
+                'fileName' => $fileName,
+                'userId' => $userId,
+                'user' => $user,
+            ]);
+
             return;
         }
 
         if (strpos($fileName, "/downloads/" . $user->id . "/") !== 0) {
+            Log::error('The download path is not in the file name', [
+                'fileName' => $fileName,
+                'userId' => $userId,
+                'path' => "/downloads/" . $user->id . "/",
+            ]);
             return;
         }
 

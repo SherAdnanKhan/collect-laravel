@@ -13,18 +13,18 @@ class CreateDownloadZip implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $user_id;
-    private $files_to_download = [];
+    private $userId;
+    private $filesToDownload = [];
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($user_id, $files_to_download)
+    public function __construct($userId, $filesToDownload)
     {
-        $this->user_id = $user_id;
-        $this->files_to_download = $files_to_download;
+        $this->userId = $userId;
+        $this->filesToDownload = $filesToDownload;
     }
 
     /**
@@ -49,8 +49,8 @@ class CreateDownloadZip implements ShouldQueue
             'MessageGroupId' => $this->job->getJobId(),
             'MessageDeduplicationId' => $this->job->getJobId(),
             'MessageBody' => json_encode([
-                'user_id' => $this->user_id,
-                'files' => $this->files_to_download,
+                'userId' => $this->userId,
+                'files' => $this->filesToDownload,
             ]),
             'QueueUrl' => $config['prefix'] . '/' . $config['jobs']['downloads']
         ];
