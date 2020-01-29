@@ -13,7 +13,7 @@ use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 class DownloadFiles
 {
-    private $files_to_download = [];
+    private $filesToDownload = [];
 
     /**
      * @param $rootValue
@@ -27,19 +27,24 @@ class DownloadFiles
     {
         $this->getFilesToDownload($args['files']);
 
-        if (!isset($this->files_to_download[0])) {
+        if (!isset($this->filesToDownload[0])) {
             return [
                 'success' => false
             ];
         }
 
-        Log::info('files_to_download', $this->files_to_download);
+        $userId = auth()->user()->id;
 
-        if (!isset($this->files_to_download[1]) && $this->files_to_download[0]->depth === 0) {
-            return $this->getFileURL($this->files_to_download[0]);
+        Log::info('filesToDownload', [
+            'user'  => $userId,
+            'files' => $this->filesToDownload
+        ]);
+
+        if (!isset($this->filesToDownload[1]) && $this->filesToDownload[0]->depth === 0) {
+            return $this->getFileURL($this->filesToDownload[0]);
         }
 
-        CreateDownloadZip::dispatch(auth()->user()->id, $this->files_to_download);
+        CreateDownloadZip::dispatch($userId, $this->filesToDownload);
 
         return [
             'success' => true
@@ -75,7 +80,7 @@ class DownloadFiles
     private function getFilesToDownload($files)
     {
         $folders = [];
-        $files_to_download = [];
+        $filesToDownload = [];
 
         foreach ($files as $file) {
             if ($file['type'] === 'folder') {
@@ -106,7 +111,7 @@ class DownloadFiles
 
     private function getFolderFiles(Folder $folder, $depth = 0)
     {
-        $files_to_download = [];
+        $filesToDownload = [];
 
         $files = $folder->files()->withoutGlobalScope(VisibleScope::class)->get();
         foreach ($files as $file) {
@@ -128,6 +133,6 @@ class DownloadFiles
     private function addFile($file, $depth = 0)
     {
         $file->depth = $depth;
-        $this->files_to_download[] = $file;
+        $this->filesToDownload[] = $file;
     }
 }
