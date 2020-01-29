@@ -14,7 +14,16 @@ class SessionCode extends Model
      * @var array
      */
     protected $fillable = [
-        'session_id', 'code'
+        'session_id', 'code', 'expires_at',
+    ];
+
+    /**
+     * Casting fields to types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'expires_at' => 'datetime',
     ];
 
     /**

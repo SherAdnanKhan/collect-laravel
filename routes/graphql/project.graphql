@@ -182,6 +182,8 @@ type SessionCode {
 	sessionId: ID @rename(attribute: "session_id")
 	session: Session
 	code: String!
+	expiresAt: String! @rename(attribute: "expires_at")
+	createdAt: String! @rename(attribute: "created_at")
 }
 
 type SessionType {

@@ -60,3 +60,12 @@ type TwoFactorResendPayload {
 type ResendCollaboratorInvitePayload {
   success: Boolean!
 }
+
+type ValidateSessionCodePayload {
+  valid: Boolean!
+  accessToken: String
+}
+
+type SessionCheckinPayload {
+  success: Boolean!
+}
