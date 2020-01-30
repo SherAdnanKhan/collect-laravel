@@ -3,7 +3,9 @@
 namespace App\Http\GraphQL\Mutations;
 
 use App\Models\User;
+use App\Models\Party;
 use App\Models\Session;
+use App\Models\CreditRole;
 use Illuminate\Support\Facades\Cache;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -30,34 +32,55 @@ class SessionCheckIn
             throw new AuthorizationException('Missing access token');
         }
 
-        $sessionId = Cache::get($token);
-        $session = Session::find($sessionId);
+        $success = rescue(function() use ($request, $token){
+            $sessionId = Cache::get($token);
+            $session = Session::find($sessionId);
 
-        $profileData = $request->only([
-            'title',
-            'first_name',
-            'middle_name',
-            'last_name',
-            'email',
-            'suffix',
-            'birth_date',
-            'instrument_id',
-            'instrument_user_defined_value',
-        ]);
+            $profileData = $request->only([
+                'title',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'email',
+                'suffix',
+                'birth_date',
+                'instrument_id',
+                'instrument_user_defined_value',
+            ]);
 
-        $email = array_get($profileData, 'email');
+            $email = array_get($profileData, 'email');
+            $firstName = array_get($profileData, 'first_name');
 
-        // TODO:
-        // Given the session and some profile information we'll create a party and a credit against
-        // the session, if the party already exists against this session we'll use that. (matching on email and name?)
+            $party = Party::where('first_name', $firstName)
+                ->whereHas('contacts', function($query) use ($email) {
+                    return $query->where('email', $email);
+                })
+                ->relatedToProject(['project' => $session->project])
+                ->first();
 
-        // TODO: Return a payload valid with this GraphQL type.
-        // type SessionCheckinPayload {
-        //     success: Boolean!
-        // }
+            if (is_null($party)) {
+                $party = Party::create($profileData);
+            }
 
-        Cache::forget($token);
+            $role = CreditRole::where('ddex_key', 'Artist')->firstOrFail();
 
-        return [];
+            $credit = $party->credits()->firstOrCreate([
+                'contribution_id'   => $session->id,
+                'contribution_type' => 'session',
+                'credit_role_id'    => $role->id,
+                'instrument_id'     => array_get($profileData, 'instrument_id', null),
+                'performing'        => true,
+            ]);
+
+            return !is_null($credit);
+        }, false);
+
+        if ($success) {
+            Cache::forget($token);
+        }
+
+        return [
+            'success' => $success,
+        ];
     }
 }
