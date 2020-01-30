@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\SessionCode;
 use Illuminate\Support\Str;
@@ -26,7 +27,9 @@ class ValidateSessionCode
             $request = request();
             $code = $request->get('sessionCode', false);
 
-            $sessionCode = SessionCode::where('code', $code)->firstOrFail();
+            $sessionCode = SessionCode::where('code', $code)
+                ->notExpired()
+                ->firstOrFail();
 
             $token = Str::random(32);
             $tokenKey = SessionCode::checkinCacheKey($token);
