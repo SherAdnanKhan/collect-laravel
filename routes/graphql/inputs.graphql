@@ -431,18 +431,18 @@ input ResendCollaboratorInviteInput {
   collaboratorId: Int!
 }
 
-input ValidateSessionCodeInput {
-    sessionCode: String!
-}
-
-input SessionCheckinInput {
-    title: String!
-    firstName: String! @rename(attribute: "first_name") @rules(apply: ["required"])
-    middleName: String! @rename(attribute: "middle_name")
-    lastName: String! @rename(attribute: "last_name")
-    email: String! @rules(apply: ["required"])
-    suffix: String
-    birthDate: String @rename(attribute: "birth_date") @rules(apply: ["date"])
-    instrumentId: ID @rename(attribute: "instrument_id")
-    instrumentUserDefinedValue: String @rename(attribute: "instrument_user_defined_value")
+input SessionCheckInInput {
+  accessToken: String! @rules(apply: ["required"])
+  title: String!
+  firstName: String!
+    @rename(attribute: "first_name")
+    @rules(apply: ["required"])
+  middleName: String! @rename(attribute: "middle_name")
+  lastName: String! @rename(attribute: "last_name")
+  email: String! @rules(apply: ["required"])
+  suffix: String
+  birthDate: String @rename(attribute: "birth_date") @rules(apply: ["date"])
+  instrumentId: ID @rename(attribute: "instrument_id")
+  instrumentUserDefinedValue: String
+    @rename(attribute: "instrument_user_defined_value")
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Session;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SessionCode extends Model
@@ -45,7 +46,7 @@ class SessionCode extends Model
      */
     public function scopeNotExpired(Builder $query): Builder
     {
-        return $query->whereDate('expires_at', '>', Carbon::now());
+        return $query->where('expires_at', '>', Carbon::now()->timestamp);
     }
 
     /**

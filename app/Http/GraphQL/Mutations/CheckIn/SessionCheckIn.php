@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations;
+namespace App\Http\GraphQL\Mutations\CheckIn;
 
 use App\Models\User;
 use App\Models\Party;

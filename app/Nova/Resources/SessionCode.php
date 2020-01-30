@@ -3,19 +3,20 @@
 namespace App\Nova\Resources;
 
 use App\Nova\Resource;
+use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Text;
+use App\Nova\Resources\Session;
+use Laravel\Nova\Fields\HasOne;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasOne;
-use Laravel\Nova\Fields\Heading;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 
 class SessionCode extends Resource
 {
@@ -60,14 +61,14 @@ class SessionCode extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Session'),
+            BelongsTo::make('Session', 'session', Session::class),
 
             Text::make('Code')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            DateTime::make('Created At')->readonly(),
-            DateTime::make('Expires At')->readonly(),
+            DateTime::make('Created At'),
+            DateTime::make('Expires At'),
         ];
     }
 

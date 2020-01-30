@@ -6,6 +6,7 @@ use Closure;
 use App\Models\SessionCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class AuthenticateCheckIn
 {
@@ -24,7 +25,7 @@ class AuthenticateCheckIn
         $tokenKey = SessionCode::checkinCacheKey($token);
 
         if (!Cache::has($tokenKey)) {
-            return abort(403, 'Invalid check-in access token');
+            throw new AuthorizationException('Invalid access token');
         }
 
         return $next($request);
