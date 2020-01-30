@@ -7,6 +7,7 @@ use App\Models\Party;
 use App\Models\Session;
 use App\Models\CreditRole;
 use App\Models\SessionCode;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -25,20 +26,23 @@ class SessionCheckIn
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $request = request();
-
-        $token = $request->get('accessToken');
+        $token = Arr::get($args, 'accessToken', false);
 
         if (!$token) {
             throw new AuthorizationException('Missing access token');
         }
 
-        $success = rescue(function() use ($request, $token){
-            $tokenKey = SessionCode::checkinCacheKey($token);
+        $tokenKey = SessionCode::checkinCacheKey($token);
+
+        if (!Cache::has($tokenKey)) {
+            throw new AuthorizationException('Invalid access token');
+        }
+
+        $success = rescue(function() use ($args, $tokenKey) {
             $sessionId = Cache::get($tokenKey);
             $session = Session::find($sessionId);
 
-            $profileData = $request->only([
+            $profileData = Arr::only($args, [
                 'title',
                 'first_name',
                 'middle_name',
@@ -50,8 +54,8 @@ class SessionCheckIn
                 'instrument_user_defined_value',
             ]);
 
-            $email = array_get($profileData, 'email');
-            $firstName = array_get($profileData, 'first_name');
+            $email = Arr::get($profileData, 'email');
+            $firstName = Arr::get($profileData, 'first_name');
 
             $party = Party::where('first_name', $firstName)
                 ->whereHas('contacts', function($query) use ($email) {
@@ -70,7 +74,7 @@ class SessionCheckIn
                 'contribution_id'   => $session->id,
                 'contribution_type' => 'session',
                 'credit_role_id'    => $role->id,
-                'instrument_id'     => array_get($profileData, 'instrument_id', null),
+                'instrument_id'     => Arr::get($profileData, 'instrument_id', null),
                 'performing'        => true,
             ]);
 
