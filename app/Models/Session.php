@@ -6,6 +6,7 @@ use App\Models\Venue;
 use App\Models\Credit;
 use App\Models\Project;
 use App\Models\Recording;
+use App\Models\SessionCode;
 use App\Models\SessionType;
 use App\Traits\EventLogged;
 use App\Traits\HasComments;
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Util\BuilderQueries\ProjectAccess;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\ElasticSearch\SessionsIndexConfigurator;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Util\BuilderQueries\CollaboratorRecordingAccess;
@@ -174,6 +177,16 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     public function credits(): MorphMany
     {
         return $this->morphMany(Credit::class, 'contribution');
+    }
+
+    /**
+     * The session codes for this session.
+     *
+     * @return HasMany
+     */
+    public function sessionCodes(): HasMany
+    {
+        return $this->hasMany(SessionCode::class);
     }
 
     public function getContributorRoleTypes($version = '1.1'): array

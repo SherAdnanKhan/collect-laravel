@@ -174,9 +174,20 @@ type Session implements Favoured & Creditable & Commentable & EventLoggable {
 	updatedAt: String @rename(attribute: "updated_at")
 	recordings: [Recording]
 	commentCount: Int @rename(attribute: "comment_count")
+	sessionCodes: [SessionCode]
+}
+
+type SessionCode {
+	id: ID!
+	sessionId: ID @rename(attribute: "session_id")
+	session: Session
+	code: String!
+	expiresAt: String! @rename(attribute: "expires_at")
+	createdAt: String! @rename(attribute: "created_at")
 }
 
 type SessionType {
+	_id: ID! @globalId @rename(attribute: "id")
 	id: ID!
 	name: String!
 	ddexKey: String! @rename(attribute: "ddex_key")
@@ -228,14 +239,6 @@ type Venue {
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 	approved: Boolean
-}
-
-type SessionType {
-	_id: ID! @globalId @rename(attribute: "id")
-	id: ID!
-	name: String!
-	createdAt: String! @rename(attribute: "created_at")
-	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type Country {
