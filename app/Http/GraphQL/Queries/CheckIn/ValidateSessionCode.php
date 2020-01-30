@@ -36,7 +36,7 @@ class ValidateSessionCode
 
             $tokenKey = SessionCode::checkinCacheKey($token);
 
-            Cache::put($tokenKey, $sessionCode->session_id, now()->addMinutes(30));
+            Cache::put($tokenKey, $sessionCode->session_id, now()->addMinutes(120));
 
             return [true, $token];
         }, [false, null]);

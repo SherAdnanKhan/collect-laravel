@@ -432,17 +432,15 @@ input ResendCollaboratorInviteInput {
 }
 
 input SessionCheckInInput {
-  accessToken: String! @rules(apply: ["required"])
+  access_token: String! @rules(apply: ["required"])
   title: String!
-  firstName: String!
-    @rename(attribute: "first_name")
-    @rules(apply: ["required"])
-  middleName: String! @rename(attribute: "middle_name")
-  lastName: String! @rename(attribute: "last_name")
+  first_name: String! @rules(apply: ["required"])
+  middle_name: String!
+  last_name: String!
   email: String! @rules(apply: ["required"])
   suffix: String
-  birthDate: String @rename(attribute: "birth_date") @rules(apply: ["date"])
-  instrumentId: ID @rename(attribute: "instrument_id")
-  instrumentUserDefinedValue: String
-    @rename(attribute: "instrument_user_defined_value")
+  isni: String
+  birth_date: String @rules(apply: ["date"])
+  instrument_id: ID
+  instrument_user_defined_value: String
 }
