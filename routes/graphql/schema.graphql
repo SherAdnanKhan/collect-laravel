@@ -383,12 +383,9 @@ extend type Mutation @group(middleware: ["auth:api"]) {
 
 extend type Query @group(middleware: ["auth:token"]) {
   # Session Check in queries
-  validateSessionCode(
-    sessionCode: String! @rules(apply: ["required"])
-  ): ValidateSessionCodePayload
-    @field(
-      resolver: "App\\Http\\GraphQL\\Queries\\CheckIn\\validateSessionCode@resolve"
-    )
+  validateSessionCode(sessionCode: String! @rules(apply: ["required"])): ValidateSessionCodePayload @field(
+    resolver: "App\\Http\\GraphQL\\Queries\\CheckIn\\ValidateSessionCode@resolve"
+  )
 }
 
 extend type Mutation @group(middleware: ["auth:token"]) {
