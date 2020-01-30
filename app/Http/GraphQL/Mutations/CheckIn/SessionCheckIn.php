@@ -57,8 +57,6 @@ class SessionCheckIn
                 'instrument_user_defined_value',
             ]);
 
-            Log::debug('profileData', ['input' => $input]);
-
             $email = Arr::get($profileData, 'email');
             $firstName = Arr::get($profileData, 'first_name');
             $isni = Arr::get($profileData, 'isni');
