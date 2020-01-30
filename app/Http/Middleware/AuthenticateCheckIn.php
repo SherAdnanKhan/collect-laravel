@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\SessionCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -20,7 +21,9 @@ class AuthenticateCheckIn
     {
         $token = $request->get('accessToken');
 
-        if (!Cache::has($token)) {
+        $tokenKey = SessionCode::checkinCacheKey($token);
+
+        if (!Cache::has($tokenKey)) {
             return abort(403, 'Invalid check-in access token');
         }
 

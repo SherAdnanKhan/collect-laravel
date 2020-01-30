@@ -35,4 +35,15 @@ class SessionCode extends Model
     {
         return $this->belongsTo(Session::class);
     }
+
+    /**
+     * The key we're storing the access tokens for checkin.
+     *
+     * @param string $token
+     * @return string
+     */
+    public static function checkinCacheKey($token): string
+    {
+        return sprintf('checkin.%s', $token);
+    }
 }

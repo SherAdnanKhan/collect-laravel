@@ -3,9 +3,12 @@
 namespace App\Http\GraphQL\Mutations;
 
 use App\Models\User;
+use App\Models\SessionCode;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 class ValidateSessionCode
 {
@@ -19,17 +22,23 @@ class ValidateSessionCode
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        // TODO:
-        // Given a sessionCode we'll validate that it's correct and return an accessToken for the user to authenticate with
-        // as well as to know which session we're associating the profile information to
+        list($valid, $accessToken) = rescue(function() {
+            $request = request();
+            $code = $request->get('sessionCode', false);
 
+            $sessionCode = SessionCode::where('code', $code)->firstOrFail();
 
-        // TODO: Return a payload valid with this GraphQL type.
-        // type ValidateSessionCodePayload {
-        //     valid: Boolean!
-        //     accessToken: String
-        // }
+            $token = Str::random(32);
+            $tokenKey = SessionCode::checkinCacheKey($token);
 
-        return [];
+            Cache::put($tokenKey, $sessionCode->session_id, now()->addMinutes(30));
+
+            return [true, $token];
+        }, [false, null]);
+
+        return [
+            'valid' => $valid,
+            'accessToken' => $accessToken,
+        ];
     }
 }

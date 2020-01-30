@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Party;
 use App\Models\Session;
 use App\Models\CreditRole;
+use App\Models\SessionCode;
 use Illuminate\Support\Facades\Cache;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -33,7 +34,8 @@ class SessionCheckIn
         }
 
         $success = rescue(function() use ($request, $token){
-            $sessionId = Cache::get($token);
+            $tokenKey = SessionCode::checkinCacheKey($token);
+            $sessionId = Cache::get($tokenKey);
             $session = Session::find($sessionId);
 
             $profileData = $request->only([
