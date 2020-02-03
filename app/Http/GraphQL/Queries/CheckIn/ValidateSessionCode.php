@@ -25,7 +25,7 @@ class ValidateSessionCode
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        list($valid, $accessToken) = rescue(function() use ($args) {
+        list($valid, $accessToken, $session) = rescue(function() use ($args) {
             $code = Arr::get($args, 'sessionCode', false);
 
             $sessionCode = SessionCode::where('code', $code)
@@ -38,12 +38,17 @@ class ValidateSessionCode
 
             Cache::put($tokenKey, $sessionCode->session_id, now()->addMinutes(120));
 
-            return [true, $token];
+            return [
+                true,
+                $token,
+                $sessionCode->session
+            ];
         }, [false, null]);
 
         return [
             'valid' => $valid,
             'accessToken' => $accessToken,
+            'session' => $session
         ];
     }
 }
