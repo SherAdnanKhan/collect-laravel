@@ -64,7 +64,7 @@ type ResendCollaboratorInvitePayload {
 type ValidateSessionCodePayload {
   valid: Boolean!
   accessToken: String
-  session: Session!
+  sessionName: String!
 }
 
 type SessionCheckInPayload {

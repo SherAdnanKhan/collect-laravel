@@ -48,7 +48,7 @@ class ValidateSessionCode
         return [
             'valid' => $valid,
             'accessToken' => $accessToken,
-            'session' => $session
+            'sessionName' => $session->name
         ];
     }
 }
