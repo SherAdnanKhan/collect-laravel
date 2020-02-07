@@ -73,12 +73,8 @@ class Login
                 'token_type'   => 'bearer',
                 'expires_in'   => auth()->factory()->getTTL() * 60
             ];
-        } catch (JWTException $e) {
-            return [
-                'access_token' => '',
-                'token_type'   => 'bearer',
-                'expires_in'   => 0
-            ];
+        } catch (\Exception $e) {
+            throw new AuthenticationException('Unable to refresh the token');
         }
     }
 }
