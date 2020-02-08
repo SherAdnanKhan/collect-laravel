@@ -113,6 +113,11 @@ extend type Query @group(middleware: ["auth:api"]) {
       model: "App\\Models\\Session"
       defaultCount: 1000
     )
+  getSessionsByRecording(
+    recordingId: ID!
+    count: Int
+  ): [Credit]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Session\\ByRecording@resolve")
   getSessionTypes: [SessionType] @all
 
   # Comment Queries
@@ -144,6 +149,12 @@ extend type Query @group(middleware: ["auth:api"]) {
     count: Int
   ): [Credit]
     @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByProject@resolve")
+  getCreditsByRecording(
+    recordingId: ID!
+    contributionType: String
+    count: Int
+  ): [Credit]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByRecording@resolve")
   getCreditRoles(
     type: String @eq(key: "type")
     ordering: OrderingInput
