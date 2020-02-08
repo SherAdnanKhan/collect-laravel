@@ -31,6 +31,8 @@ class ByRecording
             throw new AuthorizationException('The user does not have access to view this recordings credits');
         }
 
-        return $recording->sessions()->take($args['count'])->orderBy('created_at', 'DESC');
+        return $recording->sessions()->take($args['count'])
+            ->orderBy('created_at', 'DESC')
+            ->paginate();
     }
 }

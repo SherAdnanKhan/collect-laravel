@@ -42,6 +42,6 @@ class ByRecording
             $creditsQuery->take($args['count'])->orderBy('created_at', 'DESC');
         }
 
-        return $creditsQuery->get();
+        return $creditsQuery->paginate();
     }
 }
