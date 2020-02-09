@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Queries\Credit;
+namespace App\Http\GraphQL\Queries\Session;
 
 use App\Models\Credit;
 use App\Models\Project;
