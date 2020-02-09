@@ -2,8 +2,8 @@
 
 namespace App\Http\GraphQL\Queries\Session;
 
-use App\Models\Credit;
-use App\Models\Project;
+use App\Models\Session;
+use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
