@@ -4,9 +4,10 @@ namespace App\Http\GraphQL\Queries\Session;
 
 use App\Models\Session;
 use App\Models\Recording;
+use Illuminate\Support\Arr;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class ByRecording
 {
@@ -31,8 +32,13 @@ class ByRecording
             throw new AuthorizationException('The user does not have access to view this recordings credits');
         }
 
-        return $recording->sessions()->take($args['count'])
-            ->orderBy('created_at', 'DESC')
+        $query = $recording->sessions();
+
+        if (Arr::has($args, 'count')) {
+            $query = $query->take(Arr::get($args, 'count'));
+        }
+
+        return $query->orderBy('created_at', 'DESC')
             ->paginate();
     }
 }
