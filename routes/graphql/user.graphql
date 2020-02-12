@@ -69,7 +69,7 @@ type Party implements Favoured {
 	id: ID!
 	_id: ID! @globalId @rename(attribute: "id")
 	user: User @belongsTo
-	userId: ID! @rename(attribute: "user_id")
+	userId: ID @rename(attribute: "user_id")
 	type: String!
 	isni: String
 	title: String
