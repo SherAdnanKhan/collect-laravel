@@ -330,7 +330,7 @@ class MultipartUploadsController extends Controller
             'PartNumber' => $request->get('number'),
         ]);
 
-        $request = $s3->createPresignedRequest($cmd, '+1 hour');
+        $request = $s3->createPresignedRequest($cmd, '+24 hour');
 
         return response()->json([
             'url' => (string)$request->getUri()
