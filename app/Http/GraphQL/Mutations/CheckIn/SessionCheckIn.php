@@ -104,6 +104,7 @@ class SessionCheckIn
 
                 $roleTypes = (new Session())->getContributorRoleTypes();
                 $role = CreditRole::where('ddex_key', 'Musician')->whereIn('type', $roleTypes)->firstOrFail();
+                $roleId = $role->id;
             }
 
             $credit = $party->credits()->firstOrCreate([
