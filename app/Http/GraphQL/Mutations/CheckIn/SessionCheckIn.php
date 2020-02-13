@@ -119,7 +119,7 @@ class SessionCheckIn
         }, false);
 
         if ($success) {
-            Cache::forget($token);
+            Cache::forget($tokenKey);
         }
 
         return [
