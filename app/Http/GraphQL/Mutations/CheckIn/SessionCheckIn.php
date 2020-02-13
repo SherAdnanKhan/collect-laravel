@@ -85,7 +85,8 @@ class SessionCheckIn
                 'value' => Arr::get($profileData, 'email'),
             ]);
 
-            $role = CreditRole::where('ddex_key', 'Artist')->firstOrFail();
+            $roleTypes = (new Session())->getContributorRoleTypes();
+            $role = CreditRole::where('ddex_key', 'Artist')->whereIn('type', $roleTypes)->firstOrFail();
 
             $credit = $party->credits()->firstOrCreate([
                 'contribution_id'   => $session->id,

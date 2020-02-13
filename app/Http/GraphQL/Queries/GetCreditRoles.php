@@ -20,7 +20,7 @@ class GetCreditRoles
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $query = CreditRole::newQuery();
+        $query = (new CreditRole())->newQuery();
 
         $types = array_keys(CreditRole::TYPES_WITH_LABELS);
 
