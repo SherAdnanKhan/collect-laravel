@@ -54,6 +54,7 @@ class SessionCheckIn
                 'isni',
                 'birth_date',
                 'instrument_id',
+                'role_id',
                 'instrument_user_defined_value',
             ]);
 
@@ -85,15 +86,32 @@ class SessionCheckIn
                 'value' => Arr::get($profileData, 'email'),
             ]);
 
-            $roleTypes = (new Session())->getContributorRoleTypes();
-            $role = CreditRole::where('ddex_key', 'Artist')->whereIn('type', $roleTypes)->firstOrFail();
+            $checkInType = Arr::get($input, 'checkin_type', 'instrument');
+
+            if (!in_array($checkInType, ['instrument', 'role'])) {
+                throw new \Exception('Invalid check in type value');
+            }
+
+            $instrumentId = null;
+            $roleId = Arr::get($profileData, 'role_id', null);
+
+            if ($checkInType === 'instrument') {
+                $instrumentId = Arr::get($profileData, 'instrument_id', null);
+
+                if (is_null($instrumentId)) {
+                    throw new \Exception('Instrument is required');
+                }
+
+                $roleTypes = (new Session())->getContributorRoleTypes();
+                $role = CreditRole::where('ddex_key', 'Musician')->whereIn('type', $roleTypes)->firstOrFail();
+            }
 
             $credit = $party->credits()->firstOrCreate([
                 'contribution_id'   => $session->id,
                 'contribution_type' => 'session',
-                'credit_role_id'    => $role->id,
-                'instrument_id'     => Arr::get($profileData, 'instrument_id', null),
-                'performing'        => true,
+                'credit_role_id'    => $roleId,
+                'instrument_id'     => $instrumentId,
+                'performing'        => !is_null($instrumentId),
             ]);
 
             return !is_null($credit);

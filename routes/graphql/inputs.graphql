@@ -441,6 +441,8 @@ input SessionCheckInInput {
   suffix: String
   isni: String
   birth_date: String @rules(apply: ["date"])
+  checkin_type: String! @rules(apply: ["required"])
+  role_id: ID
   instrument_id: ID
   instrument_user_defined_value: String
 }
