@@ -5,10 +5,8 @@ namespace App\Http\GraphQL\Queries;
 use App\Models\Session;
 use App\Models\CreditRole;
 use Illuminate\Support\Arr;
-use App\Models\CollaboratorInvite;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class GetCreditRoles
 {
