@@ -24,7 +24,7 @@ Route::get('/', function () {
 // });
 
 // How to test an email.
-// Route::get('mailable', function () {
-//     $user = \App\Models\User::find(39);
-//     return new \App\Mail\SubscriptionPaymentSuccessful($user, $user->subscriptions()->first(), 0, '');
-// });
+Route::get('mailable', function () {
+    $invite = \App\Models\CollaboratorInvite::find(31);
+    return new \App\Mail\CollaboratorInvite($invite);
+});

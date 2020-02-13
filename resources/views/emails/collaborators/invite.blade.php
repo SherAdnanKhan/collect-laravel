@@ -141,16 +141,18 @@
                     <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
                       <div style="font-family:Poppins, Helvetica, Arial;font-size:16px;line-height:24px;text-align:left;color:#000000;">Hey {{ $name }},<br />
                         <br /> Welcome to VEVA Collect!<br />
-                        <br /> @if ($recordingName != null) You have been invited to collaborate with {{ $senderName }} on the recording {{ $recordingName }} on {{ $projectName }}.<br /> @else You have been invited to collaborate with {{ $senderName }} on {{ $projectArtistName }} {{ $projectName }}.<br /> @endif
-                        <br /> You have been assigned with permissions to:
-                        @foreach ($permissions as $permission_type => $permission_values)
-                        <p>{{ ucfirst($permission_type) }}s</p>
-                        <ul>
-                            @foreach ($permission_values as $permission_level)
-                            <li>{{ ucfirst($permission_level) }}</li>
+                        <br /> @if ($recordingNames != null) You have been invited to collaborate with {{ $senderName }} on the recordings: "{{ $recordingNames }}" on "{{ $projectName }}".<br /> @else You have been invited to collaborate with {{ $senderName }} on {{ $projectArtistName }} {{ $projectName }}.<br /> @endif
+                        @if ($type !== 'recording')
+                            <br /> You have been assigned with permissions to:
+                            @foreach ($permissions as $permission_type => $permission_values)
+                            <p>{{ ucfirst($permission_type) }}s</p>
+                            <ul>
+                                @foreach ($permission_values as $permission_level)
+                                <li>{{ ucfirst($permission_level) }}</li>
+                                @endforeach
+                            </ul>
                             @endforeach
-                        </ul>
-                        @endforeach
+                        @endif
                         <br /> To accept the invitation, click the button below.
                       </div>
                     </td>
