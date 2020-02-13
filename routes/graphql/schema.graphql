@@ -12,7 +12,7 @@ type Query {
   getCreditRoles(
     type: String @eq(key: "type")
     ordering: OrderingInput
-    checkIn: Bool
+    checkIn: Boolean
   ): [CreditRole] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetCreditRoles@resolve")
 }
 
