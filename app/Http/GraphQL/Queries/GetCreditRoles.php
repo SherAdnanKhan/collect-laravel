@@ -31,6 +31,8 @@ class GetCreditRoles
             $query = $query->orderByField(['ordering' => $ordering]);
         }
 
+        // The Check-In app only needs session roles, and
+        // we only need a specific set of Role Keys.
         $isCheckIn = Arr::get($args, 'checkIn', false);
         if ($isCheckIn) {
             $roleTypes = (new Session())->getContributorRoleTypes();
