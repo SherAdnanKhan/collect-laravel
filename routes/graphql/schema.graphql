@@ -7,6 +7,13 @@ type Query {
 
   # Instrument Queries
   getInstruments: [Instrument] @all
+
+  # Credit role Queries
+  getCreditRoles(
+    type: String @eq(key: "type")
+    ordering: OrderingInput
+    checkIn: Bool
+  ): [CreditRole] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetCreditRoles@resolve")
 }
 
 extend type Query @group(middleware: ["auth:api"]) {
@@ -155,10 +162,6 @@ extend type Query @group(middleware: ["auth:api"]) {
     count: Int
   ): [Credit]
     @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByRecording@resolve")
-  getCreditRoles(
-    type: String @eq(key: "type")
-    ordering: OrderingInput
-  ): [CreditRole] @all(scopes: ["orderByField"])
 
   # Language Queries
   getLanguages: [Language] @all

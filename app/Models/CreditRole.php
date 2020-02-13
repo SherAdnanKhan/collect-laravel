@@ -20,6 +20,19 @@ class CreditRole extends Model
     ];
 
     /**
+     * The set of role DDEX Keys which we'll
+     * pass to the Check-In app when it requests the list
+     * of Credit Roles.
+     */
+    const CHECKIN_ROLE_KEYS = [
+        'Engineer',
+        'OverdubEngineer',
+        'DigitalEditor',
+        'MasteringEngineer',
+        'Producer'
+    ];
+
+    /**
      * Mass assignable fields.
      *
      * @var array
