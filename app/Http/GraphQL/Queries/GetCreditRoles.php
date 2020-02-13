@@ -26,23 +26,22 @@ class GetCreditRoles
 
         $types = array_keys(CreditRole::TYPES_WITH_LABELS);
 
-        $isCheckIn = Arr::get($args, 'checkIn', false);
-        if ($isCheckIn) {
-            $roleTypes = (new Session())->getContributorRoleTypes();
-            $query = $query->whereIn('ddex_key', CreditRole::CHECKIN_ROLE_KEYS)
-                ->whereIn('type', $roleTypes);
-        }
-
-        if (!$isCheckIn) {
-            $type = Arr::get($args, 'type', false);
-            if ($type && in_array($type, $types)) {
-                $query = $query->where('type', $type);
-            }
-        }
-
         $ordering = Arr::get($args, 'ordering', false);
         if ($ordering) {
             $query = $query->orderByField(['ordering' => $ordering]);
+        }
+
+        $isCheckIn = Arr::get($args, 'checkIn', false);
+        if ($isCheckIn) {
+            $roleTypes = (new Session())->getContributorRoleTypes();
+            return $query->whereIn('ddex_key', CreditRole::CHECKIN_ROLE_KEYS)
+                ->whereIn('type', $roleTypes)
+                ->get();
+        }
+
+        $type = Arr::get($args, 'type', false);
+        if ($type && in_array($type, $types)) {
+            $query = $query->where('type', $type);
         }
 
         return $query->get();
