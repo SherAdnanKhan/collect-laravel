@@ -16,7 +16,11 @@
         </mj-text>
         <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#000000" color="white" border-radius="4px" href="{{ $verifyUrl }}">
           Verify
-         </mj-button>
+        </mj-button>
+        <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+          Collect while you Create,<br />
+          VEVA Collect
+        </mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
