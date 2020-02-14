@@ -16,7 +16,7 @@
           <br />
           Please <a href="{{ $accountUrl }}" style="color: #000000">click here</a> to update your payment details.<br />
           <br />
-          Many thanks<br />
+          Collect while you Create<br />
           VEVA Collect
         </mj-text>
       </mj-column>
