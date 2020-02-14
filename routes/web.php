@@ -25,6 +25,8 @@ Route::get('/', function () {
 
 // How to test an email.
 Route::get('mailable', function () {
-    $invite = \App\Models\CollaboratorInvite::find(31);
-    return new \App\Mail\CollaboratorInvite($invite);
+    // $user = \App\Models\User::find(38);
+    // return new \App\Mail\SubscriptionPaymentSuccessful($user, $user->subscriptions->first(), '$17.50', 'http://google.com');
+    // $invite = \App\Models\CollaboratorInvite::find(31);
+    // return new \App\Mail\CollaboratorInvite($invite);
 });
