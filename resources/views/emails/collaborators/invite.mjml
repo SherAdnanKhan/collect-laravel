@@ -14,11 +14,13 @@
           <br />
           Welcome to VEVA Collect!<br />
           <br />
-          @if ($recordingName != null)
-            You have been invited to collaborate with {{ $senderName }} on the recording {{ $recordingName }} on {{ $projectName }}.<br />
-          @else
-            You have been invited to collaborate with {{ $senderName }} on {{ $projectName }}.<br />
-          @endif
+            @if ($recordingNames != null)
+              You have been invited to collaborate with {{ $senderName }} on the recordings: "{{ $recordingNames }}" on "{{ $projectName }}".
+              <br />
+            @else
+              You have been invited to collaborate with {{ $senderName }} on {{ $projectArtistName }} {{ $projectName }}.
+              <br />
+            @endif
           <br />
           To accept the invitation, click the button below.
         </mj-text>
@@ -26,8 +28,7 @@
           Accept
          </mj-button>
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Many thanks<br />
-          VEVA Collect
+          Collect while you Create,<br /> VEVA Collect
         </mj-text>
       </mj-column>
     </mj-section>
