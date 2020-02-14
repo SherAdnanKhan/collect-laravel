@@ -29,4 +29,5 @@ Route::get('mailable', function () {
     // return new \App\Mail\SubscriptionPaymentSuccessful($user, $user->subscriptions->first(), '$17.50', 'http://google.com');
     // $invite = \App\Models\CollaboratorInvite::find(31);
     // return new \App\Mail\CollaboratorInvite($invite);
+    // return new \App\Mail\ZipCreated('example.txt');
 });
