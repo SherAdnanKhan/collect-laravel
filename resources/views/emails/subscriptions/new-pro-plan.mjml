@@ -1,0 +1,35 @@
+<mjml>
+   <mj-head>
+     <mj-font name="Source Sans Pro" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" />
+   </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" src="{{ asset('images/email-logo.png') }}"></mj-image>
+
+        <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+          Hey {{ $name }},<br />
+          <br />
+          Thank you for subscribing to VEVA Collect’s Pro Plan!
+          <br />
+          <br />
+          By using VEVA Collect, you are part of a revolutionary movement to change the way metadata is captured in the recording studio. This will not only help you manage your project, it can help ensure that everyone who is involved in making music is credited for their work. Your metadata can be reported on PDF documents or as an XML file that conforms to the DDEX RIN (Recording Information Notification) 1.1 standard. The use of RIN allows your data to move seamlessly through the digital supply chain, which will facilitate accurate crediting and prompt payment for your work.
+          <br />
+          <br />
+          With this plan, you’ll receive unlimited data, no upload or download limitations and the ability to securely share your recordings and invite an unlimited number of collaborators.
+          <br />
+          <br />
+          We have processed your first payment for {{ $invoiceAmountPaid }}
+          <br />
+          <br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
+          <br />
+          Collect while you Create<br />
+          VEVA Collect
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
