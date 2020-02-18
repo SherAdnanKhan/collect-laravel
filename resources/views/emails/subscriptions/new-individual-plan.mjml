@@ -15,7 +15,7 @@
           Thank you for subscribing to VEVA Collect’s Individual Plan!
           <br />
           <br />
-          With this plan, you receive up to 1TB of storage, no upload or download caps and you can generate unlimited DDEX RIN and Credit Report PDFs. You will also benefit from keeping all of your sessions, credits and files organized, accessible and securely stored.
+          With this plan, you receive up to {{ $storageLimit }} of storage, no upload or download caps and you can generate unlimited DDEX RIN and Credit Report PDFs. You will also benefit from keeping all of your sessions, credits and files organized, accessible and securely stored.
           <br />
           <br />
           We have processed your first payment for {{ $invoiceAmountPaid }}
@@ -23,7 +23,8 @@
           <br />
           Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
           <br />
-          Collect while you Create<br />
+          <br />
+          Collect while you Create,<br />
           VEVA Collect
         </mj-text>
       </mj-column>

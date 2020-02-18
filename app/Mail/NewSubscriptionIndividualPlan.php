@@ -44,6 +44,7 @@ class NewSubscriptionIndividualPlan extends Mailable
         $email = $this->view('emails.subscriptions.new-individual-plan')
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
+                'storageLimit' => User::PLAN_STORAGE_LIMITS_PRETTY['individual'],
                 'name' => $this->user->first_name,
                 'invoiceAmountPaid' => $this->invoiceAmountPaid,
             ]);

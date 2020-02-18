@@ -1,3 +1,4 @@
+
 <mjml>
    <mj-head>
      <mj-font name="Source Sans Pro" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" />
@@ -26,7 +27,8 @@
           <br />
           Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
           <br />
-          Collect while you Create<br />
+          <br />
+          Collect while you Create,<br />
           VEVA Collect
         </mj-text>
       </mj-column>

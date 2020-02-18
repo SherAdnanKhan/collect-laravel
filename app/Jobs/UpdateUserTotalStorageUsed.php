@@ -47,7 +47,10 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
                     ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
             })
             ->groupBy('projects.id')
-            ->with('user:id,first_name,last_name, user.subscriptions:stripe_plan')
+            ->with('user:id,first_name,last_name')
+            ->with(['user.subscriptions' => function($query) {
+                return $query->select('stripe_plan');
+            }])
             ->get();
 
         // Array to keep track of which users nee to have

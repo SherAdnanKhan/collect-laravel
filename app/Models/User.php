@@ -54,6 +54,13 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
         'pro'        => false, // unlimited
     ];
 
+    const PLAN_STORAGE_LIMITS_PRETTY = [
+        'free'       => '2GB',
+        'individual' => '1TB',
+        'education'  => 'Unlimited',
+        'pro'        => 'Unlimited',
+    ];
+
     protected $guard = 'api';
 
     /**

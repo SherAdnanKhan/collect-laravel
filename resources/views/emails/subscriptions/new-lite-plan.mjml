@@ -15,12 +15,13 @@
           Thank you for subscribing to VEVA Collect’s Lite Plan!
           <br />
           <br />
-          You will receive 2GB of free data and access to create unlimited projects and recordings to collect your credits. All data is available to export your credits via PDF and DDEX RIN file.
+          You will receive {{ $storageLimit }} of free data and access to create unlimited projects and recordings to collect your credits. All data is available to export your credits via PDF and DDEX RIN file.
           <br />
           <br />
           Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
           <br />
-          Collect while you Create<br />
+          <br />
+          Collect while you Create,<br />
           VEVA Collect
         </mj-text>
       </mj-column>
