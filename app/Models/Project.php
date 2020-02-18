@@ -130,7 +130,7 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
                 [];
         })->toArray() : [];
 
-        $arr['files'] = $this->files ? $this->files->pluck('name')->toArray() : [];
+        $arr['files'] = $this->allFiles ? $this->allFiles->pluck('name')->toArray() : [];
 
         return $arr;
     }
