@@ -2,34 +2,37 @@
 
 namespace App\Models;
 
-use App\Jobs\Emails\SendUserPasswordResetEmail;
-use App\Jobs\Emails\SendVerificationEmail;
-use App\Jobs\Emails\SendWelcomeEmail;
-use App\Models\Collaborators;
-use App\Models\Comment;
-use App\Models\EventLog;
 use App\Models\File;
-use App\Models\Folder;
+use App\Models\Song;
 use App\Models\Party;
+use App\Models\Venue;
+use App\Models\Folder;
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Session;
-use App\Models\Song;
-use App\Models\Subscription;
-use App\Models\UserFavourite;
-use App\Models\UserPluginCode;
+use App\Models\EventLog;
 use App\Models\UserProfile;
-use App\Models\UserTwoFactorToken;
-use App\Models\Venue;
-use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
-use Illuminate\Contracts\Auth\CanResetPassword;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use App\Models\Subscription;
+use App\Models\Collaborators;
+use App\Models\UserFavourite;
 use Laravel\Cashier\Billable;
+use App\Models\UserPluginCode;
+use App\Models\UserTwoFactorToken;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use App\Jobs\Emails\SendWelcomeEmail;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use App\Jobs\Emails\SendVerificationEmail;
+use App\Jobs\Emails\SendUserPasswordResetEmail;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Jobs\Emails\SendNewSubscriptionProPlanEmail;
+use App\Jobs\Emails\SendNewSubscriptionLitePlanEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Jobs\Emails\SendNewSubscriptionIndividualPlanEmail;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 
 class User extends Authenticatable implements JWTSubject, CanResetPassword
 {
@@ -40,25 +43,30 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     const SUBSCRIPTION_NAME = 'main';
     const DEFAULT_SUBSCRIPTION_PLAN = 'free';
 
+    const PLAN_FREE = 'free';
+    const PLAN_INDIVIDUAL = 'individual';
+    const PLAN_EDUCATION = 'education';
+    const PLAN_PRO = 'pro';
+
     const PLANS = [
-        self::DEFAULT_SUBSCRIPTION_PLAN,
-        'individual',
-        'education',
-        'pro',
+        self::PLAN_FREE,
+        self::PLAN_INDIVIDUAL,
+        self::PLAN_EDUCATION,
+        self::PLAN_PRO,
     ];
 
     const PLAN_STORAGE_LIMITS = [
-        'free'       => 2 * 1000 * 1000 * 1000, // 2GB
-        'individual' => 1000 * 1000 * 1000 * 1000, // 1TB
-        'education'  => false, // unlimited
-        'pro'        => false, // unlimited
+        self::PLAN_FREE       => 2 * 1000 * 1000 * 1000, // 2GB
+        self::PLAN_INDIVIDUAL => 1000 * 1000 * 1000 * 1000, // 1TB
+        self::PLAN_EDUCATION  => false, // unlimited
+        self::PLAN_PRO        => false, // unlimited
     ];
 
     const PLAN_STORAGE_LIMITS_PRETTY = [
-        'free'       => '2GB',
-        'individual' => '1TB',
-        'education'  => 'Unlimited',
-        'pro'        => 'Unlimited',
+        self::PLAN_FREE       => '2GB',
+        self::PLAN_INDIVIDUAL => '1TB',
+        self::PLAN_EDUCATION  => 'Unlimited',
+        self::PLAN_PRO        => 'Unlimited',
     ];
 
     protected $guard = 'api';
@@ -343,7 +351,22 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function sendWelcomeNotification()
     {
-        SendWelcomeEmail::dispatch($this);
+        // send the relevant subscription notification.
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+
+        if (!$subscription) {
+            return;
+        }
+
+        $plan = $subscription->stripe_plan;
+
+        if ($plan === self::PLAN_FREE) {
+            SendNewSubscriptionLitePlanEmail::dispatch($this);
+        } else if ($plan === self::PLAN_INDIVIDUAL) {
+            SendNewSubscriptionIndividualPlanEmail::dispatch($this);
+        } else if ($plan === self::PLAN_PRO) {
+            SendNewSubscriptionProPlanEmail::dispatch($this);
+        }
     }
 
     /**

@@ -22,12 +22,6 @@ class SendNewSubscriptionIndividualPlanEmail implements ShouldQueue
      */
     protected $user;
 
-    /**
-     * The amount that would be paid.
-     *
-     * @var string
-     */
-    protected $subscriptionAmount;
 
     /**
      * Create a new job instance.
@@ -35,10 +29,9 @@ class SendNewSubscriptionIndividualPlanEmail implements ShouldQueue
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, $subscriptionAmount)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->subscriptionAmount = $subscriptionAmount;
     }
 
     /**
@@ -48,8 +41,18 @@ class SendNewSubscriptionIndividualPlanEmail implements ShouldQueue
      */
     public function handle()
     {
+        $subscriptionAmount = $this->getSubscriptionAmount();
+
         Mail::to($this->user->email)->send(
-            new NewSubscriptionIndividualPlan($this->user, $this->subscriptionAmount)
+            new NewSubscriptionIndividualPlan($this->user, $subscriptionAmount)
         );
+    }
+
+    private function getSubscriptionAmount()
+    {
+        // TODO:
+        // Hit Stripe to get the plan information.
+
+        return '$12.99';
     }
 }
