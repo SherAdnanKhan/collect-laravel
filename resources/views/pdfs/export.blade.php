@@ -37,7 +37,7 @@
             <p>
                 <!-- Total # of Files -->
                 <span>TOTAL FILES:</span>
-                <span>{{ $project->files()->count() }}</span>
+                <span>{{ $project->allFiles()->count() }}</span>
             </p>
             <p>
                 <!-- Project Notes -->
