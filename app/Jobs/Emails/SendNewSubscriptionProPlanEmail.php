@@ -25,7 +25,7 @@ class SendNewSubscriptionProPlanEmail implements ShouldQueue
     /**
      * The amount that would be paid.
      *
-     * @var int
+     * @var string
      */
     protected $subscriptionAmount;
 
