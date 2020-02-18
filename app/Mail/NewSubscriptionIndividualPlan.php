@@ -20,7 +20,7 @@ class NewSubscriptionIndividualPlan extends Mailable
      *
      * @var int
      */
-    protected $invoiceAmountPaid;
+    protected $subscriptionAmount;
 
     /**
      * Create a new message instance.
@@ -28,10 +28,10 @@ class NewSubscriptionIndividualPlan extends Mailable
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, $invoiceAmountPaid)
+    public function __construct(User $user, $subscriptionAmount)
     {
         $this->user = $user;
-        $this->invoiceAmountPaid = $invoiceAmountPaid;
+        $this->subscriptionAmount = $subscriptionAmount;
     }
 
     /**
@@ -46,7 +46,7 @@ class NewSubscriptionIndividualPlan extends Mailable
             ->with([
                 'storageLimit' => User::PLAN_STORAGE_LIMITS_PRETTY['individual'],
                 'name' => $this->user->first_name,
-                'invoiceAmountPaid' => $this->invoiceAmountPaid,
+                'invoiceAmountPaid' => $this->subscriptionAmount,
             ]);
 
         return $email;

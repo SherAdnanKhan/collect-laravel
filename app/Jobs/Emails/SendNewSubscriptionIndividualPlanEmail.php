@@ -2,14 +2,15 @@
 
 namespace App\Jobs\Emails;
 
-use App\Mail\NewSubscriptionIndividualPlan;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\NewSubscriptionIndividualPlan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 
 class SendNewSubscriptionIndividualPlanEmail implements ShouldQueue
 {
@@ -48,11 +49,10 @@ class SendNewSubscriptionIndividualPlanEmail implements ShouldQueue
         );
     }
 
-    private function getSubscriptionAmount()
+    public function getSubscriptionAmount()
     {
-        // TODO:
-        // Hit Stripe to get the plan information.
+        $subscription = $this->user->subscription(User::SUBSCRIPTION_NAME);
 
-        return '$12.99';
+        return $subscription->getPlanCostFormatted();
     }
 }

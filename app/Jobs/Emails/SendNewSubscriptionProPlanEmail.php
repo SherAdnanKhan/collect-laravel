@@ -49,9 +49,8 @@ class SendNewSubscriptionProPlanEmail implements ShouldQueue
 
     private function getSubscriptionAmount()
     {
-        // TODO:
-        // Hit Stripe to get the plan information.
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
 
-        return '$7.99';
+        return $subscription->getPlanCostFormatted();
     }
 }

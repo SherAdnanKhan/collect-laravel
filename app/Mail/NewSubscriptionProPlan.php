@@ -20,7 +20,7 @@ class NewSubscriptionProPlan extends Mailable
      *
      * @var int
      */
-    protected $invoiceAmountPaid;
+    protected $subscriptionAmount;
 
     /**
      * Create a new message instance.
@@ -28,10 +28,10 @@ class NewSubscriptionProPlan extends Mailable
      * @param User $user
      * @return void
      */
-    public function __construct(User $user, $invoiceAmountPaid)
+    public function __construct(User $user, $subscriptionAmount)
     {
         $this->user = $user;
-        $this->invoiceAmountPaid = $invoiceAmountPaid;
+        $this->subscriptionAmount = $subscriptionAmount;
     }
 
     /**
@@ -45,7 +45,7 @@ class NewSubscriptionProPlan extends Mailable
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
                 'name' => $this->user->first_name,
-                'invoiceAmountPaid' => $this->invoiceAmountPaid,
+                'invoiceAmountPaid' => $this->subscriptionAmount,
             ]);
 
         return $email;
