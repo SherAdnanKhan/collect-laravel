@@ -20,11 +20,11 @@ class FolderObserver
         // Important! We iterate over the children here because we want to
         // leverage the Observers attached to them.
 
-        $folder->folders()->each(function($subFolder) {
+        $folder->allFolders()->each(function($subFolder) {
             $subFolder->delete();
         });
 
-        $folder->files()->each(function($file) {
+        $folder->allFiles()->each(function($file) {
             $file->delete();
         });
     }
