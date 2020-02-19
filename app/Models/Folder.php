@@ -154,6 +154,28 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     }
 
     /**
+     * Return all files in this folder, not just
+     * scoped to the user.
+     *
+     * @return HasMany
+     */
+    public function allFiles(): HasMany
+    {
+        return $this->hasMany(File::class);
+    }
+
+    /**
+     * Return all folders in this folder, not just
+     * scoped to the user.
+     *
+     * @return HasMany
+     */
+    public function allFolders(): HasMany
+    {
+        return $this->hasMany(Folder::class);
+    }
+
+    /**
      * We'll override the type we're using to determine
      * user permissions. We will treat folders as files.
      *

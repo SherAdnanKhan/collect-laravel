@@ -41,13 +41,16 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
         // since we last ran this job. And eager load all the users, so we can
         // grab them all in a single query.
         $projects = Project::select('projects.id', 'projects.user_id')
-            ->whereHas('files', function($query) use ($last_ran) {
+            ->whereHas('allFiles', function($query) use ($last_ran) {
                 return $query->select('files.project_id', 'files.updated_at', 'files.deleted_at')
                     ->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
                     ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
             })
             ->groupBy('projects.id')
-            ->with('user:id,first_name,last_name, user.subscriptions:stripe_plan')
+            ->with('user:id,first_name,last_name')
+            ->with(['user.subscriptions' => function($query) {
+                return $query->select('stripe_plan');
+            }])
             ->get();
 
         // Array to keep track of which users nee to have
@@ -56,7 +59,7 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
 
         // We go over each project and grab a sum of the non-deleted files sizes.
         foreach ($projects as $project) {
-            $total_storage_used = $project->files()
+            $total_storage_used = $project->allFiles()
                 ->whereNull('deleted_at')
                 ->sum('size');
 

@@ -45,6 +45,8 @@ class Update
 
         $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
 
+        $user->sendNewSubscriptionEmail($subscription);
+
         return $subscription->toArray();
     }
 }
