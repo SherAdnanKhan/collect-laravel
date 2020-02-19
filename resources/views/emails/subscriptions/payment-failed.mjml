@@ -16,7 +16,10 @@
           <br />
           Please <a href="{{ $accountUrl }}" style="color: #000000">click here</a> to update your payment details.<br />
           <br />
-          Collect while you Create<br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a><br/>
+          <br/>
+          <br/>
+          Collect while you Create,<br />
           VEVA Collect
         </mj-text>
       </mj-column>

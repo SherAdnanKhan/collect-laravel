@@ -28,7 +28,11 @@
           Accept
          </mj-button>
         <mj-text font-size="16px" color="#212141" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
-          Collect while you Create,<br /> VEVA Collect
+          <br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a><br/>
+          <br/>
+          Collect while you Create,<br />
+          VEVA Collect
         </mj-text>
       </mj-column>
     </mj-section>

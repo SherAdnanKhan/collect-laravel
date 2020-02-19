@@ -18,7 +18,10 @@
           <br />
           To view our other plan options <a href="{{ $link }}" style="color: #000000">click here</a>.<br />
           <br />
-          Many thanks<br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a><br/>
+          <br/>
+          <br/>
+          Collect while you Create,<br />
           VEVA Collect
         </mj-text>
       </mj-column>
