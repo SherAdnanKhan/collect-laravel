@@ -49,7 +49,7 @@ class SendNewSubscriptionProPlanEmail implements ShouldQueue
 
     private function getSubscriptionAmount()
     {
-        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+        $subscription = $this->user->subscription(self::SUBSCRIPTION_NAME);
 
         return $subscription->getPlanCostFormatted();
     }
