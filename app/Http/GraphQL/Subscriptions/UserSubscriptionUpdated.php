@@ -36,10 +36,9 @@ class UserSubscriptionUpdated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        Log::debug('userSubscriptionUpdated', [
-            'context' => $subscriber->context,
-            'root'    => $root,
-        ]);
+        if ($subscriber->context->user === null) {
+            return false;
+        }
 
         return $subscriber->context->user->id == $root->user_id;
     }
