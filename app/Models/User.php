@@ -351,8 +351,20 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function sendWelcomeNotification()
     {
-        // send the relevant subscription notification.
-        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+        SendWelcomeEmail::dispatch($this);
+    }
+
+    /**
+     * Send the new subscription emails.
+     *
+     * @return void
+     */
+    public function sendNewSubscriptionEmail($subscription = null)
+    {
+        if (is_null($subscription)) {
+            // send the relevant subscription notification.
+            $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+        }
 
         if (!$subscription) {
             return;
