@@ -160,11 +160,19 @@ class StripeController extends CashierController
 
                 $subscription->save();
 
-                GraphQLSubscription::broadcast('userSubscriptionUpdated', $subscription);
+                try {
+                    Log::debug('Broadcasting subscription updated');
+                    GraphQLSubscription::broadcast('userSubscriptionUpdated', $subscription);
+                } catch (\Exception $e) {
+                    Log::error($e->getMessage());
+                }
 
                 // Send subscription updated email if they've changed plan
                 if ($originalStripePlan !== $subscription->stripe_plan) {
-                    Log::debug('Send subscription updated email');
+                    Log::debug('Send subscription updated email', [
+                        'original_plan' => $originalStripePlan,
+                        'new_plan' => $subscription->stripe_plan,
+                    ]);
 
                     $user->sendNewSubscriptionEmail($subscription);
                 }
