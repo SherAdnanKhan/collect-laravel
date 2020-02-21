@@ -14,13 +14,16 @@
           <br />
 
           @if($planName === 'Free')
-            Thank you for subscribing to VEVA Collect’s Free Plan!<br />
+            Thank you for subscribing to VEVA Collect’s Free Plan!
+            <br />
+            <br />
             Please contact us with any questions at hello@vevacollect.com
           @else
             Thank you for using VEVA Collect, we love working with you!
             <br />
             <br />
             We have processed your payment for {{ $invoiceAmountPaid }} for the {{ $planName }} Plan.
+            <br />
             <br />
             Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
           @endif

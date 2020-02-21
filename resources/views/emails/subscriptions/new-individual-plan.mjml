@@ -12,13 +12,18 @@
         <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
           <br />
-          It looks like we were unable to process the payment for your VEVA Collect subscription.<br />
+          Thank you for subscribing to VEVA Collect’s Individual Plan!
           <br />
-          Please <a href="{{ $accountUrl }}" style="color: #000000">click here</a> to update your payment details.<br />
           <br />
-          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a><br/>
-          <br/>
-          <br/>
+          With this plan, you receive up to {{ $storageLimit }} of storage, no upload or download caps and you can generate unlimited DDEX RIN and Credit Report PDFs. You will also benefit from keeping all of your sessions, credits and files organized, accessible and securely stored.
+          <br />
+          <br />
+          We have processed your first payment for {{ $invoiceAmountPaid }}
+          <br />
+          <br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
+          <br />
+          <br />
           Collect while you Create,<br />
           VEVA Collect
         </mj-text>

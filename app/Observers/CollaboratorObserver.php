@@ -34,7 +34,7 @@ class CollaboratorObserver
 
         $collaborator->createAndSendInvite();
 
-        if (!is_nul($collaborator->user)) {
+        if (!is_null($collaborator->user)) {
             $collaborator->user->touch();
 
             // Subscription::broadcast('collaboratorCreated', $collaborator);
@@ -70,7 +70,7 @@ class CollaboratorObserver
             // Setup the default permissions.
             $collaborator->permissions()->saveMany($permissions);
 
-            if (!is_nul($collaborator->user)) {
+            if (!is_null($collaborator->user)) {
                 $collaborator->user->touch();
 
                 // Broadcast a GraphQL subscription for clients.

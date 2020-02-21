@@ -45,7 +45,7 @@ class UserVerification extends Mailable
         $verifyUrl = config('app.frontend_url') . '/verify/' . $this->token;
 
         return $this->view('emails.users.verification')
-            ->subject('Verify your email.')
+            ->subject('Verify your email')
             ->with([
                 'name' => $this->user->first_name,
                 'verifyUrl' => $verifyUrl

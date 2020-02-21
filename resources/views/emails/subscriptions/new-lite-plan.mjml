@@ -12,13 +12,15 @@
         <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
           <br />
-          It looks like we were unable to process the payment for your VEVA Collect subscription.<br />
+          Thank you for subscribing to VEVA Collect’s Lite Plan!
           <br />
-          Please <a href="{{ $accountUrl }}" style="color: #000000">click here</a> to update your payment details.<br />
           <br />
-          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a><br/>
-          <br/>
-          <br/>
+          You will receive {{ $storageLimit }} of free data and access to create unlimited projects and recordings to collect your credits. All data is available to export your credits via PDF and DDEX RIN file.
+          <br />
+          <br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
+          <br />
+          <br />
           Collect while you Create,<br />
           VEVA Collect
         </mj-text>

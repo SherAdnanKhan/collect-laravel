@@ -130,7 +130,7 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
                 [];
         })->toArray() : [];
 
-        $arr['files'] = $this->files ? $this->files->pluck('name')->toArray() : [];
+        $arr['files'] = $this->allFiles ? $this->allFiles->pluck('name')->toArray() : [];
 
         return $arr;
     }
@@ -183,6 +183,16 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     public function files(): HasMany
     {
         return $this->hasMany(File::class)->userViewable();
+    }
+
+    /**
+     * All project files, not just scoped to user.
+     *
+     * @return HasMany
+     */
+    public function allFiles(): HasMany
+    {
+        return $this->hasMany(File::class);
     }
 
     /**
