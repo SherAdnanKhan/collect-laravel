@@ -191,6 +191,7 @@ class MultipartUploadsController extends Controller
                     continue;
                 }
             } else {
+                $originalQuery->where('name', 'like', $name);
                 $count = $originalQuery->count();
             }
 
