@@ -64,7 +64,8 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
                 ->sum('size');
 
             // Run an update to save that value.
-            $saved = $project->save(['total_storage_used' => $total_storage_used]);
+            $project->total_storage_used = $total_storage_used;
+            $saved = $project->save();
 
             // If it's saved and we already haven't marked a user to update, do so.
             if ($saved && !array_key_exists($project->user->id, $users_to_update)) {
@@ -78,7 +79,8 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
             $total_storage_used = $user->projects()->sum('total_storage_used');
 
             // Then update the user with that value.
-            $saved = $user->save(['total_storage_used' => $total_storage_used]);
+            $user->total_storage_used = $total_storage_used;
+            $saved = $user->save();
 
             // If we saved we may want to do some things
             if ($saved) {

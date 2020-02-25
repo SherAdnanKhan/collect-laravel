@@ -287,6 +287,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function hasStorageSpaceAvailable(): bool
     {
+        $this->load('subscriptions');
         $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
 
         if (!$subscription) {
