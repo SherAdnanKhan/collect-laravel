@@ -79,6 +79,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     protected $fillable = [
         'first_name', 'last_name', 'email',
         'password', 'phone', 'two_factor_enabled',
+        'total_storage_used'
     ];
 
     /**
@@ -299,7 +300,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
             $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);
         }
 
-        return $this->total_storage_used < $limit || !$limit;
+        return $limit === false || $this->total_storage_used < $limit;
     }
 
     /**
