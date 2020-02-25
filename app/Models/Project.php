@@ -196,6 +196,16 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     }
 
     /**
+     * All project files, not just scoped to user.
+     *
+     * @return HasMany
+     */
+    public function allFilesNoScope(): HasMany
+    {
+        return $this->hasMany(File::class)->withoutGlobalScopes();
+    }
+
+    /**
      * Get the files belonging to this project.
      *
      * @return Integer

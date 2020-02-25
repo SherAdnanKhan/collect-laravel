@@ -41,7 +41,7 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
         // since we last ran this job. And eager load all the users, so we can
         // grab them all in a single query.
         $projects = Project::select('projects.id', 'projects.user_id')
-            ->whereHas('allFiles', function($query) use ($last_ran) {
+            ->whereHas('allFilesNoScope', function($query) use ($last_ran) {
                 return $query->select('files.project_id', 'files.updated_at', 'files.deleted_at')
                     ->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
                     ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
