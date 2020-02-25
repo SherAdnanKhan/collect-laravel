@@ -73,13 +73,29 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
             }
         }
 
+        $file_users = User::select('users.id')
+            ->whereHas('filesNoScope', function($query) use ($last_ran) {
+                return $query->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
+                             ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
+            })
+            ->whereNotIn('users_id', array_keys($users_to_update))
+            ->groupBy('users.id')
+            ->get();
+
+        foreach ($file_users as $file_user) {
+            $users_to_update[$file_user->id] = $file_user;
+        }
+
         // We now have all the users to update
         foreach ($users_to_update as $user) {
             // Grab the sum of the total storage used for this users projects.
-            $total_storage_used = $user->projects()->sum('total_storage_used');
+            $projects_total_storage_used = $user->projects()->sum('total_storage_used');
+            $files_total_storage_used = $user->filesNoScope()
+                ->whereNull('deleted_at')
+                ->sum('size');
 
             // Then update the user with that value.
-            $user->total_storage_used = $total_storage_used;
+            $user->total_storage_used = $projects_total_storage_used + $files_total_storage_used;
             $saved = $user->save();
 
             // If we saved we may want to do some things

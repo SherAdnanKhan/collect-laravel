@@ -204,6 +204,16 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      *
      * @return HasMany
      */
+    public function filesNoScope(): HasMany
+    {
+        return $this->hasMany(File::class)->whereNull('project_id')->withoutGlobalScopes();
+    }
+
+    /**
+     * Get the files belonging to this user.
+     *
+     * @return HasMany
+     */
     public function recentFiles(): HasMany
     {
         return $this->hasMany(File::class)->whereNull('project_id')->orderBy('created_at', 'desc')->limit(6);
