@@ -43,7 +43,7 @@ class UserUnreadActivities extends GraphQLSubscription
             return false;
         }
 
-        return $subscriber->context->user->id != $root->user_id && $root->project_id == array_get($args, 'projectId', 0);
+        return $subscriber->context->user->id != $root['user_id'] && $root['project_id'] == array_get($args, 'projectId', 0);
     }
 
     /**
