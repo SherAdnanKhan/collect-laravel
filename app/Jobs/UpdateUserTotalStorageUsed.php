@@ -78,7 +78,7 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
                 return $query->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
                              ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
             })
-            ->whereNotIn('users_id', array_keys($users_to_update))
+            ->whereNotIn('user_id', array_keys($users_to_update))
             ->groupBy('users.id')
             ->get();
 
