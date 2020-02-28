@@ -296,7 +296,7 @@ class MultipartUploadsController extends Controller
         $fullFilename = $filename . '.' . $extension;
 
         // Generate the S3 key
-        $key = implode('/', $path) . '/' . $fullFilename;
+        $key = implode('/', $path) . '/' . substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 16) . '/' . $fullFilename;
 
         // Create the file
         $file = File::create([
