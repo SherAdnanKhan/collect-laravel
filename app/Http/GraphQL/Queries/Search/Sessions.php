@@ -2,10 +2,11 @@
 
 namespace App\Http\GraphQL\Queries\Search;
 
+use App\Models\Project;
 use App\Models\Session;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class Sessions
 {
@@ -22,11 +23,11 @@ class Sessions
         $term = array_get($args, 'term');
         $user = auth()->user();
 
-        $project_ids = $user->projects()->userViewable(['user' => $user])->pluck('id')->toArray();
+        $sessionIds = Session::userViewable(['user' => $user])->pluck('id')->toArray();
 
         return Session::search($term)
-            ->get()
-            ->whereIn('project_id', $project_ids)
-            ->take(10);
+            ->whereIn('id', $sessionIds)
+            ->take(10)
+            ->get();
     }
 }

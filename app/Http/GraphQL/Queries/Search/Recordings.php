@@ -4,8 +4,8 @@ namespace App\Http\GraphQL\Queries\Search;
 
 use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class Recordings
 {
@@ -22,10 +22,10 @@ class Recordings
         $term = array_get($args, 'term');
         $user = auth()->user();
 
-        $project_ids = $user->projects()->userViewable(['user' => $user])->pluck('id')->toArray();
+        $recordingIds = Recording::userViewable(['user' => $user])->pluck('id')->toArray();
 
         return Recording::search($term)
-            ->whereIn('project_id', $project_ids)
+            ->whereIn('id', $recordingIds)
             ->take(10)
             ->get();
     }

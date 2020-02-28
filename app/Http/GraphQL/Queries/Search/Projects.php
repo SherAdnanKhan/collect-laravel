@@ -22,10 +22,12 @@ class Projects
         $term = array_get($args, 'term');
         $user = auth()->user();
 
-        $project_ids = $user->projects()->userViewable(['user' => $user])->pluck('id')->toArray();
+        // We need the Project id's before
+        $projectIds = Project::userViewable(['user' => $user])->pluck('id')->toArray();
 
+        // The ElasticSearch Builder doesn't support our scopes.
         return Project::search($term)
-            ->whereIn('id', $project_ids)
+            ->whereIn('id', $projectIds)
             ->take(10)
             ->get();
     }
