@@ -22,10 +22,10 @@ class Songs
         $term = array_get($args, 'term');
         $user = auth()->user();
 
-        $songs_ids = $user->songs()->userViewable(['user' => $user])->pluck('id')->toArray();
+        $songIds = Song::userViewable(['user' => $user])->pluck('id')->toArray();
 
         return Song::search($term)
-            ->whereIn('id', $songs_ids)
+            ->whereIn('id', $songIds)
             ->take(10)
             ->get();
     }

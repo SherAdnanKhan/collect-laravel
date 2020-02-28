@@ -3,9 +3,10 @@
 namespace App\Http\GraphQL\Queries\Search;
 
 use App\Models\File;
+use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class ProjectFiles
 {
@@ -22,10 +23,10 @@ class ProjectFiles
         $term = array_get($args, 'term');
         $user = auth()->user();
 
-        $project_ids = $user->projects()->userViewable(['user' => $user])->pluck('id')->toArray();
+        $projectIds = Project::userViewable(['user' => $user])->pluck('id')->toArray();
 
         return File::search($term)
-            ->whereIn('project_id', $project_ids)
+            ->whereIn('project_id', $projectIds)
             ->take(10)
             ->get();
     }
