@@ -25,7 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new \App\Jobs\UpdateUserTotalStorageUsed)
-                 ->everyFiveMinutes()
+                 ->everyMinute()
+                //  ->everyFiveMinutes()
                  ->onOneServer();
 
         $schedule->job(new \App\Jobs\DeleteFiles)

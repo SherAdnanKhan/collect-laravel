@@ -29,22 +29,22 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
      */
     public function handle()
     {
-        $cache_key = 'UpdateUserTotalStorageUsed-lastran';
+        $cacheKey = 'UpdateUserTotalStorageUsed-lastran';
 
         // Grab last ran, default 0 if it doesn't exist
-        $last_ran = Cache::get($cache_key, 0);
+        $lastRan = Cache::get($cacheKey, 0);
 
         // Then put the current time in the cache for 30 minutes.
-        Cache::put($cache_key, time(), 30);
+        Cache::put($cacheKey, time(), 30);
 
         // Grab projects which have files that have been updated or deleted
         // since we last ran this job. And eager load all the users, so we can
         // grab them all in a single query.
         $projects = Project::select('projects.id', 'projects.user_id')
-            ->whereHas('allFilesNoScope', function($query) use ($last_ran) {
+            ->whereHas('allFilesNoScope', function($query) use ($lastRan) {
                 return $query->select('files.project_id', 'files.updated_at', 'files.deleted_at')
-                    ->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
-                    ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
+                    ->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $lastRan))
+                    ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $lastRan));
             })
             ->groupBy('projects.id')
             ->with('user:id,first_name,last_name')
@@ -55,47 +55,47 @@ class UpdateUserTotalStorageUsed implements ShouldQueue
 
         // Array to keep track of which users nee to have
         // the storage recalculated.
-        $users_to_update = [];
+        $usersToUpdate = [];
 
         // We go over each project and grab a sum of the non-deleted files sizes.
         foreach ($projects as $project) {
-            $total_storage_used = $project->allFiles()
+            $totalStorageUsed = $project->allFiles()
                 ->whereNull('deleted_at')
                 ->sum('size');
 
             // Run an update to save that value.
-            $project->total_storage_used = $total_storage_used;
+            $project->total_storage_used = $totalStorageUsed;
             $saved = $project->save();
 
             // If it's saved and we already haven't marked a user to update, do so.
-            if ($saved && !array_key_exists($project->user->id, $users_to_update)) {
-                $users_to_update[$project->user->id] = $project->user;
+            if ($saved && !array_key_exists($project->user->id, $usersToUpdate)) {
+                $usersToUpdate[$project->user->id] = $project->user;
             }
         }
 
-        $file_users = User::select('users.id')
-            ->whereHas('filesNoScope', function($query) use ($last_ran) {
-                return $query->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $last_ran))
-                             ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $last_ran));
+        $fileUsers = User::select('users.id')
+            ->whereHas('filesNoScope', function($query) use ($lastRan) {
+                return $query->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $lastRan))
+                             ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $lastRan));
             })
-            ->whereNotIn('users.id', array_keys($users_to_update))
+            ->whereNotIn('users.id', array_keys($usersToUpdate))
             ->groupBy('users.id')
             ->get();
 
-        foreach ($file_users as $file_user) {
-            $users_to_update[$file_user->id] = $file_user;
+        foreach ($fileUsers as $fileUser) {
+            $usersToUpdate[$fileUser->id] = $fileUser;
         }
 
         // We now have all the users to update
-        foreach ($users_to_update as $user) {
+        foreach ($usersToUpdate as $user) {
             // Grab the sum of the total storage used for this users projects.
-            $projects_total_storage_used = $user->projects()->sum('total_storage_used');
-            $files_total_storage_used = $user->filesNoScope()
+            $projectsTotalStorageUsed = $user->projects()->sum('total_storage_used');
+            $filesTotalStorageUsed = $user->filesNoScope()
                 ->whereNull('deleted_at')
                 ->sum('size');
 
             // Then update the user with that value.
-            $user->total_storage_used = $projects_total_storage_used + $files_total_storage_used;
+            $user->total_storage_used = $projectsTotalStorageUsed + $filesTotalStorageUsed;
             $saved = $user->save();
 
             // If we saved we may want to do some things
