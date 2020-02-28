@@ -23,6 +23,7 @@ use App\Observers\CreditableObserver;
 use App\Observers\EventLogObserver;
 use App\Observers\EventLoggableObserver;
 use App\Observers\FavouredObserver;
+use App\Observers\FileObserver;
 use App\Observers\FolderObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\SongObserver;
@@ -59,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
         Collaborator::observe(CollaboratorObserver::class);
         Comment::observe(CommentObserver::class);
         Credit::observe(CreditObserver::class);
+        File::observe(FileObserver::class);
         Folder::observe(FolderObserver::class);
         Project::observe(ProjectObserver::class);
         User::observe(UserObserver::class);

@@ -293,9 +293,10 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     /**
      * Return whether the user has storage space available
      *
+     * @param int $additional_storage_used
      * @return bool
      */
-    public function hasStorageSpaceAvailable(): bool
+    public function hasStorageSpaceAvailable(int $additional_storage_used = 0): bool
     {
         $this->load('subscriptions');
         $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
@@ -311,7 +312,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
             $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);
         }
 
-        return $limit === false || $this->total_storage_used < $limit;
+        return $limit === false || ($this->total_storage_used + $additional_storage_used) < $limit;
     }
 
     /**

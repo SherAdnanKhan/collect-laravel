@@ -39,6 +39,8 @@ class MultipartUploadsController extends Controller
 
         $batchId = array_get($meta, 'batchId', false);
 
+        $size = (int)$request->get('size');
+
         // if we're uploading to a project
         // make sure we have access and create a path
         // to the project folder
@@ -54,7 +56,7 @@ class MultipartUploadsController extends Controller
 
             $projectId = $project->id;
 
-            if ($project->user->hasStorageSpaceAvailable() === false) {
+            if ($project->user->hasStorageSpaceAvailable($size) === false) {
                 return response()->json([
                     'upgradeRequired' => true
                 ]);
@@ -68,7 +70,7 @@ class MultipartUploadsController extends Controller
         } else {
             // Otherwise we're uploading to the
             // users space
-            if ($user->hasStorageSpaceAvailable() === false) {
+            if ($user->hasStorageSpaceAvailable($size) === false) {
                 return response()->json([
                     'upgradeRequired' => true
                 ]);
@@ -298,14 +300,15 @@ class MultipartUploadsController extends Controller
 
         // Create the file
         $file = File::create([
-            'user_id' => $user->id,
+            'user_id'    => $user->id,
             'project_id' => $projectId,
-            'folder_id' => $folderId,
-            'path' => $key,
-            'name' => $fullFilename,
-            'type' => $extension,
-            'status' => File::STATUS_PENDING,
-            'hidden' => $hidden,
+            'folder_id'  => $folderId,
+            'path'       => $key,
+            'name'       => $fullFilename,
+            'type'       => $extension,
+            'status'     => File::STATUS_PENDING,
+            'hidden'     => $hidden,
+            'size'       => $size
         ]);
 
         // uplaod the upload
@@ -363,7 +366,7 @@ class MultipartUploadsController extends Controller
             ->where('project_id', $request->get('projectId'))
             ->userViewable();
 
-            if ($request->has('folderId')) {
+        if ($request->has('folderId')) {
             $file_query->where('folder_id', $request->get('folderId'));
         } else {
             $file_query->whereNull('folder_id');
