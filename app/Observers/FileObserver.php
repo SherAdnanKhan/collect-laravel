@@ -24,9 +24,9 @@ class FileObserver
         $project = null;
         if ($file->project_id) {
             $project = $file->project;
-            $user = $project->user;
+            $user = $project->user()->first();
         } else {
-            $user = $file->user;
+            $user = $file->user()->first();
         }
 
         if ($project) {
@@ -38,6 +38,8 @@ class FileObserver
         $user->update([
             'total_storage_used' => DB::raw('total_storage_used + ' . (int)$file->size)
         ]);
+
+        $user->refresh();
 
         Subscription::broadcast('userStorageUpdated', $user);
 
