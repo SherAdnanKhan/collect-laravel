@@ -157,7 +157,7 @@ return [
 
     'extensions' => [
         // \Nuwave\Lighthouse\Schema\Extensions\DeferExtension::class,
-        // \Nuwave\Lighthouse\Schema\Extensions\SubscriptionExtension::class,
+        \Nuwave\Lighthouse\Schema\Extensions\SubscriptionExtension::class,
         // \Nuwave\Lighthouse\Schema\Extensions\TracingExtension::class,
     ],
 
@@ -245,7 +245,9 @@ return [
             ],
             'pusher' => [
                 'driver' => 'pusher',
-                'routes' => \Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class.'@pusher',
+
+                // Override the router.
+                'routes' => \App\Http\GraphQL\Subscriptions\Router::class.'@pusher',
             ],
         ],
     ],

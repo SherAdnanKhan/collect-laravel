@@ -2,12 +2,13 @@
 
 namespace App\Http\GraphQL\Subscriptions;
 
-use App\Contracts\UserAccessible;
 use App\Models\User;
-use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Http\Request;
-use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
+use App\Contracts\UserAccessible;
+use Illuminate\Support\Facades\Log;
+use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Subscriptions\Subscriber;
+use Nuwave\Lighthouse\Schema\Types\GraphQLSubscription;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class UserStorageUpdated extends GraphQLSubscription
