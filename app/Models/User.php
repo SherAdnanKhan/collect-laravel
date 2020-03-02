@@ -316,6 +316,53 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     }
 
     /**
+     * Does the user require 2 factor authentication?
+     *
+     * @return bool
+     */
+    public function getTotalStorageUsedPercentageAttribute(): int
+    {
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+
+        if (!$subscription) {
+            return 0;
+        }
+
+        $limit = false;
+        $plan = $subscription->stripe_plan;
+
+        if (array_key_exists($plan, self::PLAN_STORAGE_LIMITS)) {
+            $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);
+        }
+
+        if ($limit === false) {
+            return 0;
+        }
+
+        return min(round(($this->total_storage_used / $limit) * 100), 100);
+    }
+
+    /**
+     * Does the user require 2 factor authentication?
+     *
+     * @return bool
+     */
+    public function getTotalStorageUsedPrettyAttribute(): string
+    {
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+
+        if (!$subscription) {
+            return 0;
+        }
+
+        $precision = 2;
+        $base = log($this->total_storage_used, 1024);
+        $suffixes = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+    }
+
+    /**
      * A user only has collaborator access if they're on the pro or
      * education plan.
      *
