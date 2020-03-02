@@ -208,7 +208,7 @@ class File extends Model implements UserAccessible, Commentable
         $base = log($this->size, 1024);
         $suffixes = ['B', 'KB', 'MB', 'GB', 'TB'];
 
-        return round(pow(1024, $base - floor($base)), $precision) .''. $suffixes[floor($base)];
+        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
     }
 
     /**
