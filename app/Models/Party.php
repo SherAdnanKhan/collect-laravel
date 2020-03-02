@@ -51,14 +51,16 @@ class Party extends Model implements UserAccessible
      */
     public function getNameAttribute(): string
     {
-        return trim(sprintf(
-            '%s %s %s %s %s',
-            $this->attributes['prefix'],
-            $this->attributes['first_name'],
-            $this->attributes['middle_name'],
-            $this->attributes['last_name'],
-            $this->attributes['suffix']
-        ));
+        $nameParts = [];
+        $partKeys = ['prefix', 'first_name', 'middle_name', 'last_name', 'suffix'];
+
+        foreach ($partKeys as $key) {
+            if (!empty($this->attributes[$key])) {
+                $nameParts[] = $this->attributes[$key];
+            }
+        }
+
+        return trim(join(' ', $nameParts));
     }
 
     /**
