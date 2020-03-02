@@ -122,6 +122,16 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     }
 
     /**
+     * Get the artist for the project
+     *
+     * @return HasOne
+     */
+    public function artist(): HasOne
+    {
+        return $this->project->artist();
+    }
+
+    /**
      * The venue who owns this song.
      *
      * @return BelongsTo

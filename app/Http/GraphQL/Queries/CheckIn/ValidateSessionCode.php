@@ -45,10 +45,15 @@ class ValidateSessionCode
             ];
         }, [false, null]);
 
+        $sessionName = $session->name;
+        if ($session->artist) {
+            $sessionName = sprintf('%s - %s', $session->artist->name, $session->name);
+        }
+
         return [
             'valid' => $valid,
             'accessToken' => $accessToken,
-            'sessionName' => $session->name
+            'sessionName' => $sessionName,
         ];
     }
 }
