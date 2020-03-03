@@ -41,8 +41,6 @@ class FileObserver
 
         $user->refresh();
 
-        Subscription::broadcast('userStorageUpdated', $user);
-
         if (!$user->hasStorageSpaceAvailable()) {
             // If the user no longer has enough storage left, then we need to email them.
             SendUserStorageLimitReachedEmail::dispatch($user);
@@ -76,7 +74,5 @@ class FileObserver
         ]);
 
         $user->refresh();
-
-        Subscription::broadcast('userStorageUpdated', $user);
     }
 }
