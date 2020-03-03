@@ -460,7 +460,12 @@ class MultipartUploadsController extends Controller
             ->first();
 
         $count = 1;
-        while ($existingFile) {
+        while (true) {
+            if ($existingFile->status === File::STATUS_PENDING && $existingFile->user_id === $user->id) {
+                $existingFile->forceDelete();
+                break;
+            }
+
             $filename  = $originalFilename . ' ('.$count.')';
             $existingFile = (clone $existingFileQueryBase)
                 ->where('name', 'like', $filename . '.' . $extension)
