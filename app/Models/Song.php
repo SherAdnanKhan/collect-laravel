@@ -171,7 +171,7 @@ class Song extends Model implements UserAccessible, Creditable
             // ownership access on that.
             return (new ProjectAccess($q, $user, ['recording'], ['read']))->getQuery()
                 ->select(['recordings.id', 'recordings.project_id']);
-        })->orWhere('user_id', $user->getAuthIdentifier())->orWhereNotNull('iswc');
+        })->orWhere('user_id', $user->getAuthIdentifier()); // ->orWhereNotNull('iswc')
     }
 
     /**
