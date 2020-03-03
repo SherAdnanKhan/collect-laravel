@@ -461,7 +461,11 @@ class MultipartUploadsController extends Controller
 
         $count = 1;
         while (true) {
-            if (!$existingFile || ($existingFile->status === File::STATUS_PENDING && $existingFile->user_id === $user->id)) {
+            if (!$existingFile) {
+                break;
+            }
+
+            if ($existingFile->status === File::STATUS_PENDING && $existingFile->user_id === $user->id) {
                 $existingFile->forceDelete();
                 break;
             }
