@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\App;
+use Maxbanton\Cwh\Handler\CloudWatch;
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -40,6 +43,19 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
+
+// Configure Cloud Watch Logs for logging
+$app->configureMonologUsing(function($monolog) {
+    $cwClient = App::make('aws')->createClient('CloudWatchLogs');
+    $cwGroupName = env('AWS_CWL_GROUP', 'laravel-app-logs');
+    $cwStreamNameApp = env('AWS_CWL_APP', 'laravel-app-name');
+    $cwTagName = env('AWS_CWL_TAG_NAME', 'application');
+    $cwTagValue = env('AWS_CWL_TAG_VALUE', 'laravel-testapp01');
+    $cwRetentionDays = 90;
+    $cwHandlerApp = new CloudWatch($cwClient, $cwGroupName, $cwStreamNameApp, $cwRetentionDays, 10000, [ $cwTagName => $cwTagValue ] );
+
+    $monolog->pushHandler($cwHandlerApp);
+});
 
 /*
 |--------------------------------------------------------------------------

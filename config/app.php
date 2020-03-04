@@ -186,6 +186,7 @@ return [
         \Nuwave\Lighthouse\LighthouseServiceProvider::class,
         \Intervention\Image\ImageServiceProvider::class,
         \Barryvdh\Snappy\ServiceProvider::class,
+        \Aws\Laravel\AwsServiceProvider::class,
 
         /*
          * Application Service Providers...

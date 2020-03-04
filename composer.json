@@ -8,6 +8,7 @@
         "php": ">=7.0.0",
         "askedio/laravel-soft-cascade": "5.7",
         "aws/aws-sdk-php": "^3.87",
+        "aws/aws-sdk-php-laravel": "^3.4",
         "babenkoivan/scout-elasticsearch-driver": "^3.10",
         "barryvdh/laravel-cors": "^0.11.3",
         "barryvdh/laravel-snappy": "^0.4.6",
@@ -35,7 +36,8 @@
         "symfony/console": "4.*",
         "themsaid/nova-cashier-manager": "^0.2.1",
         "titasgailius/search-relations": "^1.0",
-        "tymon/jwt-auth": "1.0.0-rc.3"
+        "tymon/jwt-auth": "1.0.0-rc.3",
+        "maxbanton/cwh": "^1.1.14"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
