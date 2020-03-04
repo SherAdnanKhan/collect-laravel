@@ -36,8 +36,7 @@
         "symfony/console": "4.*",
         "themsaid/nova-cashier-manager": "^0.2.1",
         "titasgailius/search-relations": "^1.0",
-        "tymon/jwt-auth": "1.0.0-rc.3",
-        "maxbanton/cwh": "^1.1.14"
+        "tymon/jwt-auth": "1.0.0-rc.3"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
