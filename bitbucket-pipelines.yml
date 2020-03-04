@@ -16,7 +16,7 @@ build-assets: &build-assets
       - public/fonts
       - public/images
       - public/js
-​
+
 package: &package
   step:
     name: Package
@@ -24,7 +24,7 @@ package: &package
       - zip -r application.zip . -x ".git" -x "laradock" -x "resources/fonts" -x "resources/images" -x "resources/js" -x "resources/sass" -x "resources/tests"
     artifacts:
       - application.zip
-​
+
 deploy-to-production: &deploy-to-production
   step:
     name: "Deploy to Production"
@@ -41,11 +41,11 @@ deploy-to-production: &deploy-to-production
         S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment"
         COMMAND: "upload-only"
         VERSION_LABEL: "production-$BITBUCKET_BUILD_NUMBER"
-​
+
 definitions:
   caches:
     yarncustom: ./node_modules
-​
+
 pipelines:
   branches:
     master:
