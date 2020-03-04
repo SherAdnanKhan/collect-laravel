@@ -1,0 +1,54 @@
+image:
+  name: atlassian/default-image:2
+
+build-assets: &build-assets
+  step:
+    name: Build Assets
+    image: node:10.15.3
+    caches:
+      - yarncustom
+    script:
+      - yarn install
+      - yarn prod
+    artifacts:
+      - public/mix-manifest.json
+      - public/css
+      - public/fonts
+      - public/images
+      - public/js
+​
+package: &package
+  step:
+    name: Package
+    script:
+      - zip -r application.zip . -x ".git" -x "laradock" -x "resources/fonts" -x "resources/images" -x "resources/js" -x "resources/sass" -x "resources/tests"
+    artifacts:
+      - application.zip
+​
+deploy-to-production: &deploy-to-production
+  step:
+    name: "Deploy to Production"
+    deployment: production
+    script:
+    - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
+      variables:
+        AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+        AWS_DEFAULT_REGION: "us-east-1"
+        APPLICATION_NAME: "VEVA Sound Production"
+        ENVIRONMENT_NAME: "VevaSound-production-1"
+        ZIP_FILE: "application.zip"
+        S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment"
+        COMMAND: "upload-only"
+        VERSION_LABEL: "production-$BITBUCKET_BUILD_NUMBER"
+​
+definitions:
+  caches:
+    yarncustom: ./node_modules
+​
+pipelines:
+  branches:
+    master:
+    - <<: *build-assets
+    - <<: *package
+    - <<: *deploy-to-production
