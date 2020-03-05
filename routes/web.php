@@ -11,9 +11,7 @@
 |
 */
 
-// Route::get('/', function () {
-//     return 'Nothing to see here';
-// });
+Route::get('/', '\App\Http\Controllers\Controller@index');
 
 // Example rendering of PDF as a html view
 // Route::get('pdf-example', function() {
