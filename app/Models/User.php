@@ -316,6 +316,35 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     }
 
     /**
+     * Return whether the user is within 5% of
+     * their storage limit
+     *
+     * @return bool
+     */
+    public function isCloseToStorageLimit(): bool
+    {
+        $this->load('subscriptions');
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+
+        if (!$subscription) {
+            return true;
+        }
+
+        $plan = $subscription->stripe_plan;
+
+        if (!array_key_exists($plan, self::PLAN_STORAGE_LIMITS)) {
+            return false;
+        }
+
+        $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);
+        if ($limit === false) {
+            return false;
+        }
+
+        return $this->total_storage_used_percentage >= 95;
+    }
+
+    /**
      * Does the user require 2 factor authentication?
      *
      * @return bool

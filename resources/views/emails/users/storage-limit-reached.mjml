@@ -12,7 +12,7 @@
         <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
           <br />
-          It looks like you’ve been working hard because you’ve reached your storage limit on VEVA Collect.<br />
+          It looks like you’ve been working hard because you’ve almost reached your storage limit on VEVA Collect.<br />
           <br />
           You can either remove some of your files (make sure you have your own backup), or upgrade to one of our higher storage limit plans.  Our Pro Plan includes unlimited storage amongst other great benefits!<br />
           <br />
