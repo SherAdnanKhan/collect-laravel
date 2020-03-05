@@ -66,7 +66,7 @@ class PlatformImage extends Resource
             Image::make('Image', 'path')
                 ->deletable(false)
                 ->creationRules('required')
-                ->disk('public'),
+                ->disk(config('filesystems.public')),
 
             Text::make('Caption')
                 ->sortable()

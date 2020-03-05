@@ -17,6 +17,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Public Filesystem Disk
+    |--------------------------------------------------------------------------
+    |
+    | Here we specify the disk we want to use for the public filsystem.
+    */
+
+    'public' => env('FILESYSTEM_PUBLIC_DRIVER', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Cloud Filesystem Disk
     |--------------------------------------------------------------------------
     |
@@ -61,11 +71,28 @@ return [
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
+            'root'   => 'admin/',
 
             'cache' => [
                 'store' => 'redis',
                 'expire' => 600,
                 'prefix' => 'filesystem-s3',
+            ],
+        ],
+
+        'public-s3' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'root'   => 'admin/public/uploads',
+            'visibility' => 'public',
+
+            'cache' => [
+                'store' => 'redis',
+                'expire' => 600,
+                'prefix' => 'filesystem-s3-public',
             ],
         ],
 
