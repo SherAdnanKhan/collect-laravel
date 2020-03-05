@@ -61,6 +61,12 @@ return [
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
+
+            'cache' => [
+                'store' => 'redis',
+                'expire' => 600,
+                'prefix' => 'filesystem-s3',
+            ],
         ],
 
     ],

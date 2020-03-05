@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea6e4a8bd705e34d43cd7981a804b866",
+    "content-hash": "0cb230bdfcd930475a341dd0e932c2e5",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -184,73 +184,6 @@
                 "sdk"
             ],
             "time": "2020-03-03T19:11:21+00:00"
-        },
-        {
-            "name": "aws/aws-sdk-php-laravel",
-            "version": "3.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aws/aws-sdk-php-laravel.git",
-                "reference": "90f72efd7ec85c1141b397079112f58e0ca0143b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php-laravel/zipball/90f72efd7ec85c1141b397079112f58e0ca0143b",
-                "reference": "90f72efd7ec85c1141b397079112f58e0ca0143b",
-                "shasum": ""
-            },
-            "require": {
-                "aws/aws-sdk-php": "~3.0",
-                "illuminate/support": "~5.1|~6.0",
-                "php": ">=5.5.9"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0|~5.0",
-                "vlucas/phpdotenv": "~2.0|~3.0"
-            },
-            "suggest": {
-                "laravel/framework": "To test the Laravel bindings",
-                "laravel/lumen-framework": "To test the Lumen bindings"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Aws\\Laravel\\AwsServiceProvider"
-                    ],
-                    "aliases": {
-                        "AWS": "Aws\\Laravel\\AwsFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Aws\\Laravel\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Amazon Web Services",
-                    "homepage": "http://aws.amazon.com"
-                }
-            ],
-            "description": "A simple Laravel 5 service provider for including the AWS SDK for PHP.",
-            "homepage": "http://aws.amazon.com/sdkforphp2",
-            "keywords": [
-                "amazon",
-                "aws",
-                "dynamodb",
-                "ec2",
-                "laravel",
-                "laravel 5",
-                "s3",
-                "sdk"
-            ],
-            "time": "2019-09-09T21:00:25+00:00"
         },
         {
             "name": "babenkoivan/scout-elasticsearch-driver",
@@ -2832,6 +2765,53 @@
             "time": "2020-02-23T13:31:58+00:00"
         },
         {
+            "name": "league/flysystem-cached-adapter",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-cached-adapter.git",
+                "reference": "08ef74e9be88100807a3b92cc9048a312bf01d6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-cached-adapter/zipball/08ef74e9be88100807a3b92cc9048a312bf01d6f",
+                "reference": "08ef74e9be88100807a3b92cc9048a312bf01d6f",
+                "shasum": ""
+            },
+            "require": {
+                "league/flysystem": "~1.0",
+                "psr/cache": "^1.0.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpspec/phpspec": "^3.4",
+                "phpunit/phpunit": "^5.7",
+                "predis/predis": "~1.0",
+                "tedivm/stash": "~0.12"
+            },
+            "suggest": {
+                "ext-phpredis": "Pure C implemented extension for PHP"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\Cached\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "frankdejonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "An adapter decorator to enable meta-data caching.",
+            "time": "2018-07-09T20:51:04+00:00"
+        },
+        {
             "name": "league/iso3166",
             "version": "2.1.5",
             "source": {
@@ -4141,6 +4121,52 @@
                 "validation"
             ],
             "time": "2020-03-03T16:55:31+00:00"
+        },
+        {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/container",
