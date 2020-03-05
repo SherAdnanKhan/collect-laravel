@@ -40,7 +40,7 @@ class CheckUserTotalStorageUsed implements ShouldQueue
                     ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $lastRan));
             })
             ->groupBy('projects.id')
-            ->with('user:id,first_name,last_name')
+            ->with('user:*')
             ->with(['user.subscriptions' => function($query) {
                 return $query->select('stripe_plan');
             }])
@@ -56,7 +56,7 @@ class CheckUserTotalStorageUsed implements ShouldQueue
             $users[$project->user->id] = $project->user;
         }
 
-        $fileUsers = User::select('users.id')
+        $fileUsers = User::select('users.*')
             ->whereHas('filesNoScope', function($query) use ($lastRan) {
                 return $query->where('files.deleted_at', '>=', date("Y-m-d H:i:s", $lastRan))
                              ->orWhere('files.updated_at', '>=', date("Y-m-d H:i:s", $lastRan));
