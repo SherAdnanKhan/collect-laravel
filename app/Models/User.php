@@ -56,8 +56,8 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     ];
 
     const PLAN_STORAGE_LIMITS = [
-        self::PLAN_FREE       => 2 * 1000 * 1000 * 1000, // 2GB
-        self::PLAN_INDIVIDUAL => 1000 * 1000 * 1000 * 1000, // 1TB
+        self::PLAN_FREE       => 2 * 1024 * 1024 * 1024, // 2GB
+        self::PLAN_INDIVIDUAL => 1024 * 1024 * 1024 * 1024, // 1TB
         self::PLAN_EDUCATION  => false, // unlimited
         self::PLAN_PRO        => false, // unlimited
     ];
