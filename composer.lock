@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cede5cdaef250bb6332f742d720bd6e",
+    "content-hash": "3a2b87b7621cce32848a726422cc1c4c",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -103,16 +103,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.133.28",
+            "version": "3.133.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5ef2118011e39504484d70ed738eb8ede7f69287"
+                "reference": "1ae0cff5226ffdd9b8a1d7b1f69c65fbaa5cb4e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5ef2118011e39504484d70ed738eb8ede7f69287",
-                "reference": "5ef2118011e39504484d70ed738eb8ede7f69287",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1ae0cff5226ffdd9b8a1d7b1f69c65fbaa5cb4e1",
+                "reference": "1ae0cff5226ffdd9b8a1d7b1f69c65fbaa5cb4e1",
                 "shasum": ""
             },
             "require": {
@@ -183,24 +183,24 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-03-03T19:11:21+00:00"
+            "time": "2020-03-05T19:19:55+00:00"
         },
         {
             "name": "babenkoivan/scout-elasticsearch-driver",
-            "version": "v3.12.0",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/babenkoivan/scout-elasticsearch-driver.git",
-                "reference": "c3e106aa6deac0bbcc1cd1e0c2c3aa5ef47b7cda"
+                "reference": "c99fc14afcd0e188bfffafc416b5199736b5411d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/babenkoivan/scout-elasticsearch-driver/zipball/c3e106aa6deac0bbcc1cd1e0c2c3aa5ef47b7cda",
-                "reference": "c3e106aa6deac0bbcc1cd1e0c2c3aa5ef47b7cda",
+                "url": "https://api.github.com/repos/babenkoivan/scout-elasticsearch-driver/zipball/c99fc14afcd0e188bfffafc416b5199736b5411d",
+                "reference": "c99fc14afcd0e188bfffafc416b5199736b5411d",
                 "shasum": ""
             },
             "require": {
-                "elasticsearch/elasticsearch": "^6.0",
+                "elasticsearch/elasticsearch": ">=7.0 <7.4.0",
                 "laravel/scout": "^7.0",
                 "php": "^7.1.3"
             },
@@ -229,8 +229,8 @@
             "authors": [
                 {
                     "name": "Babenko Ivan",
-                    "role": "Developer",
-                    "email": "babenko.i.a@gmail.com"
+                    "email": "babenko.i.a@gmail.com",
+                    "role": "Developer"
                 }
             ],
             "description": "The Elasticsearch Driver for Laravel Scout",
@@ -244,7 +244,7 @@
                 "scout",
                 "search"
             ],
-            "time": "2019-06-28T15:38:11+00:00"
+            "time": "2020-01-19T12:33:54+00:00"
         },
         {
             "name": "barryvdh/laravel-cors",
@@ -1073,33 +1073,33 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v6.7.2",
+            "version": "v7.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "9ba89f905ebf699e72dacffa410331c7fecc8255"
+                "reference": "f8b5d2beeeb22a5a59aabb183b5bcd7e70878d2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/9ba89f905ebf699e72dacffa410331c7fecc8255",
-                "reference": "9ba89f905ebf699e72dacffa410331c7fecc8255",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/f8b5d2beeeb22a5a59aabb183b5bcd7e70878d2f",
+                "reference": "f8b5d2beeeb22a5a59aabb183b5bcd7e70878d2f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": ">=1.3.7",
                 "guzzlehttp/ringphp": "~1.0",
-                "php": "^7.0",
+                "php": "^7.1",
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "cpliakas/git-wrapper": "^1.7 || ^2.1",
-                "doctrine/inflector": "^1.1",
+                "cpliakas/git-wrapper": "~2.0",
+                "doctrine/inflector": "^1.3",
                 "mockery/mockery": "^1.2",
-                "phpstan/phpstan-shim": "^0.9 || ^0.11",
-                "phpunit/phpunit": "^5.7 || ^6.5",
+                "phpstan/phpstan-shim": "^0.11",
+                "phpunit/phpunit": "^7.5",
                 "squizlabs/php_codesniffer": "^3.4",
-                "symfony/finder": "^2.8",
-                "symfony/yaml": "^2.8"
+                "symfony/finder": "~4.0",
+                "symfony/yaml": "~4.0"
             },
             "suggest": {
                 "ext-curl": "*",
@@ -1129,7 +1129,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2019-07-19T14:48:24+00:00"
+            "time": "2019-09-30T12:52:38+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -7478,16 +7478,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.10.2",
+            "version": "v1.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9"
+                "reference": "451c3cd1418cf640de218914901e51b064abb093"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/451c3cd1418cf640de218914901e51b064abb093",
+                "reference": "451c3cd1418cf640de218914901e51b064abb093",
                 "shasum": ""
             },
             "require": {
@@ -7537,7 +7537,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2020-01-20T15:57:02+00:00"
+            "time": "2020-03-05T15:02:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
