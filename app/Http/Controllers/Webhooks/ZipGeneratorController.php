@@ -18,6 +18,7 @@ class ZipGeneratorController extends Controller
     {
         $user = auth()->user();
         if ($user->name !== 'ZipGenerator') {
+            Log::error(sprintf('User %s is not authenticated to hit the zip webhook'. $user->name));
             throw new AuthenticationException;
         }
 
