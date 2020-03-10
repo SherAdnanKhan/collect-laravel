@@ -27,12 +27,12 @@ class FileObserver
 
         if ($project) {
             $project->update([
-                'total_storage_used' => DB::raw('total_storage_used - ' . (int)$file->size)
+                'total_storage_used' => DB::raw('GREATEST(0, total_storage_used - ' . (int)$file->size.')')
             ]);
         }
 
         $user->update([
-            'total_storage_used' => DB::raw('total_storage_used - ' . (int)$file->size)
+            'total_storage_used' => DB::raw('GREATEST(0, total_storage_used - ' . (int)$file->size.')')
         ]);
     }
 }
