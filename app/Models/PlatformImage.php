@@ -19,6 +19,6 @@ class PlatformImage extends Model
      */
     public function getFullPathAttribute(): string
     {
-        return Storage::disk('public')->url($this->attributes['path']);
+        return Storage::disk(config('filesystems.public'))->url($this->attributes['path']);
     }
 }
