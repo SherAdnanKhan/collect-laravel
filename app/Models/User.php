@@ -56,8 +56,8 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     ];
 
     const PLAN_STORAGE_LIMITS = [
-        self::PLAN_FREE       => 2 * 1000 * 1000 * 1000, // 2GB
-        self::PLAN_INDIVIDUAL => 1000 * 1000 * 1000 * 1000, // 1TB
+        self::PLAN_FREE       => 2 * 1024 * 1024 * 1024, // 2GB
+        self::PLAN_INDIVIDUAL => 1024 * 1024 * 1024 * 1024, // 1TB
         self::PLAN_EDUCATION  => false, // unlimited
         self::PLAN_PRO        => false, // unlimited
     ];
@@ -313,6 +313,35 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
         }
 
         return $limit === false || ($this->total_storage_used + $additional_storage_used) < $limit;
+    }
+
+    /**
+     * Return whether the user is within 5% of
+     * their storage limit
+     *
+     * @return bool
+     */
+    public function isCloseToStorageLimit(): bool
+    {
+        $this->load('subscriptions');
+        $subscription = $this->subscription(self::SUBSCRIPTION_NAME);
+
+        if (!$subscription) {
+            return true;
+        }
+
+        $plan = $subscription->stripe_plan;
+
+        if (!array_key_exists($plan, self::PLAN_STORAGE_LIMITS)) {
+            return false;
+        }
+
+        $limit = array_get(self::PLAN_STORAGE_LIMITS, $plan);
+        if ($limit === false) {
+            return false;
+        }
+
+        return $this->total_storage_used_percentage >= 95;
     }
 
     /**

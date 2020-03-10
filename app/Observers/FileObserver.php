@@ -41,10 +41,10 @@ class FileObserver
 
         $user->refresh();
 
-        if (!$user->hasStorageSpaceAvailable()) {
-            // If the user no longer has enough storage left, then we need to email them.
-            SendUserStorageLimitReachedEmail::dispatch($user);
-        }
+        // if (!$user->hasStorageSpaceAvailable()) {
+        //     // If the user no longer has enough storage left, then we need to email them.
+        //     SendUserStorageLimitReachedEmail::dispatch($user);
+        // }
     }
 
     /**
