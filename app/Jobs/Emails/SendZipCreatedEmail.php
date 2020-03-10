@@ -47,6 +47,6 @@ class SendZipCreatedEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new ZipCreated($this->fileName));
+        Mail::to($this->user)->send(new ZipCreated($this->user, $this->fileName));
     }
 }
