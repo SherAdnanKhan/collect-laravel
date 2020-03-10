@@ -384,6 +384,10 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
             return 0;
         }
 
+        if ($this->total_storage_used == 0) {
+            return '0B';
+        }
+
         $precision = 2;
         $base = log($this->total_storage_used, 1024);
         $suffixes = ['B', 'KB', 'MB', 'GB', 'TB'];
