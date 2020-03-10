@@ -8,8 +8,9 @@ use App\Models\Project;
 use App\Scopes\VisibleScope;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MultipartUploadsController extends Controller
 {
