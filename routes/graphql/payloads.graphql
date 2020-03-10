@@ -70,3 +70,7 @@ type ValidateSessionCodePayload {
 type SessionCheckInPayload {
   success: Boolean!
 }
+
+type GenerateSessionCodePayload {
+  sessionCode: SessionCode!
+}

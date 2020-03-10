@@ -59,4 +59,21 @@ class SessionCode extends Model
     {
         return sprintf('checkin.%s', $token);
     }
+
+    /**
+     * Generate a unique code
+     *
+     * @return string
+     */
+    public static function generateCode()
+    {
+        $code = [];
+        $codeLength = 6;
+
+        for ($i = 0; $i < $codeLength; $i++) {
+            $code[] = rand(0, 9);
+        }
+
+        return join('', $code);
+    }
 }
