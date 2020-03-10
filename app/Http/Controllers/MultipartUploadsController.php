@@ -42,6 +42,10 @@ class MultipartUploadsController extends Controller
 
         $size = (int)$request->get('size');
 
+        // Sleep for between 0 and 1 seconds to try to prevent issues
+        // with folder name and filename collisions
+        usleep(rand(0, 1000000));
+
         // if we're uploading to a project
         // make sure we have access and create a path
         // to the project folder
@@ -122,10 +126,6 @@ class MultipartUploadsController extends Controller
         $user->update([
             'total_storage_used' => DB::raw('total_storage_used + ' . (int)$size)
         ]);
-
-        // Sleep for between 0 and 1 seconds to try to prevent issues
-        // with folder name and filename collisions
-        usleep(rand(0, 1000000));
 
         // Start at the current folder and at it's depth
         $currentFolder = $folder;
