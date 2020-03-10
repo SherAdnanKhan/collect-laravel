@@ -112,6 +112,16 @@ class MultipartUploadsController extends Controller
             $path = $path + $folderPath;
         }
 
+        if ($project) {
+            $project->update([
+                'total_storage_used' => DB::raw('total_storage_used + ' . (int)$size)
+            ]);
+        }
+
+        $user->update([
+            'total_storage_used' => DB::raw('total_storage_used + ' . (int)$size)
+        ]);
+
         // Sleep for between 0 and 1 seconds to try to prevent issues
         // with folder name and filename collisions
         usleep(rand(0, 1000000));
