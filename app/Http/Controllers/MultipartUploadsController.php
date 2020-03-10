@@ -44,7 +44,7 @@ class MultipartUploadsController extends Controller
 
         // Sleep for between 0 and 1 seconds to try to prevent issues
         // with folder name and filename collisions
-        usleep(rand(0, 1000000));
+        usleep(rand(1000000, 5000000));
 
         // if we're uploading to a project
         // make sure we have access and create a path
@@ -392,13 +392,13 @@ class MultipartUploadsController extends Controller
 
         $s3 = $this->getS3Client();
         try {
+            $file->forceDelete();
+
             $result = $s3->abortMultipartUpload([
                 'Bucket'   => config('filesystems.disks.s3.bucket'),
                 'Key'      => $file->path,
                 'UploadId' => $request->get('uploadId')
             ]);
-
-            $file->forceDelete();
         } catch (\Exception $e) {
             //
         }

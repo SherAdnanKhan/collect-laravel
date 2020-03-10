@@ -34,7 +34,5 @@ class FileObserver
         $user->update([
             'total_storage_used' => DB::raw('total_storage_used - ' . (int)$file->size)
         ]);
-
-        $user->refresh();
     }
 }
