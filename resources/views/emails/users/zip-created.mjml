@@ -14,7 +14,7 @@
           <br />
           Your download is ready. Please click the button below to continue.<br />
           <br />
-          <strong>Please Note: This link is only valid for 24 hours.</strong>
+          <strong>This link is only valid for 24 hours.</strong>
         </mj-text>
 
         <mj-button font-family="Source Sans Pro" font-size="14px" font-weight="700" background-color="#000000" color="white" border-radius="4px" href="{{ $zipUrl }}">
