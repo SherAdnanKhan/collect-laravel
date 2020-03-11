@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\CheckIn;
+namespace App\Http\GraphQL\Queries\CheckIn;
 
 use Carbon\Carbon;
 use App\Models\User;

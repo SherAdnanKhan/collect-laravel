@@ -126,6 +126,10 @@ extend type Query @group(middleware: ["auth:api"]) {
   ): [Session]
     @field(resolver: "App\\Http\\GraphQL\\Queries\\Session\\ByRecording@resolve")
   getSessionTypes: [SessionType] @all
+  generateSessionCode(input: GenerateSessionCodeInput!): GenerateSessionCodePayload
+    @field(
+      resolver: "App\\Http\\GraphQL\\Queries\\CheckIn\\GenerateSessionCode@resolve"
+    )
 
   # Comment Queries
   getComment(id: Int! @eq): Comment @find(scopes: ["userViewable"])
@@ -278,10 +282,6 @@ extend type Mutation @group(middleware: ["auth:api"]) {
   deleteSessionRecording(input: SessionRecordingInput!): SessionRecording
     @field(
       resolver: "App\\Http\\GraphQL\\Mutations\\SessionRecording\\Delete@resolve"
-    )
-  generateSessionCode(input: GenerateSessionCodeInput!): GenerateSessionCodePayload
-    @field(
-      resolver: "App\\Http\\GraphQL\\Mutations\\CheckIn\\GenerateSessionCode@resolve"
     )
 
   # Song Mutations
