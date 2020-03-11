@@ -18,9 +18,15 @@
               {{ $senderName }} has invited you to collaborate on {{ $projectArtistName }} "{{ $recordingNames }}".
               <br />
             @else
-              You have been invited to collaborate with {{ $senderName }} on {{ $projectArtistName }} "{{ $projectName }}".
+              {{ $senderName }} has invited you to collaborate on {{ $projectArtistName }} “{{ $projectName }}"”.
               <br />
             @endif
+          <br />
+          You have been given the following permissions:<br />
+          <br />
+          @foreach ($permissions as $type => $levels)
+          {{ $type }} - $levels<br />
+          @endforeach
           <br />
           To accept the invitation, click the button below.
         </mj-text>

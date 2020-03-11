@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\CollaboratorInvite as CollaboratorInviteModel;
+use App\Models\CollaboratorPermission;
 use Illuminate\Mail\Mailable;
 
 class CollaboratorInvite extends Mailable
@@ -51,7 +52,15 @@ class CollaboratorInvite extends Mailable
             ->with([
                 'type'          => $this->invite->collaborator->type,
                 'name'          => $this->invite->collaborator->name,
-                'permissions'   => array_reduce($this->invite->collaborator->permissions->toArray(), function ($carry, $item) { $carry[$item["type"]][] = $item["level"]; return $carry; }, []),
+                'permissions'   => array_map(function($item) {
+                    return implode(', ', $item);
+                }, array_reduce($this->invite->collaborator->permissions->toArray(), function ($carry, $item) {
+                    $name = CollaboratorPermission::TYPES_WITH_LABELS[$item['type']];
+                    $level = CollaboratorPermission::LEVELS_WITH_LABELS[$item['level']];
+
+                    $carry[$name][] = $level;
+                    return $carry;
+                }, [])),
                 'projectName'   => $this->invite->project->name,
                 'projectArtistName' => $artistName,
                 'recordingNames' => $recordingNames,
