@@ -55,7 +55,7 @@ class CollaboratorInvite extends Mailable
                 'projectName'   => $this->invite->project->name,
                 'projectArtistName' => $artistName,
                 'recordingNames' => $recordingNames,
-                'senderName'    => $this->invite->user->name,
+                'senderName'    => sprintf('%s (%s)', $this->invite->user->name, $this->invite->user->email),
                 'inviteUrl'     => $inviteUrl
             ]);
     }
