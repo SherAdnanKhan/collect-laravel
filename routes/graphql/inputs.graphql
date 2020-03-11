@@ -446,3 +446,7 @@ input SessionCheckInInput {
   instrument_id: ID
   instrument_user_defined_value: String
 }
+
+input GenerateSessionCodeInput {
+    session_id: ID!
+}
