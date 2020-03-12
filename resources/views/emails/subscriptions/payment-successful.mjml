@@ -1,6 +1,6 @@
 <mjml>
    <mj-head>
-     <mj-font name="Source Sans Pro" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,900" />
+     <mj-font name="Poppins" href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900" />
    </mj-head>
   <mj-body>
     <mj-section>
@@ -9,24 +9,21 @@
 
         <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
 
-        <mj-text font-size="16px" color="#000000" font-family="Source Sans Pro, Helvetica" line-height="24px" padding-bottom="30px">
+        <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
           Hey {{ $name }},<br />
           <br />
 
           @if($planName === 'Free')
             Thank you for subscribing to VEVA Collect’s Free Plan!
-            <br />
-            <br />
-            Please contact us with any questions at hello@vevacollect.com
           @else
             Thank you for using VEVA Collect, we love working with you!
             <br />
             <br />
             We have processed your payment for {{ $invoiceAmountPaid }} for the {{ $planName }} Plan.
-            <br />
-            <br />
-            Please contact us with any questions at <a href="mailto:hello@vevacollect.com">hello@vevacollect.com</a>
           @endif
+          <br />
+          <br />
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.
           <br />
           <br />
           Collect while you Create,<br />
