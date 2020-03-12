@@ -29,7 +29,7 @@
           @endif
           <br />
           @foreach ($permissions as $type => $levels)
-            {{ $type }} - {{ implode(", ", $levels) }}<br />
+            {{ $type }} - {{ $levels }}<br />
           @endforeach
           <br />
           To accept the invitation, click the button below.

@@ -75,7 +75,15 @@ class CollaboratorInvite extends Mailable
         }
 
         $permissionsFormatted = array_map(function($item) {
-            return implode(', ', $item);
+            if (in_array('Create', $item)) {
+                return 'Full Access';
+            }
+
+            if (in_array('Download', $item)) {
+                return 'Download Only';
+            }
+
+            return 'Read Only';
         }, array_reduce($permissions, function ($carry, $item) {
             $name = CollaboratorPermission::TYPES_WITH_LABELS[$item['type']];
             $level = CollaboratorPermission::LEVELS_WITH_LABELS[$item['level']];
