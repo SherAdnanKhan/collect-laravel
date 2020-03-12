@@ -46,6 +46,34 @@ class CollaboratorInvite extends Mailable
             $recordingNames = join(', ', $this->invite->collaborator->recordings->pluck('name')->toArray());
         }
 
+        $permissions = $this->invite->collaborator->permissions->toArray();
+
+        $fullAccess = false;
+        if (!$recordingNames) {
+            $permissionTypes = [];
+            foreach ($permissions as $permission) {
+                if (!isset($permissionTypes[$permission['type']])) {
+                    $permissionTypes[$permission['type']] = false;
+                }
+
+                if ($permission['level'] != 'create') {
+                    continue;
+                }
+
+                $permissionTypes[$permission['type']] = true;
+            }
+
+            $fullAccess = true;
+            foreach ($permissionTypes as $type => $create) {
+                if ($create === true) {
+                    continue;
+                }
+
+                $fullAccess = false;
+                break;
+            }
+        }
+
         return $this->view('emails.collaborators.invite')
             ->from('noreply@vevacollect.com', 'VEVA Collect')
             ->subject('VEVA Collect invitation from ' . $this->invite->user->name)
@@ -54,18 +82,19 @@ class CollaboratorInvite extends Mailable
                 'name'          => $this->invite->collaborator->name,
                 'permissions'   => array_map(function($item) {
                     return implode(', ', $item);
-                }, array_reduce($this->invite->collaborator->permissions->toArray(), function ($carry, $item) {
+                }, array_reduce($permissions, function ($carry, $item) {
                     $name = CollaboratorPermission::TYPES_WITH_LABELS[$item['type']];
                     $level = CollaboratorPermission::LEVELS_WITH_LABELS[$item['level']];
 
                     $carry[$name][] = $level;
                     return $carry;
                 }, [])),
-                'projectName'   => $this->invite->project->name,
+                'fullAccess'        => $fullAccess,
+                'projectName'       => $this->invite->project->name,
                 'projectArtistName' => $artistName,
-                'recordingNames' => $recordingNames,
-                'senderName'    => sprintf('%s (%s)', $this->invite->user->name, $this->invite->user->email),
-                'inviteUrl'     => $inviteUrl
+                'recordingNames'    => $recordingNames,
+                'senderName'        => sprintf('%s (%s)', $this->invite->user->name, $this->invite->user->email),
+                'inviteUrl'         => $inviteUrl
             ]);
     }
 }

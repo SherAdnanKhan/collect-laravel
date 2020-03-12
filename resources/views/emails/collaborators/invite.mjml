@@ -22,7 +22,11 @@
               <br />
             @endif
           <br />
-          You have been given the following permissions:<br />
+          @if ($fullAccess)
+            You have been given the highest level of access to this project, which means you can view, download and edit all sessions, recordings, files and other collaborators. <br />
+          @else
+            You have been given the following permissions:<br />
+          @endif
           <br />
           @foreach ($permissions as $type => $levels)
           {{ $type }} - $levels<br />
