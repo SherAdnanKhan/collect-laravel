@@ -4,7 +4,9 @@ namespace App\Http\GraphQL\Mutations\CollaboratorInvite;
 
 use App\Models\CollaboratorInvite;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
+use Nuwave\Lighthouse\Execution\Utils\Subscription;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Accept
@@ -37,6 +39,12 @@ class Accept
         $collaborator->save();
 
         $invite->delete();
+
+        $collaborator->refresh();
+
+        // Broadcast a GraphQL subscription for clients.
+        Log::debug('userPermissionsUpdated', [$collaborator->user]);
+        Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
 
         return $collaborator;
     }
