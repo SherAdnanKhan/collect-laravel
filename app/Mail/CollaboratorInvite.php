@@ -78,7 +78,7 @@ class CollaboratorInvite extends Mailable
             }
         }
 
-        $permissionsFormatted = array_map(function($item, $type) {
+        $permissionsFormatted = array_map(function($item) {
             if (in_array('Create', $item)) {
                 return 'Full Access';
             }
