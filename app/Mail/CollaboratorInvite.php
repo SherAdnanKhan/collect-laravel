@@ -74,21 +74,23 @@ class CollaboratorInvite extends Mailable
             }
         }
 
+        $permissionsFormatted = array_map(function($item) {
+            return implode(', ', $item);
+        }, array_reduce($permissions, function ($carry, $item) {
+            $name = CollaboratorPermission::TYPES_WITH_LABELS[$item['type']];
+            $level = CollaboratorPermission::LEVELS_WITH_LABELS[$item['level']];
+
+            $carry[$name][] = $level;
+            return $carry;
+        }, []));
+
         return $this->view('emails.collaborators.invite')
             ->from('noreply@vevacollect.com', 'VEVA Collect')
             ->subject('VEVA Collect invitation from ' . $this->invite->user->name)
             ->with([
-                'type'          => $this->invite->collaborator->type,
-                'name'          => $this->invite->collaborator->name,
-                'permissions'   => array_map(function($item) {
-                    return implode(', ', $item);
-                }, array_reduce($permissions, function ($carry, $item) {
-                    $name = CollaboratorPermission::TYPES_WITH_LABELS[$item['type']];
-                    $level = CollaboratorPermission::LEVELS_WITH_LABELS[$item['level']];
-
-                    $carry[$name][] = $level;
-                    return $carry;
-                }, [])),
+                'type'              => $this->invite->collaborator->type,
+                'name'              => $this->invite->collaborator->name,
+                'permissions'       => $permissionsFormatted,
                 'fullAccess'        => $fullAccess,
                 'projectName'       => $this->invite->project->name,
                 'projectArtistName' => $artistName,
