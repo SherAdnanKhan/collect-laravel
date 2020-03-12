@@ -65,6 +65,10 @@ class CollaboratorInvite extends Mailable
 
             $fullAccess = true;
             foreach ($permissionTypes as $type => $create) {
+                if ($type === 'Project') {
+                    continue;
+                }
+
                 if ($create === true) {
                     continue;
                 }
