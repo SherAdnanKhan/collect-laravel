@@ -78,11 +78,7 @@ class CollaboratorInvite extends Mailable
             }
         }
 
-        $permissionsFormatted = array_map(function($item, $type) use ($recordingNames) {
-            if ($recordingNames && $type === 'Recordings') {
-                return 'Full Access';
-            }
-
+        $permissionsFormatted = array_map(function($item, $type) {
             if (in_array('Create', $item)) {
                 return 'Full Access';
             }
@@ -99,6 +95,10 @@ class CollaboratorInvite extends Mailable
             $carry[$name][] = $level;
             return $carry;
         }, []));
+
+        if ($recordingNames) {
+            $permissionsFormatted['Recordings'] = 'Full Access'l
+        }
 
         return $this->view('emails.collaborators.invite')
             ->from('noreply@vevacollect.com', 'VEVA Collect')
