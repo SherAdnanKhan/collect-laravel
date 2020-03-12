@@ -5,7 +5,7 @@ namespace App\Mail;
 use App\Models\User;
 use Illuminate\Mail\Mailable;
 
-class NewSubscriptionProPlan extends Mailable
+class NewSubscriptionProUnlimitedPlan extends Mailable
 {
 
     /**
@@ -41,11 +41,10 @@ class NewSubscriptionProPlan extends Mailable
      */
     public function build()
     {
-        $email = $this->view('emails.subscriptions.new-pro-plan')
+        $email = $this->view('emails.subscriptions.new-pro-unlimited-plan')
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
                 'name' => $this->user->first_name,
-                'storageLimit' => User::PLAN_STORAGE_LIMITS_PRETTY['pro'],
                 'invoiceAmountPaid' => $this->subscriptionAmount,
             ]);
 

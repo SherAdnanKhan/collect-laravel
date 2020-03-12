@@ -29,6 +29,7 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Jobs\Emails\SendNewSubscriptionProPlanEmail;
+use App\Jobs\Emails\SendNewSubscriptionProUnlimitedPlanEmail;
 use App\Jobs\Emails\SendNewSubscriptionLitePlanEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Jobs\Emails\SendNewSubscriptionIndividualPlanEmail;
@@ -47,26 +48,30 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     const PLAN_INDIVIDUAL = 'individual';
     const PLAN_EDUCATION = 'education';
     const PLAN_PRO = 'pro';
+    const PLAN_PRO_UNLIMITED = 'prounlimited';
 
     const PLANS = [
         self::PLAN_FREE,
         self::PLAN_INDIVIDUAL,
         self::PLAN_EDUCATION,
         self::PLAN_PRO,
+        self::PLAN_PRO_UNLIMITED,
     ];
 
     const PLAN_STORAGE_LIMITS = [
-        self::PLAN_FREE       => 2 * 1024 * 1024 * 1024, // 2GB
-        self::PLAN_INDIVIDUAL => 1024 * 1024 * 1024 * 1024, // 1TB
-        self::PLAN_EDUCATION  => false, // unlimited
-        self::PLAN_PRO        => false, // unlimited
+        self::PLAN_FREE          => 2 * 1024 * 1024 * 1024, // 2GB
+        self::PLAN_INDIVIDUAL    => 1024 * 1024 * 1024 * 1024, // 1TB
+        self::PLAN_EDUCATION     => false, // unlimited
+        self::PLAN_PRO           => 1024 * 1024 * 1024 * 1024 * 3, // 3TB
+        self::PLAN_PRO_UNLIMITED => false, // unlimited
     ];
 
     const PLAN_STORAGE_LIMITS_PRETTY = [
-        self::PLAN_FREE       => '2GB',
-        self::PLAN_INDIVIDUAL => '1TB',
-        self::PLAN_EDUCATION  => 'Unlimited',
-        self::PLAN_PRO        => 'Unlimited',
+        self::PLAN_FREE          => '2GB',
+        self::PLAN_INDIVIDUAL    => '1TB',
+        self::PLAN_EDUCATION     => 'Unlimited',
+        self::PLAN_PRO           => '3TB',
+        self::PLAN_PRO_UNLIMITED => 'Unlimited',
     ];
 
     protected $guard = 'api';
@@ -403,7 +408,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      */
     public function hasCollaboratorAccess(): bool
     {
-        return $this->subscribedToPlan(['education', 'pro'], self::SUBSCRIPTION_NAME);
+        return $this->subscribedToPlan([self::PLAN_EDUCATION, self::PLAN_PRO, self::PLAN_PRO_UNLIMITED], self::SUBSCRIPTION_NAME);
     }
 
     /**
@@ -471,6 +476,8 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
             SendNewSubscriptionIndividualPlanEmail::dispatch($this);
         } else if ($plan === self::PLAN_PRO) {
             SendNewSubscriptionProPlanEmail::dispatch($this);
+        } else if ($plan === self::PLAN_PRO_UNLIMITED) {
+            SendNewSubscriptionProUnlimitedPlanEmail::dispatch($this);
         }
     }
 
