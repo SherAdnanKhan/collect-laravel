@@ -26,10 +26,10 @@
             You have been given the following permissions:<br />
           @endif
           <br />
-          Collaborators - {{ $permissions['collaborator'] ?? 'Read Only' }}
-          Files & Folders - {{ $permissions['file'] ?? 'Read Only' }}
-          Recordings - {{ $permissions['recording'] ?? 'Read Only' }}
-          Credits & Sessions - {{ $permissions['session'] ?? 'Read Only' }}
+          Collaborators - {{ $permissions['collaborator'] ?? 'Read Only' }}<br />
+          Files & Folders - {{ $permissions['file'] ?? 'Read Only' }}<br />
+          Recordings - {{ $permissions['recording'] ?? 'Read Only' }}<br />
+          Credits & Sessions - {{ $permissions['session'] ?? 'Read Only' }}<br />
           <br />
           To accept the invitation, click the button below.
         </mj-text>
