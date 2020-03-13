@@ -58,7 +58,7 @@ class Register
         }
 
         try {
-            $subscription = $user->newSubscription(User::SUBSCRIPTION_NAME, $input['plan'])->create($input['stripe_token'] ? $input['stripe_token'] : null, [
+            $subscription = $user->newSubscription(User::SUBSCRIPTION_NAME, $input['plan'])->create(isset($input['stripe_token']) ? $input['stripe_token'] : null, [
                 'email' => $user->email,
             ]);
         } catch (\Exception $e) {
