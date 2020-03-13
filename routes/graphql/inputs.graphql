@@ -391,6 +391,8 @@ input RegisterInput {
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "min:6", "confirmed"])
     password_confirmation: String! @rules(apply: ["required_with:password", "min:6"])
+    plan: String! @rules(apply: ["required"])
+    stripe_token: String! @rules(apply: ["required"])
 }
 
 input VerificationInput {

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserProfile;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\DB;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -27,11 +28,15 @@ class Register
     {
         $input = array_get($args, 'input');
 
+        if (!in_array($input['plan'], User::PLANS)) {
+            throw new AuthorizationException('Invalid plan chosen.');
+        }
+
         DB::beginTransaction();
 
         try {
             $user = new User();
-            $user->fill(array_except($input, 'password_confirmation'));
+            $user->fill(array_except($input, ['password_confirmation', 'plan', 'stripe_token']));
 
             // Specify a user verification token, and that they're
             // inactive until verified.
@@ -45,13 +50,27 @@ class Register
             }
 
             DB::commit();
-
-            $user->sendRegistrationVerificationNotification();
         } catch (\Exception $e) {
             DB::rollback();
 
             throw $e;
         }
+
+        try {
+            $subscription = $user->newSubscription(User::SUBSCRIPTION_NAME, $input['plan'])->create($input['stripe_token'], [
+                'email' => $user->email,
+            ]);
+        } catch (\Exception $e) {
+            $user->asStripeCustomer()->delete();
+            $user->forceDelete();
+
+            return [
+                'success' => false
+            ];
+        }
+
+        $user->sendRegistrationVerificationNotification();
+        $user->sendNewSubscriptionEmail($subscription);
 
         return [
             'success' => true

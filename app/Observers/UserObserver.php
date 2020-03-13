@@ -17,9 +17,5 @@ class UserObserver
     public function created(User $user)
     {
         $user->profile()->save(new UserProfile());
-
-        $user->newSubscription(User::SUBSCRIPTION_NAME, User::DEFAULT_SUBSCRIPTION_PLAN)->create(null, [
-            'email' => $user->email,
-        ]);
     }
 }
