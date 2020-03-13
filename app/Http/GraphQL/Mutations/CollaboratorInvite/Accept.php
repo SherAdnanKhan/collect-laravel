@@ -41,7 +41,7 @@ class Accept
         $invite->delete();
 
         // Broadcast a GraphQL subscription for clients.
-        Log::debug('userPermissionsUpdated', $user);
+        Log::debug('userPermissionsUpdated', (array)$user);
         Subscription::broadcast('userPermissionsUpdated', $user);
 
         return $collaborator;
