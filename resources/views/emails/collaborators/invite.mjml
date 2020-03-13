@@ -30,10 +30,6 @@
           Files & Folders - {{ $permissions['file'] ?? 'Read Only' }}
           Recordings - {{ $permissions['recording'] ?? 'Read Only' }}
           Credits & Sessions - {{ $permissions['session'] ?? 'Read Only' }}
-
-          @foreach ($permissions as $type => $levels)
-            {{ $type }} - {{ $levels }}<br />
-          @endforeach
           <br />
           To accept the invitation, click the button below.
         </mj-text>
