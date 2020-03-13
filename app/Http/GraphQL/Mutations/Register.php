@@ -57,11 +57,17 @@ class Register
         }
 
         try {
-            $subscription = $user->newSubscription(User::SUBSCRIPTION_NAME, $input['plan'])->create($input['stripe_token'], [
+            $subscription = $user->newSubscription(User::SUBSCRIPTION_NAME, $input['plan'])->create($input['stripe_token'] ? $input['stripe_token'] : null, [
                 'email' => $user->email,
             ]);
         } catch (\Exception $e) {
-            $user->asStripeCustomer()->delete();
+            Log::error('Could not create stripe subscription', $e);
+
+            try {
+                $user->asStripeCustomer()->delete();
+            } catch (\Exception $e) {
+                Log::error('Could not delete stripe customer', $e);
+            }
             $user->forceDelete();
 
             return [
