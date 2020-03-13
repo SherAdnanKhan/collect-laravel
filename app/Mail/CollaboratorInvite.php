@@ -97,6 +97,7 @@ class CollaboratorInvite extends Mailable
 
         if ($recordingNames) {
             $permissionsFormatted['recording'] = 'Full Access';
+            $permissionsFormatted['file'] = 'Full Access';
         }
 
         return $this->view('emails.collaborators.invite')
