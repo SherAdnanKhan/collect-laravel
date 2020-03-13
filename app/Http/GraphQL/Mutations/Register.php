@@ -62,13 +62,14 @@ class Register
                 'email' => $user->email,
             ]);
         } catch (\Exception $e) {
-            Log::error('Could not create stripe subscription', (array)$e);
+            Log::error(sprintf('Could not create stripe subscription: %s', $e->getMessage()));
 
             try {
                 $user->asStripeCustomer()->delete();
             } catch (\Exception $e) {
-                Log::error('Could not delete stripe customer', (array)$e);
+                Log::error(sprintf('Could not delete stripe customer: %s', $e->getMessage()));
             }
+
             $user->forceDelete();
 
             return [
