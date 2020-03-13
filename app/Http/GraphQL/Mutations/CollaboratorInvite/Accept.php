@@ -40,11 +40,9 @@ class Accept
 
         $invite->delete();
 
-        $collaborator->refresh();
-
         // Broadcast a GraphQL subscription for clients.
-        Log::debug('userPermissionsUpdated', [$collaborator->user]);
-        Subscription::broadcast('userPermissionsUpdated', $collaborator->user);
+        Log::debug('userPermissionsUpdated', $user);
+        Subscription::broadcast('userPermissionsUpdated', $user);
 
         return $collaborator;
     }
