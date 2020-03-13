@@ -89,15 +89,14 @@ class CollaboratorInvite extends Mailable
 
             return 'Read Only';
         }, array_reduce($permissions, function ($carry, $item) {
-            $name = CollaboratorPermission::TYPES_WITH_LABELS[$item['type']];
             $level = CollaboratorPermission::LEVELS_WITH_LABELS[$item['level']];
 
-            $carry[$name][] = $level;
+            $carry[$item['type']][] = $level;
             return $carry;
         }, []));
 
         if ($recordingNames) {
-            $permissionsFormatted['Recordings'] = 'Full Access';
+            $permissionsFormatted['recording'] = 'Full Access';
         }
 
         return $this->view('emails.collaborators.invite')
@@ -105,7 +104,7 @@ class CollaboratorInvite extends Mailable
             ->subject('VEVA Collect invitation from ' . $this->invite->user->name)
             ->with([
                 'type'              => $this->invite->collaborator->type,
-                'name'              => $this->invite->collaborator->name,
+                'name'              => explode(' ', $this->invite->collaborator->name, 2)[0],
                 'permissions'       => $permissionsFormatted,
                 'fullAccess'        => $fullAccess,
                 'projectName'       => $this->invite->project->name,

@@ -50,7 +50,7 @@ class ZipCreated extends Mailable
             ->subject('Your VEVA Collect Download is Ready!')
             ->with([
                 'zipUrl' => $url,
-                'name'   => $this->user->name,
+                'name'   => $this->user->first_name,
             ]);
     }
 }
