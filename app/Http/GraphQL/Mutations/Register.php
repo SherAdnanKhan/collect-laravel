@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserProfile;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
