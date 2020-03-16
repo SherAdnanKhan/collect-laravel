@@ -39,7 +39,7 @@ class CreateDownloadZip implements ShouldQueue
 
         $download_job = DownloadJob::create([
             'user_id' => $this->userId,
-            'project_id' => $filesToDownload[0]->project_id
+            'project_id' => $this->filesToDownload[0]->project_id
         ]);
 
         $client = new \Aws\Sqs\SqsClient([
