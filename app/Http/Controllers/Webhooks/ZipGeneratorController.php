@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\Emails\SendZipCreatedEmail;
+use App\Models\DownloadJob;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
