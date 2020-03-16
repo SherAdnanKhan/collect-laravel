@@ -2,37 +2,27 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\DownloadJob;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Storage;
 
 class ZipCreated extends Mailable
 {
     /**
-     * The fileName of the zip
-     *
-     * @var string
+     * The download job for this zip
+     * @var DownloadJob
      */
-    protected $fileName;
-
-
-    /**
-     * The user who's download has been created.
-     *
-     * @var User
-     */
-    protected $user;
+    protected $download_job;
 
     /**
      * Create a new message instance.
      *
-     * @param string $fileName
+     * @param DownloadJob $download_job
      * @return void
      */
-    public function __construct(User $user, $fileName)
+    public function __construct(DownloadJob $download_job)
     {
-        $this->user = $user;
-        $this->fileName = $fileName;
+        $this->download_job = $download_job;
     }
 
     /**
@@ -42,16 +32,14 @@ class ZipCreated extends Mailable
      */
     public function build()
     {
-        $url = Storage::disk('s3')->temporaryUrl(
-            substr($this->fileName, 1), now()->addHours(24)
-        );
+        $url = config('app.frontend_url') . '/share/' . $this->download_job->id;
 
         return $this->view('emails.users.zip-created')
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Your VEVA Collect Download is Ready!')
             ->with([
                 'zipUrl' => $url,
-                'name'   => $this->user->first_name,
+                'name'   => $this->download_job->user->first_name,
             ]);
     }
 }

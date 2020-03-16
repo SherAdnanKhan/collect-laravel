@@ -74,3 +74,8 @@ type SessionCheckInPayload {
 type GenerateSessionCodePayload {
   sessionCode: SessionCode!
 }
+
+type ValidateDownloadPayload {
+  expired: Boolean!
+  url: String
+}

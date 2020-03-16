@@ -36,6 +36,11 @@ class CreateDownloadZip implements ShouldQueue
     {
         $config = config('queue.connections.sqs');
 
+        $download_job = DownloadJob::create([
+            'user_id' => $this->userId,
+            'project_id' => $filesToDownload[0]->project_id
+        ]);
+
         $client = new \Aws\Sqs\SqsClient([
             'region' => $config['region'],
             'version' => 'latest',
@@ -49,6 +54,7 @@ class CreateDownloadZip implements ShouldQueue
             'MessageGroupId' => $this->job->getJobId(),
             'MessageDeduplicationId' => $this->job->getJobId(),
             'MessageBody' => json_encode([
+                'downloadJobId' => $download_job->id,
                 'userId' => $this->userId,
                 'files' => $this->filesToDownload,
             ]),

@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Webhooks;
 use App\Http\Controllers\Controller;
 use App\Jobs\Emails\SendZipCreatedEmail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Handle lambda webhook requests.
@@ -23,6 +24,7 @@ class ZipGeneratorController extends Controller
         }
 
         $userId = $request->get('userId');
+        $downloadJobId = $request->get('downloadJobId');
         $fileName = $request->get('fileName');
 
         $user = User::find($userId);
@@ -36,6 +38,12 @@ class ZipGeneratorController extends Controller
             return;
         }
 
+        $download_job = DownloadJob::find($downloadJobId);
+        if ($download_job->complete) {
+            Log::error(sprintf('The download job is already complete: %s', $download_job->id));
+            return;
+        }
+
         if (strpos($fileName, "/downloads/" . $user->id . "/") !== 0) {
             Log::error('The download path is not in the file name', [
                 'fileName' => $fileName,
@@ -45,6 +53,15 @@ class ZipGeneratorController extends Controller
             return;
         }
 
-        SendZipCreatedEmail::dispatch($user, $fileName);
+        $size = Storage::disk('s3')->size(substr($fileName, 1));
+
+        $download_job->update([
+            'size' => $size,
+            'path' => $fileName,
+            'complete' => true,
+            'expires_at' => Carbon::now()->addDay(),
+        ]);
+
+        SendZipCreatedEmail::dispatch($download_job);
     }
 }

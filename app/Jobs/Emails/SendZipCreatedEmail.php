@@ -3,6 +3,7 @@
 namespace App\Jobs\Emails;
 
 use App\Mail\ZipCreated;
+use App\Models\DownloadJob;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,16 +17,10 @@ class SendZipCreatedEmail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The user that generated the download
-     * @var User
+     * The download job for this zip
+     * @var DownloadJob
      */
-    protected $user;
-
-    /**
-     * The filename of the zip that was generated
-     * @var string
-     */
-    protected $fileName = '';
+    protected $download_job;
 
     /**
      * Create a new job instance.
@@ -34,10 +29,9 @@ class SendZipCreatedEmail implements ShouldQueue
      * @param string $fileName
      * @return void
      */
-    public function __construct(User $user, $fileName)
+    public function __construct(DownloadJob $download_job)
     {
-        $this->user = $user;
-        $this->fileName = $fileName;
+        $this->download_job = $download_job;
     }
 
     /**
@@ -47,6 +41,6 @@ class SendZipCreatedEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user)->send(new ZipCreated($this->user, $this->fileName));
+        Mail::to($this->download_job->user)->send(new ZipCreated($this->download_job));
     }
 }

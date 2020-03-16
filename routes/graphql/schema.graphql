@@ -225,6 +225,9 @@ type Mutation {
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\ForgotPassword@resolve")
   doResetPassword(input: ResetPasswordInput): ResetPasswordPayload!
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\ResetPassword@resolve")
+
+  doValidateDownload(uuid: String!): ValidateDownloadPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\ValidateDownload@resolve")
 }
 
 extend type Mutation @group(middleware: ["auth:api"]) {
