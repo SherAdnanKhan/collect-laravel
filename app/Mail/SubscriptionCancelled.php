@@ -43,6 +43,7 @@ class SubscriptionCancelled extends Mailable
     public function build()
     {
         return $this->view('emails.subscriptions.cancelled')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Sorry to see you go!')
             ->with([
                 'name' => $this->user->first_name,

@@ -45,6 +45,7 @@ class SubscriptionPaymentFailed extends Mailable
         $accountUrl = config('app.frontend_url') . '/subscription';
 
         return $this->view('emails.subscriptions.payment-failed')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('VEVA Collect Payment Issue')
             ->with([
                 'name'       => $this->user->first_name,

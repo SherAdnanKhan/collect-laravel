@@ -47,6 +47,7 @@ class ZipCreated extends Mailable
         );
 
         return $this->view('emails.users.zip-created')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Your VEVA Collect Download is Ready!')
             ->with([
                 'zipUrl' => $url,

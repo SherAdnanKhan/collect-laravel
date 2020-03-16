@@ -42,6 +42,7 @@ class NewSubscriptionIndividualPlan extends Mailable
     public function build()
     {
         $email = $this->view('emails.subscriptions.new-individual-plan')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
                 'storageLimit' => User::PLAN_STORAGE_LIMITS_PRETTY['individual'],

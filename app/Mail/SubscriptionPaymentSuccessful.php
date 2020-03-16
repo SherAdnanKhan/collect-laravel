@@ -57,6 +57,7 @@ class SubscriptionPaymentSuccessful extends Mailable
     public function build()
     {
         $email = $this->view('emails.subscriptions.payment-successful')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Thank you for your payment!')
             ->with([
                 'name'              => $this->user->first_name,

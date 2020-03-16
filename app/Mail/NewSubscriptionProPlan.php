@@ -42,6 +42,7 @@ class NewSubscriptionProPlan extends Mailable
     public function build()
     {
         $email = $this->view('emails.subscriptions.new-pro-plan')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
                 'name' => $this->user->first_name,

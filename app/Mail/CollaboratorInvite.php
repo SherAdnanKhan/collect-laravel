@@ -101,7 +101,7 @@ class CollaboratorInvite extends Mailable
         }
 
         return $this->view('emails.collaborators.invite')
-            ->from('noreply@vevacollect.com', 'VEVA Collect')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('VEVA Collect invitation from ' . $this->invite->user->name)
             ->with([
                 'type'              => $this->invite->collaborator->type,
