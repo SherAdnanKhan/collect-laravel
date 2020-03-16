@@ -41,3 +41,4 @@ class ValidateDownload
             'url' => $url
         ];
     }
+}
