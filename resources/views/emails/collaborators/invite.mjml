@@ -16,7 +16,7 @@
               {{ $senderName }} has invited you to collaborate on {{ $projectArtistName }} "{{ $recordingNames }}".
               <br />
             @else
-              {{ $senderName }} has invited you to collaborate on {{ $projectArtistName }} “{{ $projectName }}"”.
+              {{ $senderName }} has invited you to collaborate on {{ $projectArtistName }} "{{ $projectName }}".
               <br />
             @endif
           <br />
