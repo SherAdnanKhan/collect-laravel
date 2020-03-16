@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations;
+namespace App\Http\GraphQL\Queries;
 
 use App\Models\DownloadJob;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -41,4 +41,3 @@ class ValidateDownload
             'url' => $url
         ];
     }
-}

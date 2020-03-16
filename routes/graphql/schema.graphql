@@ -14,6 +14,9 @@ type Query {
     ordering: OrderingInput
     checkIn: Boolean
   ): [CreditRole] @field(resolver: "App\\Http\\GraphQL\\Queries\\GetCreditRoles@resolve")
+
+  validateDownload(uuid: String!): ValidateDownloadPayload!
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\ValidateDownload@resolve")
 }
 
 extend type Query @group(middleware: ["auth:api"]) {
@@ -225,9 +228,6 @@ type Mutation {
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\ForgotPassword@resolve")
   doResetPassword(input: ResetPasswordInput): ResetPasswordPayload!
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\ResetPassword@resolve")
-
-  doValidateDownload(uuid: String!): ValidateDownloadPayload!
-    @field(resolver: "App\\Http\\GraphQL\\Mutations\\ValidateDownload@resolve")
 }
 
 extend type Mutation @group(middleware: ["auth:api"]) {
