@@ -11,6 +11,7 @@ use App\Models\Session;
 use App\Models\Song;
 use App\Models\User;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Arr;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -60,13 +61,6 @@ class Create
             }
         }
 
-        return $party->credits()->firstOrCreate(array_only($input, [
-            'contribution_id',
-            'contribution_type',
-            'credit_role_id',
-            'instrument_id',
-            'performing',
-            'split'
-        ]));
+        return $party->credits()->firstOrCreate(Arr::except($input, ['party_id']));
     }
 }
