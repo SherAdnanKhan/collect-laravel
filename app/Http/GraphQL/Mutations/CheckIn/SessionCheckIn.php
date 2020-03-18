@@ -68,8 +68,9 @@ class SessionCheckIn
                         return $query->where('value', $email)
                             ->where('type', 'email');
                     });
-            })->orWhere('isni', $isni)
-                ->relatedToProject(['project' => $session->project])
+                })->orWhere(function($q) {
+                    return $q->where('isni', $isni)->where('isni', '!=', '');
+                })->relatedToProject(['project' => $session->project])
                 ->first();
 
             $dataToInsert = Arr::except($profileData, ['email']);
