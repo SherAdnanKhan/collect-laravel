@@ -68,7 +68,7 @@ class SessionCheckIn
                         return $query->where('value', $email)
                             ->where('type', 'email');
                     });
-                })->orWhere(function($q) {
+                })->orWhere(function($q) use ($isni) {
                     return $q->where('isni', $isni)->where('isni', '!=', '');
                 })->relatedToProject(['project' => $session->project])
                 ->first();
