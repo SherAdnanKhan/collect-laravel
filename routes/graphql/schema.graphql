@@ -169,6 +169,12 @@ extend type Query @group(middleware: ["auth:api"]) {
     count: Int
   ): [Credit]
     @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\ByRecording@resolve")
+  getCreditsBySession(
+    sessionId: ID!
+    contributionType: String
+    count: Int
+  ): [Credit]
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\Credit\\BySession@resolve")
 
   # Language Queries
   getLanguages: [Language] @all
