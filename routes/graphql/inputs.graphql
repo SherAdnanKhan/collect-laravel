@@ -147,7 +147,7 @@ input CreateSessionInput {
     timecode_type: String
     timecode_frame_rate: String
     started_at: String!
-    ended_at: String!
+    ended_at: String
 }
 
 input UpdateSessionInput {
@@ -166,7 +166,7 @@ input UpdateSessionInput {
     timecode_type: String
     timecode_frame_rate: String
     started_at: String!
-    ended_at: String!
+    ended_at: String
 }
 
 input DeleteSessionInput {
