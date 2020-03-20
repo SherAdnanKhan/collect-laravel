@@ -35,7 +35,9 @@ class Create
             throw new AuthorizationException('Unable to find recording to associate to session.');
         }
 
-        $session->recordings()->attach($recording->id);
+        if (!$session->recordings()->where('id', $recording->id)->exists()) {
+            $session->recordings()->attach($recording->id);
+        }
 
         return [
             'session_id'   => $session->id,
