@@ -24,7 +24,7 @@ class CreateDownloadJobsTable extends Migration
             $table->timestamp('expires_at', 0)->nullable()->index();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
-            $table->foreign('project_id')->references('id')->on('users')->onDelete('CASCADE');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('CASCADE');
         });
     }
 
