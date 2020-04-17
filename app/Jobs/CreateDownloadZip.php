@@ -16,6 +16,7 @@ class CreateDownloadZip implements ShouldQueue
 
     private $userId;
     private $filesToDownload = [];
+    private $projectId;
 
     /**
      * Create a new job instance.
@@ -25,7 +26,10 @@ class CreateDownloadZip implements ShouldQueue
     public function __construct($userId, $filesToDownload)
     {
         $this->userId = $userId;
-        $this->filesToDownload = $filesToDownload;
+        $this->filesToDownload = collect($filesToDownload)->map(function ($file) {
+            return $file->only(['id', 'status', 'depth', 'aliased_folder_id']);
+        });
+        $this->projectId = $filesToDownload[0]->project_id;
     }
 
     /**
@@ -39,7 +43,7 @@ class CreateDownloadZip implements ShouldQueue
 
         $download_job = DownloadJob::create([
             'user_id' => $this->userId,
-            'project_id' => $this->filesToDownload[0]->project_id
+            'project_id' => $this->projectId,
         ]);
 
         $client = new \Aws\Sqs\SqsClient([
