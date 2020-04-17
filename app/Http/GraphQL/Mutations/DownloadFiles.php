@@ -36,11 +36,6 @@ class DownloadFiles
 
         $userId = $user->id;
 
-        Log::info('filesToDownload', [
-            'user'  => $userId,
-            'files' => $this->filesToDownload
-        ]);
-
         if (!isset($this->filesToDownload[1]) && $this->filesToDownload[0]->depth === 0) {
             return $this->getFileURL($this->filesToDownload[0]);
         }
@@ -89,7 +84,7 @@ class DownloadFiles
                 continue;
             }
 
-            $file = File::select('id', 'status', 'depth', 'aliased_folder_id')->where('id', $file['id'])->userViewable(['user' => $user])->first();
+            $file = File::where('id', $file['id'])->userViewable(['user' => $user])->first();
 
             if (!$file || $file->status === File::STATUS_PENDING) {
                 continue;
