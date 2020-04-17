@@ -74,7 +74,7 @@ class DownloadFiles
 
         return [
             'success' => true,
-            'url' => (string)$request->getUri()
+            'url' => (string) $request->getUri()
         ];
     }
 
@@ -89,7 +89,7 @@ class DownloadFiles
                 continue;
             }
 
-            $file = File::where('id', $file['id'])->userViewable(['user' => $user])->first();
+            $file = File::select('id', 'status', 'depth', 'aliased_folder_id')->where('id', $file['id'])->userViewable(['user' => $user])->first();
 
             if (!$file || $file->status === File::STATUS_PENDING) {
                 continue;
