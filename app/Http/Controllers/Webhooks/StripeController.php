@@ -7,6 +7,7 @@ use App\Jobs\Emails\SendSubscriptionPaymentFailedEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentSuccessfulEmail;
 use App\Jobs\Emails\SendSubscriptionUpdatedEmail;
 use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 use Nuwave\Lighthouse\Execution\Utils\Subscription as GraphQLSubscription;
