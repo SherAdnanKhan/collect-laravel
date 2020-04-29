@@ -44,6 +44,11 @@ class StripeController extends CashierController
 
                 // Dispatch the sending of the cancelled email.
                 SendSubscriptionCancelledEmail::dispatch($user, $subscription);
+
+                // Create free subscription
+                $user->newSubscription(User::SUBSCRIPTION_NAME, User::DEFAULT_SUBSCRIPTION_PLAN)->create(null, [
+                    'email' => $user->email,
+                ]);
             });
         }
 
