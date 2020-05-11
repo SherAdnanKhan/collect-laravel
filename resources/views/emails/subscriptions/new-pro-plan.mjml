@@ -15,9 +15,6 @@
           Thank you for subscribing to VEVA Collect’s Pro Plan!
           <br />
           <br />
-          By using VEVA Collect, you are part of a revolutionary movement to change the way metadata is captured in the recording studio. This will not only help you manage your project, it can help ensure that everyone who is involved in making music is credited for their work. Your metadata can be reported on PDF documents or as an XML file that conforms to the DDEX RIN (Recording Information Notification) 1.1 standard. The use of RIN allows your data to move seamlessly through the digital supply chain, which will facilitate accurate crediting and prompt payment for your work.
-          <br />
-          <br />
           With this plan, you receive up to {{ $storageLimit }} of storage, no upload or download limitations and the ability to securely share your recordings and invite an unlimited number of collaborators.
           <br />
           <br />
