@@ -325,9 +325,10 @@ class MultipartUploadsController extends Controller
         // uplaod the upload
         $s3 = $this->getS3Client();
         $result = $s3->createMultipartUpload([
-            'Bucket' => config('filesystems.disks.s3.bucket'),
-            'Key'    => $key,
-            'ACL'    => 'private'
+            'Bucket'       => config('filesystems.disks.s3.bucket'),
+            'Key'          => $key,
+            'ACL'          => 'private',
+            // 'StorageClass' => 'STANDARD_IA'
         ]);
 
         return response()->json([

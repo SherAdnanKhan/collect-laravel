@@ -7,6 +7,7 @@ use App\Jobs\Emails\SendSubscriptionPaymentFailedEmail;
 use App\Jobs\Emails\SendSubscriptionPaymentSuccessfulEmail;
 use App\Jobs\Emails\SendSubscriptionUpdatedEmail;
 use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 use Nuwave\Lighthouse\Execution\Utils\Subscription as GraphQLSubscription;
@@ -44,6 +45,11 @@ class StripeController extends CashierController
 
                 // Dispatch the sending of the cancelled email.
                 SendSubscriptionCancelledEmail::dispatch($user, $subscription);
+
+                // Create free subscription
+                $user->newSubscription(User::SUBSCRIPTION_NAME, User::DEFAULT_SUBSCRIPTION_PLAN)->create(null, [
+                    'email' => $user->email,
+                ]);
             });
         }
 
