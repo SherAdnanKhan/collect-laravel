@@ -47,7 +47,7 @@ class SubscriptionUpdated extends Mailable
             ->subject('Thank you for subscribing to VEVA Collect!')
             ->with([
                 'name' => $this->user->first_name,
-                'planName' => ucfirst($this->subscription->stripe_plan),
+                'planName' => User::PLAN_NAMES[$this->subscription->stripe_plan],
             ]);
     }
 }
