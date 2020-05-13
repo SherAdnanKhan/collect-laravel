@@ -74,6 +74,14 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
         self::PLAN_PRO_UNLIMITED => 'Unlimited',
     ];
 
+    const PLAN_NAMES = [
+        self::PLAN_FREE          => 'Lite',
+        self::PLAN_INDIVIDUAL    => 'Individual',
+        self::PLAN_EDUCATION     => 'Education',
+        self::PLAN_PRO           => 'Pro',
+        self::PLAN_PRO_UNLIMITED => 'Pro Unlimited',
+    ];
+
     protected $guard = 'api';
 
     /**

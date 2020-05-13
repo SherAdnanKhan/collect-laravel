@@ -62,7 +62,7 @@ class SubscriptionPaymentSuccessful extends Mailable
             ->with([
                 'name'              => $this->user->first_name,
                 'invoiceAmountPaid' => $this->invoiceAmountPaid,
-                'planName'          => ucfirst($this->subscription->stripe_plan)
+                'planName'          => User::PLAN_NAMES[$this->subscription->stripe_plan]
             ]);
 
         // $tmpfname = tempnam('/tmp', 'invoice');
