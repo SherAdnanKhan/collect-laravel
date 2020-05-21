@@ -18,7 +18,7 @@
           With this plan, you receive up to {{ $storageLimit }} of storage, no upload or download caps and you can generate unlimited DDEX RIN and Credit Report PDFs. You will also benefit from keeping all of your sessions, credits and files organized, accessible and securely stored.
           <br />
           <br />
-          We have processed your first payment for {{ $invoiceAmountPaid }}.
+          We have processed your payment for {{ $invoiceAmountPaid }}.
           <br />
           <br />
           Please contact us with any questions at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.
