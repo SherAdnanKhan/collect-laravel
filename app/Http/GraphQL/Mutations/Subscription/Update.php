@@ -45,6 +45,7 @@ class Update
 
         try {
             $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
+            $user->sendNewSubscriptionEmail($subscription);
         } catch (\Exception $e) {
             throw new GenericException('Unable to swap subscription.');
         }
