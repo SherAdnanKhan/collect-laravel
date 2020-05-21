@@ -174,21 +174,21 @@ class StripeController extends CashierController
                 }
 
                 // Send subscription updated email if they've changed plan
-                if ($originalStripePlan !== $subscription->stripe_plan) {
-                    Log::debug('Send subscription updated email', [
-                        'original_plan' => $originalStripePlan,
-                        'new_plan' => $subscription->stripe_plan,
-                    ]);
+                // if ($originalStripePlan !== $subscription->stripe_plan) {
+                //     Log::debug('Send subscription updated email', [
+                //         'original_plan' => $originalStripePlan,
+                //         'new_plan' => $subscription->stripe_plan,
+                //     ]);
 
-                    $user->sendNewSubscriptionEmail($subscription);
-                }
+                //     $user->sendNewSubscriptionEmail($subscription);
+                // }
 
                 // Send cancelled email if they downgrade to free plan
-                if ($data['plan']['id'] === 'free' && $originalStripePlan !== 'free') {
-                    Log::debug('Send subscription cancelled email');
+                // if ($data['plan']['id'] === 'free' && $originalStripePlan !== 'free') {
+                //     Log::debug('Send subscription cancelled email');
 
-                    SendSubscriptionCancelledEmail::dispatch($user, $subscription);
-                }
+                //     SendSubscriptionCancelledEmail::dispatch($user, $subscription);
+                // }
             });
         }
 
