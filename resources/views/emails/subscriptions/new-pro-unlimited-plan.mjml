@@ -18,7 +18,7 @@
           With this plan, you’ll receive unlimited storage, no upload or download limitations and the ability to securely share your recordings and invite an unlimited number of collaborators.
           <br />
           <br />
-          We have processed your first payment for {{ $invoiceAmountPaid }}.
+          We have processed your payment for {{ $invoiceAmountPaid }}.
           <br />
           <br />
           Please contact us with any questions at <a href="mailto:hello@vevacollect.com" style="color: #000000;">hello@vevacollect.com</a>.
