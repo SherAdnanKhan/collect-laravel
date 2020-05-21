@@ -60,7 +60,7 @@ class Register
         try {
             $subscriptionBuilder = $user->newSubscription(User::SUBSCRIPTION_NAME, $input['plan']);
 
-            if ($input['coupon']) {
+            if (isset($input['coupon'])) {
                 $subscriptionBuilder->withCoupon($input['coupon']);
             }
 
