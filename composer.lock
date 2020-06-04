@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a2b87b7621cce32848a726422cc1c4c",
+    "content-hash": "a957d8396102614984778e02aea45126",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -1902,6 +1902,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -1948,7 +1949,53 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
+        },
+        {
+            "name": "keboola/csv",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/php-csv.git",
+                "reference": "86f03def371e5b1a8a11973b496c86d3a0d4d57d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/php-csv/zipball/86f03def371e5b1a8a11973b496c86d3a0d4d57d",
+                "reference": "86f03def371e5b1a8a11973b496c86d3a0d4d57d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Keboola\\Csv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keboola",
+                    "email": "devel@keboola.com"
+                }
+            ],
+            "description": "Keboola CSV reader and writer",
+            "homepage": "http://keboola.com",
+            "keywords": [
+                "csv",
+                "rfc4180"
+            ],
+            "time": "2019-11-11T08:02:32+00:00"
         },
         {
             "name": "knplabs/knp-snappy",
@@ -6560,6 +6607,7 @@
                 "nova",
                 "stripe"
             ],
+            "abandoned": true,
             "time": "2018-09-03T19:00:16+00:00"
         },
         {
@@ -8634,5 +8682,6 @@
     "platform": {
         "php": ">=7.0.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
