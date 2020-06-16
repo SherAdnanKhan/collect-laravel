@@ -40,7 +40,10 @@ class Verification
         $user->status = 'active';
         $user->save();
 
-        $user->sendWelcomeNotification();
+        $subscription = $user->subscription(User::SUBSCRIPTION_NAME);
+        if ($subscription->stripe_plan != User::PLAN_PRO && $subscription->stripe_plan != User::PLAN_PRO_UNLIMITED) {
+            $user->sendWelcomeNotification();
+        }
 
         return [
             'access_token' => $token,
