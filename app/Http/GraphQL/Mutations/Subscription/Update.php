@@ -34,17 +34,21 @@ class Update
         $plan = array_get($args, 'input.plan');
 
         if (!in_array($plan, User::PLANS)) {
-            throw new AuthorizationException('Invalid plan chosen.');
+            throw new GenericException('Invalid plan chosen.');
         }
 
         $user = auth()->user();
 
         if (!$user->hasCardOnFile()) {
-            throw new AuthorizationException('User does not have a card on file.');
+            throw new GenericException('User does not have a card on file.');
         }
 
-        $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
-        $user->sendNewSubscriptionEmail($subscription);
+        try {
+            $subscription = $user->subscription(User::SUBSCRIPTION_NAME)->swap($plan);
+            $user->sendNewSubscriptionEmail($subscription);
+        } catch (\Exception $e) {
+            throw new GenericException('Unable to swap subscription.');
+        }
 
         return $subscription->toArray();
     }

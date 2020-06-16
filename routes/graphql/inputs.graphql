@@ -393,6 +393,7 @@ input RegisterInput {
     password_confirmation: String! @rules(apply: ["required_with:password", "min:6"])
     plan: String! @rules(apply: ["required"])
     stripe_token: String @rules(apply: ["required_unless:input.plan,free"])
+    coupon: String
 }
 
 input VerificationInput {

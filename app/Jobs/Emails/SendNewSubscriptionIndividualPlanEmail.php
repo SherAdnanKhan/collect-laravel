@@ -53,6 +53,6 @@ class SendNewSubscriptionIndividualPlanEmail implements ShouldQueue
     {
         $subscription = $this->user->subscription(User::SUBSCRIPTION_NAME);
 
-        return $subscription->getPlanCostFormatted();
+        return $subscription->getLatestInvoiceAmountFormatted();
     }
 }
