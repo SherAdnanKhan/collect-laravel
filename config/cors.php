@@ -17,6 +17,7 @@ return [
         'http://veva.local:3000',
         'http://localhost:3000',
         'https://veva-studio-collect.netlify.com',
+        'https://veva-studio-collect.netlify.app',
         'https://prod.vevacollect.com',
         'https://app.vevacollect.com',
         'https://staging.vevacollect.com',
