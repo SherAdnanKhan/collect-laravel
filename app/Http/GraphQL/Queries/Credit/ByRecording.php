@@ -32,7 +32,7 @@ class ByRecording
         }
 
         // We need a party on the credit.
-        $creditsQuery = $recording->credits()->whereHas('party');
+        $creditsQuery = $recording->allCredits()->whereHas('party');
 
         if (array_key_exists('contributionType', $args) && in_array(array_get($args, 'contributionType'), Credit::TYPES)) {
             $creditsQuery = $creditsQuery->where('contribution_type', array_get($args, 'contributionType'));

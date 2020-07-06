@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Util\BuilderQueries\CollaboratorRecordingAccess;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
@@ -106,7 +107,7 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
                 //         'type' => 'keyword',
                 //     ]
                 // ]
-                ],
+            ],
             'credits' => [
                 'type' => 'object'
             ]
@@ -222,6 +223,20 @@ class Recording extends Model implements UserAccessible, EventLoggable, Creditab
     public function credits(): MorphMany
     {
         return $this->morphMany(Credit::class, 'contribution');
+    }
+
+    /**
+     * Grab the credits/contributions directly on this resource.
+     *
+     * @return Builder
+     */
+    public function allCredits(): Builder
+    {
+        return Credit::where(function ($query) {
+            return $query->where('contribution_type', 'session')->whereIn('contribution_id', $this->sessions->pluck('id'));
+        })->orWhere(function ($query) {
+            return $query->where('contribution_type', 'recording')->where('contribution_id', $this->id);
+        });
     }
 
     /**
