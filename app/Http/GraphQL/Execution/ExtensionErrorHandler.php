@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Execution;
 
 use GraphQL\Error\Error;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 use Nuwave\Lighthouse\Execution\ErrorHandler;
 
@@ -21,6 +22,8 @@ class ExtensionErrorHandler implements ErrorHandler
     public static function handle(Error $error, \Closure $next): array
     {
         $underlyingException = $error->getPrevious();
+
+        report($underlyingException);
 
         if ($underlyingException && $underlyingException instanceof \Illuminate\Auth\AuthenticationException) {
             $underlyingException = new \Nuwave\Lighthouse\Exceptions\AuthenticationException;

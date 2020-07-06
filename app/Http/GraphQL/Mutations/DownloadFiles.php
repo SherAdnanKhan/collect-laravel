@@ -84,7 +84,7 @@ class DownloadFiles
                 continue;
             }
 
-            $file = File::select('id', 'status', 'aliased_folder_id')->where('id', $file['id'])->userViewable(['user' => $user])->first();
+            $file = File::select('id', 'status', 'aliased_folder_id', 'path')->where('id', $file['id'])->userViewable(['user' => $user])->first();
 
             if (!$file || $file->status === File::STATUS_PENDING) {
                 continue;
