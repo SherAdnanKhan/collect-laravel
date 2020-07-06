@@ -24,6 +24,7 @@ class ExtensionErrorHandler implements ErrorHandler
         $underlyingException = $error->getPrevious();
 
         report($underlyingException);
+        Log::error($underlyingException);
 
         if ($underlyingException && $underlyingException instanceof \Illuminate\Auth\AuthenticationException) {
             $underlyingException = new \Nuwave\Lighthouse\Exceptions\AuthenticationException;
