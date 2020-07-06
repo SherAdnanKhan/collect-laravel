@@ -105,7 +105,7 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     {
         $arr = array_only($this->toArray(), ['id', 'name', 'project_id']);
         $arr['started_at'] = $this->started_at->toIso8601String();
-        $arr['ended_at'] = $this->ended_at->toIso8601String();
+        $arr['ended_at'] = $this->ended_at ? $this->ended_at->toIso8601String() : '';
         $arr['session_type'] = $this->sessionType->name;
         $arr['venue'] = $this->venue->name;
         return $arr;
