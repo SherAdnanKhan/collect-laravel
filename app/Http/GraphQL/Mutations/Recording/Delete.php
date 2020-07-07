@@ -2,6 +2,7 @@
 
 namespace App\Http\GraphQL\Mutations\Recording;
 
+use App\Models\Folder;
 use App\Models\Recording;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
@@ -30,7 +31,7 @@ class Delete
 
         $recording->delete();
 
-        Folder::find($recording->folder_id)->delete();
+//        Folder::find($recording->folder_id)->delete();
 
         return $recording;
     }
