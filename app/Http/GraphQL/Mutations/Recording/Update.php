@@ -30,6 +30,19 @@ class Update
             throw new AuthorizationException('Unable to find recording to update');
         }
 
+        if (strpos($input['duration'], ':') !== false) {
+            $durationParts = explode(':', $input['duration'], 3);
+            $duration = 0;
+            if (count($durationParts) === 3) {
+                $duration = ((int)$durationParts[0] * 3600) + ((int)$durationParts[1] * 60) + (int)$durationParts[2];
+            } elseif (count($durationParts) === 2) {
+                $duration = ((int)$durationParts[0] * 60) + (int)$durationParts[1];
+            } else {
+                $duration = (int)$durationParts[0];
+            }
+            $input['duration'] = $duration;
+        }
+
         $saved = $recording->fill($input)->save();
 
         if (!$saved) {

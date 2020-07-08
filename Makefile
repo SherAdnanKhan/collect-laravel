@@ -6,6 +6,9 @@ build:
 up:
 	cd ${LARADOCK_PATH}; docker-compose up workspace mysql redis nginx php-fpm elasticsearch mailhog
 
+stop:
+	cd ${LARADOCK_PATH}; docker-compose stop
+
 workspace:
 	cd ${LARADOCK_PATH}; docker-compose exec workspace bash
 
