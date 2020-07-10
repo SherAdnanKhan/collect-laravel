@@ -233,6 +233,10 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     {
         $user = $this->getUser($data);
 
+        if ($user instanceof Administrator) {
+            return $query;
+        }
+
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['update']))->getQuery();
         })->orWhere(function($q) use ($user) {
@@ -263,6 +267,10 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     {
         $user = $this->getUser($data);
 
+        if ($user instanceof Administrator) {
+            return $query;
+        }
+        
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['delete']))->getQuery();
         })->orWhere(function($q) use ($user) {
