@@ -89,7 +89,7 @@ class User extends Resource
 
             CashierResourceTool::make()->onlyOnDetail(),
 
-            HasOne::make('User Profile', 'profile'),
+//            HasOne::make('User Profile', 'profile'),
 
             HasMany::make('Projects', 'projects'),
 
@@ -141,5 +141,16 @@ class User extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    /**
+     * Determine if the current user can create new resources.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
     }
 }
