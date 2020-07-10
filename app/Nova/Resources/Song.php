@@ -85,7 +85,7 @@ class Song extends Resource
 
             Textarea::make('Notes'),
 
-            HasMany::make('Recording'),
+//            HasMany::make('Recording'),
         ];
     }
 
