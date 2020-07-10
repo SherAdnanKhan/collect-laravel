@@ -16,6 +16,8 @@ class Application extends Resource
 
     public static $group = 'Admin';
 
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
