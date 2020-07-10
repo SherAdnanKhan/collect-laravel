@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a957d8396102614984778e02aea45126",
+    "content-hash": "19db2eeb0c68571a834cf4567d135475",
     "packages": [
         {
             "name": "askedio/laravel-soft-cascade",
@@ -4950,9 +4950,9 @@
             "authors": [
                 {
                     "name": "Freek Van der Herten",
-                    "role": "Developer",
                     "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be"
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
                 }
             ],
             "description": "A magic memoization function",
@@ -6562,16 +6562,16 @@
         },
         {
             "name": "themsaid/nova-cashier-manager",
-            "version": "v0.2.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/themsaid/nova-cashier-manager.git",
-                "reference": "f9a48bdd3fa84d498221bdc534e928542f639e11"
+                "url": "https://github.com/AnalogRepublic/nova-cashier-manager.git",
+                "reference": "4594c56dd1690c9b45f784809f3246d90cf52015"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/themsaid/nova-cashier-manager/zipball/f9a48bdd3fa84d498221bdc534e928542f639e11",
-                "reference": "f9a48bdd3fa84d498221bdc534e928542f639e11",
+                "url": "https://api.github.com/repos/AnalogRepublic/nova-cashier-manager/zipball/4594c56dd1690c9b45f784809f3246d90cf52015",
+                "reference": "4594c56dd1690c9b45f784809f3246d90cf52015",
                 "shasum": ""
             },
             "require": {
@@ -6590,7 +6590,6 @@
                     "Themsaid\\CashierTool\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6607,8 +6606,10 @@
                 "nova",
                 "stripe"
             ],
-            "abandoned": true,
-            "time": "2018-09-03T19:00:16+00:00"
+            "support": {
+                "source": "https://github.com/AnalogRepublic/nova-cashier-manager/tree/master"
+            },
+            "time": "2019-07-01T08:04:30+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -6754,9 +6755,9 @@
             "authors": [
                 {
                     "name": "Sean Tymon",
-                    "role": "Developer",
                     "email": "tymon148@gmail.com",
-                    "homepage": "https://tymon.xyz"
+                    "homepage": "https://tymon.xyz",
+                    "role": "Developer"
                 }
             ],
             "description": "JSON Web Token Authentication for Laravel and Lumen",
@@ -7907,8 +7908,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "The PHP Unit Testing framework.",
@@ -8675,6 +8676,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "nuwave/lighthouse": 10,
+        "themsaid/nova-cashier-manager": 20,
         "tymon/jwt-auth": 5
     },
     "prefer-stable": false,
@@ -8682,6 +8684,5 @@
     "platform": {
         "php": ">=7.0.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }
