@@ -105,4 +105,15 @@ class Application extends Resource
     {
         return [];
     }
+
+    /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    public function authorizeToViewAny(Request $request)
+    {
+        return false;
+    }
 }
