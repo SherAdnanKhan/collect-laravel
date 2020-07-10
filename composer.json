@@ -35,7 +35,7 @@
         "ramsey/uuid": "^3.8",
         "s-ichikawa/laravel-sendgrid-driver": "^2.0",
         "symfony/console": "4.*",
-        "themsaid/nova-cashier-manager": "^0.2.1",
+        "themsaid/nova-cashier-manager": "dev-master#4594c56dd1690c9b45f784809f3246d90cf52015",
         "titasgailius/search-relations": "^1.0",
         "tymon/jwt-auth": "1.0.0-rc.3"
     },
@@ -87,6 +87,10 @@
         {
             "type": "vcs",
             "url": "git@bitbucket.org:analogrepublic/laravel-nova.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:AnalogRepublic/nova-cashier-manager.git"
         }
     ]
 }
