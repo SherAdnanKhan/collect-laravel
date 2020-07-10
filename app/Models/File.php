@@ -236,6 +236,10 @@ class File extends Model implements UserAccessible, Commentable
     {
         $user = $this->getUser($data);
 
+        if ($user instanceof Administrator) {
+            return $query;
+        }
+
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['read']))->getQuery();
         })->orWhere(function($q) use ($user) {
@@ -261,6 +265,10 @@ class File extends Model implements UserAccessible, Commentable
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
     {
         $user = $this->getUser($data);
+
+        if ($user instanceof Administrator) {
+            return $query;
+        }
 
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['update']))->getQuery();
