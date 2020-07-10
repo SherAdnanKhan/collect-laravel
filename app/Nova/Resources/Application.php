@@ -16,6 +16,8 @@ class Application extends Resource
 
     public static $group = 'Admin';
 
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
@@ -104,16 +106,5 @@ class Application extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    /**
-     * Determine if the resource should be available for the given request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    public function authorizeToViewAny(Request $request)
-    {
-        return false;
     }
 }

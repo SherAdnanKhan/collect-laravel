@@ -143,4 +143,26 @@ class Comment extends Resource
     {
         return false;
     }
+
+    /**
+     * Determine if the current user can delete the given resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    public function authorizedToDelete(Request $request)
+    {
+        return false;
+    }
+
+    /**
+     * Determine if the current user can view the given resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    public function authorizedToView(Request $request)
+    {
+        return true;
+    }
 }
