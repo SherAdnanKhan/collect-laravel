@@ -35,6 +35,7 @@ class Create
             throw new AuthorizationException('User does not have permission to create a recording on this project');
         }
 
+        $input = array_get($args, 'input');
         if (strpos($input['duration'], ':') !== false) {
             $durationParts = explode(':', $input['duration'], 3);
             $duration = 0;
@@ -48,7 +49,7 @@ class Create
             $input['duration'] = $duration;
         }
 
-        $recording = $project->recordings()->create(array_get($args, 'input'));
+        $recording = $project->recordings()->create($input);
 
         $folder = Folder::create([
             'project_id' => $recording->project_id,
