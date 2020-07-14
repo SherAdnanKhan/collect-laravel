@@ -114,10 +114,10 @@
 
                     $sessionCredits = collect();
                     foreach ($recording->sessions as $session) {
-                        $sessionCredits = $sessionCredits->combine($session->credits);
+                        $sessionCredits = $sessionCredits->merge($session->credits);
                     }
 
-                    $allCredits = $recordingCredits->combine($sessionCredits);
+                    $allCredits = $recordingCredits->merge($sessionCredits);
 
                     // Filter only musicians and map them
                     // by their instruments.
