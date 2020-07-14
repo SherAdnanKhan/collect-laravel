@@ -151,7 +151,19 @@ class Exporter
     {
         $partyList = $document->createElement('PartyList');
 
-        $partyModels = Party::relatedToProject(['project' => $this->project])->with('addresses')->get();
+        if ($this->recording) {
+            $songModels = collect([$this->recording->song]);
+        } else {
+            $this->project->load('recordings.song');
+            $songModels = $this->project->recordings->pluck('song')->unique();
+        }
+
+        $songIds = $songModels->pluck('id');
+
+        $partyModels = Party::relatedToProject([
+            'project' => $this->project,
+            'includeSongs' => $songIds->toArray()
+        ])->with('addresses')->get();
 
         foreach ($partyModels as $partyModel) {
             $party = $document->createElement('Party');
