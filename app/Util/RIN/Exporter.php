@@ -339,12 +339,12 @@ class Exporter
 
             $session->appendChild($document->createElement('Comment', $sessionModel->description));
 
+            $session = $this->creditList($document, $session, $sessionModel);
+
             $recordingModels = $sessionModel->recordings;
             foreach ($recordingModels as $recordingModel) {
                 $session->appendChild($document->createElement('SessionSoundRecordingReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
             }
-
-            $session = $this->creditList($document, $session, $sessionModel);
 
             $sessionList->appendChild($session);
         }
