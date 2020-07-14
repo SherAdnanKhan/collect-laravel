@@ -109,21 +109,31 @@
             <!-- Recording Parties -->
             <div class="block">
                 @php
+                    // Build a collection of every credit (recording or session)
+                    $recordingCredits = $recording->credits;
+
+                    $sessionCredits = collect();
+                    foreach ($recording->sessions as $session) {
+                        $sessionCredits = $sessionCredits->combine($session->credits);
+                    }
+
+                    $allCredits = $recordingCredits->combine($sessionCredits);
+
                     // Filter only musicians and map them
                     // by their instruments.
-                    $musicians = $recording->credits->filter(function($item) {
+                    $musicians = $allCredits->filter(function($item) {
                         return strpos($item->role->ddex_key, 'Musician') !== FALSE;
                     })->mapToGroups(function($item) {
                         return [$item->instrument->name => $item];
                     });
 
-                    $producers = $recording->credits->filter(function($item) {
+                    $producers = $allCredits->filter(function($item) {
                         return strpos($item->role->ddex_key, 'Producer') !== FALSE;
                     })->sortBy('role.ddex_key')->mapToGroups(function ($item, $key) {
                         return [$item->role->name => $item];
                     });
 
-                    $engineers = $recording->credits->filter(function($item) {
+                    $engineers = $allCredits->filter(function($item) {
                         return strpos($item->role->ddex_key, 'Engineer') !== FALSE;
                     })->sortBy('role.ddex_key')->mapToGroups(function ($item, $key) {
                         return [$item->role->name => $item];
@@ -131,7 +141,7 @@
 
                     // Filter out non-musician credits
                     // and then map them by their roles.
-                    $otherCredits = $recording->credits->filter(function($item) {
+                    $otherCredits = $allCredits->filter(function($item) {
                         return strpos($item->role->ddex_key, 'Producer') === FALSE &&
                             strpos($item->role->ddex_key, 'Engineer') === FALSE &&
                             strpos($item->role->ddex_key, 'Musician') === FALSE;
