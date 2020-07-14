@@ -151,7 +151,19 @@ class Exporter
     {
         $partyList = $document->createElement('PartyList');
 
-        $partyModels = Party::relatedToProject(['project' => $this->project])->with('addresses')->get();
+        if ($this->recording) {
+            $songModels = collect([$this->recording->song]);
+        } else {
+            $this->project->load('recordings.song');
+            $songModels = $this->project->recordings->pluck('song')->unique();
+        }
+
+        $songIds = $songModels->pluck('id');
+
+        $partyModels = Party::relatedToProject([
+            'project' => $this->project,
+            'includeSongs' => $songIds->toArray()
+        ])->with('addresses')->get();
 
         foreach ($partyModels as $partyModel) {
             $party = $document->createElement('Party');
@@ -339,12 +351,12 @@ class Exporter
 
             $session->appendChild($document->createElement('Comment', $sessionModel->description));
 
+            $session = $this->creditList($document, $session, $sessionModel);
+
             $recordingModels = $sessionModel->recordings;
             foreach ($recordingModels as $recordingModel) {
                 $session->appendChild($document->createElement('SessionSoundRecordingReference', self::RECORDING_ID_PREFIX . $recordingModel->getKey()));
             }
-
-            $session = $this->creditList($document, $session, $sessionModel);
 
             $sessionList->appendChild($session);
         }
