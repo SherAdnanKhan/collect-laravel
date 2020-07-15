@@ -458,4 +458,9 @@ class Project extends Model implements UserAccessible, EventLoggable, Creditable
     {
         return $this->collaborators()->where($field, $value)->exists();
     }
+
+    public function hasAttribute($key): bool
+    {
+        return isset($this->attributes[$key]);
+    }
 }

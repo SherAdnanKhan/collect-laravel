@@ -243,10 +243,21 @@ class Party extends Model implements UserAccessible
             throw new \Exception('Project must be specified when querying related to a project');
         }
 
-        return $query->whereHas('credits', function($q) use ($project) {
-            return $q->whereHas('projects', function($q) use ($project) {
+        $includeSongs = array_get($data, 'includeSongs', null);
+
+        return $query->whereHas('credits', function($q) use ($project, $includeSongs) {
+            $q->whereHas('projects', function($q) use ($project) {
                 return $q->where('projects.id', $project->getKey());
             });
+
+            if ($includeSongs) {
+                $q->orWhere(function($q) use ($includeSongs) {
+                    $q->where('contribution_type', 'song')
+                        ->whereIn('contribution_id', $includeSongs);
+                });
+            }
+
+            return $q;
         })->orWhereHas('projectLabel', function($q) use ($project) {
             return $q->where('projects.id', $project->getKey());
         })->orWhereHas('projectArtist', function($q) use ($project) {

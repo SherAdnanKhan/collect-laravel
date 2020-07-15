@@ -17,7 +17,7 @@ class ProjectObserver
         // Set the default value of the number to be
         // the ID of the row.
 
-        if (is_null($project->number) || empty($project->number)) {
+        if ($project->hasAttribute('number') && empty($project->number)) {
             $number = '';
             for($i = 0; $i < 14; $i++) {
                 $number .= mt_rand(0, 9);
