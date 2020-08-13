@@ -21,6 +21,7 @@ class PartyAddress extends Model implements UserAccessible
     protected $fillable = [
         'party_id', 'line_1', 'line_2', 'line_3',
         'city', 'district', 'postal_code', 'territory_code_id',
+        'country_id'
     ];
 
     /**
