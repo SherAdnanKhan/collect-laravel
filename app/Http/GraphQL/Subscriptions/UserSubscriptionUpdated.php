@@ -36,7 +36,7 @@ class UserSubscriptionUpdated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
-        if ($subscriber->context->user === null) {
+        if (is_null($subscriber->context) || is_null($subscriber->context->user)) {
             return false;
         }
 

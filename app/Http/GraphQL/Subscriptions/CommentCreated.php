@@ -36,10 +36,14 @@ class CommentCreated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
+        if (is_null($subscriber->context) || is_null($subscriber->context->user)) {
+            return false;
+        }
+
         $user = $subscriber->context->user;
 
         // Don't need to get this for the user who made it.
-        if (is_null($user) || $user->id == $root->user_id) {
+        if ($user->id == $root->user_id) {
             return false;
         }
 
