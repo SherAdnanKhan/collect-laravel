@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.3",
         "askedio/laravel-soft-cascade": "5.7",
         "aws/aws-sdk-php": "^3.87",
         "babenkoivan/scout-elasticsearch-driver": "^4.0.3",

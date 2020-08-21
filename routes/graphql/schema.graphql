@@ -388,6 +388,8 @@ extend type Mutation @group(middleware: ["auth:api"]) {
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\CreateFolder@resolve")
   renameFolder(input: RenameFolderInput!): Folder
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\RenameFolder@resolve")
+  moveFiles(input: MoveFilesInput!): MoveFilesPayload
+    @field(resolver: "App\\Http\\GraphQL\\Mutations\\MoveFiles@resolve")
 
   # Subscription Mutations
   doSubscriptionUpdate(input: SubscriptionUpdateInput!): UserSubscription

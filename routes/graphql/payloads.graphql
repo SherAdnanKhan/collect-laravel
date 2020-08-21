@@ -2,6 +2,10 @@ type DeleteFilesPayload {
   success: Boolean
 }
 
+type MoveFilesPayload {
+  success: Boolean
+}
+
 type LogoutPayload {
   loggedOut: Boolean @rename(attribute: "logged_out")
 }
