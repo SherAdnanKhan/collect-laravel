@@ -89,7 +89,7 @@ class RenameFile
 
         Storage::disk('s3')->move($file->path, $path . '/' . $name);
 
-        $file->path = $path;
+        $file->path = $path . '/' . $name;
         $file->name = $name;
         $file->save();
 
