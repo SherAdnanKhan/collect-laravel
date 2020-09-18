@@ -7,6 +7,7 @@ use App\Models\File;
 use App\Models\Folder;
 use App\Models\Project;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Storage;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -84,6 +85,11 @@ class RenameFile
             throw new ValidationException('File with that name already exists.');
         }
 
+        $path = pathinfo($file->path, PATHINFO_DIRNAME);
+
+        Storage::disk('s3')->move($file->path, $path . '/' . $name);
+
+        $file->path = $path . '/' . $name;
         $file->name = $name;
         $file->save();
 
