@@ -22,6 +22,17 @@ input DeleteFilesInput {
     type: String!
 }
 
+input MoveFileInput {
+    id: ID!
+    type: String!
+}
+
+input MoveFilesInput {
+    files: [MoveFileInput!]!
+    folder_id: ID
+    project_id: ID
+}
+
 input LoginInput {
   email: String! @rules(apply: ["email"])
   password: String! @rules(apply: ["required", "min:6"])
