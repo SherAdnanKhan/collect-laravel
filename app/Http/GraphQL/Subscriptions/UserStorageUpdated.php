@@ -35,6 +35,10 @@ class UserStorageUpdated extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
+        if (is_null($subscriber->context) || is_null($subscriber->context->user)) {
+            return false;
+        }
+
         return $subscriber->context->user->id == $root->id;
     }
 
