@@ -33,7 +33,7 @@ Copy `.env.example` to `.env` and then run `php artisan key:generate`. Configure
 #### Setup a user
 Use the Laradock Workspace by running `make workspace` and then inside of that bash terminal, run `php artisan nova:user` and interactively create yourself an admin user.
 
-### xDebug
+### xDebug (Optional)
 
 The `php-fpm` and `workspace` containers have xDebug installed. It is reccomended to configure an xDebug client locally, this will enable you to add breakpoints to your PHP code for easier debugging.
 
