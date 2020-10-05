@@ -17,3 +17,7 @@ yarn-error.log
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Laradock
+/laradock
+!/.laradock/.env

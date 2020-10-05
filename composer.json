@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.2",
         "askedio/laravel-soft-cascade": "5.7",
         "aws/aws-sdk-php": "^3.87",
         "babenkoivan/scout-elasticsearch-driver": "^4.0.3",
@@ -31,7 +31,7 @@
         "nuwave/lighthouse": "v3.0-beta.3",
         "predis/predis": "^1.1",
         "propaganistas/laravel-phone": "^4.1",
-        "pusher/pusher-php-server": "^3.4",
+        "pusher/pusher-php-server": "^4.1",
         "ramsey/uuid": "^3.8",
         "s-ichikawa/laravel-sendgrid-driver": "^2.0",
         "symfony/console": "4.*",
@@ -85,8 +85,8 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "git@bitbucket.org:analogrepublic/laravel-nova.git"
+            "type": "path",
+            "url": "./packages/nova"
         },
         {
             "type": "vcs",

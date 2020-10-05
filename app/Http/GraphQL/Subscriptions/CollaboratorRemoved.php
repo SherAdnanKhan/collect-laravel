@@ -35,6 +35,10 @@ class CollaboratorRemoved extends GraphQLSubscription
      */
     public function filter(Subscriber $subscriber, $root): bool
     {
+        if (is_null($subscriber->context) || is_null($subscriber->context->user)) {
+            return false;
+        }
+        
         $user = $subscriber->context->user;
         return is_null($user) || $user->id == $root->user_id;
     }
