@@ -24,6 +24,8 @@ Then to run Laradock: `make up`. This will boot up the workspace environment as 
 
 [Read here for documentation](https://laravel.com/docs/5.7/installation)
 
+Install the composer dependencies by running `composer install`
+
 Copy `.env.example` to `.env` and then run `php artisan key:generate`. Configure the `APP_URL` key in your `.env` to match the hosts file entry for this project.
 
 ### Laravel Nova
