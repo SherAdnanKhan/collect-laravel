@@ -2,6 +2,23 @@
 
 This project uses Laravel 5.7, running Laradock to handle the docker environment.
 
+## Getting Started
+
+### TLDR
+
+1. Launch Docker
+1. `$ chmod +x setup.sh && make setup`
+1. `$ make up`
+1. Open new Terminal window
+1. `$ composer install`
+1. `$ cp .env.example .env`
+1. `$ php artisan key:generate`
+1. `$ make workspace`
+1. `$ php artisan migrate`
+1. `$ php artisan db:seed`
+1. `$ php artisan nova:user`
+1. Visit http://localhost/admin
+
 ### Laradock
 	
 [Read here for Laradock documentation](https://laradock.io/documentation)
