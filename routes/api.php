@@ -58,4 +58,9 @@ Route::middleware('auth:token')->group(function() {
         'zipgenerator/complete',
         '\App\Http\Controllers\Webhooks\ZipGeneratorController@complete'
     );
+
+    Route::post(
+        'sharezipgenerator/complete',
+        '\App\Http\Controllers\Webhooks\ShareZipGeneratorController@complete'
+    );
 });
