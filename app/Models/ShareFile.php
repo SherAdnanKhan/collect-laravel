@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ShareFile extends Model
 {
-    protected $fillable = ['share_id', 'file_id'];
+    protected $fillable = ['share_id', 'file_id', 'folder_id'];
 
     /**
      * Get the owning share of this model.
      *
-     * @return Collection
+     * @return BelongsTo
      */
     public function share(): BelongsTo
     {
@@ -22,7 +22,7 @@ class ShareFile extends Model
     /**
      * Get the owning file of this model.
      *
-     * @return Collection
+     * @return BelongsTo
      */
     public function file(): BelongsTo
     {

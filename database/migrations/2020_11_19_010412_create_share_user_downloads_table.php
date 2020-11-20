@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShareUsersTable extends Migration
+class CreateShareUserDownloadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateShareUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('share_users', function (Blueprint $table) {
+        Schema::create('share_user_downloads', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('share_id');
-            $table->string('email');
-            $table->string('encrypted_email');
+            $table->unsignedInteger('share_user_id');
             $table->timestamps();
-            $table->foreign('share_id')->references('id')->on('shares')->onDelete('CASCADE');
+            $table->foreign('share_user_id')->references('id')->on('share_users')->onDelete('CASCADE');
         });
     }
 
@@ -30,6 +28,6 @@ class CreateShareUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('share_users');
+        Schema::dropIfExists('share_user_downloads');
     }
 }

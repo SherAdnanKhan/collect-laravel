@@ -3,7 +3,6 @@
 namespace App\Http\GraphQL\Mutations;
 
 use App\Models\Share;
-use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -21,7 +20,7 @@ class ExpireShare
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $input = array_get($args, 'input')[0];
+        $input = array_get($args, 'input');
 
         $share = Share::where('id', array_get($input, 'uuid'))
             ->userUpdatable()
@@ -31,7 +30,7 @@ class ExpireShare
             throw new AuthorizationException('Unable to find share to update');
         }
 
-        $share->expires_at = Carbon::now()->subDays(1);
+        $share->status = Share::STATUS_CANCELLED;
         $saved = $share->save();
 
         if (!$saved) {

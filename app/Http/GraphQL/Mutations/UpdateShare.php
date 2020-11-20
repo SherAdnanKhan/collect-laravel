@@ -9,7 +9,7 @@ use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class UpdateShareExpiry
+class UpdateShare
 {
     /**
      * @param $rootValue
@@ -21,9 +21,10 @@ class UpdateShareExpiry
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        $input = array_get($args, 'input')[0];
+        $input = array_get($args, 'input');
 
         $share = Share::where('id', array_get($input, 'uuid'))
+            ->with('user', 'project')
             ->userUpdatable()
             ->first();
 
@@ -37,16 +38,23 @@ class UpdateShareExpiry
             ];
         }
 
-        $share->expires_at = $input['expiry'];
+        $password = isset($input['password']) ? $input['password'] : null;
+        $expiry = null;
+
+        if (isset($input['expiry'])) {
+            $expiry = $input['expiry'];
+            $share->status = Share::STATUS_LIVE;
+        }
+
+        $share->password = (!empty($password)) ? bcrypt($password) : null;
+        $share->expires_at = $expiry;
         $saved = $share->save();
 
         if (!$saved) {
-            throw new GenericException('Error updating share expiry');
+            throw new GenericException('Error updating share');
         }
 
-        return [
-            'success' => true
-        ];
+        return $share;
     }
 
     private function isValidExpiry($expiry)

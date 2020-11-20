@@ -14,6 +14,7 @@ class ShareFiles
 {
     private $filesToShare = [];
     private $emailsToShare = [];
+    private $message;
     private $expiry;
     private $password;
 
@@ -28,19 +29,21 @@ class ShareFiles
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $user = auth()->user();
+        $input = $args['input'];
 
-        $this->getfilesToShare($user, $args['input'][0]['files']);
-        $this->emailsToShare = collect($args['input'][0]['users'])->pluck('email');
-        $this->expiry = $args['input'][0]['expiry'];
-        $this->password = $args['input'][0]['password'];
+        $this->getfilesToShare($user, $input['files']);
+        $this->emailsToShare = collect($input['users'])->pluck('email');
+        $this->expiry = (isset($input['expiry']) && !empty($input['expiry'])) ? $input['expiry'] : null;
+        $this->password = $input['password'];
+        $this->message = $input['message'];
 
-        if (!isset($this->filesToShare[0]) || !isset($this->emailsToShare[0]) || empty($this->expiry) || !$this->isValidExpiry($this->expiry)) {
+        if (!isset($this->filesToShare[0]) || !isset($this->emailsToShare[0]) || !$this->isValidExpiry($this->expiry)) {
             return [
                 'success' => false
             ];
         }
 
-        CreateShareZip::dispatch($user->id, $this->filesToShare, $this->emailsToShare, $this->expiry, $this->password);
+        CreateShareZip::dispatch($user->id, $this->filesToShare, $this->emailsToShare, $this->message, $this->expiry, $this->password);
 
         return [
             'success' => true
@@ -108,6 +111,10 @@ class ShareFiles
 
     private function isValidExpiry($expiry)
     {
-        return Carbon::parse($expiry)->gt(Carbon::now());
+        if (!isset($expiry)) {
+            return true;
+        }
+
+        return Carbon::parse($expiry)->gte(Carbon::today());
     }
 }

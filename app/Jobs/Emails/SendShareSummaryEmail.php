@@ -23,11 +23,15 @@ class SendShareSummaryEmail implements ShouldQueue
      */
     public function handle()
     {
-        $expiredShares = Share::whereRaw("DATE_FORMAT(expires_at, '%Y-%m-%d %H:%i:00') = ?", [Carbon::now()->second(00)->format('Y-m-d H:i:s')])
+        $expiredShares = Share::where('expires_at', Carbon::today()->subDay())
+                            ->where('status',Share::STATUS_LIVE)
                             ->with('users')
                             ->get();
 
         foreach ($expiredShares as $share) {
+            $share->status = Share::STATUS_EXPIRED;
+            $share->save();
+
             Mail::to($share->user)->send(new ShareSummary($share));
         }
     }

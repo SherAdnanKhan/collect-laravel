@@ -14,7 +14,12 @@ class Share extends Model implements UserAccessible
 {
     use UserAccesses;
 
-    protected $fillable = ['user_id', 'project_id', 'size', 'download_count', 'path', 'password', 'complete', 'expires_at'];
+    const STATUS_NEW = "new";
+    const STATUS_LIVE = "live";
+    const STATUS_CANCELLED = "cancelled";
+    const STATUS_EXPIRED = "expired";
+
+    protected $fillable = ['user_id', 'project_id', 'size', 'download_count', 'path', 'password', 'message', 'complete', 'status', 'expires_at'];
 
     protected static function boot()
     {
@@ -42,7 +47,7 @@ class Share extends Model implements UserAccessible
     /**
      * Get the owning user of this model.
      *
-     * @return Collection
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -52,7 +57,7 @@ class Share extends Model implements UserAccessible
     /**
      * Get the owning project of this model.
      *
-     * @return Collection
+     * @return BelongsTo
      */
     public function project(): BelongsTo
     {
@@ -62,7 +67,7 @@ class Share extends Model implements UserAccessible
     /**
      * Get the files of this model.
      *
-     * @return Collection
+     * @return hasMany
      */
     public function files(): hasMany
     {
@@ -72,7 +77,7 @@ class Share extends Model implements UserAccessible
     /**
      * Get the users of this model.
      *
-     * @return Collection
+     * @return HasMany
      */
     public function users(): HasMany
     {
@@ -81,6 +86,6 @@ class Share extends Model implements UserAccessible
 
     public function hasExpired()
     {
-        return Carbon::now()->isAfter($this->expires_at);
+        return $this->status !== self::STATUS_LIVE;
     }
 }
