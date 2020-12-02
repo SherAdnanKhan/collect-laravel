@@ -57,7 +57,7 @@ deploy-to-staging: &deploy-to-staging
         ZIP_FILE: "application.zip"
         S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
         COMMAND: "upload-only"
-        VERSION_LABEL: "production-$BITBUCKET_BUILD_NUMBER"
+        VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
 
 definitions:
   caches:
