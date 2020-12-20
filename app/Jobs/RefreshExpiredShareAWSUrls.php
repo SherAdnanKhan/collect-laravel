@@ -42,14 +42,14 @@ class RefreshExpiredShareAWSUrls implements ShouldQueue
      */
     public function handle()
     {
-        $awsExpiredShares = Share::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:00') = ?", [Carbon::now()->subDays(7)->second(00)->format('Y-m-d H:i:s')])
-                                ->where('expires_at', '>' , Carbon::now())
+        $awsExpiredShares = Share::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d 00:00:00') = ?", [Carbon::now()->subDays(7)->hour(00)->minute(00)->second(00)->format('Y-m-d H:i:s')])
+                                ->where('status', Share::STATUS_LIVE)
                                 ->get();
 
         foreach ($awsExpiredShares as $share) {
             $filesToShare = $share->files->map(function ($shareFile) {
                 $file = File::find($shareFile->file_id);
-                return $file->only(['id', 'type', 'status', 'depth', 'aliased_folder_id']);
+                return $file->only(['id', 'type', 'status', 'depth', 'aliased_folder_id', 'folder_id']);
             });
 
             $params = [

@@ -27,6 +27,7 @@ class ShareZipGeneratorController extends Controller
         $userId = $request->get('userId');
         $shareId = $request->get('shareId');
         $fileName = $request->get('fileName');
+        $refresh = $request->get('refresh');
 
         $user = User::find($userId);
         if (!$user || $user->status !== 'active') {
@@ -59,11 +60,12 @@ class ShareZipGeneratorController extends Controller
         $share->update([
             'size' => $size,
             'path' => $fileName,
-            'complete' => true
+            'complete' => true,
+            'status' => Share::STATUS_LIVE
         ]);
 
         //Dont send email if refresh is set to true - which means just updating the expired path
-        if (!isset($request->refresh)) {
+        if (!$refresh) {
             SendShareZipCreatedEmail::dispatch($share);
         }
     }

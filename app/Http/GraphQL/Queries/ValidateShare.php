@@ -4,7 +4,6 @@ namespace App\Http\GraphQL\Queries;
 
 use App\Models\Share;
 use App\Models\ShareUser;
-use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +22,7 @@ class ValidateShare
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $uuid = $args['input']['uuid'];
-        $encEmail = $args['input']['encrypted_email'];
+        $encEmail = $args['input']['encryptedEmail'];
 
         $share = Share::find($uuid);
 
@@ -53,16 +52,18 @@ class ValidateShare
             ];
         }
 
-        $shareUser->download_count = $shareUser->download_count + 1;
-        $shareUser->downloaded_last_at = Carbon::now();
-        $shareUser->save();
+        $shareUser->downloads()->create();
 
         $share->download_count = $share->download_count + 1;
         $share->save();
 
-        $url = Storage::disk('s3')->temporaryUrl(
-            substr($share->path, 1), $share->expires_at
-        );
+        if (isset($share->expires_at)) {
+            $url = Storage::disk('s3')->temporaryUrl(
+                substr($share->path, 1), $share->expires_at
+            );
+        } else {
+            $url = Storage::disk('s3')->url(substr($share->path, 1));
+        }
 
         return [
             'message' => 'success',

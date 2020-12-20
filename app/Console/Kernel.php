@@ -37,12 +37,12 @@ class Kernel extends ConsoleKernel
                  ->onOneServer();
 
         $schedule->job(new \App\Jobs\Emails\SendShareSummaryEmail)
-            ->everyMinute()
-            ->onOneServer();
+                 ->dailyAt('02:00')
+                 ->onOneServer();
 
         $schedule->job(new \App\Jobs\RefreshExpiredShareAWSUrls)
-            ->everyMinute()
-            ->onOneServer();
+                 ->daily()
+                 ->onOneServer();
     }
 
     /**

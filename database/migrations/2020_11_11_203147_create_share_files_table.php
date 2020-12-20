@@ -17,6 +17,7 @@ class CreateShareFilesTable extends Migration
             $table->increments('id');
             $table->uuid('share_id');
             $table->unsignedInteger('file_id');
+            $table->unsignedInteger('folder_id')->nullable();
             $table->timestamps();
             $table->foreign('share_id')->references('id')->on('shares')->onDelete('CASCADE');
             $table->foreign('file_id')->references('id')->on('files')->onDelete('CASCADE');

@@ -21,8 +21,10 @@ class CreateSharesTable extends Migration
             $table->unsignedInteger('download_count')->default(0);
             $table->text('path')->nullable();
             $table->string('password')->nullable();
+            $table->text('message')->nullable();
             $table->boolean('complete')->default(false)->index();
-            $table->timestamp('expires_at', 0)->nullable()->index();
+            $table->enum('status', ['new', 'live', 'cancelled', 'expired'])->default('new');
+            $table->date('expires_at')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('CASCADE');

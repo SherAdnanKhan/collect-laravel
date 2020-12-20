@@ -10,11 +10,18 @@
         <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
 
         <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
-          Hello!,<br />
+          Hello!<br />
           <br />
+          @if ($mailMessage)
+            {{ $mailMessage }}
+            <br />
+            <br />
+          @endif
           Your have received share link. Please click the button below to continue.<br />
-          <br />
-          <strong>This link is only valid till {{ $expiry }}.</strong>
+          @if ($expiry)
+            <br />
+            <strong>This link is only valid till {{ $expiry }}.</strong>
+          @endif
         </mj-text>
 
         <mj-button font-family="Poppins, Helvetica, Arial" font-size="14px" font-weight="700" background-color="#000000" color="white" border-radius="4px" href="{{ $zipUrl }}">

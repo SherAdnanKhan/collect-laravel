@@ -21,6 +21,7 @@ class CreateShareZip implements ShouldQueue
     private $filesToShare = [];
     private $projectId;
     private $emailsToShare = [];
+    private $message;
     private $expiry;
     private $password;
 
@@ -29,15 +30,16 @@ class CreateShareZip implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($userId, $filesToShare, $emailsToShare, $expiry, $password)
+    public function __construct($userId, $filesToShare, $emailsToShare, $message, $expiry, $password)
     {
         $this->userId = $userId;
         $this->filesToShare = collect($filesToShare)->map(function ($file) {
-            return $file->only(['id', 'type', 'status', 'depth', 'aliased_folder_id']);
+            return $file->only(['id', 'type', 'status', 'depth', 'aliased_folder_id', 'folder_id']);
         });
 
         $this->projectId = $filesToShare[0]->project_id;
         $this->emailsToShare = $emailsToShare;
+        $this->message = $message;
         $this->expiry = $expiry;
         $this->password = $password;
     }
@@ -57,14 +59,16 @@ class CreateShareZip implements ShouldQueue
             $share = Share::create([
                 'user_id' => $this->userId,
                 'project_id' => $this->projectId,
+                'message' => $this->message,
                 'password' => (!empty($this->password)) ? bcrypt($this->password) : null,
-                'expires_at' => Carbon::parse($this->expiry)
+                'expires_at' => (isset($this->expiry)) ? Carbon::parse($this->expiry) : null
             ]);
 
             foreach ($this->filesToShare as $file) {
                 ShareFile::create([
                     'share_id' => $share->id,
-                    'file_id' => $file['id']
+                    'file_id' => $file['id'],
+                    'folder_id' => $file['folder_id']
                 ]);
             }
 

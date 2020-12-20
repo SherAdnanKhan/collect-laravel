@@ -11,10 +11,9 @@
 
         <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px">
           Hello {{ $share->user->name }},<br />
-          <br />
         </mj-text>
 
-        <mj-text font-size="16px" align="center" padding-bottom="24px">
+        <mj-text font-size="16px" align="center" padding-bottom="15px">
           <strong>Summary of your share</strong>
         </mj-text>
 
@@ -32,8 +31,8 @@
           @foreach($share->users as $user)
           <tr>
             <td style="padding: 0 15px 0 0;">{{$user->email}}</td>
-            <td style="padding: 0 15px;">{{$user->download_count}}</td>
-            <td style="padding: 0 0 0 15px;">{{$user->downloaded_last_at}}</td>
+            <td style="padding: 0 15px;">{{$user->downloads()->count()}}</td>
+            <td style="padding: 0 0 0 15px;">{{($user->downloads()->latest()->first()->created_at) ?? ''}}</td>
           </tr>
           @endforeach
 

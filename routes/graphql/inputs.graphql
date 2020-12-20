@@ -90,7 +90,8 @@ input DownloadFilesInput {
 input ShareFilesInput {
     files: [ShareFileInput]!
     users: [ShareUserInput]!
-    expiry: String! @rules(apply: ["date"])
+    message: String @rules(apply: ["max:255"])
+    expiry: String @rules(apply: ["date"])
     password: String @rules(apply: ["max:255"])
 }
 
@@ -105,22 +106,18 @@ input ShareUserInput {
 
 input ValidateShareInput {
     uuid: String!,
-    encrypted_email: String!,
+    encryptedEmail: String!,
     password: String @rules(apply: ["max:255"])
 }
 
-input UpdateSharePasswordInput {
+input UpdateShareInput {
     uuid: String!,
-    password: String! @rules(apply: ["max:255"])
+    password: String @rules(apply: ["max:255"])
+    expiry: String @rules(apply: ["date"])
 }
 
 input ExpireShareInput {
     uuid: String!
-}
-
-input UpdateShareExpiryInput {
-    uuid: String!,
-    expiry: String! @rules(apply: ["date"])
 }
 
 input CreateCommentInput {
