@@ -17,6 +17,9 @@ type Query {
 
   validateDownload(uuid: String!): ValidateDownloadPayload!
     @field(resolver: "App\\Http\\GraphQL\\Queries\\ValidateDownload@resolve")
+
+  validateShare(input: ValidateShareInput!): ValidateShare!
+    @field(resolver: "App\\Http\\GraphQL\\Queries\\ValidateShare@resolve")
 }
 
 extend type Query @group(middleware: ["auth:api"]) {
@@ -186,6 +189,12 @@ extend type Query @group(middleware: ["auth:api"]) {
   # Get unread activity count
   getUnreadActivity(projectId: ID!): UnreadActivityPayload!
     @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
+
+  # Share Queries
+  getShares: [Share] @all(scopes: ["userViewable"])
+  getShare(id: String! @eq): Share @find(scopes: ["userViewable"])
+  getSharesByFile(input: ShareFileInput!): [Share]
+  @field(resolver: "App\\Http\\GraphQL\\Queries\\Share\\ByFile@resolve")
 
   # Search Queries
   searchUserFiles(term: String!): [File]
@@ -408,6 +417,14 @@ extend type Mutation @group(middleware: ["auth:api"]) {
     @field(
       resolver: "App\\Http\\GraphQL\\Mutations\\ResetUnreadActivity@resolve"
     )
+
+  # Share Mutations
+  shareFiles(input: ShareFilesInput!): ShareFilesPayload
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\ShareFiles@resolve")
+  updateShare(input: UpdateShareInput!): Share
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\UpdateShare@resolve")
+  expireShare(input: ExpireShareInput!): ExpireSharePayload
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\ExpireShare@resolve")
 }
 
 extend type Query @group(middleware: ["auth:token"]) {

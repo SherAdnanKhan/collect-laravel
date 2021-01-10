@@ -87,6 +87,39 @@ input DownloadFilesInput {
     type: String!
 }
 
+input ShareFilesInput {
+    files: [ShareFileInput]!
+    users: [ShareUserInput]!
+    message: String @rules(apply: ["max:255"])
+    expiry: String @rules(apply: ["date"])
+    password: String @rules(apply: ["max:255"])
+}
+
+input ShareFileInput {
+    id: ID!
+    type: String!
+}
+
+input ShareUserInput {
+    email: String! @rules(apply: ["email"])
+}
+
+input ValidateShareInput {
+    uuid: String!,
+    encryptedEmail: String!,
+    password: String @rules(apply: ["max:255"])
+}
+
+input UpdateShareInput {
+    uuid: String!,
+    password: String @rules(apply: ["max:255"])
+    expiry: String @rules(apply: ["date"])
+}
+
+input ExpireShareInput {
+    uuid: String!
+}
+
 input CreateCommentInput {
     project_id: ID! @rules(apply: ["required"])
     resource_id: ID! @rules(apply: ["required"])

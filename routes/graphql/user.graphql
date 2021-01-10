@@ -185,3 +185,33 @@ type Language {
 	name: String!
 	code: String!
 }
+
+
+type ShareUser {
+	id: ID!
+ 	email: String!
+ 	downloadCount: Int @rename(attribute: "download_count")
+ 	downloadedLastAt: Int @rename(attribute: "downloaded_last_at")
+ 	createdAt: String! @rename(attribute: "created_at")
+ 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type ShareFile {
+ 	id: ID!
+ 	file: File! @belongsTo
+ 	createdAt: String! @rename(attribute: "created_at")
+ 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Share {
+ 	id: String!
+ 	user: User! @belongsTo
+ 	project: Project @belongsTo
+ 	users: [ShareUser] @hasMany
+ 	files: [ShareFile] @hasMany
+ 	size: Int
+ 	downloadCount: Int @rename(attribute: "download_count")
+ 	expiresAt: String @rename(attribute: "expires_at")
+ 	createdAt: String! @rename(attribute: "created_at")
+ 	updatedAt: String @rename(attribute: "updated_at")
+}

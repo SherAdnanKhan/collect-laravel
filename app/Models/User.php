@@ -183,6 +183,16 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     }
 
     /**
+     * All of the users shares.
+     *
+     * @return HasMany
+     */
+    public function shares(): HasMany
+    {
+        return $this->hasMany(Share::class);
+    }
+
+    /**
      * Get the times this user has been a collaborator
      *
      * @return HasMany

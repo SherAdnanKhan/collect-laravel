@@ -19,6 +19,9 @@
           <br />
           <br />
           We have processed your payment for {{ $invoiceAmountPaid }}.
+            <br />
+            <br />
+            Check out our <a href="https://www.youtube.com/playlist?list=PLbHcdtLqw7M_28xQFI48voSPnIoEL7D1f">YouTube channel</a> to learn how to use features within VEVA Collect. Also remember to download the companion <a href="https://www.vevacollect.com/checkin-app">Check-in App</a>- to accurately deliver your credits for any session within VEVA Collect.
           <br />
           <br />
           Please contact us with any questions at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.
