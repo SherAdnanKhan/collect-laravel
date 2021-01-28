@@ -95,8 +95,7 @@ class CreateShareZip implements ShouldQueue
                 'MessageBody' => json_encode([
                     'shareJobId' => $share->id,
                     'userId' => $this->userId,
-                    'files' => $this->filesToShare,
-                    'refresh' => false
+                    'files' => $this->filesToShare
                 ]),
                 'QueueUrl' => $config['prefix'] . '/' . $config['jobs']['downloads']
             ];
