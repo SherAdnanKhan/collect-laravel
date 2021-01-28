@@ -19,7 +19,7 @@ class ShareZipGeneratorController extends Controller
     public function complete(Request $request)
     {
         $user = auth()->user();
-        if ($user->name !== 'ShareZipGenerator') {
+        if ($user->name !== 'ZipGenerator') {
             Log::error(sprintf('User %s is not authenticated to hit the share zip webhook'. $user->name));
             throw new AuthenticationException;
         }
