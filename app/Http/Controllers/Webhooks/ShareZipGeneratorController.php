@@ -28,6 +28,9 @@ class ShareZipGeneratorController extends Controller
         $shareId = $request->get('shareId');
         $fileName = $request->get('fileName');
         $refresh = $request->get('refresh');
+        if (isset($refresh)) {
+            $refresh = true;
+        }
 
         $user = User::find($userId);
         if (!$user || $user->status !== 'active') {
