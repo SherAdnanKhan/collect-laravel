@@ -56,7 +56,7 @@ class RefreshExpiredShareAWSUrls implements ShouldQueue
                 'MessageGroupId' => $this->job->getJobId(),
                 'MessageDeduplicationId' => $this->job->getJobId(),
                 'MessageBody' => json_encode([
-                    'shareJobId' => $share->id,
+                    'shareId' => $share->id,
                     'userId' => $share->user->id,
                     'files' => $filesToShare,
                     'refresh' => true
