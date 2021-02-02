@@ -93,7 +93,7 @@ class CreateShareZip implements ShouldQueue
                 'MessageGroupId' => $this->job->getJobId(),
                 'MessageDeduplicationId' => $this->job->getJobId(),
                 'MessageBody' => json_encode([
-                    'shareJobId' => $share->id,
+                    'shareId' => $share->id,
                     'userId' => $this->userId,
                     'files' => $this->filesToShare
                 ]),
