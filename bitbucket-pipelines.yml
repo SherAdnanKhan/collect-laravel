@@ -45,39 +45,40 @@ package: &package
 deploy-to-staging: &deploy-to-staging
   - step:
       name: Deploy to Staging Server & Staging Worker Server
-      deployment: staging
       trigger: manual
+      script:
+        - echo "Deploying...";
   - parallel:
-    - step:
-        name: "Deploy to Staging Server"
-        deployment: staging
-        script:
-        - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
-          variables:
-            AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-            AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-            AWS_DEFAULT_REGION: "us-east-1"
-            APPLICATION_NAME: "VEVA Sound Staging"
-            ENVIRONMENT_NAME: "VevaSound-staging-1"
-            ZIP_FILE: "application.zip"
-            S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
-            COMMAND: "all"
-            VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
-    - step:
-        name: "Deploy to Staging Worker Server"
-        deployment: staging
-        script:
-        - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
-          variables:
-            AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-            AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-            AWS_DEFAULT_REGION: "us-east-1"
-            APPLICATION_NAME: "VEVA Sound Staging"
-            ENVIRONMENT_NAME: "VevaSound-Workers-staging-1"
-            ZIP_FILE: "application.zip"
-            S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
-            COMMAND: "all"
-            VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
+      - step:
+          name: "Deploy to Staging Server"
+          deployment: staging
+          script:
+          - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: "us-east-1"
+              APPLICATION_NAME: "VEVA Sound Staging"
+              ENVIRONMENT_NAME: "VevaSound-staging-1"
+              ZIP_FILE: "application.zip"
+              S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
+              COMMAND: "all"
+              VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
+      - step:
+          name: "Deploy to Staging Worker Server"
+          deployment: staging
+          script:
+          - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: "us-east-1"
+              APPLICATION_NAME: "VEVA Sound Staging"
+              ENVIRONMENT_NAME: "VevaSound-Workers-staging-1"
+              ZIP_FILE: "application.zip"
+              S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
+              COMMAND: "all"
+              VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
 
 definitions:
   caches:
