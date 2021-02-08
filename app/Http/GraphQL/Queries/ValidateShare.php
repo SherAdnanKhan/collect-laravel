@@ -59,7 +59,7 @@ class ValidateShare
 
         if (isset($share->expires_at)) {
             $url = Storage::disk('s3')->temporaryUrl(
-                substr($share->path, 1), $share->expires_at
+                substr($share->path, 1), 7
             );
         } else {
             $url = Storage::disk('s3')->url(substr($share->path, 1));
