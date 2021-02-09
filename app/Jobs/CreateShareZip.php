@@ -76,7 +76,7 @@ class CreateShareZip implements ShouldQueue
                 ShareUser::create([
                     'share_id' => $share->id,
                     'email' => $email,
-                    'encrypted_email' => bcrypt($email)
+                    'encrypted_email' => bin2hex($email)
                 ]);
             }
 
