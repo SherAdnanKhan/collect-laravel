@@ -37,7 +37,7 @@ class ShareZipCreated extends Mailable
     public function build()
     {
         $url = config('app.frontend_url') . '/download/' . $this->share->id . '/u/' . $this->user->encrypted_email;
-        $subject = $this->user->email . ' has sent you files via VEVA Collect';
+        $subject = $this->share->user->name . ' has sent you files via VEVA Collect';
 
         return $this->view('emails.users.share-zip-created')
             ->from(config('mail.from.address'), config('mail.from.name'))
