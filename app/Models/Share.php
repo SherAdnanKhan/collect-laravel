@@ -88,4 +88,9 @@ class Share extends Model implements UserAccessible
     {
         return $this->status !== self::STATUS_LIVE;
     }
+
+    public function getIsPasswordRequiredAttribute()
+    {
+        return isset($this->password);
+    }
 }

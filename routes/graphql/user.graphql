@@ -211,6 +211,7 @@ type Share {
  	files: [ShareFile] @hasMany
  	size: Int
  	downloadCount: Int @rename(attribute: "download_count")
+	isPasswordRequired: Boolean @rename(attribute: "is_password_required")
  	expiresAt: String @rename(attribute: "expires_at")
  	createdAt: String! @rename(attribute: "created_at")
  	updatedAt: String @rename(attribute: "updated_at")
