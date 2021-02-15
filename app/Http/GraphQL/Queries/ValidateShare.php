@@ -42,6 +42,12 @@ class ValidateShare
 
         if (isset($share->password)) {
             $password = $args['input']['password'];
+            if (!$password) {
+                return [
+                    'success' => false,
+                    'errors' => [ 'isSharePasswordRequired' => true ]
+                ];
+            }
             if (!Hash::check($password, $share->password)) {
                 return [
                     'success' => false,
