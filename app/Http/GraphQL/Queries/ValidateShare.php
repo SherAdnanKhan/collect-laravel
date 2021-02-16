@@ -24,22 +24,34 @@ class ValidateShare
     {
         $uuid = $args['input']['uuid'];
         $encEmail = $args['input']['encryptedEmail'];
-
         $share = Share::find($uuid);
 
-        if (!$share || $share->hasExpired() || !$share->complete) {
+        if (!$share || !$share->complete) {
             return [
-                'message' => 'failure',
-                'expired' => true
+                'success' => false,
+                'errors' => [ 'isShareInvalid' => true ]
+            ];
+        }
+
+        if ($share->hasExpired()) {
+            return [
+                'success' => false,
+                'errors' => [ 'isShareExpired' => true ]
             ];
         }
 
         if (isset($share->password)) {
             $password = $args['input']['password'];
+            if (!$password) {
+                return [
+                    'success' => false,
+                    'errors' => [ 'isSharePasswordRequired' => true ]
+                ];
+            }
             if (!Hash::check($password, $share->password)) {
                 return [
-                    'message' => 'Invalid Password!',
-                    'expired' => true
+                    'success' => false,
+                    'errors' => [ 'isSharePasswordInvalid' => true ]
                 ];
             }
         }
@@ -48,8 +60,8 @@ class ValidateShare
 
         if (!$shareUser) {
             return [
-                'message' => 'Invalid Reference!',
-                'expired' => true
+                'success' => false,
+                'errors' => [ 'isShareUserInvalid' => true ]
             ];
         }
 
@@ -67,8 +79,7 @@ class ValidateShare
         }
 
         return [
-            'message' => 'success',
-            'expired' => false,
+            'success' => true,
             'url' => $url
         ];
     }
