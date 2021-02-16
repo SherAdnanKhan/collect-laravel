@@ -36,7 +36,7 @@ class ValidateShare
         if ($share->hasExpired()) {
             return [
                 'success' => false,
-                'errors' => [ 'isShareExpired' => true ]
+                'errors' => [ 'isExpired' => true ]
             ];
         }
 
@@ -51,7 +51,7 @@ class ValidateShare
             if (!Hash::check($password, $share->password)) {
                 return [
                     'success' => false,
-                    'errors' => [ 'isSharePasswordInvalid' => true ]
+                    'errors' => [ 'isPasswordInvalid' => true ]
                 ];
             }
         }
@@ -61,7 +61,7 @@ class ValidateShare
         if (!$shareUser) {
             return [
                 'success' => false,
-                'errors' => [ 'isShareUserInvalid' => true ]
+                'errors' => [ 'isUserInvalid' => true ]
             ];
         }
 
