@@ -90,7 +90,7 @@ input DownloadFilesInput {
 input ShareFilesInput {
     files: [ShareFileInput]!
     users: [ShareUserInput]!
-    message: String @rules(apply: ["max:255"])
+    message: String @rules(apply: ["max:10000"])
     expiry: String @rules(apply: ["date"])
     password: String @rules(apply: ["max:255"])
 }
