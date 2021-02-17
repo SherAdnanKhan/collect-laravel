@@ -90,9 +90,17 @@ type ValidateDownloadPayload {
 }
 
 type ValidateShare {
-  message: String,
-  expired: Boolean!
+  message: String
+  errors: [ValidateShareError]
   url: String
+}
+
+type ValidateShareError {
+  isShareInvalid: Boolean
+  isExpired: Boolean
+  isSharePasswordRequired: Boolean
+  isPasswordInvalid: Boolean
+  isUserInvalid: Boolean
 }
 
 type ExpireSharePayload {
