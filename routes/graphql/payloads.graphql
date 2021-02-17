@@ -90,8 +90,8 @@ type ValidateDownloadPayload {
 }
 
 type ValidateShare {
-  message: String
-  errors: [ValidateShareError]
+  success: Boolean
+  errors: ValidateShareError
   url: String
 }
 
