@@ -25,43 +25,56 @@ class ValidateShare
         $uuid = $args['input']['uuid'];
         $encEmail = $args['input']['encryptedEmail'];
         $share = Share::find($uuid);
+        $success = true;
+        $isPasswordRequired = false;
+        $errors = [
+            'isShareInvalid' => false,
+            'isExpired' => false,
+            'isSharePasswordRequired' => false,
+            'isPasswordInvalid' => false,
+            'isUserInvalid' => false,
+        ];
 
         if (!$share || !$share->complete) {
+            $success = false;
+            $errors['isShareInvalid'] = true;
             return [
                 'success' => false,
-                'errors' => [ 'isShareInvalid' => true ]
+                'errors' => $errors,
+                'isPasswordRequired' => $isPasswordRequired
             ];
         }
 
         if ($share->hasExpired()) {
-            return [
-                'success' => false,
-                'errors' => [ 'isExpired' => true ]
-            ];
+            $success = false;
+            $errors['isExpired'] = true;
         }
 
         if (isset($share->password)) {
+            $isPasswordRequired = true;
             $password = $args['input']['password'];
             if (!$password) {
-                return [
-                    'success' => false,
-                    'errors' => [ 'isSharePasswordRequired' => true ]
-                ];
+                $success = false;
+                $errors['isPasswordInvalid'] = true;
             }
             if (!Hash::check($password, $share->password)) {
-                return [
-                    'success' => false,
-                    'errors' => [ 'isPasswordInvalid' => true ]
-                ];
+                $success = false;
+                $errors['isPasswordInvalid'] = true;
             }
         }
 
         $shareUser = ShareUser::where(['encrypted_email' => $encEmail, 'share_id' => $share->id])->first();
 
         if (!$shareUser) {
+            $success = false;
+            $errors['isUserInvalid'] = true;
+        }
+
+        if (!$success) {
             return [
                 'success' => false,
-                'errors' => [ 'isUserInvalid' => true ]
+                'errors' => $errors,
+                'isPasswordRequired' => $isPasswordRequired
             ];
         }
 
@@ -80,7 +93,8 @@ class ValidateShare
 
         return [
             'success' => true,
-            'url' => $url
+            'url' => $url,
+            'isPasswordRequired' => $isPasswordRequired
         ];
     }
 }
