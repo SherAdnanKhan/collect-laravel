@@ -26,6 +26,7 @@ class ValidateShare
         $encEmail = $args['input']['encryptedEmail'];
         $share = Share::find($uuid);
         $success = true;
+        $isPasswordRequired = false;
         $errors = [
             'isShareInvalid' => false,
             'isExpired' => false,
@@ -39,7 +40,8 @@ class ValidateShare
             $errors['isShareInvalid'] = true;
             return [
                 'success' => false,
-                'errors' => $errors
+                'errors' => $errors,
+                'isPasswordRequired' => $isPasswordRequired
             ];
         }
 
@@ -49,10 +51,11 @@ class ValidateShare
         }
 
         if (isset($share->password)) {
+            $isPasswordRequired = true;
             $password = $args['input']['password'];
             if (!$password) {
                 $success = false;
-                $errors['isSharePasswordRequired'] = true;
+                $errors['isPasswordInvalid'] = true;
             }
             if (!Hash::check($password, $share->password)) {
                 $success = false;
@@ -70,7 +73,8 @@ class ValidateShare
         if (!$success) {
             return [
                 'success' => false,
-                'errors' => $errors
+                'errors' => $errors,
+                'isPasswordRequired' => $isPasswordRequired
             ];
         }
 
@@ -89,7 +93,8 @@ class ValidateShare
 
         return [
             'success' => true,
-            'url' => $url
+            'url' => $url,
+            'isPasswordRequired' => $isPasswordRequired
         ];
     }
 }

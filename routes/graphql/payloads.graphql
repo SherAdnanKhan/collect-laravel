@@ -90,6 +90,7 @@ type ValidateDownloadPayload {
 }
 
 type ValidateShare {
+  isPasswordRequired: Boolean
   success: Boolean
   errors: ValidateShareError
   url: String
@@ -98,7 +99,6 @@ type ValidateShare {
 type ValidateShareError {
   isShareInvalid: Boolean
   isExpired: Boolean
-  isSharePasswordRequired: Boolean
   isPasswordInvalid: Boolean
   isUserInvalid: Boolean
 }
