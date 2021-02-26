@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations;
 
 use App\Models\Share;
+use Carbon\Carbon;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -31,6 +32,7 @@ class ExpireShare
         }
 
         $share->status = Share::STATUS_CANCELLED;
+        $share->expires_at = Carbon::today();
         $saved = $share->save();
 
         if (!$saved) {
