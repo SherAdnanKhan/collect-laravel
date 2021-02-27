@@ -25,59 +25,64 @@ class ValidateShare
         $uuid = $args['input']['uuid'];
         $encEmail = $args['input']['encryptedEmail'];
         $share = Share::find($uuid);
-        $success = true;
-        $isPasswordRequired = false;
-        $errors = [
-            'isShareInvalid' => false,
-            'isExpired' => false,
-            'isSharePasswordRequired' => false,
-            'isPasswordInvalid' => false,
-            'isUserInvalid' => false,
+        $response = [
+            'isPasswordRequired' => false,
+            'success' => true,
+            'errors' => [
+                'isShareInvalid' => false,
+                'isExpired' => false,
+                'isSharePasswordRequired' => false,
+                'isPasswordInvalid' => false,
+                'isUserInvalid' => false,
+            ],
+            'url' => '',
         ];
 
+        // Does this share exist yet?
         if (!$share || !$share->complete) {
-            $success = false;
-            $errors['isShareInvalid'] = true;
-            return [
-                'success' => false,
-                'errors' => $errors,
-                'isPasswordRequired' => $isPasswordRequired
-            ];
+            $response['success'] = false;
+            $response['errors']['isShareInvalid'] = true;
+            return $response;
         }
 
+        // Has this share expired?
         if ($share->hasExpired()) {
-            $success = false;
-            $errors['isExpired'] = true;
+            $response['success'] = false;
+            $response['errors']['isExpired'] = true;
         }
 
+        // Handle password, if necessary
         if (isset($share->password)) {
-            $isPasswordRequired = true;
+            $response['isPasswordRequired'] = true;
             $password = $args['input']['password'];
             if (!$password) {
-                $success = false;
-                $errors['isPasswordInvalid'] = true;
+                $response['success'] = false;
+                $response['errors']['isPasswordInvalid'] = true;
             }
             if (!Hash::check($password, $share->password)) {
-                $success = false;
-                $errors['isPasswordInvalid'] = true;
+                $response['success'] = false;
+                $response['errors']['isPasswordInvalid'] = true;
             }
         }
 
-        $shareUser = ShareUser::where(['encrypted_email' => $encEmail, 'share_id' => $share->id])->first();
+        // Is this user allowed access to this share?
+        $shareUser = ShareUser::where([
+            'encrypted_email' => $encEmail,
+            'share_id' => $share->id
+        ])->first();
 
+        // This user is not allowed access to this share.
         if (!$shareUser) {
-            $success = false;
-            $errors['isUserInvalid'] = true;
+            $response['success'] = false;
+            $response['errors']['isUserInvalid'] = true;
         }
 
-        if (!$success) {
-            return [
-                'success' => false,
-                'errors' => $errors,
-                'isPasswordRequired' => $isPasswordRequired
-            ];
+        // Return if anything above has hindered success.
+        if (!$response['success']) {
+            return $response;
         }
 
+        // Proceed with collecting share
         $shareUser->downloads()->create();
 
         $share->download_count = $share->download_count + 1;
@@ -91,10 +96,8 @@ class ValidateShare
             $url = Storage::disk('s3')->url(substr($share->path, 1));
         }
 
-        return [
-            'success' => true,
-            'url' => $url,
-            'isPasswordRequired' => $isPasswordRequired
-        ];
+        // Respond with full success
+        $response['url'] = $url;
+        return $response;
     }
 }
