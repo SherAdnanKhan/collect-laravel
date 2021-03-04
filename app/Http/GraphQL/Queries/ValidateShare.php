@@ -31,6 +31,7 @@ class ValidateShare
             'errors' => [
                 'isShareInvalid' => false,
                 'isExpired' => false,
+                'isSharePasswordRequired' => false,
                 'isPasswordInvalid' => false,
                 'isUserInvalid' => false,
             ],
@@ -39,11 +40,9 @@ class ValidateShare
 
         // Does this share exist yet?
         if (!$share || !$share->complete) {
-            $errors['isShareInvalid'] = true;
-            return [
-                'success' => false,
-                'errors' => $errors
-            ];
+            $response['success'] = false;
+            $response['errors']['isShareInvalid'] = true;
+            return $response;
         }
 
         // Has this share expired?
