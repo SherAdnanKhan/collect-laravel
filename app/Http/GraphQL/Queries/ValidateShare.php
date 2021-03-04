@@ -25,15 +25,19 @@ class ValidateShare
         $uuid = $args['input']['uuid'];
         $encEmail = $args['input']['encryptedEmail'];
         $share = Share::find($uuid);
-        $success = true;
-        $errors = [
-            'isShareInvalid' => false,
-            'isExpired' => false,
-            'isSharePasswordRequired' => false,
-            'isPasswordInvalid' => false,
-            'isUserInvalid' => false,
+        $response = [
+            'isPasswordRequired' => false,
+            'success' => true,
+            'errors' => [
+                'isShareInvalid' => false,
+                'isExpired' => false,
+                'isPasswordInvalid' => false,
+                'isUserInvalid' => false,
+            ],
+            'url' => '',
         ];
 
+        // Does this share exist yet?
         if (!$share || !$share->complete) {
             $errors['isShareInvalid'] = true;
             return [
@@ -42,37 +46,44 @@ class ValidateShare
             ];
         }
 
+        // Has this share expired?
         if ($share->hasExpired()) {
-            $success = false;
-            $errors['isExpired'] = true;
+            $response['success'] = false;
+            $response['errors']['isExpired'] = true;
         }
 
+        // Handle password, if necessary
         if (isset($share->password)) {
+            $response['isPasswordRequired'] = true;
             $password = $args['input']['password'];
             if (!$password) {
-                $success = false;
-                $errors['isSharePasswordRequired'] = true;
+                $response['success'] = false;
+                $response['errors']['isPasswordInvalid'] = true;
             }
             if (!Hash::check($password, $share->password)) {
-                $success = false;
-                $errors['isPasswordInvalid'] = true;
+                $response['success'] = false;
+                $response['errors']['isPasswordInvalid'] = true;
             }
         }
 
-        $shareUser = ShareUser::where(['encrypted_email' => $encEmail, 'share_id' => $share->id])->first();
+        // Is this user allowed access to this share?
+        $shareUser = ShareUser::where([
+            'encrypted_email' => $encEmail,
+            'share_id' => $share->id
+        ])->first();
 
+        // This user is not allowed access to this share.
         if (!$shareUser) {
-            $success = false;
-            $errors['isUserInvalid'] = true;
+            $response['success'] = false;
+            $response['errors']['isUserInvalid'] = true;
         }
 
-        if (!$success) {
-            return [
-                'success' => false,
-                'errors' => $errors
-            ];
+        // Return if anything above has hindered success.
+        if (!$response['success']) {
+            return $response;
         }
 
+        // Proceed with collecting share
         $shareUser->downloads()->create();
 
         $share->download_count = $share->download_count + 1;
@@ -82,9 +93,8 @@ class ValidateShare
             substr($share->path, 1), Carbon::now()->addDay()
         );
 
-        return [
-            'success' => true,
-            'url' => $url
-        ];
+        // Respond with full success
+        $response['url'] = $url;
+        return $response;
     }
 }

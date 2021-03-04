@@ -44,8 +44,9 @@ package: &package
 
 deploy-to-staging: &deploy-to-staging
   step:
-    name: "Deploy to Staging"
+    name: "Deploy to Staging Laravel Server"
     deployment: staging
+    trigger: manual
     script:
     - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
       variables:
@@ -56,7 +57,7 @@ deploy-to-staging: &deploy-to-staging
         ENVIRONMENT_NAME: "VevaSound-staging-1"
         ZIP_FILE: "application.zip"
         S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
-        COMMAND: "upload-only"
+        COMMAND: "all"
         VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
 
 definitions:
