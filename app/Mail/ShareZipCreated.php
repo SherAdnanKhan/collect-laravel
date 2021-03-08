@@ -45,7 +45,7 @@ class ShareZipCreated extends Mailable
             ->with([
                 'zipUrl' => $url,
                 'mailMessage' => $this->share->message,
-                'expiry' => Carbon::parse($this->share->expires_at)->format('Y-m-d')
+                'expiry' => isset($this->share->expires_at) ? Carbon::parse($this->share->expires_at)->format('Y-m-d') : null
             ]);
     }
 }

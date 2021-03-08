@@ -88,13 +88,9 @@ class ValidateShare
         $share->download_count = $share->download_count + 1;
         $share->save();
 
-        if (isset($share->expires_at)) {
-            $url = Storage::disk('s3')->temporaryUrl(
-                substr($share->path, 1), Carbon::now()->addDay()
-            );
-        } else {
-            $url = Storage::disk('s3')->url(substr($share->path, 1));
-        }
+        $url = Storage::disk('s3')->temporaryUrl(
+            substr($share->path, 1), Carbon::now()->addDay()
+        );
 
         // Respond with full success
         $response['url'] = $url;
