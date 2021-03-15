@@ -24,6 +24,7 @@ class UpdateShare
         $input = array_get($args, 'input');
         $response = [
             'success' => true,
+            'data' => null,
             'errors' => [
                 'isShareInvalid' => false,
                 'isExpiryInvalid' => false,
@@ -37,10 +38,12 @@ class UpdateShare
             ->first();
 
         if (!$share) {
+            $response['success'] = false;
             $response['errors']['isShareInvalid'] = true;
         }
 
         if (isset($input['expiry']) && !$this->isValidExpiry($input['expiry'])) {
+            $response['success'] = false;
             $response['errors']['isExpiryInvalid'] = true;
         }
 
@@ -57,10 +60,13 @@ class UpdateShare
         $saved = $share->save();
 
         if (!$saved) {
+            $response['success'] = false;
             $response['errors']['isErrorUpdatingShare'] = true;
+        } else {
+            $response['data'] = $share;
         }
 
-        return $share;
+        return $response;
     }
 
     private function isValidExpiry($expiry)
