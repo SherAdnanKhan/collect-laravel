@@ -421,7 +421,7 @@ extend type Mutation @group(middleware: ["auth:api"]) {
   # Share Mutations
   shareFiles(input: ShareFilesInput!): ShareFilesPayload
   @field(resolver: "App\\Http\\GraphQL\\Mutations\\ShareFiles@resolve")
-  updateShare(input: UpdateShareInput!): Share
+  updateShare(input: UpdateShareInput!): UpdateSharePayload
   @field(resolver: "App\\Http\\GraphQL\\Mutations\\UpdateShare@resolve")
   expireShare(input: ExpireShareInput!): ExpireSharePayload
   @field(resolver: "App\\Http\\GraphQL\\Mutations\\ExpireShare@resolve")

@@ -18,10 +18,10 @@
             <br />
           @endif
           Your have received share link. Please click the button below to continue.<br />
-          @if ($expiry)
+          @isset ($expiry)
             <br />
             <strong>This link is only valid till {{ $expiry }}.</strong>
-          @endif
+          @endisset
         </mj-text>
 
         <mj-button font-family="Poppins, Helvetica, Arial" font-size="14px" font-weight="700" background-color="#000000" color="white" border-radius="4px" href="{{ $zipUrl }}">

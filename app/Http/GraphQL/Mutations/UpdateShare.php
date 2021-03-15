@@ -22,6 +22,15 @@ class UpdateShare
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $input = array_get($args, 'input');
+        $response = [
+            'success' => true,
+            'data' => null,
+            'errors' => [
+                'isShareInvalid' => false,
+                'isExpiryInvalid' => false,
+                'isErrorUpdatingShare' => false,
+            ]
+        ];
 
         $share = Share::where('id', array_get($input, 'uuid'))
             ->with('user', 'project')
@@ -29,13 +38,13 @@ class UpdateShare
             ->first();
 
         if (!$share) {
-            throw new AuthorizationException('Unable to find share to update');
+            $response['success'] = false;
+            $response['errors']['isShareInvalid'] = true;
         }
 
         if (isset($input['expiry']) && !$this->isValidExpiry($input['expiry'])) {
-            return [
-                'success' => false
-            ];
+            $response['success'] = false;
+            $response['errors']['isExpiryInvalid'] = true;
         }
 
         $password = isset($input['password']) ? $input['password'] : null;
@@ -51,10 +60,13 @@ class UpdateShare
         $saved = $share->save();
 
         if (!$saved) {
-            throw new GenericException('Error updating share');
+            $response['success'] = false;
+            $response['errors']['isErrorUpdatingShare'] = true;
+        } else {
+            $response['data'] = $share;
         }
 
-        return $share;
+        return $response;
     }
 
     private function isValidExpiry($expiry)

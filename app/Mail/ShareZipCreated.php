@@ -38,14 +38,19 @@ class ShareZipCreated extends Mailable
     {
         $url = config('app.frontend_url') . '/download/' . $this->share->id . '/u/' . $this->user->encrypted_email;
         $subject = $this->share->user->name . ' has sent you files via VEVA Collect';
+        $data = [
+            'zipUrl' => $url,
+            'mailMessage' => $this->share->message,
+            'expiry' => null
+        ];
+
+        if (isset($this->share->expires_at)) {
+            $data['expiry'] = Carbon::parse($this->share->expires_at)->format('Y-m-d');
+        }
 
         return $this->view('emails.users.share-zip-created')
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject($subject)
-            ->with([
-                'zipUrl' => $url,
-                'mailMessage' => $this->share->message,
-                'expiry' => isset($this->share->expires_at) ? Carbon::parse($this->share->expires_at)->format('Y-m-d') : null
-            ]);
+            ->with($data);
     }
 }
