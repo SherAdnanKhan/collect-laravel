@@ -29,6 +29,12 @@ type ShareFilesPayload {
   url: String
 }
 
+type UpdateSharePayload {
+  success: Boolean!
+  data: Share
+  errors: UpdateShareError
+}
+
 type GetFilePreviewPayload {
   name: String!
   type: String!
@@ -101,6 +107,12 @@ type ValidateShareError {
   isExpired: Boolean
   isPasswordInvalid: Boolean
   isUserInvalid: Boolean
+}
+
+type UpdateShareError {
+  isShareInvalid: Boolean
+  isExpiryInvalid: Boolean
+  isErrorUpdatingShare: Boolean
 }
 
 type ExpireSharePayload {
