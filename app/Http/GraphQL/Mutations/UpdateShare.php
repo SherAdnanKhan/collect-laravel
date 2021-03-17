@@ -40,11 +40,13 @@ class UpdateShare
         if (!$share) {
             $response['success'] = false;
             $response['errors']['isShareInvalid'] = true;
+            return $response;
         }
 
         if (isset($input['expiry']) && !$this->isValidExpiry($input['expiry'])) {
             $response['success'] = false;
             $response['errors']['isExpiryInvalid'] = true;
+            return $response;
         }
 
         $password = isset($input['password']) ? $input['password'] : null;
