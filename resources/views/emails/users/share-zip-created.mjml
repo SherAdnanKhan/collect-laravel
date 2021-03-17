@@ -12,10 +12,9 @@
         <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
           @if ($mailMessage)
             {{ $mailMessage }}
-            <br />
-            <br />
           @endif
           @isset ($expiry)
+            <br />
             <br />
             <strong>This link expires on {{ $expiry }}.</strong>
           @endisset
@@ -27,10 +26,7 @@
 
         <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
           <br/>
-          Check out how VEVA Collect could help your workflow at <a href="https://vevacollect.com" style="color: #000000">vevacollect.com</a> or give us a shout at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.<br/>
-          <br/>
-          Collect while you Create,<br />
-          VEVA Collect
+          Check out how VEVA Collect could help your workflow at <a href="https://vevacollect.com" style="color: #000000">vevacollect.com</a> or give us a shout at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.
         </mj-text>
       </mj-column>
     </mj-section>
