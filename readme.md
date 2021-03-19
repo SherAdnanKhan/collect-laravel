@@ -42,6 +42,23 @@ Use the Laradock Workspace by running `make workspace` and then you can run `php
 
 See the [Laravel documentation](https://laravel.com/docs/5.7) for more information on Migrations and Seeding 
 
+#### Creating Indexes in ElasticSearch
+
+In order for the search indexing to work you need to create the indexes in Elastic Search, to do this you need to have access to the workspace via:
+```
+make workspace
+```
+
+and then you need to run the following:
+
+```
+php artisan elastic:create-index "\App\ElasticSearch\FilesIndexConfigurator"
+php artisan elastic:create-index "\App\ElasticSearch\ProjectsIndexConfigurator"
+php artisan elastic:create-index "\App\ElasticSearch\RecordingsIndexConfigurator"
+php artisan elastic:create-index "\App\ElasticSearch\SessionsIndexConfigurator"
+php artisan elastic:create-index "\App\ElasticSearch\SongsIndexConfigurator"
+```
+
 ### Laravel Nova
 #### Setup a user
 Use the Laradock Workspace by running `make workspace` and then inside of that bash terminal, run `php artisan nova:user` and interactively create yourself an admin user. You will then be able to login to the Nova admin panel at http://veva.local/admin (assuming veva.local is the domain you use for local development)
