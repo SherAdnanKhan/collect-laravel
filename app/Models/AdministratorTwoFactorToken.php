@@ -16,7 +16,7 @@ class AdministratorTwoFactorToken extends Model
         'administrator_id', 'token', 'expires_at'
     ];
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     /**
      * Get the owning administrator of this model.
