@@ -45,7 +45,7 @@ class ShareZipCreated extends Mailable
         ];
 
         if (isset($this->share->expires_at)) {
-            $data['expiry'] = Carbon::parse($this->share->expires_at)->format('Y-m-d');
+            $data['expiry'] = Carbon::parse($this->share->expires_at)->format('MMMM DD, YYYY');
         }
 
         return $this->view('emails.users.share-zip-created')
