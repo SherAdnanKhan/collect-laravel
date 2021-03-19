@@ -30,10 +30,6 @@ class Update
             throw new AuthorizationException('Unable to find party to update');
         }
 
-        if ($party->isni && empty($input['isni'])) {
-            unset($input['isni']);
-        }
-
         $saved = $party->fill($input)->save();
 
         if (!$saved) {
