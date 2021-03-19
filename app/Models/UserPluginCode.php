@@ -17,7 +17,7 @@ class UserPluginCode extends Model
         'user_id', 'session_id', 'type', 'code', 'expires_at'
     ];
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     /**
      * Get the owning user of this model.
