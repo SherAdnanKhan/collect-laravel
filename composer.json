@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "askedio/laravel-soft-cascade": "5.7",
         "aws/aws-sdk-php": "^3.87",
         "babenkoivan/scout-elasticsearch-driver": "^4.0.3",
@@ -37,7 +37,7 @@
         "symfony/console": "4.*",
         "themsaid/nova-cashier-manager": "dev-master#4594c56dd1690c9b45f784809f3246d90cf52015",
         "titasgailius/search-relations": "^1.0",
-        "tymon/jwt-auth": "1.0.0-rc.3"
+        "tymon/jwt-auth": "1.0.2"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
