@@ -49,16 +49,15 @@ class UpdateShare
             return $response;
         }
 
-        $password = isset($input['password']) ? $input['password'] : null;
-        $expiry = null;
-
         if (isset($input['expiry'])) {
-            $expiry = $input['expiry'];
             $share->status = Share::STATUS_LIVE;
+            $share->expires_at = $input['expiry'];
         }
 
-        $share->password = (!empty($password)) ? bcrypt($password) : null;
-        $share->expires_at = $expiry;
+        if (isset($input['password'])) {
+            $share->password = (!empty($input['password'])) ? bcrypt($input['password']) : null;
+        }
+
         $saved = $share->save();
 
         if (!$saved) {
