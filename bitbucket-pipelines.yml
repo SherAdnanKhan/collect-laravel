@@ -27,8 +27,9 @@ package: &package
 
 deploy-to-production: &deploy-to-production
   step:
-    name: "Deploy to Production"
+    name: "Deploy to Production Laravel Server"
     deployment: production
+    trigger: manual
     script:
     - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
       variables:
@@ -42,13 +43,38 @@ deploy-to-production: &deploy-to-production
         COMMAND: "upload-only"
         VERSION_LABEL: "production-$BITBUCKET_BUILD_NUMBER"
 
+deploy-to-staging: &deploy-to-staging
+  step:
+    name: "Deploy to Staging Laravel Server"
+    deployment: staging
+    trigger: manual
+    script:
+    - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
+      variables:
+        AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+        AWS_DEFAULT_REGION: "us-east-1"
+        APPLICATION_NAME: "VEVA Sound Staging"
+        ENVIRONMENT_NAME: "VevaSound-staging-1"
+        ZIP_FILE: "application.zip"
+        S3_BUCKET: "veva-pipeline-elasticbeanstalk-deployment-staging"
+        COMMAND: "all"
+        VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
+
 definitions:
   caches:
     yarncustom: ./node_modules
 
 pipelines:
+  pull-requests:
+    '**':
+    - <<: *build-assets
   branches:
-    master:
+    production:
     - <<: *build-assets
     - <<: *package
     - <<: *deploy-to-production
+    staging:
+    - <<: *build-assets
+    - <<: *package
+    - <<: *deploy-to-staging
