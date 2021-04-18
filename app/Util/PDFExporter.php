@@ -56,7 +56,10 @@ class PDFExporter
 
         return $snappy->loadView('pdfs.export', $this->getViewData())
             ->setPaper('a4')
-            ->setOption('margin-bottom', 0)
+            ->setOption('margin-bottom', '25mm')
+            ->setOption('margin-left', '25mm')
+            ->setOption('margin-right', '25mm')
+            ->setOption('margin-top', '25mm')
             ->setOption('footer-right', 'Page [page] of [toPage]');
     }
 
