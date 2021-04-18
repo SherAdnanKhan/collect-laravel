@@ -1,0 +1,34 @@
+<mjml>
+   <mj-head>
+     <mj-font name="Poppins" href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900" />
+   </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" src="{{ asset('images/email-logo.png') }}"></mj-image>
+
+        <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
+          @if ($mailMessage)
+            {{ $mailMessage }}
+          @endif
+          @isset ($expiry)
+            <br />
+            <br />
+            <strong>This link expires on {{ $expiry }}.</strong>
+          @endisset
+        </mj-text>
+
+        <mj-button font-family="Poppins, Helvetica, Arial" font-size="14px" font-weight="700" background-color="#000000" color="white" border-radius="4px" href="{{ $zipUrl }}">
+          Download Files
+        </mj-button>
+
+        <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
+          <br/>
+          Check out how VEVA Collect could help your workflow at <a href="https://vevacollect.com" style="color: #000000">vevacollect.com</a> or give us a shout at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

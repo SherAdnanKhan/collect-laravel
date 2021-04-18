@@ -35,6 +35,14 @@ class Kernel extends ConsoleKernel
         $schedule->job(new \App\Jobs\CheckUserTotalStorageUsed)
                  ->daily()
                  ->onOneServer();
+
+        $schedule->job(new \App\Jobs\Emails\SendShareSummaryEmail)
+                 ->dailyAt('02:00')
+                 ->onOneServer();
+
+        $schedule->job(new \App\Jobs\RefreshExpiredShareAWSUrls)
+                 ->daily()
+                 ->onOneServer();
     }
 
     /**

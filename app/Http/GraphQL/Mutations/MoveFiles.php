@@ -38,6 +38,11 @@ class MoveFiles
             if (!$newFolder) {
                 throw new ValidationException('Cannot move into this folder');
             }
+
+            $newFolderPath = array_map(function($path) {
+                return $path['id'];
+            }, $newFolder->path);
+            $newFolderPath[] = $newFolderId;
         }
 
         $filesToMove = [];
@@ -60,16 +65,8 @@ class MoveFiles
                     break;
                 }
 
-                if ($newFolder) {
-                    $path = $folder->path;
-                    $path[] = [
-                        'id' => $newFolderId
-                    ];
-                    foreach ($path as $p) {
-                        if ($p['id'] == $newFolderId) {
-                            throw new ValidationException('You cannot move folders into themselves');
-                        }
-                    }
+                if ($newFolder && in_array($folder->id, $newFolderPath) === true) {
+                    throw new ValidationException('You cannot move folders into themselves');
                 }
 
                 $foldersToMove[] = $folder;
