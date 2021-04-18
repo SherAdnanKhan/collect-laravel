@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LARADOCK_VERSION="v10.0"
+LARADOCK_VERSION="v11.0"
 
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"

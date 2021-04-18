@@ -8,15 +8,15 @@ showdir:
 .PHONY: showdir
 
 up:
-	cd ${LARADOCK_PATH}; docker-compose up workspace mysql redis apache2 php-fpm mailhog
+	cd ${LARADOCK_PATH}; docker-compose up workspace mysql redis apache2 php-fpm mailhog elasticsearch
 .PHONY: up
 
 up-d:
-	cd ${LARADOCK_PATH}; docker-compose up -d workspace mysql redis apache2 php-fpm mailhog
+	cd ${LARADOCK_PATH}; docker-compose up -d workspace mysql redis apache2 php-fpm mailhog elasticsearch
 .PHONY: up-d
 
 rebuild:
-	cd ${LARADOCK_PATH}; docker-compose build --no-cache workspace mysql redis apache2 php-fpm mailhog; docker-compose up -d mysql redis apache2 php-fpm mailhog;
+	cd ${LARADOCK_PATH}; docker-compose build --no-cache workspace mysql redis apache2 php-fpm mailhog elasticsearch; docker-compose up -d mysql redis apache2 php-fpm mailhog elasticsearch;
 .PHONY: rebuild
 
 stop:
