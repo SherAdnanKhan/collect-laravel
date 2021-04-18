@@ -129,6 +129,7 @@ type Song implements Favoured & Creditable {
 	id: ID!
 	user: User! @belongsTo
 	userId: String! @rename(attribute: "user_id")
+	folderId: ID @rename(attribute: "folder_id")
 	type: SongType! @belongsTo
 	typeUserDefinedValue: String @rename(attribute: "song_type_user_defined_value")
 	title: String!
