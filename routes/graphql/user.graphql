@@ -7,6 +7,7 @@
 	email: String!
 	phone: String
 	status: String!
+	timezoneId: String! @rename(attribute: "timezone_id")
 	twoFactorEnabled: Boolean @rename(attribute: "two_factor_enabled")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
@@ -194,14 +195,20 @@ type Affiliation {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
- type UserAffiliation {
-	 id: ID!
-	 number: String!
-	 status: String!
-	 affiliation:  Affiliation
-	 createdAt: String! @rename(attribute: "created_at")
-	 updatedAt: String @rename(attribute: "updated_at")
- }
+type UserAffiliation {
+	id: ID!
+	number: String!
+	status: String!
+	affiliation:  Affiliation
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Timezone {
+	id: ID!
+	offset: String!
+	timezone: String!
+}
 
 type ShareUser {
 	id: ID!

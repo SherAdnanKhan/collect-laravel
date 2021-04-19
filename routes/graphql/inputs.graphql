@@ -43,6 +43,7 @@ input UpdateUserInput {
     last_name: String! @rules(apply: ["required", "min:1", "max:255"])
     email: String! @rules(apply: ["required", "email"])
     phone: String @rules(apply: ["phone:LENIENT"])
+    timezone_id: ID @rules(apply: ["required", "numeric", "exists:timezones,id"])
     two_factor_enabled: Boolean
     current_password: String @rules(apply: ["required_with:password,phone"])
     password: String @rules(apply: ["confirmed", "min:6"])
@@ -418,13 +419,13 @@ input CreateVenueInput {
     country: String!
 }
 
-input CreateAffilityInput {
+input CreateAffiliationInput {
     affiliation_id: ID! @rules(apply: ["required", "exists:affiliations,id", "unique:user_affiliations,affiliation_id"])
     number: String! @rules(apply: ["required", "max:50"])
     status: String @rules(apply: ["in:unverified,pending,verified"])
 }
 
-input DeleteAffilityInput {
+input DeleteAffiliationInput {
     id: ID!
 }
 
