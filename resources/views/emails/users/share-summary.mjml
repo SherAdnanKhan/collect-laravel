@@ -1,0 +1,56 @@
+<mjml>
+   <mj-head>
+     <mj-font name="Poppins" href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700,900" />
+   </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" src="{{ asset('images/email-logo.png') }}"></mj-image>
+
+        <mj-divider border-color="#ff9602" border-width="2px" padding-bottom="40px"></mj-divider>
+
+        <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px">
+          Hello {{ $share->user->name }},<br />
+        </mj-text>
+
+        <mj-text font-size="16px" align="center" padding-bottom="15px">
+          <strong>Summary of your share</strong>
+        </mj-text>
+
+        <mj-text>
+        	 URL : {{$url}}
+        </mj-text>
+
+        <mj-table>
+          <tr style="border-bottom:1px solid #ecedee;text-align:left;padding:15px 0;">
+            <th style="padding: 0 15px 0 0;">Email</th>
+            <th style="padding: 0 15px;">Download Count</th>
+            <th style="padding: 0 0 0 15px;">Last Downloaded At</th>
+          </tr>
+
+          @foreach($share->users as $user)
+          <tr>
+            <td style="padding: 0 15px 0 0;">{{$user->email}}</td>
+            <td style="padding: 0 15px;">{{$user->downloads()->count()}}</td>
+            <td style="padding: 0 0 0 15px;">{{($user->downloads()->latest()->first()->created_at) ?? ''}}</td>
+          </tr>
+          @endforeach
+
+          <tr style="background-color:#000000; color:#ffffff; font-weight:bold;">
+            <td style="padding: 0 15px 0 0;">Total</td>
+            <td style="padding: 0 15px;">{{$share->download_count}}</td>
+            <td style="padding: 0 0 0 15px;"></td>
+          </tr>
+        </mj-table>
+
+        <mj-text font-size="16px" color="#000000" font-family="Poppins, Helvetica, Arial" line-height="24px" padding-bottom="30px">
+          <br/>
+          Please contact us with any questions at <a href="mailto:hello@vevacollect.com" style="color: #000000">hello@vevacollect.com</a>.<br/>
+          <br/>
+          Collect while you Create,<br />
+          VEVA Collect
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

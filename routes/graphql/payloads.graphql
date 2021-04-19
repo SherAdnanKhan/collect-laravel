@@ -24,6 +24,17 @@ type DownloadFilesPayload {
   url: String
 }
 
+type ShareFilesPayload {
+  success: Boolean!
+  url: String
+}
+
+type UpdateSharePayload {
+  success: Boolean!
+  data: Share
+  errors: UpdateShareError
+}
+
 type GetFilePreviewPayload {
   name: String!
   type: String!
@@ -82,4 +93,32 @@ type GenerateSessionCodePayload {
 type ValidateDownloadPayload {
   expired: Boolean!
   url: String
+}
+
+type ValidateShare {
+  isPasswordRequired: Boolean
+  success: Boolean
+  errors: ValidateShareError
+  url: String
+}
+
+type ValidateShareError {
+  isShareInvalid: Boolean
+  isExpired: Boolean
+  isPasswordInvalid: Boolean
+  isUserInvalid: Boolean
+}
+
+type UpdateShareError {
+  isShareInvalid: Boolean
+  isExpiryInvalid: Boolean
+  isErrorUpdatingShare: Boolean
+}
+
+type ExpireSharePayload {
+  success: Boolean!
+}
+
+type UpdateShareExpiryPayload {
+  success: Boolean!
 }
