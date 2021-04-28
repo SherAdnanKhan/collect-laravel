@@ -24,11 +24,11 @@ class PPLController extends Controller
                         'token' => $token,
                         '_links' => [
                             'verify' => [
-                                'href' => sprintf('%s/api/integration/ppl/verify', env('APP_API_URL')),
+                                'href' => sprintf('%s/api/integration/ppl/verify', env('APP_URL')),
                                 'method' => 'POST'
                             ],
                             'cancel' => [
-                                'href' => env('APP_URL')
+                                'href' => env('FRONTEND_URL')
                             ],
                         ]
                     ]
@@ -58,7 +58,7 @@ class PPLController extends Controller
                     'resource' => [
                         '_links' => [
                             'callbackUrl' => [
-                                'href' => env('APP_URL')
+                                'href' => env('FRONTEND_URL')
                             ]
                         ]
                     ]
