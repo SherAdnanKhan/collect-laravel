@@ -16,7 +16,7 @@ class PPLController extends Controller
         $nonce = time();
         $token = Generator::makePPLJWTWithKey($nonce);
 
-        $responce = [
+        $response = [
             'success' => true,
             'response' => [
                 'veva_initiateIpnVerification' => [
@@ -36,7 +36,7 @@ class PPLController extends Controller
             ]
         ];
 
-        return response()->json($responce);
+        return response()->json($response);
     }
 
     /**
@@ -52,7 +52,7 @@ class PPLController extends Controller
             dd($IPN);
         }
 
-        $responce = [
+        $response = [
             'response' => [
                 'veva_finalizeIpnVerification' => [
                     'resource' => [
@@ -66,6 +66,6 @@ class PPLController extends Controller
             ]
         ];
 
-        return response()->json($responce);
+        return response()->json($response);
     }
 }
