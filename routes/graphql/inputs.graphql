@@ -434,6 +434,7 @@ input RegisterInput {
     first_name: String! @rules(apply: ["required", "min:1"])
     last_name: String! @rules(apply: ["required", "min:1"])
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    timezone_id: ID @rules(apply: ["numeric", "exists:timezones,id"])
     password: String! @rules(apply: ["required", "min:6", "confirmed"])
     password_confirmation: String! @rules(apply: ["required_with:password", "min:6"])
     plan: String! @rules(apply: ["required"])
