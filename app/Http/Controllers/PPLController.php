@@ -46,10 +46,10 @@ class PPLController extends Controller
     public function verify(Request $request)
     {
         $data = $request->get('data');
+        $IPN = 0;
 
         if ($data && !empty($data['IPN']) && !empty($data['IPN'][0]) && !empty($data['IPN'][0]['number'])) {
             $IPN = $data['IPN'][0]['number'];
-            dd($IPN);
         }
 
         $response = [
@@ -58,7 +58,7 @@ class PPLController extends Controller
                     'resource' => [
                         '_links' => [
                             'callbackUrl' => [
-                                'href' => env('FRONTEND_URL')
+                                'href' => sprintf('%s/?IPN=%s', trim(env('FRONTEND_URL'), '/'), $IPN)
                             ]
                         ]
                     ]
