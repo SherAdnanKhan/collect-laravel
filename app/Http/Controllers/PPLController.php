@@ -45,12 +45,14 @@ class PPLController extends Controller
      */
     public function verify(Request $request)
     {
-        $data = $request->get('data');
-        $IPN = 0;
+        $data = $request->all();
+//        $IPN = 0;
+//
+//        if ($data && !empty($data['IPN']) && !empty($data['IPN'][0]) && !empty($data['IPN'][0]['number'])) {
+//            $IPN = $data['IPN'][0]['number'];
+//        }
 
-        if ($data && !empty($data['IPN']) && !empty($data['IPN'][0]) && !empty($data['IPN'][0]['number'])) {
-            $IPN = $data['IPN'][0]['number'];
-        }
+        $IPN = json_encode($data);
 
         $response = [
             'response' => [
