@@ -45,14 +45,14 @@ class PPLController extends Controller
      */
     public function verify(Request $request)
     {
-        $data = $request->all();
+//        $data = $request->all();
 //        $IPN = 0;
 //
 //        if ($data && !empty($data['IPN']) && !empty($data['IPN'][0]) && !empty($data['IPN'][0]['number'])) {
 //            $IPN = $data['IPN'][0]['number'];
 //        }
-
-        $IPN = json_encode($data);
+        $IPN = json_encode($request->headers->all());
+        $jwt = $request->header('Authorization');
 
         $response = [
             'response' => [
@@ -60,7 +60,7 @@ class PPLController extends Controller
                     'resource' => [
                         '_links' => [
                             'callbackUrl' => [
-                                'href' => sprintf('%s/?IPN=%s', trim(env('FRONTEND_URL'), '/'), $IPN)
+                                'href' => sprintf('%s/?IPN=%s&jwt=%s', trim(env('FRONTEND_URL'), '/'), $IPN, $jwt)
                             ]
                         ]
                     ]
