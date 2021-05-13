@@ -33,4 +33,27 @@ class Generator
 
         return sprintf('%s.%s.%s', $base64UrlHeader, $base64UrlPayload, $base64UrlSignature);
     }
+
+    /**
+     * @param $token
+     * @param $key
+     * @return false|mixed
+     */
+    public static function getDataFromJWT($token, $key)
+    {
+        $tokenParts = explode(".", $token);
+
+        if (count($tokenParts) != 3) {
+            return false;
+        }
+
+        $tokenPayload = base64_decode($tokenParts[1]);
+        $jwtPayload = json_decode($tokenPayload, true);
+
+        if (!empty($jwtPayload[$key])) {
+            return $jwtPayload[$key];
+        }
+
+        return false;
+    }
 }

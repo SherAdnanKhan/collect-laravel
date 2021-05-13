@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Generator;
+use App\Models\TmpIntegration;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PPLController extends Controller
 {
@@ -13,7 +15,13 @@ class PPLController extends Controller
      */
     public function retrieveToken(Request $request)
     {
-        $nonce = time();
+        $nonce = $request->route('nonce');
+        $key = TmpIntegration::query()->where(['key' => $nonce]);
+
+        if (!$key->exists()) {
+            abort(404);
+        }
+
         $token = Generator::makePPLJWTWithKey($nonce);
 
         $response = [
@@ -45,14 +53,28 @@ class PPLController extends Controller
      */
     public function verify(Request $request)
     {
-//        $data = $request->all();
-//        $IPN = 0;
-//
-//        if ($data && !empty($data['IPN']) && !empty($data['IPN'][0]) && !empty($data['IPN'][0]['number'])) {
-//            $IPN = $data['IPN'][0]['number'];
-//        }
-        $IPN = json_encode($request->headers->all());
-        $jwt = $request->header('Authorization');
+        $IPN = 0;
+        $token = $request->header('Authorization');
+        $data = Generator::getDataFromJWT($token, 'data');
+        $nonce = Generator::getDataFromJWT($token, 'jti');
+        $key = TmpIntegration::query()->where(['key' => $nonce]);
+
+        if (!$key->exists()) {
+            abort(404);
+        }
+
+        if ($data && !empty($data['IPN']) && !empty($data['IPN'][0]) && !empty($data['IPN'][0]['number'])) {
+            $IPN = $data['IPN'][0]['number'];
+
+            try {
+                $key->update(['number' => $IPN]);
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                abort(500, 'Could not update integration PPL number');
+            }
+        } else {
+            abort(404);
+        }
 
         $response = [
             'response' => [
@@ -60,7 +82,7 @@ class PPLController extends Controller
                     'resource' => [
                         '_links' => [
                             'callbackUrl' => [
-                                'href' => sprintf('%s/?IPN=%s&jwt=%s', trim(env('FRONTEND_URL'), '/'), $IPN, $jwt)
+                                'href' => sprintf('%s/account?IPN=%s', trim(env('FRONTEND_URL'), '/'), $IPN)
                             ]
                         ]
                     ]
