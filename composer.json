@@ -37,7 +37,7 @@
         "themsaid/nova-cashier-manager": "dev-master#4594c56dd1690c9b45f784809f3246d90cf52015",
         "titasgailius/search-relations": "^1.0",
         "tymon/jwt-auth": "1.0.2",
-        "vonage/client": "^1.9"
+        "vonage/client": "^2.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
