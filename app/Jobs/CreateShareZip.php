@@ -24,13 +24,14 @@ class CreateShareZip implements ShouldQueue
     private $message;
     private $expiry;
     private $password;
+    private $zipName;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($userId, $filesToShare, $emailsToShare, $message, $expiry, $password)
+    public function __construct($userId, $filesToShare, $emailsToShare, $message, $expiry, $password, $zipName)
     {
         $this->userId = $userId;
         $this->filesToShare = collect($filesToShare)->map(function ($file) {
@@ -42,6 +43,7 @@ class CreateShareZip implements ShouldQueue
         $this->message = $message;
         $this->expiry = $expiry;
         $this->password = $password;
+        $this->zipName = $zipName;
     }
 
     /**
@@ -95,7 +97,8 @@ class CreateShareZip implements ShouldQueue
                 'MessageBody' => json_encode([
                     'shareId' => $share->id,
                     'userId' => $this->userId,
-                    'files' => $this->filesToShare
+                    'files' => $this->filesToShare,
+                    'zipName' => $this->zipName
                 ]),
                 'QueueUrl' => $config['prefix'] . '/' . $config['jobs']['downloads']
             ];

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\File;
+use App\Models\Folder;
 use App\Models\Share;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -52,6 +53,8 @@ class RefreshExpiredShareAWSUrls implements ShouldQueue
                 return $file->only(['id', 'type', 'status', 'depth', 'aliased_folder_id', 'folder_id']);
             });
 
+            $zipName = $this->getZipName($share->user, $filesToShare);
+
             $params = [
                 'MessageGroupId' => $this->job->getJobId(),
                 'MessageDeduplicationId' => $this->job->getJobId(),
@@ -59,12 +62,32 @@ class RefreshExpiredShareAWSUrls implements ShouldQueue
                     'shareId' => $share->id,
                     'userId' => $share->user->id,
                     'files' => $filesToShare,
-                    'refresh' => true
+                    'refresh' => true,
+                    'zipName' => $zipName
                 ]),
                 'QueueUrl' => $this->config['prefix'] . '/' . $this->config['jobs']['downloads']
             ];
 
             $this->client->sendMessage($params);
         }
+    }
+
+    private function getZipName($user, $files)
+    {
+        $firstFile = $files[0];
+        if ($firstFile['type'] === 'folder') {
+            $folder = Folder::select('id','folder_id')->where('id', $firstFile['id'])->userViewable(['user' => $user])->first();
+            if (isset($folder->folder_id)) {
+                $parentFolder = Folder::select('id','name')->where('id', $folder->folder_id)->userViewable(['user' => $user])->first();
+                return $parentFolder->name;
+            }
+            return 'VEVA';
+        }
+        $file = File::select('id', 'folder_id')->where('id', $firstFile['id'])->userViewable(['user' => $user])->first();
+        if (isset($file->folder_id)) {
+            $folder = Folder::select('id','name')->where('id', $file->folder_id)->userViewable(['user' => $user])->first();
+            return $folder->name;
+        }
+        return 'VEVA';
     }
 }
