@@ -252,7 +252,7 @@ input DeleteSongInput {
 
 input CreatePartyInput {
     isni: String @rules(apply: ["nullable", "numeric", "digits:16"])
-    ipi_cae: String @rules(apply: ["nullable", "numeric", "digits:16"])
+    ipi_cae: String @rules(apply: ["nullable", "numeric", "digits:11"])
     type: String! @rules(apply: ["required", "in:person,organisation,label"])
     title: String
     prefix: String
