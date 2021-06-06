@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Nexmo\Message\Text;
+use Vonage\SMS\Message\SMS;
 
 /**
  * Calculates the users total storage used in bytes.
@@ -39,15 +39,23 @@ class SendTwoFactorSMS implements ShouldQueue
      */
     public function handle()
     {
-        $from = config('services.nexmo.from');
+        $from = config('services.vonage.from');
         Log::debug(sprintf('Sending code: %s to phone: %s from: %s', $this->code, $this->phone, $from));
 
-        $client = resolve('Nexmo\Client');
+        $client = resolve('Vonage\Client');
         $message = 'Your 2FA Code for VEVA Collect is: %s';
-        $text = new Text($this->phone, $from, sprintf($message, $this->code));
+        $text = new SMS($this->phone, $from, sprintf($message, $this->code));
         // $text->setClientRef('2fa-' . $this->phone);
         //     ->setClass(Text::CLASS_FLASH);
 
-        $client->message()->send($text);
+        $response = $client->sms()->send($text);
+
+        $message = $response->current();
+
+        if ($message->getStatus() == 0) {
+            Log::info("The message was sent successfully");
+        } else {
+            Log::error("The message failed with status: " . $message->getStatus());
+        }
     }
 }

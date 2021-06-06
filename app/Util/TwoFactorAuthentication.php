@@ -234,7 +234,7 @@ class TwoFactorAuthentication
      */
     private function generateCode()
     {
-        $length = (int) config('services.nexmo.code_length', 6);
+        $length = (int) config('services.vonage.code_length', 6);
 
         // Generated this way to always include the range from 0-9
         // on each digit.

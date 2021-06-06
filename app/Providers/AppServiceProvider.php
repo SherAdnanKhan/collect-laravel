@@ -94,11 +94,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Nexmo\Client', function() {
-            return new \Nexmo\Client(
-                new \Nexmo\Client\Credentials\Basic(
-                    config('services.nexmo.key'),
-                    config('services.nexmo.secret')
+        $this->app->bind('Vonage\Client', function() {
+            return new \Vonage\Client(
+                new \Vonage\Client\Credentials\Basic(
+                    config('services.vonage.key'),
+                    config('services.vonage.secret')
                 )
             );
         });

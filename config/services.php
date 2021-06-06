@@ -38,11 +38,11 @@ return [
         ]
     ],
 
-    'nexmo' => [
-        'key'         => env('NEXMO_KEY'),
-        'secret'      => env('NEXMO_SECRET'),
-        'from'        => env('NEXMO_FROM'),
-        'code_length' => env('NEXMO_CODE_LENGTH', '6')
+    'vonage' => [
+        'key'         => env('VONAGE_KEY'),
+        'secret'      => env('VONAGE_SECRET'),
+        'from'        => env('VONAGE_FROM'),
+        'code_length' => env('VONAGE_CODE_LENGTH', '6')
     ],
 
     'sendgrid' => [
