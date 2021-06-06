@@ -251,7 +251,7 @@ input DeleteSongInput {
 }
 
 input CreatePartyInput {
-    isni: String
+    isni: String @rules(apply: ["nullable", "numeric", "digits:16"])
     type: String! @rules(apply: ["required", "in:person,organisation,label"])
     title: String
     prefix: String
@@ -266,7 +266,7 @@ input CreatePartyInput {
 
 input UpdatePartyInput {
     id: ID!
-    isni: String
+    isni: String @rules(apply: ["nullable", "numeric", "digits:16"])
     type: String! @rules(apply: ["required", "in:person,organisation,label"])
     title: String
     prefix: String
@@ -486,7 +486,7 @@ input SessionCheckInInput {
   last_name: String! @rules(apply: ["required"])
   email: String! @rules(apply: ["required"])
   suffix: String
-  isni: String
+  isni: String @rules(apply: ["nullable", "numeric", "digits:16"])
   birth_date: String @rules(apply: ["date"])
   checkin_type: String
   role_id: ID
