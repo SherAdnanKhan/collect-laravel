@@ -65,7 +65,6 @@ deploy-to-testing: &deploy-to-testing
   step:
     name: "Deploy to Testing Laravel Server"
     deployment: testing
-    trigger: manual
     script:
     - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
       variables:
