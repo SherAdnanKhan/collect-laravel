@@ -61,6 +61,23 @@ deploy-to-staging: &deploy-to-staging
         COMMAND: "all"
         VERSION_LABEL: "staging-$BITBUCKET_BUILD_NUMBER"
 
+deploy-to-develop: &deploy-to-develop
+  step:
+    name: "Deploy to Develop Laravel Server"
+    deployment: develop
+    script:
+    - pipe: atlassian/aws-elasticbeanstalk-deploy:0.2.1
+      variables:
+        AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+        AWS_DEFAULT_REGION: "us-east-1"
+        APPLICATION_NAME: "VEVA Sound Develop"
+        ENVIRONMENT_NAME: "VevaSound-develop-1"
+        ZIP_FILE: "application.zip"
+        S3_BUCKET: "veva-collect-develop-deployment"
+        COMMAND: "all"
+        VERSION_LABEL: "develop-$BITBUCKET_BUILD_NUMBER"
+
 definitions:
   caches:
     yarncustom: ./node_modules
@@ -78,3 +95,7 @@ pipelines:
     - <<: *build-assets
     - <<: *package
     - <<: *deploy-to-staging
+    develop:
+    - <<: *build-assets
+    - <<: *package
+    - <<: *deploy-to-develop
