@@ -34,7 +34,7 @@ class Song extends Model implements UserAccessible, Creditable
     use Searchable;
 
     protected $fillable = [
-        'user_id', 'song_type_id', 'song_type_user_defined_value', 'iswc', 'title',
+        'user_id', 'song_type_id', 'folder_id', 'song_type_user_defined_value', 'iswc', 'title',
         'subtitle', 'title_alt', 'subtitle_alt', 'created_on', 'description',
         'lyrics', 'notes'
     ];
@@ -119,6 +119,16 @@ class Song extends Model implements UserAccessible, Creditable
     public function projects(): Collection
     {
         return $this->recordings()->get()->pluck('project');
+    }
+
+    /**
+     * Get the files belonging to this user.
+     *
+     * @return BelongsTo
+     */
+    public function folders(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class, 'folder_id');
     }
 
     /**

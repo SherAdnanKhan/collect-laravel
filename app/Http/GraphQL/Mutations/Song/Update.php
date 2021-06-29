@@ -22,7 +22,7 @@ class Update
     {
         $input = array_get($args, 'input');
 
-        $song = Song::where('id', (int) array_get($input, 'id'))
+        $song = Song::where('id', (int)array_get($input, 'id'))
             ->userUpdatable()
             ->first();
 
@@ -32,6 +32,12 @@ class Update
 
         if ($song->iswc && empty($input['iswc'])) {
             unset($input['iswc']);
+        }
+
+        $folders = $song->folders();
+
+        if ($folders->exists()) {
+            $song->folders()->update(['name' => sprintf('Song: %s', array_get($input, 'title'))]);
         }
 
         $saved = $song->fill($input)->save();
