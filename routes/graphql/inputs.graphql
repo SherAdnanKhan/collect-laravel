@@ -181,6 +181,7 @@ input CreateSessionInput {
     session_type_id: ID! @rules(apply: ["required"])
     venue_id: ID! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
+    recording_id: ID
     description: String
     union_session: Boolean!
     analog_session: Boolean!

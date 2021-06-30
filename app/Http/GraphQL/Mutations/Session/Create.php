@@ -25,7 +25,7 @@ class Create
     {
         $user = auth()->user();
         $input = array_get($args, 'input');
-        $projectId = (int) array_get($args, 'input.project_id');
+        $projectId = (int)array_get($args, 'input.project_id');
 
         $project = Project::find($projectId);
 
@@ -55,6 +55,12 @@ class Create
             ]);
         }
 
-        return $project->sessions()->create($input);
+        $session = $project->sessions()->create($input);
+
+        if (!empty($input['recording_id'])) {
+            $session->recordings()->attach($input['recording_id']);
+        }
+
+        return $session;
     }
 }
