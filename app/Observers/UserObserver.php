@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Comment;
+use App\Models\File;
+use App\Models\Folder;
 use App\Models\User;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
@@ -19,7 +21,6 @@ class UserObserver
     public function created(User $user)
     {
         $user->profile()->save(new UserProfile());
-
         /* DEMO DATA INSERTION */
 
         /* Users */
@@ -201,6 +202,7 @@ class UserObserver
             'image' => '',
             'number' => 'VEVA'.substr(number_format(time() * mt_rand(),0,'',''),0,14)
         ]);
+
         /* Project Sessions */
         $session1Project2 = $project2->sessions()->create([
             'session_type_id' => 14,
@@ -379,25 +381,33 @@ class UserObserver
         ]);
 
         /* Folders */
-        $folder1Project2 = $project2->folders()->create([
+        $folder1Project2 = Folder::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'name' => 'Recording: Cry Pretty',
             'depth' => 0,
             'readonly' => 1,
             'hidden' => 0,
         ]);
-        $folder1Project1 = $project1->folders()->create([
+        $folder1Project1 = Folder::create([
+            'project_id' => $project1->id,
+            'user_id'    => $user->id,
             'name' => 'Recording: My New Song',
             'depth' => 0,
             'readonly' => 1,
             'hidden' => 0,
         ]);
-        $folder1Project3 = $project3->folders()->create([
+        $folder1Project3 = Folder::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'name' => 'Recording: Recording of This Is A Sample Song',
             'depth' => 0,
             'readonly' => 1,
             'hidden' => 0,
         ]);
-        $folder2Project3 = $project3->folders()->create([
+        $folder2Project3 = Folder::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'folder_id' => $folder1Project3->id,
             'name' => 'Sample Folder ',
             'depth' => 1,
@@ -405,7 +415,9 @@ class UserObserver
             'root_folder_id' => $folder1Project3->id,
             'hidden' => 0,
         ]);
-        $folder3Project3 = $project3->folders()->create([
+        $folder3Project3 = Folder::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'name' => 'Recording: Recording of Another Sample Song',
             'depth' => 0,
             'readonly' => 1,
@@ -470,7 +482,9 @@ class UserObserver
         $bucket = config('filesystems.disks.s3.bucket');
         $s3 = $this->getS3Client();
 
-        $file1Project1 = $project1->files()->create([
+        $file1Project1 = File::create([
+            'project_id' => $project1->id,
+            'user_id'    => $user->id,
             'type' => 'wav',
             'name' => '  BGV 6 (Doubled)-1_02.R.wav',
             'path' => $this->addProjectFiles($s3, $bucket, $project1, 'uploads/projects', $project1UploadFiles[0]),
@@ -485,7 +499,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file2Project1 = $project1->files()->create([
+        $file2Project1 = File::create([
+            'project_id' => $project1->id,
+            'user_id'    => $user->id,
             'type' => 'wav',
             'name' => '  BGV 6 (Doubled)-1_02.L.wav',
             'path' => $this->addProjectFiles($s3, $bucket, $project1, 'uploads/projects', $project1UploadFiles[1]),
@@ -500,7 +516,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file1Project3 = $project3->files()->create([
+        $file1Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Explaining Collaborators and Permissions.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[0]),
@@ -515,7 +533,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file2Project3 = $project3->files()->create([
+        $file2Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Explaining Sessions and the VEVA Check In App.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[1]),
@@ -530,7 +550,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file3Project3 = $project3->files()->create([
+        $file3Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'How to Add Parties in VEVA Collect.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[2]),
@@ -545,7 +567,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file4Project3 = $project3->files()->create([
+        $file4Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'How to Manage Collaborators.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[3]),
@@ -560,7 +584,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file5Project3 = $project3->files()->create([
+        $file5Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'How to Upload and Share Files.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[4]),
@@ -575,7 +601,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file6Project3 = $project3->files()->create([
+        $file6Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Managing Songs and Credits.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[5]),
@@ -590,7 +618,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file7Project3 = $project3->files()->create([
+        $file7Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Managing Sound Recordings.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[6]),
@@ -605,7 +635,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file8Project3 = $project3->files()->create([
+        $file8Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'VEVA Collect Sample Music File.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[7]),
@@ -621,7 +653,9 @@ class UserObserver
             'folder_id' => $folder1Project3->id
         ]);
 
-        $file9Project3 = $project3->files()->create([
+        $file9Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Bass DI.13_01.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[8]),
@@ -637,7 +671,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file10Project3 = $project3->files()->create([
+        $file10Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'BSS OLI.13_01.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[9]),
@@ -653,7 +689,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file11Project3 = $project3->files()->create([
+        $file11Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'CLAPS_01.L.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[10]),
@@ -669,7 +707,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file12Project3 = $project3->files()->create([
+        $file12Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'CLAPS_01.R.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[11]),
@@ -685,7 +725,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file13Project3 = $project3->files()->create([
+        $file13Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'CLAPS.dup1_01.L.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[12]),
@@ -701,7 +743,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file14Project3 = $project3->files()->create([
+        $file14Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'CLAPS.dup1_01.R.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[13]),
@@ -717,7 +761,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file15Project3 = $project3->files()->create([
+        $file15Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Floor.13_01.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[14]),
@@ -733,7 +779,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file16Project3 = $project3->files()->create([
+        $file16Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'FOK.13_01.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[15]),
@@ -749,7 +797,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file17Project3 = $project3->files()->create([
+        $file17Project3 = File::create([
+            'project_id' => $project3->id,
+            'user_id'    => $user->id,
             'type' => 'mp3',
             'name' => 'Hat.13_01.mp3',
             'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project3UploadFiles[16]),
@@ -765,7 +815,9 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file1Project2 = $project2->files()->create([
+        $file1Project2 = File::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'type' => 'pdf',
             'name' => 'Poster_Dark_You_Deserve_Credit_2021.pdf',
             'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[0]),
@@ -780,7 +832,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file2Project2 = $project2->files()->create([
+        $file2Project2 = File::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'type' => 'jpg',
             'name' => 'SaveTheDate_Dark_You_Deserve_Credit_2021.jpg',
             'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[1]),
@@ -795,7 +849,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file3Project2 = $project2->files()->create([
+        $file3Project2 = File::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'type' => 'jpg',
             'name' => 'Story_You_Deserve_Credit_2021.jpg',
             'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[2]),
@@ -810,7 +866,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file4Project2 = $project2->files()->create([
+        $file4Project2 = File::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'type' => 'jpg',
             'name' => 'Square_You_Deserve_Credit_2021.jpg',
             'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[3]),
@@ -825,10 +883,12 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file5Project2 = $project3->files()->create([
+        $file5Project2 = File::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'type' => 'png',
             'name' => 'LOGO_You_Deserve_Credit_White.png',
-            'path' => $this->addProjectFiles($s3, $bucket, $project3, 'uploads/projects', $project2UploadFiles[4]),
+            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[4]),
             'transcoded_path' => '',
             'bitrate' => 0,
             'bitdepth' => 0,
@@ -840,7 +900,9 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $file6Project2 = $project3->files()->create([
+        $file6Project2 = File::create([
+            'project_id' => $project2->id,
+            'user_id'    => $user->id,
             'type' => 'png',
             'name' => 'LOGO_You_Deserve_Credit_Dark.png',
             'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[5]),
@@ -1025,50 +1087,22 @@ class UserObserver
         ]);
 
         /* Credits to Projects */
-        $project3->credits()->create([
-            'credit_id' => $credit5->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit6->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit7->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit8->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit9->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit10->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit11->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit12->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit13->id
-        ]);
-        $project3->credits()->create([
-            'credit_id' => $credit14->id
-        ]);
+        $project3->credits()->attach($credit5->id);
+        $project3->credits()->attach($credit6->id);
+        $project3->credits()->attach($credit7->id);
+        $project3->credits()->attach($credit8->id);
+        $project3->credits()->attach($credit9->id);
+        $project3->credits()->attach($credit10->id);
+        $project3->credits()->attach($credit11->id);
+        $project3->credits()->attach($credit12->id);
+        $project3->credits()->attach($credit13->id);
+        $project3->credits()->attach($credit14->id);
 
         /* Sessions to Recordings */
-        $recording1->sessions()->create([
-            'session_id' => $session1Project2->id,
-        ]);
-        $recording3->sessions()->create([
-            'session_id' => $session1Project3->id,
-        ]);
-        $recording3->sessions()->create([
-            'session_id' => $session2Project3->id,
-        ]);
-        $recording3->sessions()->create([
-            'session_id' => $session3Project3->id,
-        ]);
+        $recording1->sessions()->attach($session1Project2->id);
+        $recording3->sessions()->attach($session1Project3->id);
+        $recording3->sessions()->attach($session2Project3->id);
+        $recording3->sessions()->attach($session3Project3->id);
 
         /* Comments */
         Comment::create([
@@ -1132,7 +1166,9 @@ class UserObserver
 
     private function addProjectFiles($s3, $bucket, $project, $prefix, $fileSource): string
     {
-        $key = "{$prefix}/{$project->getUploadFolderPath()}" . time() . substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 16) . '/' . end(explode('/', $fileSource));
+        $uploadPath = $project->getUploadFolderPath();
+        $filename = explode('/', $fileSource);
+        $key = "{$prefix}/{$uploadPath}" . time() . substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 16) . '/' . end($filename);
         $s3->copyObject([
             'Bucket' => $bucket,
             'Key' => $key,
