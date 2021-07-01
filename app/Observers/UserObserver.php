@@ -21,14 +21,6 @@ class UserObserver
     public function created(User $user)
     {
         $user->profile()->save(new UserProfile());
-        /* DEMO DATA INSERTION */
-
-        /* Users */
-        $user->update([
-            'stripe_id' => 'cus_Hh62i9i0hBa5Cg',
-            'card_brand' => 'Visa',
-            'card_last_four' => '9942'
-        ]);
 
         /* Venues */
         $venue1 = $user->venues()->create([
@@ -921,24 +913,25 @@ class UserObserver
         $recording1 = $project1->recordings()->create([
             'party_id' => $party6->id,
             'song_id' => $song1->id,
-            'folder_id' => $folder1Project2->id,
             'name' => 'My New Song',
             'recording_type_id' => 2,
         ]);
+        $recording1->folder_id = $folder1Project1->id;
+        $recording1->save();
 
         $recording2 = $project2->recordings()->create([
             'party_id' => $party6->id,
             'song_id' => $song2->id,
-            'folder_id' => $folder1Project1->id,
             'name' => 'Cry Pretty',
             'recording_type_id' => 2,
             'language_id' => 40,
         ]);
+        $recording2->folder_id = $folder1Project2->id;
+        $recording2->save();
 
         $recording3 = $project3->recordings()->create([
             'party_id' => $party2->id,
             'song_id' => $song3->id,
-            'folder_id' => $folder1Project3->id,
             'name' => 'Recording of This Is A Sample Song',
             'subtitle' => 'Subtitle for This Is A Sample Song',
             'recording_type_id' => 2,
@@ -952,11 +945,12 @@ class UserObserver
             'time_signature' => '4/4',
             'tempo' => 120,
         ]);
+        $recording3->folder_id = $folder1Project3->id;
+        $recording3->save();
 
         $recording4 = $project3->recordings()->create([
             'party_id' => $party2->id,
             'song_id' => $song4->id,
-            'folder_id' => $folder3Project3->id,
             'name' => 'Recording of Another Sample Song',
             'subtitle' => 'Subtitle for The Recording of Another Sample Song',
             'recording_type_id' => 2,
@@ -970,6 +964,8 @@ class UserObserver
             'time_signature' => '4/4',
             'tempo' => 160,
         ]);
+        $recording4->folder_id = $folder3Project3->id;
+        $recording4->save();
 
         /* Party Credits */
         $credit1 = $party8->credits()->create([
