@@ -167,24 +167,6 @@ class UserObserver
         ]);
 
         /* Projects */
-        $project1 = $user->projects()->create([
-            'name' => 'Demo VEVA Project',
-            'description' => 'New LP',
-            'total_storage_used' => 41985872,
-            'label_id' => $party5->id,
-            'main_artist_id' => $party6->id,
-            'image' => '1598982250veva-main-banner-with-logo.jpg',
-            'number' => 'VEVA'.substr(number_format(time() * mt_rand(),0,'',''),0,14)
-        ]);
-        $project2 = $user->projects()->create([
-            'name' => 'Song ideas',
-            'description' => '',
-            'total_storage_used' => 0,
-            'label_id' => $party5->id,
-            'main_artist_id' => $party6->id,
-            'image' => '',
-            'number' => 'VEVA'.substr(number_format(time() * mt_rand(),0,'',''),0,14)
-        ]);
         $project3 = $user->projects()->create([
             'name' => 'VEVA Collect Sample Project',
             'description' => 'This is a sample project, and this is a sample project description. Within this project are credits and files.',
@@ -196,22 +178,11 @@ class UserObserver
         ]);
 
         /* Project Sessions */
-        $session1Project2 = $project2->sessions()->create([
-            'session_type_id' => 14,
-            'venue_id' => $venue1->id,
-            'name' => 'Tracking',
-            'started_at' => '2019-05-28 00:00:00',
-            'union_session' => 0,
-            'analog_session' => 0,
-            'drop_frame' => 0,
-            'bitdepth' => 24,
-            'samplerate' => 44100,
-        ]);
         $session1Project3 = $project3->sessions()->create([
             'session_type_id' => 7,
             'venue_id' => $venue3->id,
             'name' => 'Sample Mixing Session',
-            'description' => "This is a sample session and this is a sample session description. VEVA doesn''t have a studio. ",
+            'description' => "This is a sample session and this is a sample session description. VEVA doesn't have a studio. ",
             'started_at' => '2020-10-01 12:00:00',
             'union_session' => 0,
             'analog_session' => 0,
@@ -247,12 +218,6 @@ class UserObserver
             'samplerate' => 96000,
         ]);
 
-        /* Session codes */
-        $session1Project2->sessionCodes()->create([
-            'code' => '036613',
-            'expires_at' => now()->subDay(1)
-        ]);
-
         /* Songs */
         $song1 = $user->songs()->create([
             'song_type_id' => 19,
@@ -262,45 +227,45 @@ class UserObserver
         $song2 = $user->songs()->create([
             'song_type_id' => 19,
             'title' => 'Cry Pretty',
-            'lyrics' => "I''m sorry, but I''m just a girl
+            'lyrics' => "I'm sorry, but I'm just a girl
                         Not usually the kind to show my heart to the world
-                        I''m pretty good at keeping it together
+                        I'm pretty good at keeping it together
                         I hold my composure, for worse or for better
-                        So I apologize if you don''t like what you see
+                        So I apologize if you don't like what you see
                         But sometimes my emotions get the best of me
                         And falling apart is as human as it gets
-                        You can''t hide it, you can''t fight what the truth is
-                        You can pretty lie and say it''s okay
+                        You can't hide it, you can't fight what the truth is
+                        You can pretty lie and say it's okay
                         You can pretty smile and just walk away
                         Pretty much fake your way through anything
-                        But you can''t cry pretty
-                        Oh no, you can''t dress it up in lace or rhinestones
-                        It don''t matter if you''re in a crowd or home all alone
-                        Yeah, it''s all the same when you''re looking in the mirror
+                        But you can't cry pretty
+                        Oh no, you can't dress it up in lace or rhinestones
+                        It don't matter if you're in a crowd or home all alone
+                        Yeah, it's all the same when you're looking in the mirror
                         A picture of pain, so let it flow like a river
-                        You can pretty lie and say it''s okay
+                        You can pretty lie and say it's okay
                         You can pretty smile and just walk away
                         Pretty much fake your way through anything
-                        But you can''t cry pretty
-                        You can''t turn off the flood when the dam breaks
+                        But you can't cry pretty
+                        You can't turn off the flood when the dam breaks
                         When all your mascara is going to waste
                         When things get ugly, you just gotta face
-                        That you can''t cry pretty
-                        Oh no, you can''t
+                        That you can't cry pretty
+                        Oh no, you can't
                         Ooh, yeah
-                        You can''t turn off the flood when the dam breaks
+                        You can't turn off the flood when the dam breaks
                         When all your mascara is going to waste
                         When things get ugly, you just gotta face
-                        That you can''t cry pretty
+                        That you can't cry pretty
                         Yeah, yeah, yeah, yeah
-                        No, you can''t cry
-                        No, you can''t cry
+                        No, you can't cry
+                        No, you can't cry
                         Yeah, yeah, yeah, yeah, yeah
                         No, no, no, no, no, no, no, no, woo
-                        You can''t cry
-                        You can''t cry pretty, baby
+                        You can't cry
+                        You can't cry pretty, baby
                         Oh yeah, woo, woo
-                        No, you can''t cry pretty, yeah",
+                        No, you can't cry pretty, yeah",
         ]);
         $song3 = $user->songs()->create([
             'song_type_id' => 19,
@@ -313,27 +278,27 @@ class UserObserver
             'description' => 'This is a sample song, and this is a sample song description. ',
             'lyrics' => "This is my sample song
                         These are sample song lyrics
-                        Aren''t they great
-                        If you don''t mind, I say
+                        Aren't they great
+                        If you don't mind, I say
                         They are
 
                         This is my sample song
                         These are sample song lyrics
-                        Aren''t they great
-                        If you don''t mind, I say
+                        Aren't they great
+                        If you don't mind, I say
                         They are
 
                         Imagine the possibilities
                         when you collaborate in VEVA Collect
                         to write a song of your own
                         Then people will say
-                        All about you, aren''t they great?
+                        All about you, aren't they great?
                         They are
 
                         This is my sample song
                         These are sample song lyrics
-                        Aren''t they great
-                        If you don''t mind, I say
+                        Aren't they great
+                        If you don't mind, I say
                         They are'",
             'notes' => 'This is a sample song, and these are sample song notes.',
         ]);
@@ -347,48 +312,32 @@ class UserObserver
             'description' => 'This is the description of another sample song. ',
             'lyrics' => "This is another sample song
                         These are sample song lyrics
-                        Aren''t they great
-                        If you don''t mind, I say
+                        Aren't they great
+                        If you don't mind, I say
                         They are
 
                         This is my sample song
                         These are sample song lyrics
-                        Aren''t they great
-                        If you don''t mind, I say
+                        Aren't they great
+                        If you don't mind, I say
                         They are
 
                         Imagine the possibilities
                         when you collaborate in VEVA Collect
                         to write a song of your own
                         Then people will say
-                        All about you, aren''t they great?
+                        All about you, aren't they great?
                         They are
 
                         This is my sample song
                         These are sample song lyrics
-                        Aren''t they great
-                        If you don''t mind, I say
+                        Aren't they great
+                        If you don't mind, I say
                         They are",
             'notes' => 'These are the notes for another sample song. ',
         ]);
 
         /* Folders */
-        $folder1Project2 = Folder::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'name' => 'Recording: Cry Pretty',
-            'depth' => 0,
-            'readonly' => 1,
-            'hidden' => 0,
-        ]);
-        $folder1Project1 = Folder::create([
-            'project_id' => $project1->id,
-            'user_id'    => $user->id,
-            'name' => 'Recording: My New Song',
-            'depth' => 0,
-            'readonly' => 1,
-            'hidden' => 0,
-        ]);
         $folder1Project3 = Folder::create([
             'project_id' => $project3->id,
             'user_id'    => $user->id,
@@ -416,14 +365,6 @@ class UserObserver
             'hidden' => 0,
         ]);
 
-        $project1UploadFiles = [
-            'uploads/projects/d32bb14e71e175a626e45cccaccb32b5/1599591623dPbEf0WDy83RFlsA/  BGV 6 (Doubled)-1_02.R.wav',
-            'uploads/projects/d32bb14e71e175a626e45cccaccb32b5/1599591639W8rbX37wNFf5Zaz9/  BGV 6 (Doubled)-1_02.L.wav',
-        ];
-        $project1TransFiles = [
-            'transcoded/uploads/projects/d32bb14e71e175a626e45cccaccb32b5/1599591623dPbEf0WDy83RFlsA/  BGV 6 (Doubled)-1_02.R.wav.mp3',
-            'transcoded/uploads/projects/d32bb14e71e175a626e45cccaccb32b5/1599591639W8rbX37wNFf5Zaz9/  BGV 6 (Doubled)-1_02.L.wav.mp3',
-        ];
         $project3UploadFiles = [
             'uploads/projects/b1c747ab0057df75fcdeeab2bb712eb8/1603999331F52aRVp0yl1EO8Jq/Explaining Collaborators and Permissions.mp3',
             'uploads/projects/b1c747ab0057df75fcdeeab2bb712eb8/1603999339xNBTGRf7OS86d1mg/Explaining Sessions and the VEVA Check In App.mp3',
@@ -462,51 +403,9 @@ class UserObserver
             'transcoded/uploads/projects/b1c747ab0057df75fcdeeab2bb712eb8/16040873342VWEAsIkTi5pXw0Q/FOK.13_01.mp3',
             'transcoded/uploads/projects/b1c747ab0057df75fcdeeab2bb712eb8/1604087338wWAbhBdnycUoCYSV/Hat.13_01.mp3',
         ];
-        $project2UploadFiles = [
-            'uploads/projects/71f99c64bc13558c9e36605bd7e8a3e8/1617910329jDMaVkvNfnZUF0bS/Poster_Dark_You_Deserve_Credit_2021.pdf',
-            'uploads/projects/71f99c64bc13558c9e36605bd7e8a3e8/1617910350QwhZ9REcvuONoqS7/SaveTheDate_Dark_You_Deserve_Credit_2021.jpg',
-            'uploads/projects/71f99c64bc13558c9e36605bd7e8a3e8/1617910357m7X9ngCZudVyK8zL/Story_You_Deserve_Credit_2021.jpg',
-            'uploads/projects/71f99c64bc13558c9e36605bd7e8a3e8/1617910363YrHc1dAw0FijOMSl/Square_You_Deserve_Credit_2021.jpg',
-            'uploads/projects/71f99c64bc13558c9e36605bd7e8a3e8/1617910373BqpU9s0LdbYvmnwQ/LOGO_You_Deserve_Credit_White.png',
-            'uploads/projects/71f99c64bc13558c9e36605bd7e8a3e8/1617910378ZRqzKtSbYInD6ohV/LOGO_You_Deserve_Credit_Dark.png',
-        ];
 
         $bucket = config('filesystems.disks.s3.bucket');
         $s3 = $this->getS3Client();
-
-        $file1Project1 = File::create([
-            'project_id' => $project1->id,
-            'user_id'    => $user->id,
-            'type' => 'wav',
-            'name' => '  BGV 6 (Doubled)-1_02.R.wav',
-            'path' => $this->addProjectFiles($s3, $bucket, $project1, 'uploads/projects', $project1UploadFiles[0]),
-            'transcoded_path' => $this->addProjectFiles($s3, $bucket, $project1, 'transcoded/uploads/projects', $project1TransFiles[0]),
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 20992936,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        $file2Project1 = File::create([
-            'project_id' => $project1->id,
-            'user_id'    => $user->id,
-            'type' => 'wav',
-            'name' => '  BGV 6 (Doubled)-1_02.L.wav',
-            'path' => $this->addProjectFiles($s3, $bucket, $project1, 'uploads/projects', $project1UploadFiles[1]),
-            'transcoded_path' => $this->addProjectFiles($s3, $bucket, $project1, 'transcoded/uploads/projects', $project1TransFiles[1]),
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 20992936,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
 
         $file1Project3 = File::create([
             'project_id' => $project3->id,
@@ -807,128 +706,6 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $file1Project2 = File::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'type' => 'pdf',
-            'name' => 'Poster_Dark_You_Deserve_Credit_2021.pdf',
-            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[0]),
-            'transcoded_path' => '',
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 9215616,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        $file2Project2 = File::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'type' => 'jpg',
-            'name' => 'SaveTheDate_Dark_You_Deserve_Credit_2021.jpg',
-            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[1]),
-            'transcoded_path' => '',
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 3001108,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        $file3Project2 = File::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'type' => 'jpg',
-            'name' => 'Story_You_Deserve_Credit_2021.jpg',
-            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[2]),
-            'transcoded_path' => '',
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 571198,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        $file4Project2 = File::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'type' => 'jpg',
-            'name' => 'Square_You_Deserve_Credit_2021.jpg',
-            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[3]),
-            'transcoded_path' => '',
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 400074,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        $file5Project2 = File::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'type' => 'png',
-            'name' => 'LOGO_You_Deserve_Credit_White.png',
-            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[4]),
-            'transcoded_path' => '',
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 128321,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        $file6Project2 = File::create([
-            'project_id' => $project2->id,
-            'user_id'    => $user->id,
-            'type' => 'png',
-            'name' => 'LOGO_You_Deserve_Credit_Dark.png',
-            'path' => $this->addProjectFiles($s3, $bucket, $project2, 'uploads/projects', $project2UploadFiles[5]),
-            'transcoded_path' => '',
-            'bitrate' => 0,
-            'bitdepth' => 0,
-            'samplerate' => 0,
-            'duration' => 0,
-            'numchans' => 0,
-            'size' => 135743,
-            'status' => 'complete',
-            'hidden' => 0,
-        ]);
-
-        /* Recordings */
-        $recording1 = $project1->recordings()->create([
-            'party_id' => $party6->id,
-            'song_id' => $song1->id,
-            'name' => 'My New Song',
-            'recording_type_id' => 2,
-        ]);
-        $recording1->folder_id = $folder1Project1->id;
-        $recording1->save();
-
-        $recording2 = $project2->recordings()->create([
-            'party_id' => $party6->id,
-            'song_id' => $song2->id,
-            'name' => 'Cry Pretty',
-            'recording_type_id' => 2,
-            'language_id' => 40,
-        ]);
-        $recording2->folder_id = $folder1Project2->id;
-        $recording2->save();
-
         $recording3 = $project3->recordings()->create([
             'party_id' => $party2->id,
             'song_id' => $song3->id,
@@ -1095,7 +872,6 @@ class UserObserver
         $project3->credits()->attach($credit14->id);
 
         /* Sessions to Recordings */
-        $recording1->sessions()->attach($session1Project2->id);
         $recording3->sessions()->attach($session1Project3->id);
         $recording3->sessions()->attach($session2Project3->id);
         $recording3->sessions()->attach($session3Project3->id);
@@ -1134,11 +910,6 @@ class UserObserver
         ]);
 
         /* User Favourites  */
-        UserFavourite::create([
-            'user_id' => $user->id,
-            'resource_id' => $project2->id,
-            'resource_type' => 'project',
-        ]);
 
         UserFavourite::create([
             'user_id' => $user->id,
