@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\GraphQL\Mutations\Song;
+namespace App\Http\GraphQL\Mutations\Affiliation;
 
-use App\Models\Folder;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -21,22 +19,13 @@ class Create
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $input = array_get($args, 'input');
-        $user = auth()->user();
+
         try {
-            $song = $user->songs()->create($input);
-
-            $folder = Folder::create([
-                'user_id'    => $user->id,
-                'name'       => sprintf('Song: %s', $song->title),
-                'readonly'   => true
-            ]);
-
-            $song->folder_id = $folder->id;
-            $song->save();
+            $affiliation = auth()->user()->affiliations()->create($input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }
 
-        return $song;
+        return $affiliation;
     }
 }

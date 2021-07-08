@@ -155,7 +155,15 @@
                     @foreach($credits as $groupkey => $group)
                         <p>
                             <span>{{ $groupkey }}: </span>
-                            <span>{{ collect($group)->implode('party.name', ', ') }}</span>
+                            <span>
+                                @php
+                                    $parties = collect($group)->map(function($groupItem){
+                                        $party = $groupItem->party;
+                                        return "{$party->name} " . (isset($party->isni) ? "(ISNI: {$party->isni})" : null);
+                                    })
+                                @endphp
+                                {{ $parties->implode(', ') }}
+                            </span>
                         </p>
                     @endforeach
                 @endforeach

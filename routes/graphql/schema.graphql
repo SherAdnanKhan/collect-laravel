@@ -182,6 +182,9 @@ extend type Query @group(middleware: ["auth:api"]) {
   # Language Queries
   getLanguages: [Language] @all
 
+  # Timezone Queries
+  getTimezone: [Timezone] @all
+
   # Venue Queries
   getVenues: [Venue] @all(scopes: ["userViewable"])
   getCountries: [Country] @all
@@ -189,6 +192,13 @@ extend type Query @group(middleware: ["auth:api"]) {
   # Get unread activity count
   getUnreadActivity(projectId: ID!): UnreadActivityPayload!
     @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
+
+  # Affiliation Queries
+  getAffiliations: [Affiliation] @all
+
+  # User Affiliation Queries
+  getUserAffiliations: [UserAffiliation]
+  @field(resolver: "App\\Http\\GraphQL\\Queries\\Affiliation\\ByUser@resolve")
 
   # Share Queries
   getShares: [Share] @all(scopes: ["userViewable"])
@@ -385,6 +395,12 @@ extend type Mutation @group(middleware: ["auth:api"]) {
   # Venue Mutations
   createVenue(input: CreateVenueInput!): Venue
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Create@resolve")
+
+  # Affiliation Mutations
+  createAffiliation(input: CreateAffiliationInput!): UserAffiliation
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\Affiliation\\Create@resolve")
+  deleteAffiliation(input: DeleteAffiliationInput!): UserAffiliation
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\Affiliation\\Delete@resolve")
 
   # File & Folder Mutations
   downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload
