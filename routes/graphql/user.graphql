@@ -88,6 +88,7 @@ type Party implements Favoured {
 	credits: [Credit] @hasMany
 	contacts: [PartyContact] @hasMany
 	addresses: [PartyAddress] @hasMany
+	affiliations: [UserAffiliation] @belongsToMany
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }

@@ -262,6 +262,7 @@ input CreatePartyInput {
     suffix: String
     birth_date: String @rules(apply: ["date"])
     death_date: String @rules(apply: ["date"])
+    user_affiliation_ids:[ID] @rules(apply: ["exists:user_affiliations,id"])
     comments: String
 }
 
@@ -277,6 +278,7 @@ input UpdatePartyInput {
     suffix: String
     birth_date: String @rules(apply: ["date"])
     death_date: String @rules(apply: ["date"])
+    user_affiliation_ids:[ID] @rules(apply: ["exists:user_affiliations,id"])
     comments: String
 }
 
