@@ -299,7 +299,7 @@ class UserObserver
                         These are sample song lyrics
                         Aren't they great
                         If you don't mind, I say
-                        They are'",
+                        They are",
             'notes' => 'This is a sample song, and these are sample song notes.',
         ]);
         $song4 = $user->songs()->create([
