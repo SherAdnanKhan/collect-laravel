@@ -36,7 +36,7 @@ class Party extends Model implements UserAccessible
      */
     protected $fillable = [
         'user_id', 'title', 'prefix', 'first_name', 'last_name', 'middle_name', 'birth_date', 'death_date',
-        'suffix', 'isni', 'type', 'comments',
+        'suffix', 'isni', 'ipi_cae', 'type', 'comments',
     ];
 
     protected $casts = [
