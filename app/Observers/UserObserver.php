@@ -70,14 +70,6 @@ class UserObserver
             'first_name' => 'VEVA Sample Records',
             'comments' => 'This is a sample party, and these are sample party comments. VEVA isn\'t a record label.'
         ]);
-        $party11 = $user->parties()->create([
-            'type' => 'person',
-            'title' => 'Mr.',
-            'first_name' => 'Jack',
-            'last_name' => 'Daniels',
-            'birth_date' => '1875-01-01',
-            'comments' => 'This is a sample party, and these are sample party comments. "Jack Daniels" is a very common name.'
-        ]);
         $party2 = $user->parties()->create([
             'type' => 'person',
             'title' => 'Mr.',
@@ -219,54 +211,6 @@ class UserObserver
         ]);
 
         /* Songs */
-        $song1 = $user->songs()->create([
-            'song_type_id' => 19,
-            'title' => 'My New Song',
-            'created_on' => '2020-09-01',
-        ]);
-        $song2 = $user->songs()->create([
-            'song_type_id' => 19,
-            'title' => 'Cry Pretty',
-            'lyrics' => "I'm sorry, but I'm just a girl
-                        Not usually the kind to show my heart to the world
-                        I'm pretty good at keeping it together
-                        I hold my composure, for worse or for better
-                        So I apologize if you don't like what you see
-                        But sometimes my emotions get the best of me
-                        And falling apart is as human as it gets
-                        You can't hide it, you can't fight what the truth is
-                        You can pretty lie and say it's okay
-                        You can pretty smile and just walk away
-                        Pretty much fake your way through anything
-                        But you can't cry pretty
-                        Oh no, you can't dress it up in lace or rhinestones
-                        It don't matter if you're in a crowd or home all alone
-                        Yeah, it's all the same when you're looking in the mirror
-                        A picture of pain, so let it flow like a river
-                        You can pretty lie and say it's okay
-                        You can pretty smile and just walk away
-                        Pretty much fake your way through anything
-                        But you can't cry pretty
-                        You can't turn off the flood when the dam breaks
-                        When all your mascara is going to waste
-                        When things get ugly, you just gotta face
-                        That you can't cry pretty
-                        Oh no, you can't
-                        Ooh, yeah
-                        You can't turn off the flood when the dam breaks
-                        When all your mascara is going to waste
-                        When things get ugly, you just gotta face
-                        That you can't cry pretty
-                        Yeah, yeah, yeah, yeah
-                        No, you can't cry
-                        No, you can't cry
-                        Yeah, yeah, yeah, yeah, yeah
-                        No, no, no, no, no, no, no, no, woo
-                        You can't cry
-                        You can't cry pretty, baby
-                        Oh yeah, woo, woo
-                        No, you can't cry pretty, yeah",
-        ]);
         $song3 = $user->songs()->create([
             'song_type_id' => 19,
             'iswc' => 'ISWC Number',
@@ -745,38 +689,6 @@ class UserObserver
         $recording4->save();
 
         /* Party Credits */
-        $credit1 = $party8->credits()->create([
-            'contribution_id' => $song2->id,
-            'contribution_type' => 'song',
-            'credit_role_id' => 269,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit2 = $party9->credits()->create([
-            'contribution_id' => $song2->id,
-            'contribution_type' => 'song',
-            'credit_role_id' => 269,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit3 = $party10->credits()->create([
-            'contribution_id' => $song2->id,
-            'contribution_type' => 'song',
-            'credit_role_id' => 269,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit4 = $party11->credits()->create([
-            'contribution_id' => $song3->id,
-            'contribution_type' => 'song',
-            'credit_role_id' => 269,
-            'performing' => 0,
-            'split' => 100.0,
-            'deleted_at' => '2020-10-29 19:41:19'
-        ]);
 
         $credit5 = $party2->credits()->create([
             'contribution_id' => $song3->id,
@@ -789,7 +701,7 @@ class UserObserver
         $credit6 = $party2->credits()->create([
             'contribution_id' => $recording3->id,
             'contribution_type' => 'recording',
-            'credit_role_id' => 614,
+            'credit_role_id' => 527,
             'performing' => 0,
             'split' => null,
         ]);
@@ -797,7 +709,7 @@ class UserObserver
         $credit7 = $party2->credits()->create([
             'contribution_id' => $session3Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 406,
+            'credit_role_id' => 546,
             'performing' => 0,
             'instrument_id' => 247,
             'split' => null,
@@ -806,7 +718,7 @@ class UserObserver
         $credit8 = $party2->credits()->create([
             'contribution_id' => $project3->id,
             'contribution_type' => 'project',
-            'credit_role_id' => 618,
+            'credit_role_id' => 554,
             'performing' => 0,
             'split' => null,
         ]);
@@ -814,7 +726,7 @@ class UserObserver
         $credit9 = $party3->credits()->create([
             'contribution_id' => $session2Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 400,
+            'credit_role_id' => 535,
             'performing' => 0,
             'split' => null,
         ]);
@@ -822,7 +734,7 @@ class UserObserver
         $credit10 = $party3->credits()->create([
             'contribution_id' => $session1Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 403,
+            'credit_role_id' => 540,
             'performing' => 0,
             'split' => null,
         ]);
@@ -830,7 +742,7 @@ class UserObserver
         $credit11 = $party3->credits()->create([
             'contribution_id' => $session3Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 463,
+            'credit_role_id' => 639,
             'performing' => 0,
             'split' => null,
         ]);
@@ -838,7 +750,7 @@ class UserObserver
         $credit12 = $party12->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 268,
+            'credit_role_id' => 21,
             'performing' => 0,
             'split' => 25.0,
         ]);
@@ -846,7 +758,7 @@ class UserObserver
         $credit13 = $party4->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 299,
+            'credit_role_id' => 114,
             'performing' => 0,
             'split' => 25.0,
         ]);
@@ -854,7 +766,7 @@ class UserObserver
         $credit14 = $party13->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 299,
+            'credit_role_id' => 114,
             'performing' => 0,
             'split' => 25.0,
         ]);
@@ -863,10 +775,10 @@ class UserObserver
         $project3->credits()->attach($credit5->id);
         $project3->credits()->attach($credit6->id);
         $project3->credits()->attach($credit7->id);
-        $project3->credits()->attach($credit8->id);
         $project3->credits()->attach($credit9->id);
         $project3->credits()->attach($credit10->id);
         $project3->credits()->attach($credit11->id);
+        $project3->credits()->attach($credit8->id);
         $project3->credits()->attach($credit12->id);
         $project3->credits()->attach($credit13->id);
         $project3->credits()->attach($credit14->id);
