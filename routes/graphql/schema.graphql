@@ -5,6 +5,9 @@ type Query {
   # Get the platform images
   getPlatformImages: [PlatformImage] @all
 
+  # Timezone Queries
+  getTimezone: [Timezone] @all
+
   # Instrument Queries
   getInstruments: [Instrument] @all
 

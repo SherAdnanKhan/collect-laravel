@@ -43,6 +43,7 @@ input UpdateUserInput {
     last_name: String! @rules(apply: ["required", "min:1", "max:255"])
     email: String! @rules(apply: ["required", "email"])
     phone: String @rules(apply: ["phone:LENIENT"])
+    timezone_id: ID @rules(apply: ["numeric", "exists:timezones,id"])
     two_factor_enabled: Boolean
     current_password: String @rules(apply: ["required_with:password,phone"])
     password: String @rules(apply: ["confirmed", "min:6"])
@@ -445,6 +446,7 @@ input RegisterInput {
     first_name: String! @rules(apply: ["required", "min:1"])
     last_name: String! @rules(apply: ["required", "min:1"])
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    timezone_id: ID @rules(apply: ["numeric", "exists:timezones,id"])
     password: String! @rules(apply: ["required", "min:6", "confirmed"])
     password_confirmation: String! @rules(apply: ["required_with:password", "min:6"])
     plan: String! @rules(apply: ["required"])

@@ -90,7 +90,7 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email',
+        'first_name', 'last_name', 'email', 'timezone_id',
         'password', 'phone', 'two_factor_enabled',
         'total_storage_used'
     ];
