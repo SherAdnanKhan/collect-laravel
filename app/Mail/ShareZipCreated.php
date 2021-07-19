@@ -50,6 +50,7 @@ class ShareZipCreated extends Mailable
 
         return $this->view('emails.users.share-zip-created')
             ->from(config('mail.from.address'), config('mail.from.name'))
+            ->replyTo($this->share->user->email, $this->share->user->name)
             ->subject($subject)
             ->with($data);
     }
