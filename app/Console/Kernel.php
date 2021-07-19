@@ -40,6 +40,10 @@ class Kernel extends ConsoleKernel
                  ->dailyAt('02:00')
                  ->onOneServer();
 
+        $schedule->job(new \App\Jobs\DeleteExpiredDownloads)
+                 ->dailyAt('02:00')
+                 ->onOneServer();
+
         $schedule->job(new \App\Jobs\RefreshExpiredShareAWSUrls)
                  ->daily()
                  ->onOneServer();
