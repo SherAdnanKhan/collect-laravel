@@ -24,6 +24,10 @@ type DownloadFilesPayload {
   url: String
 }
 
+type PPLUrl {
+  url: String!
+}
+
 type ShareFilesPayload {
   success: Boolean!
   url: String

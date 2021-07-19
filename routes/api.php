@@ -37,6 +37,15 @@ Route::prefix('pdf')->middleware('auth:api')->group(function () {
     Route::get('/export', '\App\Http\Controllers\PDFController@export');
 });
 
+// The Integration
+Route::prefix('integration')->group(function () {
+    // The PPL
+    Route::prefix('ppl')->group(function () {
+        Route::get('/retrieve-token/{nonce}', '\App\Http\Controllers\PPLController@retrieveToken')->where('nonce', '[0-9]+');
+        Route::post('/verify', '\App\Http\Controllers\PPLController@verify');
+    });
+});
+
 // Any routes defined in this group adhere to basic token authentication
 // for the api routing, using the 'token' guard.
 Route::middleware('auth:token')->group(function() {
