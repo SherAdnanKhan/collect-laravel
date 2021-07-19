@@ -89,6 +89,7 @@ type Party implements Favoured {
 	credits: [Credit] @hasMany
 	contacts: [PartyContact] @hasMany
 	addresses: [PartyAddress] @hasMany
+	affiliations: [UserAffiliation] @belongsToMany
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
@@ -187,6 +188,23 @@ type Language {
 	id: ID!
 	name: String!
 	code: String!
+}
+
+type Affiliation {
+	id: ID!
+	name: String! @rename(attribute: "name")
+	type:  String! @rename(attribute: "affiliation_type")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type UserAffiliation {
+	id: ID!
+	number: String!
+	status: String!
+	affiliation:  Affiliation
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }
 
 type Timezone {

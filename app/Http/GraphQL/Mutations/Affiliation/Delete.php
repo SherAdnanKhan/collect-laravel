@@ -2,6 +2,9 @@
 
 namespace App\Http\GraphQL\Mutations\Affiliation;
 
+use App\Models\Credit;
+use App\Models\Party;
+use App\Models\Recording;
 use App\Models\UserAffiliation;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;

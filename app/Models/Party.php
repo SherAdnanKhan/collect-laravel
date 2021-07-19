@@ -162,6 +162,16 @@ class Party extends Model implements UserAccessible
     }
 
     /**
+     * Get the affiliations associated to this party.
+     *
+     * @return BelongsToMany
+     */
+    public function affiliations(): BelongsToMany
+    {
+        return $this->belongsToMany(UserAffiliation::class, 'party_user_affiliations');
+    }
+
+    /**
      * Get all projects where this party is the main artist.
      *
      * @return HasMany
