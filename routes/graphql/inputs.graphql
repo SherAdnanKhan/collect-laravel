@@ -420,6 +420,16 @@ input CreateVenueInput {
     country: String!
 }
 
+input CreateAffiliationInput {
+    affiliation_id: ID! @rules(apply: ["required", "exists:affiliations,id", "unique:user_affiliations,affiliation_id"])
+    number: String! @rules(apply: ["required", "max:50"])
+    status: String @rules(apply: ["in:unverified,pending,verified"])
+}
+
+input DeleteAffiliationInput {
+    id: ID!
+}
+
 input ForgotPasswordInput {
     email: String! @rules(apply: ["required", "email"])
 }

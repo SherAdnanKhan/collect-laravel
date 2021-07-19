@@ -283,6 +283,16 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     }
 
     /**
+     * Get all of the users affiliations.
+     *
+     * @return HasMany
+     */
+    public function affiliations(): HasMany
+    {
+        return $this->hasMany(UserAffiliation::class);
+    }
+
+    /**
      * Get the event log items that this user has caused.
      *
      * @return HasMany
