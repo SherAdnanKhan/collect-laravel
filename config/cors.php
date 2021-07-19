@@ -23,9 +23,7 @@ return [
         'https://staging.vevacollect.com',
         'https://staging.app.vevacollect.com',
         'https://testing.app.vevacollect.com',
-        'https://staging.app.vevacollectstaging.com',
-        'https://app.vevacollectstaging.com',
-        'https://testing.app.vevacollectstaging.com',
+        'https://develop.app.vevacollect.com'
     ],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
