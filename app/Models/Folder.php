@@ -124,6 +124,16 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
     }
 
     /**
+     * Get the song this folder belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function song(): HasOne
+    {
+        return $this->hasOne(Song::class);
+    }
+
+    /**
      * Get the recording this folder belongs to.
      *
      * @return BelongsTo
@@ -270,7 +280,7 @@ class Folder extends Model implements UserAccessible, EventLoggable, Commentable
         if ($user instanceof Administrator) {
             return $query;
         }
-        
+
         $query = $query->where(function($q) use ($user) {
             return (new ProjectAccess($q, $user, [$this->getTypeName()], ['delete']))->getQuery();
         })->orWhere(function($q) use ($user) {
