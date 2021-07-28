@@ -650,25 +650,6 @@ class UserObserver
             'folder_id' => $folder2Project3->id
         ]);
 
-        $recording3 = $project3->recordings()->create([
-            'party_id' => $party2->id,
-            'song_id' => $song3->id,
-            'name' => 'Recording of This Is A Sample Song',
-            'subtitle' => 'Subtitle for This Is A Sample Song',
-            'recording_type_id' => 2,
-            'description' => 'This is a sample recording of "This Is A Sample Song" written and recorded by "Sample Artist," and this is a sample recording description. ',
-            'version' => '1',
-            'recorded_on' => '2020-10-01',
-            'mixed_on' => '2020-10-02',
-            'duration' => 80,
-            'language_id' => 40,
-            'key_signature' => 'D minor',
-            'time_signature' => '4/4',
-            'tempo' => 120,
-        ]);
-        $recording3->folder_id = $folder1Project3->id;
-        $recording3->save();
-
         $recording4 = $project3->recordings()->create([
             'party_id' => $party2->id,
             'song_id' => $song4->id,
@@ -688,7 +669,74 @@ class UserObserver
         $recording4->folder_id = $folder3Project3->id;
         $recording4->save();
 
+        $recording3 = $project3->recordings()->create([
+            'party_id' => $party2->id,
+            'song_id' => $song3->id,
+            'name' => 'Recording of This Is A Sample Song',
+            'subtitle' => 'Subtitle for This Is A Sample Song',
+            'recording_type_id' => 2,
+            'description' => 'This is a sample recording of "This Is A Sample Song" written and recorded by "Sample Artist," and this is a sample recording description. ',
+            'version' => '1',
+            'recorded_on' => '2020-10-01',
+            'mixed_on' => '2020-10-02',
+            'duration' => 80,
+            'language_id' => 40,
+            'key_signature' => 'D minor',
+            'time_signature' => '4/4',
+            'tempo' => 120,
+        ]);
+        $recording3->folder_id = $folder1Project3->id;
+        $recording3->save();
+
         /* Party Credits */
+        $credit9 = $party3->credits()->create([
+            'contribution_id' => $session2Project3->id,
+            'contribution_type' => 'session',
+            'credit_role_id' => 400,
+            'performing' => 0,
+            'split' => null,
+        ]);
+
+        $credit10 = $party3->credits()->create([
+            'contribution_id' => $session1Project3->id,
+            'contribution_type' => 'session',
+            'credit_role_id' => 403,
+            'performing' => 0,
+            'split' => null,
+        ]);
+
+        $credit11 = $party3->credits()->create([
+            'contribution_id' => $session3Project3->id,
+            'contribution_type' => 'session',
+            'credit_role_id' => 463,
+            'performing' => 0,
+            'split' => null,
+        ]);
+
+        $credit8 = $party2->credits()->create([
+            'contribution_id' => $project3->id,
+            'contribution_type' => 'project',
+            'credit_role_id' => 618,
+            'performing' => 0,
+            'split' => null,
+        ]);
+
+        $credit6 = $party2->credits()->create([
+            'contribution_id' => $recording3->id,
+            'contribution_type' => 'recording',
+            'credit_role_id' => 614,
+            'performing' => 0,
+            'split' => null,
+        ]);
+
+        $credit7 = $party2->credits()->create([
+            'contribution_id' => $session3Project3->id,
+            'contribution_type' => 'session',
+            'credit_role_id' => 406,
+            'performing' => 0,
+            'instrument_id' => 247,
+            'split' => null,
+        ]);
 
         $credit5 = $party2->credits()->create([
             'contribution_id' => $song3->id,
@@ -698,67 +746,10 @@ class UserObserver
             'split' => 25.0,
         ]);
 
-        $credit6 = $party2->credits()->create([
-            'contribution_id' => $recording3->id,
-            'contribution_type' => 'recording',
-            'credit_role_id' => 527,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit7 = $party2->credits()->create([
-            'contribution_id' => $session3Project3->id,
-            'contribution_type' => 'session',
-            'credit_role_id' => 546,
-            'performing' => 0,
-            'instrument_id' => 247,
-            'split' => null,
-        ]);
-
-        $credit8 = $party2->credits()->create([
-            'contribution_id' => $project3->id,
-            'contribution_type' => 'project',
-            'credit_role_id' => 554,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit9 = $party3->credits()->create([
-            'contribution_id' => $session2Project3->id,
-            'contribution_type' => 'session',
-            'credit_role_id' => 535,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit10 = $party3->credits()->create([
-            'contribution_id' => $session1Project3->id,
-            'contribution_type' => 'session',
-            'credit_role_id' => 540,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit11 = $party3->credits()->create([
-            'contribution_id' => $session3Project3->id,
-            'contribution_type' => 'session',
-            'credit_role_id' => 639,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
         $credit12 = $party12->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 21,
-            'performing' => 0,
-            'split' => 25.0,
-        ]);
-
-        $credit13 = $party4->credits()->create([
-            'contribution_id' => $song3->id,
-            'contribution_type' => 'song',
-            'credit_role_id' => 114,
+            'credit_role_id' => 268,
             'performing' => 0,
             'split' => 25.0,
         ]);
@@ -766,27 +757,35 @@ class UserObserver
         $credit14 = $party13->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 114,
+            'credit_role_id' => 299,
+            'performing' => 0,
+            'split' => 25.0,
+        ]);
+
+        $credit13 = $party4->credits()->create([
+            'contribution_id' => $song3->id,
+            'contribution_type' => 'song',
+            'credit_role_id' => 299,
             'performing' => 0,
             'split' => 25.0,
         ]);
 
         /* Credits to Projects */
-        $project3->credits()->attach($credit5->id);
-        $project3->credits()->attach($credit6->id);
-        $project3->credits()->attach($credit7->id);
         $project3->credits()->attach($credit9->id);
         $project3->credits()->attach($credit10->id);
         $project3->credits()->attach($credit11->id);
         $project3->credits()->attach($credit8->id);
+        $project3->credits()->attach($credit6->id);
+        $project3->credits()->attach($credit7->id);
+        $project3->credits()->attach($credit5->id);
         $project3->credits()->attach($credit12->id);
-        $project3->credits()->attach($credit13->id);
         $project3->credits()->attach($credit14->id);
+        $project3->credits()->attach($credit13->id);
 
         /* Sessions to Recordings */
-        $recording3->sessions()->attach($session1Project3->id);
-        $recording3->sessions()->attach($session2Project3->id);
         $recording3->sessions()->attach($session3Project3->id);
+        $recording3->sessions()->attach($session2Project3->id);
+        $recording3->sessions()->attach($session1Project3->id);
 
         /* Comments */
         Comment::create([
