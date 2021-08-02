@@ -165,7 +165,7 @@ class UserObserver
             'total_storage_used' => 92484967,
             'label_id' => $party1->id,
             'main_artist_id' => $party2->id,
-            'image' => '',
+            'image' => '1603998915Sample Project Thumb.jpg',
             'number' => 'VEVA'.substr(number_format(time() * mt_rand(),0,'',''),0,14)
         ]);
 
