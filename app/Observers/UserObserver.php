@@ -8,6 +8,7 @@ use App\Models\Folder;
 use App\Models\User;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class UserObserver
@@ -20,6 +21,8 @@ class UserObserver
      */
     public function created(User $user)
     {
+        $current_time = Carbon::now();
+
         $user->profile()->save(new UserProfile());
 
         /* Venues */
@@ -182,6 +185,8 @@ class UserObserver
             'venue_room' => 'Sample Venue Room 1',
             'bitdepth' => 24,
             'samplerate' => 96000,
+            'created_at' => $current_time,
+            'updated_at' => $current_time,
         ]);
         $session2Project3 = $project3->sessions()->create([
             'session_type_id' => 6,
@@ -195,6 +200,8 @@ class UserObserver
             'venue_room' => 'Sample Mastering Room',
             'bitdepth' => 24,
             'samplerate' => 96000,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
         $session3Project3 = $project3->sessions()->create([
             'session_type_id' => 14,
@@ -208,6 +215,8 @@ class UserObserver
             'venue_room' => 'Sample Tracking Room',
             'bitdepth' => 24,
             'samplerate' => 96000,
+            'created_at' => $current_time->addMinutes(2),
+            'updated_at' => $current_time->addMinutes(2),
         ]);
 
         /* Songs */
@@ -695,6 +704,8 @@ class UserObserver
             'credit_role_id' => 400,
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time,
+            'updated_at' => $current_time,
         ]);
 
         $credit10 = $party3->credits()->create([
@@ -703,6 +714,8 @@ class UserObserver
             'credit_role_id' => 403,
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit11 = $party3->credits()->create([
@@ -711,6 +724,8 @@ class UserObserver
             'credit_role_id' => 463,
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time->addMinutes(2),
+            'updated_at' => $current_time->addMinutes(2),
         ]);
 
         $credit8 = $party2->credits()->create([
@@ -719,6 +734,8 @@ class UserObserver
             'credit_role_id' => 618,
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time->addMinutes(3),
+            'updated_at' => $current_time->addMinutes(3),
         ]);
 
         $credit6 = $party2->credits()->create([
@@ -727,6 +744,8 @@ class UserObserver
             'credit_role_id' => 614,
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time->addMinutes(4),
+            'updated_at' => $current_time->addMinutes(4),
         ]);
 
         $credit7 = $party2->credits()->create([
@@ -736,6 +755,8 @@ class UserObserver
             'performing' => 0,
             'instrument_id' => 247,
             'split' => null,
+            'created_at' => $current_time->addMinutes(5),
+            'updated_at' => $current_time->addMinutes(5),
         ]);
 
         $credit5 = $party2->credits()->create([
@@ -744,6 +765,8 @@ class UserObserver
             'credit_role_id' => 269,
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(6),
+            'updated_at' => $current_time->addMinutes(6),
         ]);
 
         $credit12 = $party12->credits()->create([
@@ -752,6 +775,8 @@ class UserObserver
             'credit_role_id' => 268,
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(7),
+            'updated_at' => $current_time->addMinutes(7),
         ]);
 
         $credit14 = $party13->credits()->create([
@@ -760,6 +785,8 @@ class UserObserver
             'credit_role_id' => 299,
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(8),
+            'updated_at' => $current_time->addMinutes(8),
         ]);
 
         $credit13 = $party4->credits()->create([
@@ -768,6 +795,8 @@ class UserObserver
             'credit_role_id' => 299,
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(9),
+            'updated_at' => $current_time->addMinutes(9),
         ]);
 
         /* Credits to Projects */
