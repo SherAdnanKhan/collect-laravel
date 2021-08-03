@@ -375,6 +375,8 @@ class UserObserver
             'size' => 7251990,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file2Project3 = File::create([
@@ -392,6 +394,8 @@ class UserObserver
             'size' => 3922993,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file3Project3 = File::create([
@@ -409,6 +413,8 @@ class UserObserver
             'size' => 2464189,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file4Project3 = File::create([
@@ -426,6 +432,8 @@ class UserObserver
             'size' => 2496336,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file5Project3 = File::create([
@@ -443,6 +451,8 @@ class UserObserver
             'size' => 9494735,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file6Project3 = File::create([
@@ -460,6 +470,8 @@ class UserObserver
             'size' => 2970326,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file7Project3 = File::create([
@@ -477,6 +489,8 @@ class UserObserver
             'size' => 3211026,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file8Project3 = File::create([
@@ -494,7 +508,9 @@ class UserObserver
             'size' => 453391,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder1Project3->id
+            'folder_id' => $folder1Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file9Project3 = File::create([
@@ -512,7 +528,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file10Project3 = File::create([
@@ -530,7 +548,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file11Project3 = File::create([
@@ -548,7 +568,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file12Project3 = File::create([
@@ -566,7 +588,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file13Project3 = File::create([
@@ -584,7 +608,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file14Project3 = File::create([
@@ -602,7 +628,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file15Project3 = File::create([
@@ -620,7 +648,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file16Project3 = File::create([
@@ -638,7 +668,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file17Project3 = File::create([
@@ -656,7 +688,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $recording4 = $project3->recordings()->create([
@@ -696,6 +730,7 @@ class UserObserver
         ]);
         $recording3->folder_id = $folder1Project3->id;
         $recording3->save();
+        $current_time = Carbon::now();
 
         /* Party Credits */
         $credit9 = $party3->credits()->create([
@@ -724,8 +759,8 @@ class UserObserver
             'credit_role_id' => 614,
             'performing' => 0,
             'split' => null,
-            'created_at' => $current_time->addMinutes(2),
-            'updated_at' => $current_time->addMinutes(2),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit7 = $party2->credits()->create([
@@ -735,8 +770,8 @@ class UserObserver
             'performing' => 0,
             'instrument_id' => 247,
             'split' => null,
-            'created_at' => $current_time->addMinutes(3),
-            'updated_at' => $current_time->addMinutes(3),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit5 = $party2->credits()->create([
@@ -745,8 +780,8 @@ class UserObserver
             'credit_role_id' => 269,
             'performing' => 0,
             'split' => 25.0,
-            'created_at' => $current_time->addMinutes(4),
-            'updated_at' => $current_time->addMinutes(4),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit11 = $party3->credits()->create([
@@ -755,8 +790,8 @@ class UserObserver
             'credit_role_id' => 463,
             'performing' => 0,
             'split' => null,
-            'created_at' => $current_time->addMinutes(5),
-            'updated_at' => $current_time->addMinutes(5),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit8 = $party2->credits()->create([
@@ -765,8 +800,8 @@ class UserObserver
             'credit_role_id' => 618,
             'performing' => 0,
             'split' => null,
-            'created_at' => $current_time->addMinutes(6),
-            'updated_at' => $current_time->addMinutes(6),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit12 = $party12->credits()->create([
@@ -775,8 +810,8 @@ class UserObserver
             'credit_role_id' => 268,
             'performing' => 0,
             'split' => 25.0,
-            'created_at' => $current_time->addMinutes(7),
-            'updated_at' => $current_time->addMinutes(7),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit13 = $party4->credits()->create([
@@ -785,8 +820,8 @@ class UserObserver
             'credit_role_id' => 299,
             'performing' => 0,
             'split' => 25.0,
-            'created_at' => $current_time->addMinutes(8),
-            'updated_at' => $current_time->addMinutes(8),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit14 = $party13->credits()->create([
@@ -795,8 +830,8 @@ class UserObserver
             'credit_role_id' => 299,
             'performing' => 0,
             'split' => 25.0,
-            'created_at' => $current_time->addMinutes(9),
-            'updated_at' => $current_time->addMinutes(9),
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         /* Credits to Projects */
@@ -808,8 +843,8 @@ class UserObserver
         $project3->credits()->attach($credit7->id);
         $project3->credits()->attach($credit5->id);
         $project3->credits()->attach($credit12->id);
-        $project3->credits()->attach($credit13->id);
         $project3->credits()->attach($credit14->id);
+        $project3->credits()->attach($credit13->id);
 
         /* Sessions to Recordings */
         $recording3->sessions()->attach($session3Project3->id);
