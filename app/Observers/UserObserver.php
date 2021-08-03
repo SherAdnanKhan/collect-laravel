@@ -718,34 +718,14 @@ class UserObserver
             'updated_at' => $current_time->addMinutes(1),
         ]);
 
-        $credit11 = $party3->credits()->create([
-            'contribution_id' => $session3Project3->id,
-            'contribution_type' => 'session',
-            'credit_role_id' => 463,
-            'performing' => 0,
-            'split' => null,
-            'created_at' => $current_time->addMinutes(2),
-            'updated_at' => $current_time->addMinutes(2),
-        ]);
-
-        $credit8 = $party2->credits()->create([
-            'contribution_id' => $project3->id,
-            'contribution_type' => 'project',
-            'credit_role_id' => 618,
-            'performing' => 0,
-            'split' => null,
-            'created_at' => $current_time->addMinutes(3),
-            'updated_at' => $current_time->addMinutes(3),
-        ]);
-
         $credit6 = $party2->credits()->create([
             'contribution_id' => $recording3->id,
             'contribution_type' => 'recording',
             'credit_role_id' => 614,
             'performing' => 0,
             'split' => null,
-            'created_at' => $current_time->addMinutes(4),
-            'updated_at' => $current_time->addMinutes(4),
+            'created_at' => $current_time->addMinutes(2),
+            'updated_at' => $current_time->addMinutes(2),
         ]);
 
         $credit7 = $party2->credits()->create([
@@ -755,8 +735,8 @@ class UserObserver
             'performing' => 0,
             'instrument_id' => 247,
             'split' => null,
-            'created_at' => $current_time->addMinutes(5),
-            'updated_at' => $current_time->addMinutes(5),
+            'created_at' => $current_time->addMinutes(3),
+            'updated_at' => $current_time->addMinutes(3),
         ]);
 
         $credit5 = $party2->credits()->create([
@@ -765,6 +745,26 @@ class UserObserver
             'credit_role_id' => 269,
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(4),
+            'updated_at' => $current_time->addMinutes(4),
+        ]);
+
+        $credit11 = $party3->credits()->create([
+            'contribution_id' => $session3Project3->id,
+            'contribution_type' => 'session',
+            'credit_role_id' => 463,
+            'performing' => 0,
+            'split' => null,
+            'created_at' => $current_time->addMinutes(5),
+            'updated_at' => $current_time->addMinutes(5),
+        ]);
+
+        $credit8 = $party2->credits()->create([
+            'contribution_id' => $project3->id,
+            'contribution_type' => 'project',
+            'credit_role_id' => 618,
+            'performing' => 0,
+            'split' => null,
             'created_at' => $current_time->addMinutes(6),
             'updated_at' => $current_time->addMinutes(6),
         ]);
@@ -779,7 +779,7 @@ class UserObserver
             'updated_at' => $current_time->addMinutes(7),
         ]);
 
-        $credit14 = $party13->credits()->create([
+        $credit13 = $party4->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
             'credit_role_id' => 299,
@@ -789,7 +789,7 @@ class UserObserver
             'updated_at' => $current_time->addMinutes(8),
         ]);
 
-        $credit13 = $party4->credits()->create([
+        $credit14 = $party13->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
             'credit_role_id' => 299,
@@ -808,8 +808,8 @@ class UserObserver
         $project3->credits()->attach($credit7->id);
         $project3->credits()->attach($credit5->id);
         $project3->credits()->attach($credit12->id);
-        $project3->credits()->attach($credit14->id);
         $project3->credits()->attach($credit13->id);
+        $project3->credits()->attach($credit14->id);
 
         /* Sessions to Recordings */
         $recording3->sessions()->attach($session3Project3->id);
