@@ -49,9 +49,7 @@ class AwsFileCleanUp extends Command
         $expiredFilePaths = $expiredShares->merge($expiredDownloads);
 
         foreach($expiredFilePaths as $expiredFilePath) {
-            if(Storage::disk('s3')->exists($expiredFilePath)) {
-                Storage::disk('s3')->delete($expiredFilePath);
-            }
+            Storage::disk('s3')->delete($expiredFilePath);
         }
 
     }
