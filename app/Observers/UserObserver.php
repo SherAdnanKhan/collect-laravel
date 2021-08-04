@@ -22,6 +22,23 @@ class UserObserver
     public function created(User $user)
     {
         $current_time = Carbon::now();
+        $instrumentId = 247;
+        $countryId = '223';
+        $songTypeId = 19;
+        $languageId = 40;
+        $sessionIds = [6,7,14];
+        $creditRoleIds = [
+            "Mastering Engineer" => 400,
+            "Mixing Engineer"    => 403,
+            "Lead Performer"     => 614,
+            "Musician"           => 406,
+            "Songwriter"         => 269,
+            "Tracking Engineer"  => 463,
+            "Original Artist"    => 618,
+            "Composer"           => 268,
+            "Music Publisher"    => 299
+        ];
+
 
         $user->profile()->save(new UserProfile());
 
@@ -111,21 +128,21 @@ class UserObserver
             'city' => 'Nashville',
             'district' => 'TN',
             'postal_code' => '37210',
-            'country_id' => '223'
+            'country_id' => $countryId
         ]);
         $party2->addresses()->create([
             'line_1' => '122 Anytown Way',
             'city' => 'Nashville',
             'district' => 'TN',
             'postal_code' => '37210',
-            'country_id' => '223'
+            'country_id' => $countryId
         ]);
         $party3->addresses()->create([
             'line_1' => '123 Anytown Ct',
             'city' => 'Nashville',
             'district' => 'TN',
             'postal_code' => '37210',
-            'country_id' => '223'
+            'country_id' => $countryId
         ]);
 
         /* Party Contacts */
@@ -174,7 +191,7 @@ class UserObserver
 
         /* Project Sessions */
         $session1Project3 = $project3->sessions()->create([
-            'session_type_id' => 7,
+            'session_type_id' => $sessionIds[1],
             'venue_id' => $venue3->id,
             'name' => 'Sample Mixing Session',
             'description' => "This is a sample session and this is a sample session description. VEVA doesn't have a studio. ",
@@ -189,7 +206,7 @@ class UserObserver
             'updated_at' => $current_time,
         ]);
         $session2Project3 = $project3->sessions()->create([
-            'session_type_id' => 6,
+            'session_type_id' => $sessionIds[0],
             'venue_id' => $venue3->id,
             'name' => 'Sample Mastering Session',
             'description' => 'This is a sample mastering session description.',
@@ -204,7 +221,7 @@ class UserObserver
             'updated_at' => $current_time->addMinutes(1),
         ]);
         $session3Project3 = $project3->sessions()->create([
-            'session_type_id' => 14,
+            'session_type_id' => $sessionIds[2],
             'venue_id' => $venue3->id,
             'name' => 'Sample Tracking Session',
             'description' => 'This is a sample tracking session description. ',
@@ -221,7 +238,7 @@ class UserObserver
 
         /* Songs */
         $song3 = $user->songs()->create([
-            'song_type_id' => 19,
+            'song_type_id' => $songTypeId,
             'iswc' => 'ISWC Number',
             'title' => 'This Is A Sample Song',
             'subtitle' => 'A Sample Song for VEVA Collect Users',
@@ -256,7 +273,7 @@ class UserObserver
             'notes' => 'This is a sample song, and these are sample song notes.',
         ]);
         $song4 = $user->songs()->create([
-            'song_type_id' => 19,
+            'song_type_id' => $songTypeId,
             'title' => 'Another Sample Song',
             'subtitle' => 'Another Sample Song Subtitle',
             'title_alt' => 'Another Sample Song Alternative Title',
@@ -704,7 +721,7 @@ class UserObserver
             'recorded_on' => '2020-11-04',
             'mixed_on' => '2020-11-06',
             'duration' => 80,
-            'language_id' => 40,
+            'language_id' => $languageId,
             'key_signature' => 'D minor',
             'time_signature' => '4/4',
             'tempo' => 160,
@@ -723,7 +740,7 @@ class UserObserver
             'recorded_on' => '2020-10-01',
             'mixed_on' => '2020-10-02',
             'duration' => 80,
-            'language_id' => 40,
+            'language_id' => $languageId,
             'key_signature' => 'D minor',
             'time_signature' => '4/4',
             'tempo' => 120,
@@ -736,7 +753,7 @@ class UserObserver
         $credit9 = $party3->credits()->create([
             'contribution_id' => $session2Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 400,
+            'credit_role_id' => $creditRoleIds["Mastering Engineer"],
             'performing' => 0,
             'split' => null,
             'created_at' => $current_time,
@@ -746,7 +763,7 @@ class UserObserver
         $credit10 = $party3->credits()->create([
             'contribution_id' => $session1Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 403,
+            'credit_role_id' => $creditRoleIds["Mixing Engineer"],
             'performing' => 0,
             'split' => null,
             'created_at' => $current_time->addMinutes(1),
@@ -756,7 +773,7 @@ class UserObserver
         $credit6 = $party2->credits()->create([
             'contribution_id' => $recording3->id,
             'contribution_type' => 'recording',
-            'credit_role_id' => 614,
+            'credit_role_id' => $creditRoleIds["Lead Performer"],
             'performing' => 0,
             'split' => null,
             'created_at' => $current_time->addMinutes(1),
@@ -766,9 +783,9 @@ class UserObserver
         $credit7 = $party2->credits()->create([
             'contribution_id' => $session3Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 406,
+            'credit_role_id' => $creditRoleIds["Musician"],
             'performing' => 0,
-            'instrument_id' => 247,
+            'instrument_id' => $instrumentId,
             'split' => null,
             'created_at' => $current_time->addMinutes(1),
             'updated_at' => $current_time->addMinutes(1),
@@ -777,7 +794,7 @@ class UserObserver
         $credit5 = $party2->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 269,
+            'credit_role_id' => $creditRoleIds["Songwriter"],
             'performing' => 0,
             'split' => 25.0,
             'created_at' => $current_time->addMinutes(1),
@@ -787,7 +804,7 @@ class UserObserver
         $credit11 = $party3->credits()->create([
             'contribution_id' => $session3Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 463,
+            'credit_role_id' => $creditRoleIds["Tracking Engineer"],
             'performing' => 0,
             'split' => null,
             'created_at' => $current_time->addMinutes(1),
@@ -797,7 +814,7 @@ class UserObserver
         $credit8 = $party2->credits()->create([
             'contribution_id' => $project3->id,
             'contribution_type' => 'project',
-            'credit_role_id' => 618,
+            'credit_role_id' => $creditRoleIds["Original Artist"],
             'performing' => 0,
             'split' => null,
             'created_at' => $current_time->addMinutes(1),
@@ -807,7 +824,7 @@ class UserObserver
         $credit12 = $party12->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 268,
+            'credit_role_id' => $creditRoleIds["Composer"],
             'performing' => 0,
             'split' => 25.0,
             'created_at' => $current_time->addMinutes(1),
@@ -817,7 +834,7 @@ class UserObserver
         $credit13 = $party4->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 299,
+            'credit_role_id' => $creditRoleIds["Music Publisher"],
             'performing' => 0,
             'split' => 25.0,
             'created_at' => $current_time->addMinutes(1),
@@ -827,7 +844,7 @@ class UserObserver
         $credit14 = $party13->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 299,
+            'credit_role_id' => $creditRoleIds["Music Publisher"],
             'performing' => 0,
             'split' => 25.0,
             'created_at' => $current_time->addMinutes(1),
