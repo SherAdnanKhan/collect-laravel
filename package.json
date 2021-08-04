@@ -1,4 +1,6 @@
 {
+    "name": "veva",
+    "version": "1.8.1",
     "private": true,
     "scripts": {
         "dev": "npm run development",

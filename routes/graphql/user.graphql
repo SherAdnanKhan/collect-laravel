@@ -74,6 +74,7 @@ type Party implements Favoured {
 	userId: ID @rename(attribute: "user_id")
 	type: String!
 	isni: String
+	ipiCae: String @rename(attribute: "ipi_cae")
 	title: String
 	prefix: String
 	firstName: String! @rename(attribute: "first_name")
