@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,14 +32,15 @@ class DeleteExpiredDownloads implements ShouldQueue
      */
     public function handle()
     {
-        $currentTime = Carbon::now();
-        $expiredDownloads = DownloadJob::where('expires_at', '<', $currentTime)
-                                ->where('expires_at','>',$currentTime->subDay('1'))
-                                ->pluck('path');
+        $date = Carbon::yesterday()->format('Y-m-d');
+        $expiredDownloads = DownloadJob::whereBetween('expires_at', [
+                                            $date." 00:00:00",
+                                            $date." 23:59:59"
+                                        ])
+                                        ->pluck('path');
+
         foreach($expiredDownloads as $expiredDownload) {
-            if(Storage::disk('s3')->exists($expiredDownload)) {
-                Storage::disk('s3')->delete($expiredDownload);
-            }
+            Storage::disk('s3')->delete($expiredDownload);
         }
     }
 }

@@ -33,11 +33,7 @@ class SendShareSummaryEmail implements ShouldQueue
 
             $share->status = Share::STATUS_EXPIRED;
             $share->save();
-
-            if(Storage::disk('s3')->exists($share->path)) {
-                Storage::disk('s3')->delete($share->path);
-            }
-
+            Storage::disk('s3')->delete($share->path);
             Mail::to($share->user)->send(new ShareSummary($share));
         }
     }
