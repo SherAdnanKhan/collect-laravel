@@ -8,6 +8,7 @@ use App\Models\Folder;
 use App\Models\User;
 use App\Models\UserFavourite;
 use App\Models\UserProfile;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class UserObserver
@@ -20,6 +21,25 @@ class UserObserver
      */
     public function created(User $user)
     {
+        $current_time = Carbon::now();
+        $instrumentId = 247;
+        $countryId = '223';
+        $songTypeId = 19;
+        $languageId = 40;
+        $sessionIds = [6,7,14];
+        $creditRoleIds = [
+            "Mastering Engineer" => 400,
+            "Mixing Engineer"    => 403,
+            "Lead Performer"     => 614,
+            "Musician"           => 406,
+            "Songwriter"         => 269,
+            "Tracking Engineer"  => 463,
+            "Original Artist"    => 618,
+            "Composer"           => 268,
+            "Music Publisher"    => 299
+        ];
+
+
         $user->profile()->save(new UserProfile());
 
         /* Venues */
@@ -108,21 +128,21 @@ class UserObserver
             'city' => 'Nashville',
             'district' => 'TN',
             'postal_code' => '37210',
-            'country_id' => '223'
+            'country_id' => $countryId
         ]);
         $party2->addresses()->create([
             'line_1' => '122 Anytown Way',
             'city' => 'Nashville',
             'district' => 'TN',
             'postal_code' => '37210',
-            'country_id' => '223'
+            'country_id' => $countryId
         ]);
         $party3->addresses()->create([
             'line_1' => '123 Anytown Ct',
             'city' => 'Nashville',
             'district' => 'TN',
             'postal_code' => '37210',
-            'country_id' => '223'
+            'country_id' => $countryId
         ]);
 
         /* Party Contacts */
@@ -165,13 +185,13 @@ class UserObserver
             'total_storage_used' => 92484967,
             'label_id' => $party1->id,
             'main_artist_id' => $party2->id,
-            'image' => '',
+            'image' => '1603998915Sample Project Thumb.jpg',
             'number' => 'VEVA'.substr(number_format(time() * mt_rand(),0,'',''),0,14)
         ]);
 
         /* Project Sessions */
         $session1Project3 = $project3->sessions()->create([
-            'session_type_id' => 7,
+            'session_type_id' => $sessionIds[1],
             'venue_id' => $venue3->id,
             'name' => 'Sample Mixing Session',
             'description' => "This is a sample session and this is a sample session description. VEVA doesn't have a studio. ",
@@ -182,9 +202,11 @@ class UserObserver
             'venue_room' => 'Sample Venue Room 1',
             'bitdepth' => 24,
             'samplerate' => 96000,
+            'created_at' => $current_time,
+            'updated_at' => $current_time,
         ]);
         $session2Project3 = $project3->sessions()->create([
-            'session_type_id' => 6,
+            'session_type_id' => $sessionIds[0],
             'venue_id' => $venue3->id,
             'name' => 'Sample Mastering Session',
             'description' => 'This is a sample mastering session description.',
@@ -195,9 +217,11 @@ class UserObserver
             'venue_room' => 'Sample Mastering Room',
             'bitdepth' => 24,
             'samplerate' => 96000,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
         $session3Project3 = $project3->sessions()->create([
-            'session_type_id' => 14,
+            'session_type_id' => $sessionIds[2],
             'venue_id' => $venue3->id,
             'name' => 'Sample Tracking Session',
             'description' => 'This is a sample tracking session description. ',
@@ -208,11 +232,13 @@ class UserObserver
             'venue_room' => 'Sample Tracking Room',
             'bitdepth' => 24,
             'samplerate' => 96000,
+            'created_at' => $current_time->addMinutes(2),
+            'updated_at' => $current_time->addMinutes(2),
         ]);
 
         /* Songs */
         $song3 = $user->songs()->create([
-            'song_type_id' => 19,
+            'song_type_id' => $songTypeId,
             'iswc' => 'ISWC Number',
             'title' => 'This Is A Sample Song',
             'subtitle' => 'A Sample Song for VEVA Collect Users',
@@ -247,7 +273,7 @@ class UserObserver
             'notes' => 'This is a sample song, and these are sample song notes.',
         ]);
         $song4 = $user->songs()->create([
-            'song_type_id' => 19,
+            'song_type_id' => $songTypeId,
             'title' => 'Another Sample Song',
             'subtitle' => 'Another Sample Song Subtitle',
             'title_alt' => 'Another Sample Song Alternative Title',
@@ -366,6 +392,8 @@ class UserObserver
             'size' => 7251990,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file2Project3 = File::create([
@@ -383,6 +411,8 @@ class UserObserver
             'size' => 3922993,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file3Project3 = File::create([
@@ -400,6 +430,8 @@ class UserObserver
             'size' => 2464189,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file4Project3 = File::create([
@@ -417,6 +449,8 @@ class UserObserver
             'size' => 2496336,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file5Project3 = File::create([
@@ -434,6 +468,8 @@ class UserObserver
             'size' => 9494735,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file6Project3 = File::create([
@@ -451,6 +487,8 @@ class UserObserver
             'size' => 2970326,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file7Project3 = File::create([
@@ -468,6 +506,8 @@ class UserObserver
             'size' => 3211026,
             'status' => 'complete',
             'hidden' => 0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file8Project3 = File::create([
@@ -485,7 +525,9 @@ class UserObserver
             'size' => 453391,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder1Project3->id
+            'folder_id' => $folder1Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file9Project3 = File::create([
@@ -503,7 +545,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file10Project3 = File::create([
@@ -521,7 +565,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file11Project3 = File::create([
@@ -539,7 +585,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file12Project3 = File::create([
@@ -557,7 +605,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file13Project3 = File::create([
@@ -575,7 +625,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file14Project3 = File::create([
@@ -593,7 +645,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file15Project3 = File::create([
@@ -611,7 +665,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file16Project3 = File::create([
@@ -629,7 +685,9 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $file17Project3 = File::create([
@@ -647,27 +705,10 @@ class UserObserver
             'size' => 6691109,
             'status' => 'complete',
             'hidden' => 0,
-            'folder_id' => $folder2Project3->id
+            'folder_id' => $folder2Project3->id,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
-
-        $recording3 = $project3->recordings()->create([
-            'party_id' => $party2->id,
-            'song_id' => $song3->id,
-            'name' => 'Recording of This Is A Sample Song',
-            'subtitle' => 'Subtitle for This Is A Sample Song',
-            'recording_type_id' => 2,
-            'description' => 'This is a sample recording of "This Is A Sample Song" written and recorded by "Sample Artist," and this is a sample recording description. ',
-            'version' => '1',
-            'recorded_on' => '2020-10-01',
-            'mixed_on' => '2020-10-02',
-            'duration' => 80,
-            'language_id' => 40,
-            'key_signature' => 'D minor',
-            'time_signature' => '4/4',
-            'tempo' => 120,
-        ]);
-        $recording3->folder_id = $folder1Project3->id;
-        $recording3->save();
 
         $recording4 = $project3->recordings()->create([
             'party_id' => $party2->id,
@@ -680,7 +721,7 @@ class UserObserver
             'recorded_on' => '2020-11-04',
             'mixed_on' => '2020-11-06',
             'duration' => 80,
-            'language_id' => 40,
+            'language_id' => $languageId,
             'key_signature' => 'D minor',
             'time_signature' => '4/4',
             'tempo' => 160,
@@ -688,105 +729,144 @@ class UserObserver
         $recording4->folder_id = $folder3Project3->id;
         $recording4->save();
 
+        $recording3 = $project3->recordings()->create([
+            'party_id' => $party2->id,
+            'song_id' => $song3->id,
+            'name' => 'Recording of This Is A Sample Song',
+            'subtitle' => 'Subtitle for This Is A Sample Song',
+            'recording_type_id' => 2,
+            'description' => 'This is a sample recording of "This Is A Sample Song" written and recorded by "Sample Artist," and this is a sample recording description. ',
+            'version' => '1',
+            'recorded_on' => '2020-10-01',
+            'mixed_on' => '2020-10-02',
+            'duration' => 80,
+            'language_id' => $languageId,
+            'key_signature' => 'D minor',
+            'time_signature' => '4/4',
+            'tempo' => 120,
+        ]);
+        $recording3->folder_id = $folder1Project3->id;
+        $recording3->save();
+        $current_time = Carbon::now();
+
         /* Party Credits */
-
-        $credit5 = $party2->credits()->create([
-            'contribution_id' => $song3->id,
-            'contribution_type' => 'song',
-            'credit_role_id' => 269,
-            'performing' => 0,
-            'split' => 25.0,
-        ]);
-
-        $credit6 = $party2->credits()->create([
-            'contribution_id' => $recording3->id,
-            'contribution_type' => 'recording',
-            'credit_role_id' => 527,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
-        $credit7 = $party2->credits()->create([
-            'contribution_id' => $session3Project3->id,
-            'contribution_type' => 'session',
-            'credit_role_id' => 546,
-            'performing' => 0,
-            'instrument_id' => 247,
-            'split' => null,
-        ]);
-
-        $credit8 = $party2->credits()->create([
-            'contribution_id' => $project3->id,
-            'contribution_type' => 'project',
-            'credit_role_id' => 554,
-            'performing' => 0,
-            'split' => null,
-        ]);
-
         $credit9 = $party3->credits()->create([
             'contribution_id' => $session2Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 535,
+            'credit_role_id' => $creditRoleIds["Mastering Engineer"],
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time,
+            'updated_at' => $current_time,
         ]);
 
         $credit10 = $party3->credits()->create([
             'contribution_id' => $session1Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 540,
+            'credit_role_id' => $creditRoleIds["Mixing Engineer"],
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
+        ]);
+
+        $credit6 = $party2->credits()->create([
+            'contribution_id' => $recording3->id,
+            'contribution_type' => 'recording',
+            'credit_role_id' => $creditRoleIds["Lead Performer"],
+            'performing' => 0,
+            'split' => null,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
+        ]);
+
+        $credit7 = $party2->credits()->create([
+            'contribution_id' => $session3Project3->id,
+            'contribution_type' => 'session',
+            'credit_role_id' => $creditRoleIds["Musician"],
+            'performing' => 0,
+            'instrument_id' => $instrumentId,
+            'split' => null,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
+        ]);
+
+        $credit5 = $party2->credits()->create([
+            'contribution_id' => $song3->id,
+            'contribution_type' => 'song',
+            'credit_role_id' => $creditRoleIds["Songwriter"],
+            'performing' => 0,
+            'split' => 25.0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit11 = $party3->credits()->create([
             'contribution_id' => $session3Project3->id,
             'contribution_type' => 'session',
-            'credit_role_id' => 639,
+            'credit_role_id' => $creditRoleIds["Tracking Engineer"],
             'performing' => 0,
             'split' => null,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
+        ]);
+
+        $credit8 = $party2->credits()->create([
+            'contribution_id' => $project3->id,
+            'contribution_type' => 'project',
+            'credit_role_id' => $creditRoleIds["Original Artist"],
+            'performing' => 0,
+            'split' => null,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit12 = $party12->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 21,
+            'credit_role_id' => $creditRoleIds["Composer"],
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit13 = $party4->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 114,
+            'credit_role_id' => $creditRoleIds["Music Publisher"],
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         $credit14 = $party13->credits()->create([
             'contribution_id' => $song3->id,
             'contribution_type' => 'song',
-            'credit_role_id' => 114,
+            'credit_role_id' => $creditRoleIds["Music Publisher"],
             'performing' => 0,
             'split' => 25.0,
+            'created_at' => $current_time->addMinutes(1),
+            'updated_at' => $current_time->addMinutes(1),
         ]);
 
         /* Credits to Projects */
-        $project3->credits()->attach($credit5->id);
-        $project3->credits()->attach($credit6->id);
-        $project3->credits()->attach($credit7->id);
         $project3->credits()->attach($credit9->id);
         $project3->credits()->attach($credit10->id);
         $project3->credits()->attach($credit11->id);
         $project3->credits()->attach($credit8->id);
+        $project3->credits()->attach($credit6->id);
+        $project3->credits()->attach($credit7->id);
+        $project3->credits()->attach($credit5->id);
         $project3->credits()->attach($credit12->id);
-        $project3->credits()->attach($credit13->id);
         $project3->credits()->attach($credit14->id);
+        $project3->credits()->attach($credit13->id);
 
         /* Sessions to Recordings */
-        $recording3->sessions()->attach($session1Project3->id);
-        $recording3->sessions()->attach($session2Project3->id);
         $recording3->sessions()->attach($session3Project3->id);
+        $recording3->sessions()->attach($session2Project3->id);
+        $recording3->sessions()->attach($session1Project3->id);
 
         /* Comments */
         Comment::create([
