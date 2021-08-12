@@ -12,6 +12,6 @@ class TmpIntegration extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'key', 'number'
+        'user_id', 'route', 'key', 'number'
     ];
 }

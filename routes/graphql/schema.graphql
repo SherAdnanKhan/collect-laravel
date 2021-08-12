@@ -29,7 +29,7 @@ extend type Query @group(middleware: ["auth:api"]) {
     @field(resolver: "App\\Http\\GraphQL\\Queries\\GetInvites@resolve")
 
   # PPL
-  getPPL: PPLUrl
+  getPPL(route: String @rules(apply: ["max:255"])): PPLUrl
   @field(resolver: "App\\Http\\GraphQL\\Queries\\PPL\\GetUrl@resolve")
 
   # Query to return recently created/updated resources
