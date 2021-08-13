@@ -21,9 +21,10 @@ class GetUrl
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $nonce = time();
+        $route = array_get($args, 'route');
 
         try {
-            TmpIntegration::UpdateOrCreate(['user_id' => Auth::user()->id], ['key' => $nonce]);
+            TmpIntegration::UpdateOrCreate(['user_id' => Auth::user()->id], ['key' => $nonce, 'route' => $route]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             abort(500, 'Could not create integration key');

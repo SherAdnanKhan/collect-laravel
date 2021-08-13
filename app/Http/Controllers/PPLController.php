@@ -76,13 +76,15 @@ class PPLController extends Controller
             abort(404);
         }
 
+        $tmp_data = $key->first();
+
         $response = [
             'response' => [
                 'veva_finalizeIpnVerification' => [
                     'resource' => [
                         '_links' => [
                             'callbackUrl' => [
-                                'href' => sprintf('%s/account?IPN=%s', trim(env('FRONTEND_URL'), '/'), $IPN)
+                                'href' => sprintf('%s/%s?IPN=%s', trim(env('FRONTEND_URL'), '/'), !empty($tmp_data->route) ? trim($tmp_data->route, '/') : '', $IPN)
                             ]
                         ]
                     ]
