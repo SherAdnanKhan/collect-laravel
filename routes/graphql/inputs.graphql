@@ -258,6 +258,7 @@ input CreatePartyInput {
     ipi_cae: String @rules(apply: ["nullable", "numeric", "regex:/^(\\d{9}|\\d{11})$/"])
     type: String! @rules(apply: ["required", "in:person,organisation,label"])
     title: String
+    is_my: Boolean
     prefix: String
     first_name: String! @rules(apply: ["required"])
     middle_name: String
@@ -334,6 +335,11 @@ input UpdatePartyAddressInput {
 
 input DeletePartyAddressInput {
     id: ID!
+}
+
+input DeletePartyAffilationInput {
+    party_id: ID!
+    user_affiliation_id: ID!
 }
 
 input CreateCollaboratorInput {
