@@ -35,7 +35,7 @@ class Party extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'user_id', 'title', 'prefix', 'first_name', 'last_name', 'middle_name', 'birth_date', 'death_date',
+        'user_id', 'title', 'prefix', 'first_name', 'last_name', 'middle_name', 'birth_date', 'death_date', 'is_my',
         'suffix', 'isni', 'type', 'comments',
     ];
 

@@ -76,6 +76,7 @@ type Party implements Favoured {
 	type: String!
 	isni: String
 	title: String
+	is_my: Boolean
 	prefix: String
 	firstName: String! @rename(attribute: "first_name")
 	middleName: String @rename(attribute: "middle_name")
@@ -116,6 +117,10 @@ type PartyAddress {
 	postalCode: String! @rename(attribute: "postal_code")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type PartyAffilation {
+	success: Boolean
 }
 
 type Instrument {
