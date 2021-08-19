@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class SendShareSummaryEmail implements ShouldQueue
 {
@@ -29,9 +30,10 @@ class SendShareSummaryEmail implements ShouldQueue
                             ->get();
 
         foreach ($expiredShares as $share) {
+
             $share->status = Share::STATUS_EXPIRED;
             $share->save();
-
+            Storage::disk('s3')->delete($share->path);
             Mail::to($share->user)->send(new ShareSummary($share));
         }
     }

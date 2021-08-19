@@ -58,6 +58,7 @@ class Folder extends Resource
             BelongsTo::make('User'),
             BelongsTo::make('Project'),
             BelongsTo::make('Recording'),
+            BelongsTo::make('Song'),
 
             BelongsTo::make('Parent Folder', 'parent', Folder::class)->nullable(),
 

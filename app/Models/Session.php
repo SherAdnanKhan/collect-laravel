@@ -42,7 +42,7 @@ class Session extends Model implements UserAccessible, EventLoggable, Creditable
     protected $fillable = [
         'project_id', 'session_type_id', 'venue_id', 'name', 'description', 'started_at',
         'ended_at', 'union_session', 'analog_session', 'drop_frame', 'venue_room', 'bitdepth',
-        'samplerate', 'timecode_type', 'timecode_frame_rate'
+        'samplerate', 'timecode_type', 'timecode_frame_rate', 'created_at', 'updated_at'
     ];
 
     protected $casts = [

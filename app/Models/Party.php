@@ -35,8 +35,8 @@ class Party extends Model implements UserAccessible
      * @var array
      */
     protected $fillable = [
-        'user_id', 'title', 'prefix', 'first_name', 'last_name', 'middle_name', 'birth_date', 'death_date',
-        'suffix', 'isni', 'ipi_cae', 'type', 'comments',
+        'user_id', 'title', 'prefix', 'first_name', 'last_name', 'middle_name', 'birth_date', 'death_date', 'is_my',
+        'suffix', 'isni', 'ipi_cae', 'type', 'comments'
     ];
 
     protected $casts = [
@@ -162,6 +162,16 @@ class Party extends Model implements UserAccessible
     }
 
     /**
+     * Get the affiliations associated to this party.
+     *
+     * @return BelongsToMany
+     */
+    public function affiliations(): BelongsToMany
+    {
+        return $this->belongsToMany(UserAffiliation::class, 'party_user_affiliations');
+    }
+
+    /**
      * Get all projects where this party is the main artist.
      *
      * @return HasMany
@@ -184,8 +194,8 @@ class Party extends Model implements UserAccessible
     /**
      * A party is viewable to everyone.
      *
-     * @param  Builder $query
-     * @param  array   $data
+     * @param Builder $query
+     * @param array $data
      * @return Builder
      */
     public function scopeUserViewable(Builder $query, $data = []): Builder
@@ -193,8 +203,8 @@ class Party extends Model implements UserAccessible
         // i own it, it’s public, it’s already related to the project, owned by the owner or a collaborator on the project
         $user = $this->getUser($data);
 
-        return $query->where(function($q) use ($user) {
-            return $q->whereHas('credits', function($q) use ($user) {
+        return $query->where(function ($q) use ($user) {
+            return $q->whereHas('credits', function ($q) use ($user) {
                 return (new ProjectAccess($q, $user, ['project'], ['read'], 'projects'))->getQuery();
             });
         })->orWhere('user_id', $user->getKey());
@@ -204,8 +214,8 @@ class Party extends Model implements UserAccessible
     /**
      * A user can update a party if they own it.
      *
-     * @param  Builder $query
-     * @param  array   $data
+     * @param Builder $query
+     * @param array $data
      * @return Builder
      */
     public function scopeUserUpdatable(Builder $query, $data = []): Builder
@@ -217,8 +227,8 @@ class Party extends Model implements UserAccessible
     /**
      * A user can delete a party if they own it.
      *
-     * @param  Builder $query
-     * @param  array   $data
+     * @param Builder $query
+     * @param array $data
      * @return Builder
      */
     public function scopeUserDeletable(Builder $query, $data = []): Builder
@@ -231,8 +241,8 @@ class Party extends Model implements UserAccessible
      * Get absolutely every party which is referenced on a project or
      * any of it's sub resources.
      *
-     * @param  Builder $query
-     * @param  array   $data
+     * @param Builder $query
+     * @param array $data
      * @return Builder
      */
     public function scopeRelatedToProject(Builder $query, $data = []): Builder
@@ -245,22 +255,22 @@ class Party extends Model implements UserAccessible
 
         $includeSongs = array_get($data, 'includeSongs', null);
 
-        return $query->whereHas('credits', function($q) use ($project, $includeSongs) {
-            $q->whereHas('projects', function($q) use ($project) {
+        return $query->whereHas('credits', function ($q) use ($project, $includeSongs) {
+            $q->whereHas('projects', function ($q) use ($project) {
                 return $q->where('projects.id', $project->getKey());
             });
 
             if ($includeSongs) {
-                $q->orWhere(function($q) use ($includeSongs) {
+                $q->orWhere(function ($q) use ($includeSongs) {
                     $q->where('contribution_type', 'song')
                         ->whereIn('contribution_id', $includeSongs);
                 });
             }
 
             return $q;
-        })->orWhereHas('projectLabel', function($q) use ($project) {
+        })->orWhereHas('projectLabel', function ($q) use ($project) {
             return $q->where('projects.id', $project->getKey());
-        })->orWhereHas('projectArtist', function($q) use ($project) {
+        })->orWhereHas('projectArtist', function ($q) use ($project) {
             return $q->where('projects.id', $project->getKey());
         })->groupBy('parties.id');
     }

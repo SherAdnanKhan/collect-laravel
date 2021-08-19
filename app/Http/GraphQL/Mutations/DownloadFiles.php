@@ -40,7 +40,9 @@ class DownloadFiles
             return $this->getFileURL($this->filesToDownload[0]);
         }
 
-        CreateDownloadZip::dispatch($userId, $this->filesToDownload);
+        $zipName = $this->getZipName($user, $args['files']);
+
+        CreateDownloadZip::dispatch($userId, $this->filesToDownload, $zipName);
 
         return [
             'success' => true
@@ -130,5 +132,24 @@ class DownloadFiles
     {
         $file->depth = $depth;
         $this->filesToDownload[] = $file;
+    }
+
+    private function getZipName($user, $files)
+    {
+        $firstFile = $files[0];
+        if ($firstFile['type'] === 'folder') {
+            $folder = Folder::select('id','folder_id')->where('id', $firstFile['id'])->userViewable(['user' => $user])->first();
+            if (isset($folder->folder_id)) {
+                $parentFolder = Folder::select('id','name')->where('id', $folder->folder_id)->userViewable(['user' => $user])->first();
+                return $parentFolder->name;
+            }
+            return 'VEVA';
+        }
+        $file = File::select('id', 'folder_id')->where('id', $firstFile['id'])->userViewable(['user' => $user])->first();
+        if (isset($file->folder_id)) {
+            $folder = Folder::select('id','name')->where('id', $file->folder_id)->userViewable(['user' => $user])->first();
+            return $folder->name;
+        }
+        return 'VEVA';
     }
 }

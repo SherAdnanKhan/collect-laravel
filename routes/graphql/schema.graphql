@@ -5,6 +5,9 @@ type Query {
   # Get the platform images
   getPlatformImages: [PlatformImage] @all
 
+  # Timezone Queries
+  getTimezone: [Timezone] @all
+
   # Instrument Queries
   getInstruments: [Instrument] @all
 
@@ -27,6 +30,10 @@ extend type Query @group(middleware: ["auth:api"]) {
   getUser(id: Int @eq): User @inject(context: "user.id", name: "id") @find
   getUserInvites: [CollaboratorInvite]
     @field(resolver: "App\\Http\\GraphQL\\Queries\\GetInvites@resolve")
+
+  # PPL
+  getPPL(route: String @rules(apply: ["max:255"])): PPLUrl
+  @field(resolver: "App\\Http\\GraphQL\\Queries\\PPL\\GetUrl@resolve")
 
   # Query to return recently created/updated resources
   getRecents(count: Int, resourceType: String): [EventLog]
@@ -53,6 +60,7 @@ extend type Query @group(middleware: ["auth:api"]) {
 
   # Party Queries
   getParty(id: ID! @eq): Party @find(scopes: ["userViewable"])
+  getMyParty: Party @field(resolver: "App\\Http\\GraphQL\\Queries\\Party\\GetMyParty@resolve")
   getParties(type: String @eq): [Party] @all(scopes: ["userViewable"])
   getPartyAddress(id: ID! @eq): PartyAddress @find(scopes: ["userViewable"])
   getPartyContact(id: ID! @eq): PartyContact @find(scopes: ["userViewable"])
@@ -190,6 +198,13 @@ extend type Query @group(middleware: ["auth:api"]) {
   getUnreadActivity(projectId: ID!): UnreadActivityPayload!
     @field(resolver: "App\\Http\\GraphQL\\Queries\\GetUnreadActivity@resolve")
 
+  # Affiliation Queries
+  getAffiliations: [Affiliation] @all
+
+  # User Affiliation Queries
+  getUserAffiliations: [UserAffiliation]
+  @field(resolver: "App\\Http\\GraphQL\\Queries\\Affiliation\\ByUser@resolve")
+
   # Share Queries
   getShares: [Share] @all(scopes: ["userViewable"])
   getShare(id: String! @eq): Share @find(scopes: ["userViewable"])
@@ -325,6 +340,10 @@ extend type Mutation @group(middleware: ["auth:api"]) {
     @field(
       resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Update@resolve"
     )
+  deletePartyAffiliation(input: DeletePartyAffilationInput!): PartyAffilation
+  @field(
+    resolver: "App\\Http\\GraphQL\\Mutations\\PartyAffiliation\\Delete@resolve"
+  )
   deletePartyAddress(input: DeletePartyAddressInput!): PartyAddress
     @field(
       resolver: "App\\Http\\GraphQL\\Mutations\\PartyAddress\\Delete@resolve"
@@ -385,6 +404,12 @@ extend type Mutation @group(middleware: ["auth:api"]) {
   # Venue Mutations
   createVenue(input: CreateVenueInput!): Venue
     @field(resolver: "App\\Http\\GraphQL\\Mutations\\Venue\\Create@resolve")
+
+  # Affiliation Mutations
+  createAffiliation(input: CreateAffiliationInput!): UserAffiliation
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\Affiliation\\Create@resolve")
+  deleteAffiliation(input: DeleteAffiliationInput!): UserAffiliation
+  @field(resolver: "App\\Http\\GraphQL\\Mutations\\Affiliation\\Delete@resolve")
 
   # File & Folder Mutations
   downloadFiles(files: [DownloadFilesInput!]!): DownloadFilesPayload

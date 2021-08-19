@@ -45,7 +45,7 @@ class File extends Model implements UserAccessible, Commentable
     protected $fillable = [
         'user_id', 'project_id', 'folder_id', 'name', 'type', 'path', 'transcoded_path',
         'bitrate', 'bitdepth', 'size', 'samplerate', 'duration', 'numchans', 'status',
-        'hidden', 'aliased_folder_id',
+        'hidden', 'aliased_folder_id', 'created_at', 'updated_at'
     ];
 
     protected $casts = [
