@@ -34,13 +34,18 @@ class Create
                 $party = auth()->user()->parties()->create($input);
             }
 
-            if (!empty($input['user_affiliation_ids'])) {
-                if ($is_my) {
+            if ($is_my) {
+                if (!empty($input['user_affiliation_ids'])) {
                     $party->affiliations()->sync($input['user_affiliation_ids']);
                 } else {
+                    $party->affiliations()->sync([]);
+                }
+            } else {
+                if (!empty($input['user_affiliation_ids'])) {
                     $party->affiliations()->attach($input['user_affiliation_ids']);
                 }
             }
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
