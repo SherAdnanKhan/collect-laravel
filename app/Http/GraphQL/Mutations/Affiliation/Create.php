@@ -21,7 +21,7 @@ class Create
         $input = array_get($args, 'input');
 
         try {
-            $affiliation = auth()->user()->affiliations()->create($input);
+            $affiliation = auth()->user()->affiliations()->userViewable()->updateOrCreate(['affiliation_id' => array_get($input, 'affiliation_id')], $input);
         } catch (\Exception $e) {
             throw new GenericException($e->getMessage());
         }
