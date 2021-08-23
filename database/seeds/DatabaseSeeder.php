@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CreditRolesTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(RecordingTypesTableSeeder::class);
+        $this->call(AffiliationsTableSeeder::class);
+        $this->call(TimezoneSeeder::class);
     }
 }

@@ -43,7 +43,9 @@ class ShareFiles
             ];
         }
 
-        CreateShareZip::dispatch($user->id, $this->filesToShare, $this->emailsToShare, $this->message, $this->expiry, $this->password);
+        $zipName = $this->getZipName($user, $input['files']);
+
+        CreateShareZip::dispatch($user->id, $this->filesToShare, $this->emailsToShare, $this->message, $this->expiry, $this->password, $zipName);
 
         return [
             'success' => true
@@ -116,5 +118,24 @@ class ShareFiles
         }
 
         return Carbon::parse($expiry)->gte(Carbon::today());
+    }
+
+    private function getZipName($user, $files)
+    {
+        $firstFile = $files[0];
+        if ($firstFile['type'] === 'folder') {
+            $folder = Folder::select('id','folder_id')->where('id', $firstFile['id'])->userViewable(['user' => $user])->first();
+            if (isset($folder->folder_id)) {
+                $parentFolder = Folder::select('id','name')->where('id', $folder->folder_id)->userViewable(['user' => $user])->first();
+                return $parentFolder->name;
+            }
+            return 'VEVA';
+        }
+        $file = File::select('id', 'folder_id')->where('id', $firstFile['id'])->userViewable(['user' => $user])->first();
+        if (isset($file->folder_id)) {
+            $folder = Folder::select('id','name')->where('id', $file->folder_id)->userViewable(['user' => $user])->first();
+            return $folder->name;
+        }
+        return 'VEVA';
     }
 }

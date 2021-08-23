@@ -3,6 +3,7 @@
 namespace App\Http\GraphQL\Mutations\Party;
 
 use App\Models\Party;
+use App\Models\UserAffiliation;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Exceptions\GenericException;
@@ -22,7 +23,7 @@ class Update
     {
         $input = array_get($args, 'input');
 
-        $party = Party::where('id', (int) array_get($input, 'id'))
+        $party = Party::where('id', (int)array_get($input, 'id'))
             ->userUpdatable()
             ->first();
 
@@ -31,6 +32,10 @@ class Update
         }
 
         $saved = $party->fill($input)->save();
+
+        if (isset($input['user_affiliation_ids'])) {
+            $party->affiliations()->sync($input['user_affiliation_ids']);
+        }
 
         if (!$saved) {
             throw new GenericException('Error saving party');

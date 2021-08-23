@@ -7,6 +7,7 @@
 	email: String!
 	phone: String
 	status: String!
+	timezoneId: String @rename(attribute: "timezone_id")
 	twoFactorEnabled: Boolean @rename(attribute: "two_factor_enabled")
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
@@ -76,6 +77,7 @@ type Party implements Favoured {
 	isni: String
 	ipiCae: String @rename(attribute: "ipi_cae")
 	title: String
+	is_my: Boolean
 	prefix: String
 	firstName: String! @rename(attribute: "first_name")
 	middleName: String @rename(attribute: "middle_name")
@@ -88,6 +90,7 @@ type Party implements Favoured {
 	credits: [Credit] @hasMany
 	contacts: [PartyContact] @hasMany
 	addresses: [PartyAddress] @hasMany
+	affiliations: [UserAffiliation] @belongsToMany
 	createdAt: String! @rename(attribute: "created_at")
 	updatedAt: String @rename(attribute: "updated_at")
 }
@@ -117,6 +120,10 @@ type PartyAddress {
 	updatedAt: String @rename(attribute: "updated_at")
 }
 
+type PartyAffilation {
+	success: Boolean
+}
+
 type Instrument {
 	id: ID!
 	_id: ID! @globalId @rename(attribute: "id")
@@ -130,6 +137,7 @@ type Song implements Favoured & Creditable {
 	id: ID!
 	user: User! @belongsTo
 	userId: String! @rename(attribute: "user_id")
+	folderId: ID @rename(attribute: "folder_id")
 	type: SongType! @belongsTo
 	typeUserDefinedValue: String @rename(attribute: "song_type_user_defined_value")
 	title: String!
@@ -187,6 +195,28 @@ type Language {
 	code: String!
 }
 
+type Affiliation {
+	id: ID!
+	name: String! @rename(attribute: "name")
+	type:  String! @rename(attribute: "affiliation_type")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type UserAffiliation {
+	id: ID!
+	number: String!
+	status: String!
+	affiliation:  Affiliation
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Timezone {
+	id: ID!
+	offset: String!
+	timezone: String!
+}
 
 type ShareUser {
 	id: ID!
@@ -216,4 +246,21 @@ type Share {
  	expiresAt: String @rename(attribute: "expires_at")
  	createdAt: String! @rename(attribute: "created_at")
  	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type Affiliation {
+	id: ID!
+	name: String! @rename(attribute: "name")
+	type:  String! @rename(attribute: "affiliation_type")
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
+}
+
+type UserAffiliation {
+	id: ID!
+	number: String!
+	status: String!
+	affiliation:  Affiliation
+	createdAt: String! @rename(attribute: "created_at")
+	updatedAt: String @rename(attribute: "updated_at")
 }

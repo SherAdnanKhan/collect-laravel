@@ -43,6 +43,7 @@ input UpdateUserInput {
     last_name: String! @rules(apply: ["required", "min:1", "max:255"])
     email: String! @rules(apply: ["required", "email"])
     phone: String @rules(apply: ["phone:LENIENT"])
+    timezone_id: ID @rules(apply: ["numeric", "exists:timezones,id"])
     two_factor_enabled: Boolean
     current_password: String @rules(apply: ["required_with:password,phone"])
     password: String @rules(apply: ["confirmed", "min:6"])
@@ -181,6 +182,7 @@ input CreateSessionInput {
     session_type_id: ID! @rules(apply: ["required"])
     venue_id: ID! @rules(apply: ["required"])
     name: String! @rules(apply: ["required"])
+    recording_id: [ID]
     description: String
     union_session: Boolean!
     analog_session: Boolean!
@@ -200,6 +202,7 @@ input UpdateSessionInput {
     session_type_id: ID!
     venue_id: ID!
     name: String!
+    recording_id: [ID]
     description: String
     union_session: Boolean!
     analog_session: Boolean!
@@ -255,6 +258,7 @@ input CreatePartyInput {
     ipi_cae: String @rules(apply: ["nullable", "numeric", "regex:/^(\\d{9}|\\d{11})$/"])
     type: String! @rules(apply: ["required", "in:person,organisation,label"])
     title: String
+    is_my: Boolean
     prefix: String
     first_name: String! @rules(apply: ["required"])
     middle_name: String
@@ -262,6 +266,7 @@ input CreatePartyInput {
     suffix: String
     birth_date: String @rules(apply: ["date"])
     death_date: String @rules(apply: ["date"])
+    user_affiliation_ids:[ID] @rules(apply: ["exists:user_affiliations,id"])
     comments: String
 }
 
@@ -278,6 +283,7 @@ input UpdatePartyInput {
     suffix: String
     birth_date: String @rules(apply: ["date"])
     death_date: String @rules(apply: ["date"])
+    user_affiliation_ids:[ID] @rules(apply: ["exists:user_affiliations,id"])
     comments: String
 }
 
@@ -329,6 +335,11 @@ input UpdatePartyAddressInput {
 
 input DeletePartyAddressInput {
     id: ID!
+}
+
+input DeletePartyAffilationInput {
+    party_id: ID!
+    user_affiliation_id: ID!
 }
 
 input CreateCollaboratorInput {
@@ -420,6 +431,16 @@ input CreateVenueInput {
     country: String!
 }
 
+input CreateAffiliationInput {
+    affiliation_id: ID! @rules(apply: ["required", "exists:affiliations,id"])
+    number: String! @rules(apply: ["required", "max:50"])
+    status: String @rules(apply: ["in:unverified,pending,verified"])
+}
+
+input DeleteAffiliationInput {
+    id: ID!
+}
+
 input ForgotPasswordInput {
     email: String! @rules(apply: ["required", "email"])
 }
@@ -435,6 +456,7 @@ input RegisterInput {
     first_name: String! @rules(apply: ["required", "min:1"])
     last_name: String! @rules(apply: ["required", "min:1"])
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    timezone_id: ID @rules(apply: ["numeric", "exists:timezones,id"])
     password: String! @rules(apply: ["required", "min:6", "confirmed"])
     password_confirmation: String! @rules(apply: ["required_with:password", "min:6"])
     plan: String! @rules(apply: ["required"])

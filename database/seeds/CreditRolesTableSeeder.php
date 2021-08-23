@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Models\CreditRole;
 use Keboola\Csv\CsvReader;
 use Illuminate\Database\Seeder;
@@ -18,14 +19,16 @@ class CreditRolesTableSeeder extends Seeder
         CreditRole::unsetEventDispatcher();
 
         foreach ($rolesFile as $roleRow) {
-            $type = $roleRow[0];
-            $ddex_key = $roleRow[1];
-            $name = $roleRow[2];
+            $id = $roleRow[0];
+            $type = $roleRow[1];
+            $ddex_key = $roleRow[2];
+            $name = $roleRow[3];
 
             CreditRole::updateOrCreate([
                 'ddex_key' => $ddex_key,
                 'type'     => $type,
             ], [
+                'id'           => $id,
                 'name'         => $name,
                 'type'         => $type,
                 'ddex_key'     => $ddex_key,

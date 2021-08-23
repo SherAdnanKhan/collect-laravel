@@ -16,6 +16,7 @@ class CreateDownloadZip implements ShouldQueue
 
     private $userId;
     private $filesToDownload = [];
+    private $zipName;
     private $projectId;
 
     /**
@@ -23,12 +24,13 @@ class CreateDownloadZip implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($userId, $filesToDownload)
+    public function __construct($userId, $filesToDownload, $zipName)
     {
         $this->userId = $userId;
         $this->filesToDownload = collect($filesToDownload)->map(function ($file) {
             return $file->only(['id', 'status', 'depth', 'aliased_folder_id']);
         });
+        $this->zipName = $zipName;
         $this->projectId = $filesToDownload[0]->project_id;
     }
 
@@ -62,6 +64,7 @@ class CreateDownloadZip implements ShouldQueue
                 'downloadJobId' => $download_job->id,
                 'userId' => $this->userId,
                 'files' => $this->filesToDownload,
+                'zipName' => $this->zipName
             ]),
             'QueueUrl' => $config['prefix'] . '/' . $config['jobs']['downloads']
         ];

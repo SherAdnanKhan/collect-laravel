@@ -23,7 +23,7 @@ class Update
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
         $input = $args['input'];
-        $id = (int) array_get($args, 'input.id');
+        $id = (int)array_get($args, 'input.id');
 
         $session = Session::where('id', $id)->userUpdatable()->first();
 
@@ -50,6 +50,10 @@ class Update
         }
 
         $saved = $session->fill($input)->save();
+
+        if (!empty($input['recording_id'])) {
+            $session->recordings()->sync($input['recording_id']);
+        }
 
         if (!$saved) {
             throw new GenericException('Error saving session');
